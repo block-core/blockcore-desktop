@@ -1,0 +1,73 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" opened mode="side">
+
+    <!-- <button mat-icon-button>
+      <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+    </button>
+
+    <br> -->
+
+    <br>
+
+    <mat-list>
+      <!-- <h3 mat-subheader>Folders</h3> -->
+      <mat-list-item>
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 *ngIf="showFiller" mat-line>Dashboard</h4>
+        <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
+      </mat-list-item>
+      <!-- <mat-divider></mat-divider>
+      <h3 mat-subheader>Notes</h3> -->
+      <mat-list-item>
+        <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
+        <h4 *ngIf="showFiller" mat-line>Wallet</h4>
+        <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon mat-list-icon>settings</mat-icon>
+        <h4 *ngIf="showFiller" mat-line>Settings</h4>
+        <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon mat-list-icon>power_settings_new</mat-icon>
+        <h4 *ngIf="showFiller" mat-line>Logout</h4>
+        <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+      </mat-list-item>
+
+      <mat-list-item *ngIf="!showFiller" (click)="showFiller = !showFiller">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="showFiller" (click)="showFiller = !showFiller">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </mat-list-item>
+
+
+
+
+    </mat-list>
+
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+
+    <mat-toolbar color="primary">
+      <span>City Hub</span>
+
+      <span class="example-fill-remaining-space"></span>
+
+      <span>Account</span>
+    </mat-toolbar>
+
+    <br>
+
+    <button type="button" mat-button (click)="drawer.toggle()">
+      Mobile mode
+    </button>
+
+
+  </div>
+
+</mat-drawer-container>
