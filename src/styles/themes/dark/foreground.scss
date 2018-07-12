@@ -1,0 +1,17 @@
+$app-dark-theme-foreground: (
+    base:              white,
+    divider:           $light-dividers,
+    dividers:          $light-dividers,
+    disabled:          $light-disabled-text,
+    disabled-button:   rgba(white, 0.3),
+    disabled-text:     $light-disabled-text,
+    hint-text:         $light-disabled-text,
+    secondary-text:    $light-secondary-text,
+    icon:              white,
+    icons:             white,
+    text:              white,
+    slider-min:        white,
+    slider-off:        rgba(white, 0.3),
+    slider-off-active: rgba(white, 0.3),
+);
+$mat-dark-theme-foreground: map-merge($mat-dark-theme-foreground, $app-dark-theme-foreground);

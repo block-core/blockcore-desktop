@@ -1,0 +1,27 @@
+$app-font-weight: (
+    'fin': 100,
+    'light': 300,
+    'regular': 400,
+    'medium': 500,
+    'bold': 700,
+);
+
+@function app-typography-level($font-size, $line-height: $font-size, $style: 'regular') {
+    @return mat-typography-level($font-size, $line-height, map-get($app-font-weight, $style));
+}
+
+$app-typography: mat-typography-config(
+    $font-family: 'Roboto, "Helvetica Neue", sans-serif',
+    $display-4: app-typography-level(100px, 100px, 'fin'),
+    $display-3: app-typography-level(50px, 50px, 'light'),
+    $display-2: app-typography-level(40px, 40px, 'light'),
+    $display-1: app-typography-level(30px, 40px, 'regular'),
+    $headline: app-typography-level(24px, 32px, 'regular'),
+    $title: app-typography-level(20px, 32px, 'medium'),
+    $subheading-2: app-typography-level(16px, 28px, 'bold'),
+    $subheading-1: app-typography-level(16px, 28px, 'regular'),
+    $body-2: app-typography-level(14px, 20px, 'bold'),
+    $body-1: app-typography-level(14px, 20px, 'regular'),
+    $caption: app-typography-level(12px, 20px, 'regular'),
+    $button: app-typography-level(14px, 14px, 'medium')
+);

@@ -1,0 +1,21 @@
+@import '../palettes/light-gray.palette';
+
+$app-light-theme-background: (
+    status-bar: map_get($app-light-gray, 300),
+    app-bar:    map_get($app-light-gray, 100),
+    background: map_get($app-light-gray, 300),
+    hover:      rgba(black, 0.04),
+    card:       map_get($app-light-gray, 200),
+    card-2:     map_get($app-light-gray, 100),
+    card-3:     map_get($app-light-gray, 50),
+    dialog:     map_get($app-light-gray, 200),
+    disabled-button: rgba(black, 0.12),
+    raised-button: white,
+    focused-button: $dark-focused,
+    selected-button: map_get($app-light-gray, 300),
+    selected-disabled-button: map_get($app-light-gray, 400),
+    disabled-button-toggle: map_get($app-light-gray, 200),
+    unselected-chip: map_get($app-light-gray, 300),
+    disabled-list-option: map_get($app-light-gray, 200),
+);
+$mat-light-theme-background: map-merge($mat-light-theme-background, $app-light-theme-background);

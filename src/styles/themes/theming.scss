@@ -1,0 +1,52 @@
+
+@mixin app-theme($theme) {
+    $background: map-get($theme, 'background');
+    $primary: map-get($theme, 'primary');
+    $accent: map-get($theme, 'accent');
+    
+    @include angular-material-theme($theme);
+
+    .mat-menu-panel {
+        background-color: map-get($background, 'dialog');
+    }
+
+    .mat-tab-link,
+    .mat-tab-label {
+        font-weight: 300;
+        text-transform: uppercase;
+    }
+    
+    .mat-tab-label-active {
+        background-color: rgba(mat-color($primary, 'default'), .3);
+        opacity: 1 !important;
+    }
+
+    .mat-card .mat-card {
+        background: map-get($background, 'card-2');
+    }
+
+    .mat-card .mat-card .mat-card {
+        background: map-get($background, 'card-3');
+    }
+
+    .mat-slide-toggle-content {
+        font-size: 16px;
+    }
+
+    a {
+        color: mat-color($primary, 'default');
+        text-decoration: underline;
+        transition: color .2ms ease-out;
+
+        &:hover {
+            color: rgba(mat-color($primary, 'default'), .6);
+            transition: color .2ms ease-in;
+        }
+
+        &:visited {
+            color: mat-color($primary, 'default');
+        }
+    }
+
+    //@include app-app-theme($theme);
+}

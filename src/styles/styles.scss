@@ -1,0 +1,168 @@
+@import "~@angular/material/theming";
+
+$roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
+
+@import "./themes/font";
+@import "./typography";
+//@import './material';
+
+//@import './themes/palettes/green.palette';
+@import "./themes/palettes/orange.palette";
+@import "./themes/palettes/red.palette";
+@import "./themes/palettes/light-gray.palette";
+@import "./themes/palettes/dark-gray.palette";
+
+@import "./themes/light/background";
+@import "./themes/light/foreground";
+@import "./themes/light/theme";
+
+@import "./themes/dark/background";
+@import "./themes/dark/foreground";
+@import "./themes/dark/theme";
+
+@import "./themes/theming";
+
+@include mat-core($app-typography);
+
+@include app-theme($app-dark-theme);
+
+.app-light-theme {
+	@include app-theme($app-light-theme);
+}
+
+.app-dark-theme {
+	@include app-theme($app-dark-theme);
+}
+
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background-color: #f8f8f8;
+	font-family: mat-font-family($app-typography);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 28px;
+}
+
+// @media screen and (max-width: 599px) {
+// 	.toolbar {
+// 	}
+// }
+
+.toolbar-bottom {
+	order: 100;
+}
+
+.toolbar {
+	flex-shrink: 0;
+	display: inline-flex;
+}
+
+.content {
+	//overflow: scroll;
+	flex-grow: 1; /*ensures that the container will take up the full height of the parent container*/
+	overflow-y: auto; /*adds scroll to this container*/
+}
+
+.example-fill-remaining-space {
+	/* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+	flex: 1 1 auto;
+}
+
+.example-container {
+	//width: 500px;
+	//height: 300px;
+	height: 100%;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.app-sidenav-content {
+	//display: flex;
+	height: 100%;
+	overflow: hidden;
+	//align-items: center;
+	//justify-content: center;
+
+	height: 100%; /*allows both columns to span the full height of the browser window*/
+	display: flex;
+	flex-direction: column;
+}
+
+.example-sidenav {
+	//padding: 10px;
+}
+
+.main-menu {
+
+}
+
+.main-menu .mat-list-item {
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	cursor: pointer;
+}
+
+.main-menu .mat-list-item:hover {
+	background-color: #f0f0f0;
+}
+
+.mat-list-item-focus {
+	border-right: 3px solid #dfab3c !important;
+}
+
+.main-menu .main-menu-active {
+	border-right: 3px solid #dfab3c;
+}
+
+.main-menu h4 {
+	//color: red! important;
+	margin-right: 4px; /* To offset some of the left padding on icons */
+}
+
+.mat-list {
+	padding-top: 0 !important;
+}
+
+.main-menu-first {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.dashboard-item {
+	width: 80%;
+	margin: 40px;
+}
+
+::-webkit-scrollbar {
+	width: 6px; /* for vertical scrollbars */
+	height: 6px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.404);
+}
+
+::-webkit-scrollbar-thumb {
+	background: #dfab3c;
+}
+
+// ::-webkit-scrollbar-track {
+// 	background-color: orange;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//     background-color: ornage;
+//     outline: none;
+//     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
+// }
