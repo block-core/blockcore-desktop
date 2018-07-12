@@ -6,7 +6,7 @@
 
       <mat-list-item class="main-menu-first">
         <mat-icon svgIcon="app-logo" mat-list-icon></mat-icon>
-        <h4 *ngIf="showFiller" mat-line>City Hub</h4>
+        <h4 *ngIf="showFiller" mat-line>Stratis</h4>
         <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
       </mat-list-item>
 
@@ -29,11 +29,13 @@
         <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
       </mat-list-item>
 
-      <mat-list-item>
+      <mat-list-item routerLinkActive="main-menu-active" routerLink="/logout">
         <mat-icon mat-list-icon>power_settings_new</mat-icon>
         <h4 *ngIf="showFiller" mat-line>Logout</h4>
         <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
       </mat-list-item>
+
+      <div class="fill-remaining-vertical"></div>
 
       <mat-list-item *ngIf="!showFiller" (click)="showFiller = !showFiller">
         <mat-icon>keyboard_arrow_right</mat-icon>
@@ -50,22 +52,39 @@
   <div class="app-sidenav-content">
 
     <mat-toolbar class="toolbar" [ngClass]="{'toolbar-bottom': handset}" color="primary">
-      <span *ngIf="!handset">City Hub</span>
+      <span *ngIf="!handset">Stratis: Logout</span>
 
       <span *ngIf="handset">
-
-          <button mat-stroked-button>Payment</button>
-
+        <button mat-stroked-button>Payment</button>
       </span>
 
       <span class="example-fill-remaining-space"></span>
 
-      <span>Account</span>
+      <!-- <button mat-icon-button>
+        <mat-icon>cloud</mat-icon>
+      </button>
+
+      <button mat-icon-button>
+        <mat-icon>cloud_off</mat-icon>
+      </button> -->
+
+      <button mat-icon-button>
+        <mat-icon>cloud_done</mat-icon>
+      </button>
+
+      <button mat-icon-button >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <!-- <mat-slide-toggle class="example-margin">
+        Staking
+      </mat-slide-toggle> -->
+
     </mat-toolbar>
 
     <div class="content">
 
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
 
       <!-- <br>
 
@@ -84,5 +103,5 @@
 </mat-drawer-container>
 
 <ng-template #anonymous>
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </ng-template>

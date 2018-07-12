@@ -6,6 +6,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { WalletComponent } from './components/wallet/wallet.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,14 @@ const routes: Routes = [
         //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
             title: 'Settings'
+        },
+    },
+    {
+        path: 'logout',
+        component: LogoutComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Logout'
         },
     },
     // {

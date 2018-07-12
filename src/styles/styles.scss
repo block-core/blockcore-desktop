@@ -80,6 +80,12 @@ body {
 	flex: 1 1 auto;
 }
 
+.fill-remaining-vertical {
+	/* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+	flex: 1 1 auto;
+}
+
 .example-container {
 	//width: 500px;
 	//height: 300px;
@@ -135,8 +141,9 @@ body {
 }
 
 .main-menu-first {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	//background-color: #dfab3c;
 }
 
 .dashboard-item {

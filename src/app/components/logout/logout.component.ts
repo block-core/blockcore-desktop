@@ -3,21 +3,21 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    selector: 'app-logout',
+    templateUrl: './logout.component.html',
+    styleUrls: ['./logout.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
-    @HostBinding('class.login') hostClass = 'login';
+export class LogoutComponent {
+    @HostBinding('class.logout') hostClass = 'logout';
 
     constructor(private authService: AuthenticationService, private router: Router) {
 
     }
 
-    login() {
-        this.authService.authenticated = true;
-        this.router.navigateByUrl('/dashboard');
+    logout() {
+        this.authService.authenticated = false;
+        this.router.navigateByUrl('/login');
     }
 }

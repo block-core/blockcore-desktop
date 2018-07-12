@@ -11,6 +11,8 @@ import { NotFoundModule } from './components/not-found/not-found.module';
 import { WalletModule } from './components/wallet/wallet.module';
 import { SettingsModule } from './components/settings/settings.module';
 import { LoginModule } from './components/login/login.module';
+import { AppServicesModule } from './services/services.module';
+import { LogoutModule } from './components/logout/logout.module';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { LoginModule } from './components/login/login.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    AppServicesModule,
     MaterialModule,
     RootModule,
     DashboardModule,
     WalletModule,
     SettingsModule,
     LoginModule,
+    LogoutModule,
     NotFoundModule,
     AppRoutingModule,
   ],

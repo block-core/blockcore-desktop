@@ -1,10 +1,11 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -21,16 +22,17 @@ export class RootComponent implements OnInit, OnDestroy {
   showFiller = false;
   isActive = false;
 
+  // TODO: Change into Observable.
   get userActivated(): boolean {
-    return true;
-}
+    return this.authService.authenticated;
+  }
 
   constructor(
+    private readonly authService: AuthenticationService,
     iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private readonly breakpointObserver: BreakpointObserver,
   ) {
-    iconRegistry.addSvgIcon('app-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/logo.svg'));
-
+    iconRegistry.addSvgIcon('app-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/stratis/logo.svg'));
 
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
@@ -45,12 +47,12 @@ export class RootComponent implements OnInit, OnDestroy {
 
   }
 
-ngOnInit() {
+  ngOnInit() {
 
-}
+  }
 
-ngOnDestroy() {
-  this.destroyed$.next();
-  this.destroyed$.complete();
-}
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }
