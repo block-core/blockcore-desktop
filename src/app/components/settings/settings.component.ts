@@ -9,4 +9,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 })
 export class SettingsComponent {
     @HostBinding('class.settings') hostClass = 'settings';
+
+    autoLock = true;
+    clearOnExit = false;
 }

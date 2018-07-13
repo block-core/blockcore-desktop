@@ -1,1 +1,82 @@
-SETTINGS
+<div class="content">
+
+    <!-- <mat-card>
+</mat-card> -->
+
+    <mat-card class="settings-card">
+        <mat-card-header>
+            <!-- <mat-icon svgIcon="stratis-logo"></mat-icon> -->
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>Security</mat-card-title>
+            <mat-card-subtitle>Settings to help you decide between security and simplicity. Security is hard, and it reduces usability. So we
+                want you to decide.</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+        <mat-card-content>
+
+            <div class="settings-row">
+                <div>
+                    <mat-checkbox class="example-margin" [checked]="autoLock">Auto-Lock</mat-checkbox>
+                </div>
+                <div>Auto-Lock will automatically lock your account after 5 minutes. That means you won't be able to perform any
+                    transactions again, without supplying your personal password.</div>
+            </div>
+
+            <div class="settings-row">
+                <div>
+                    <mat-checkbox class="example-margin" [checked]="clearOnExit">Clear on exit</mat-checkbox>
+                </div>
+                <div>You can clear all data on every exit of the application. This require you to enter your 12-word phrases every
+                    time you use the app.</div>
+            </div>
+
+        </mat-card-content>
+        <!-- <mat-card-actions>
+            <button mat-raised-button>Save</button>
+            <button mat-button>Reset</button>
+        </mat-card-actions> -->
+    </mat-card>
+
+    <mat-card class="settings-card">
+        <mat-card-header>
+            <!-- <mat-icon svgIcon="stratis-logo"></mat-icon> -->
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>User Experience</mat-card-title>
+            <mat-card-subtitle>These settings help you improve the user experience.</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+        <mat-card-content>
+            <h3>Theme</h3>
+
+            <mat-radio-group>
+                <mat-radio-button value="dark">Dark theme</mat-radio-button>
+                <br>
+                <mat-radio-button value="light">Light theme</mat-radio-button>
+            </mat-radio-group>
+
+            <h3>Language</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose language">
+                    <mat-option value="nb-NO">Norsk</mat-option>
+                    <mat-option value="en-US">English</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <h3>Currency</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose currency">
+                    <mat-option value="nb-NO">USD</mat-option>
+                    <mat-option value="en-US">EUR</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </mat-card-content>
+        <!-- <mat-card-actions>
+            <button mat-raised-button>Save</button>
+            <button mat-button>Reset</button>
+        </mat-card-actions> -->
+    </mat-card>
+
+</div>

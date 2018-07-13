@@ -6,6 +6,8 @@ import { Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
 import { AuthenticationService } from '../../services/authentication.service';
+import { ApplicationStateService } from '../../services/application-state.service';
+import { TitleService } from '../../services/title.service';
 
 @Component({
   selector: 'app-root',
@@ -28,23 +30,33 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private readonly titleService: TitleService,
     private readonly authService: AuthenticationService,
+    public readonly appState: ApplicationStateService,
     iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private readonly breakpointObserver: BreakpointObserver,
   ) {
-    iconRegistry.addSvgIcon('app-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/stratis/logo.svg'));
+    iconRegistry.addSvgIcon('stratis-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/stratis/logo.svg'));
+    iconRegistry.addSvgIcon('city-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/city/logo.svg'));
+    iconRegistry.addSvgIcon('bitcoin-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/bitcoin/logo.svg'));
 
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       console.log(result);
       if (result.matches) {
+        appState.handset = true;
         this.handset = true;
       } else {
+        appState.handset = false;
         this.handset = false;
       }
     });
 
+  }
+
+  get appTitle$(): Observable<string> {
+    return this.titleService.$title;
   }
 
   ngOnInit() {

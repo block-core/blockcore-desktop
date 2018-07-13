@@ -9,19 +9,32 @@
     height: 100%;
 	height: 100%; /*allows both columns to span the full height of the browser window*/
 	display: flex;
-	flex-direction: row;
+    flex-direction: row;
+    
 }
 
 .login-content
 {
     width: 44%;
-    min-width: 300px;
+    min-width: 240px;
+    padding-top: 20%;
+    padding-bottom: 20%;
+    text-align: center;
+}
+
+.login-logo
+{
+    width: 100%;
 }
 
 .login-banner
 {
     background-color: #dfab3c;
     width: 56%;
+    background-image: url('/assets/city/splash-image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
 }
 
 .login-banner-content
@@ -29,7 +42,20 @@
     margin: 20%;
 }
 
-.padding-20
-{
-    padding: 20px;
+@media screen and (max-width: 599px) {
+
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-content{
+        width: 100%;
+    }
+
+    .login-banner {
+        width: 100%;
+        flex-grow: 1;
+    }
+
+
 }

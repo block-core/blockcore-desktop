@@ -7,6 +7,10 @@ import { WalletComponent } from './components/wallet/wallet.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { AboutComponent } from './components/about/about.component';
+import { LicensesComponent } from './components/licenses/licenses.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
+import { ChangesComponent } from './components/changes/changes.component';
 
 const routes: Routes = [
     {
@@ -46,7 +50,7 @@ const routes: Routes = [
         component: LoginComponent,
         //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
-            title: 'Settings'
+            title: 'Log in'
         },
     },
     {
@@ -54,17 +58,44 @@ const routes: Routes = [
         component: LogoutComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'Logout'
+            title: 'Log out'
         },
     },
-    // {
-    //     path: 'dashboard',
-    //     canActivate: [AuthenticatedUserGuard],
-    //     //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
-    //     data: {
-    //         title: 'Dashboard',
-    //     },
-    // },
+    {
+        path: 'about',
+        component: AboutComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'About'
+        },
+    },
+    {
+        path: 'changes',
+        component: ChangesComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'What\'s new',
+            prefix: 'About'
+        },
+    },
+    {
+        path: 'licenses',
+        component: LicensesComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Third party licenses',
+            prefix: 'About'
+        },
+    },
+    {
+        path: 'privacy',
+        component: PrivacyComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Privacy Policy',
+            prefix: 'About'
+        },
+    },
     {
         path: '**',
         component: NotFoundComponent,

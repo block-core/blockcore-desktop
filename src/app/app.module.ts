@@ -13,6 +13,12 @@ import { SettingsModule } from './components/settings/settings.module';
 import { LoginModule } from './components/login/login.module';
 import { AppServicesModule } from './services/services.module';
 import { LogoutModule } from './components/logout/logout.module';
+import { AboutModule } from './components/about/about.module';
+import { ChangesModule } from './components/changes/changes.module';
+import { LicensesModule } from './components/licenses/licenses.module';
+import { PrivacyModule } from './components/privacy/privacy.module';
+import { AppSharedModule } from './shared/app-shared.module';
+import { APP_TITLE } from './services/title.service';
 
 @NgModule({
   declarations: [
@@ -29,10 +35,17 @@ import { LogoutModule } from './components/logout/logout.module';
     SettingsModule,
     LoginModule,
     LogoutModule,
+    AboutModule,
+    AppSharedModule,
+    ChangesModule,
+    LicensesModule,
+    PrivacyModule,
     NotFoundModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    { provide: APP_TITLE, useValue: 'City Chain' },
+  ],
   bootstrap: [RootComponent]
 })
 export class AppModule { }

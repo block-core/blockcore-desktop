@@ -68,10 +68,23 @@ body {
 	display: inline-flex;
 }
 
-.content {
+.content-container {
 	//overflow: scroll;
 	flex-grow: 1; /*ensures that the container will take up the full height of the parent container*/
-	overflow-y: auto; /*adds scroll to this container*/
+	//overflow-y: auto; /*adds scroll to this container*/
+	overflow: hidden;
+}
+
+.content
+{
+	margin: 30px;
+}
+
+@media screen and (max-width: 599px) {
+	.content
+{
+	margin: 16px;
+}
 }
 
 .example-fill-remaining-space {
@@ -86,11 +99,8 @@ body {
 	flex: 1 1 auto;
 }
 
-.example-container {
-	//width: 500px;
-	//height: 300px;
+.app-container {
 	height: 100%;
-	border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .app-sidenav-content {
@@ -151,18 +161,7 @@ body {
 	margin: 40px;
 }
 
-::-webkit-scrollbar {
-	width: 6px; /* for vertical scrollbars */
-	height: 6px; /* for horizontal scrollbars */
-}
 
-::-webkit-scrollbar-track {
-	background: rgba(0, 0, 0, 0.404);
-}
-
-::-webkit-scrollbar-thumb {
-	background: #dfab3c;
-}
 
 // ::-webkit-scrollbar-track {
 // 	background-color: orange;
