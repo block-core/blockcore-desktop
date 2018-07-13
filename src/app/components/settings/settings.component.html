@@ -5,8 +5,7 @@
 
     <mat-card class="settings-card">
         <mat-card-header>
-            <!-- <mat-icon svgIcon="stratis-logo"></mat-icon> -->
-            <div mat-card-avatar class="example-header-image"></div>
+            <mat-icon mat-card-avatar>security</mat-icon>
             <mat-card-title>Security</mat-card-title>
             <mat-card-subtitle>Settings to help you decide between security and simplicity. Security is hard, and it reduces usability. So we
                 want you to decide.</mat-card-subtitle>
@@ -16,7 +15,7 @@
 
             <div class="settings-row">
                 <div>
-                    <mat-checkbox class="example-margin" [checked]="autoLock">Auto-Lock</mat-checkbox>
+                    <mat-checkbox class="example-margin" (change)="onChanged($event)" [(ngModel)]="autoLock">Auto-Lock</mat-checkbox>
                 </div>
                 <div>Auto-Lock will automatically lock your account after 5 minutes. That means you won't be able to perform any
                     transactions again, without supplying your personal password.</div>
@@ -24,7 +23,7 @@
 
             <div class="settings-row">
                 <div>
-                    <mat-checkbox class="example-margin" [checked]="clearOnExit">Clear on exit</mat-checkbox>
+                    <mat-checkbox class="example-margin" (change)="onChanged($event)" [(ngModel)]="clearOnExit">Clear on exit</mat-checkbox>
                 </div>
                 <div>You can clear all data on every exit of the application. This require you to enter your 12-word phrases every
                     time you use the app.</div>
@@ -39,8 +38,7 @@
 
     <mat-card class="settings-card">
         <mat-card-header>
-            <!-- <mat-icon svgIcon="stratis-logo"></mat-icon> -->
-            <div mat-card-avatar class="example-header-image"></div>
+            <mat-icon mat-card-avatar>mood</mat-icon>
             <mat-card-title>User Experience</mat-card-title>
             <mat-card-subtitle>These settings help you improve the user experience.</mat-card-subtitle>
         </mat-card-header>
@@ -48,16 +46,16 @@
         <mat-card-content>
             <h3>Theme</h3>
 
-            <mat-radio-group>
-                <mat-radio-button value="dark">Dark theme</mat-radio-button>
+            <mat-radio-group (change)="onThemeChange($event)" [(ngModel)]="selectedTheme">
+                <mat-radio-button value="app-dark-theme">Dark theme</mat-radio-button>
                 <br>
-                <mat-radio-button value="light">Light theme</mat-radio-button>
+                <mat-radio-button value="app-light-theme">Light theme</mat-radio-button>
             </mat-radio-group>
 
             <h3>Language</h3>
 
             <mat-form-field>
-                <mat-select placeholder="Choose language">
+                <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
                     <mat-option value="nb-NO">Norsk</mat-option>
                     <mat-option value="en-US">English</mat-option>
                 </mat-select>
@@ -66,9 +64,10 @@
             <h3>Currency</h3>
 
             <mat-form-field>
-                <mat-select placeholder="Choose currency">
-                    <mat-option value="nb-NO">USD</mat-option>
-                    <mat-option value="en-US">EUR</mat-option>
+                <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="NOK">NOK</mat-option>
                 </mat-select>
             </mat-form-field>
 

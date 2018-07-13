@@ -2,6 +2,10 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
+export interface Account {
+    name: string;
+    id: string;
+}
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -11,6 +15,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
     @HostBinding('class.login') hostClass = 'login';
+
+    selectedAccount: Account;
+
+    accounts: Account[] = [
+        { id: 'steak-0', name: 'main account (CITY)' },
+        { id: 'pizza-1', name: 'BTC (BTC)' },
+        { id: 'tacos-2', name: 'main (STRAT)' }
+    ];
 
     constructor(private authService: AuthenticationService, private router: Router) {
 

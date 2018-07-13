@@ -29,3 +29,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Icons
 
 Find icons to use here: [Material Icons](https://material.io/tools/icons/?style=outline)
+
+# License
+
+MIT @ City Chain Foundation   
+MIT @ Stratisplatform   
