@@ -1,0 +1,34 @@
+<div class="not-selectable">
+    <mat-progress-bar mode="determinate" *ngIf="!generalInfo?.isChainSynced" bufferValue="0" mode="buffer" [value]="percentSyncedNumber"></mat-progress-bar>
+
+    <mat-grid-list class="network-grid" #grid rowHeight="2:1">
+        <mat-grid-tile>
+            <span class="network-label">Block Height</span>
+            <span class="network-value">{{generalInfo?.chainTip}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <span class="network-label">Connections</span>
+            <span class="network-value">{{generalInfo?.connectedNodes}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <span class="network-label">Downloaded blocks</span>
+            <span class="network-value">{{generalInfo?.lastBlockSyncedHeight}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <span class="network-label">Network</span>
+            <span class="network-value">{{generalInfo?.network}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <span class="network-label" *ngIf="generalInfo?.isChainSynced">Chain Synced</span>
+            <span class="network-label" *ngIf="!generalInfo?.isChainSynced">Chain Syncing</span>
+            <span class="network-value" *ngIf="generalInfo?.isChainSynced">
+                <mat-icon *ngIf="generalInfo?.isChainSynced">cloud_done</mat-icon>
+            </span>
+            <span class="network-value" *ngIf="!generalInfo?.isChainSynced">{{percentSynced}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <span class="network-label">Account date</span>
+            <span class="network-value">{{generalInfo?.creationTime.toDateString()}}</span>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

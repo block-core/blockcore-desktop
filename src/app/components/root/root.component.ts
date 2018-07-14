@@ -18,7 +18,7 @@ import { delay, retryWhen } from 'rxjs/operators';
   selector: 'app-root',
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
-  //encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RootComponent implements OnInit, OnDestroy {

@@ -12,6 +12,7 @@ import { LicensesComponent } from './components/licenses/licenses.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { ChangesComponent } from './components/changes/changes.component';
 import { LoadComponent } from './components/load/load.component';
+import { NetworkComponent } from './components/network/network.component';
 
 const routes: Routes = [
     {
@@ -69,6 +70,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Log out'
+        },
+    },
+    {
+        path: 'network',
+        component: NetworkComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Network Status'
         },
     },
     {

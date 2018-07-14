@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable, interval } from 'rxjs';
-import { map, withLatestFrom, } from 'rxjs/operators';
+import { map, withLatestFrom, startWith, switchMap, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
 import { WalletCreation } from '../classes/wallet-creation';
@@ -12,6 +12,7 @@ import { Mnemonic } from '../classes/mnemonic';
 import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
+import { GeneralInfo } from '../classes/general-info';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -106,16 +107,30 @@ export class ApiService {
   /**
    * Get general wallet info from the API.
    */
-  // getGeneralInfo(data: WalletInfo): Observable<any> {
-  //   let params: URLSearchParams = new URLSearchParams();
-  //   params.set('Name', data.walletName);
+  getGeneralInfo(data: WalletInfo): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('Name', data.walletName);
 
-  //   return Observable
-  //     .interval(this.pollingInterval)
-  //     .startWith(0)
-  //     .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params })))
-  //     .map((response: Response) => response);
-  // }
+    return interval(this.pollingInterval)
+      .pipe(startWith(0))
+      //.pipe(switchMap)
+      //.startWith(0)
+      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(map((response: Response) => response));
+  }
+
+  /**
+ * Get general wallet info from the API.
+ */
+  getGeneralInfoTyped(data: WalletInfo): Observable<GeneralInfo> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('Name', data.walletName);
+
+    return interval(this.pollingInterval)
+      .pipe(startWith(0))
+      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(map((response: Response) => <GeneralInfo>(response.json())));
+  }
 
   /**
    * Get wallet balance info from the API.

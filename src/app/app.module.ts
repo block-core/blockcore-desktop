@@ -26,6 +26,7 @@ import { ElectronService } from 'ngx-electron';
 import { GlobalService } from './services/global.service';
 import { HttpModule } from '@angular/http';
 import { LoadModule } from './components/load/load.module';
+import { NetworkModule } from './components/network/network.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { LoadModule } from './components/load/load.module';
     LicensesModule,
     PrivacyModule,
     LoadModule,
+    NetworkModule,
     NotFoundModule,
     AppRoutingModule,
   ],

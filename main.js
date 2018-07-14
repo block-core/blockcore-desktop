@@ -37,8 +37,8 @@ function createWindow() {
         width: 1150,
         height: 650,
         frame: true,
-        minWidth: 1150,
-        minHeight: 650,
+        minWidth: 260,
+        minHeight: 320,
         title: 'City Hub'
     });
     if (serve) {

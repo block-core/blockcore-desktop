@@ -1,10 +1,11 @@
-import { Component, HostBinding, OnDestroy } from '@angular/core';
+import { Component, HostBinding, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 
 @Component({
     selector: 'app-privacy',
     templateUrl: './privacy.component.html',
-    styleUrls: ['./privacy.component.scss']
+    styleUrls: ['./privacy.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PrivacyComponent implements OnDestroy {
     @HostBinding('class.privacy') hostClass = 'privacy';

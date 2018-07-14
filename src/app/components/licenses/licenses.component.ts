@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
@@ -7,7 +7,8 @@ import { retry, tap } from 'rxjs/operators';
 @Component({
     selector: 'app-licenses',
     templateUrl: './licenses.component.html',
-    styleUrls: ['./licenses.component.scss']
+    styleUrls: ['./licenses.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class LicensesComponent implements OnDestroy, OnInit {
     @HostBinding('class.licenses') hostClass = 'licenses';
