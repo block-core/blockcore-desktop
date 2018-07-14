@@ -11,12 +11,29 @@ import { AboutComponent } from './components/about/about.component';
 import { LicensesComponent } from './components/licenses/licenses.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { ChangesComponent } from './components/changes/changes.component';
+import { LoadComponent } from './components/load/load.component';
 
 const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/login'
+        redirectTo: '/load'
+    },
+    {
+        path: 'load',
+        component: LoadComponent,
+        //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
+        data: {
+            title: 'Loading...'
+        },
+    },
+    {
+        path: 'login',
+        component: LoginComponent,
+        //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
+        data: {
+            title: 'Log in'
+        },
     },
     {
         path: 'dashboard',
@@ -45,14 +62,7 @@ const routes: Routes = [
             title: 'Settings'
         },
     },
-    {
-        path: 'login',
-        component: LoginComponent,
-        //canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
-        data: {
-            title: 'Log in'
-        },
-    },
+
     {
         path: 'logout',
         component: LogoutComponent,

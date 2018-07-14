@@ -8,6 +8,11 @@ import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { TitleService } from '../../services/title.service';
+import { ApiService } from '../../services/api.service';
+import { GlobalService } from '../../services/global.service';
+import { ElectronService } from 'ngx-electron';
+import { Router } from '@angular/router';
+import { delay, retryWhen } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -33,12 +38,19 @@ export class RootComponent implements OnInit, OnDestroy {
     private readonly titleService: TitleService,
     private readonly authService: AuthenticationService,
     public readonly appState: ApplicationStateService,
-    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
+    private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
+    private electronService: ElectronService,
+    private router: Router,
+    private apiService: ApiService,
+    private globalService: GlobalService,
     private readonly breakpointObserver: BreakpointObserver,
   ) {
     iconRegistry.addSvgIcon('stratis-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/stratis/logo.svg'));
     iconRegistry.addSvgIcon('city-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/city/logo.svg'));
     iconRegistry.addSvgIcon('bitcoin-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/bitcoin/logo.svg'));
+
+    let applicationVersion = this.electronService.remote.app.getVersion();
+    console.log('Version: ' + applicationVersion);
 
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
@@ -61,6 +73,15 @@ export class RootComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.apiService.getWalletFiles()
+      .pipe(delay(5000))
+      .pipe(retryWhen(errors => errors.pipe(delay(2000))))
+      .subscribe(() => this.startApp());
+  }
+
+  private startApp() {
+    console.log('Connected to daemon.');
+    this.router.navigateByUrl('/login');
   }
 
   ngOnDestroy() {

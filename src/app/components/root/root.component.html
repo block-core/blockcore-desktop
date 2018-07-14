@@ -1,6 +1,6 @@
 <mat-drawer-container *ngIf="userActivated; else anonymous" class="app-container" autosize>
 
-  <mat-drawer #drawer class="example-sidenav" *ngIf="!handset" opened mode="side">
+  <mat-drawer #drawer class="example-sidenav not-selectable" *ngIf="!handset" opened mode="side">
     <app-view-area>
       <mat-list class="main-menu">
         <!-- <h3 mat-subheader>Folders</h3> -->
@@ -68,7 +68,7 @@
 
   <div class="app-sidenav-content">
 
-    <mat-toolbar class="toolbar" [ngClass]="{'toolbar-bottom': handset}" color="primary">
+    <mat-toolbar class="toolbar not-selectable" [ngClass]="{'toolbar-bottom': handset}" color="primary">
       
         <button *ngIf="appState.pageMode" routerLinkBack mat-icon-button>
           <mat-icon>close</mat-icon>

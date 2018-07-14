@@ -1,11 +1,11 @@
-<div class="login-container">
+<div class="login-container not-selectable">
     <div class="login-content">
 
         <!-- <div>
             <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon> City Chain
         </div> -->
 
-        <div class="accounts" *ngIf="accounts.length > 0">
+        <div class="accounts" *ngIf="hasWallet">
             <mat-form-field>
                 <mat-select placeholder="Select account" [(ngModel)]="selectedAccount">
                     <mat-option *ngFor="let account of accounts" [value]="account.id">

@@ -21,6 +21,11 @@ import { AppSharedModule } from './shared/app-shared.module';
 import { APP_TITLE } from './services/title.service';
 import { FormsModule } from '@angular/forms';
 import { Theming } from './services/theming.service';
+import { ApiService } from './services/api.service';
+import { ElectronService } from 'ngx-electron';
+import { GlobalService } from './services/global.service';
+import { HttpModule } from '@angular/http';
+import { LoadModule } from './components/load/load.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +33,7 @@ import { Theming } from './services/theming.service';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpModule,
     FormsModule,
     HttpClientModule,
     AppServicesModule,
@@ -43,10 +49,17 @@ import { Theming } from './services/theming.service';
     ChangesModule,
     LicensesModule,
     PrivacyModule,
+    LoadModule,
     NotFoundModule,
     AppRoutingModule,
   ],
+  exports: [
+    HttpModule
+  ],
   providers: [
+    ApiService,
+    ElectronService,
+    GlobalService,
     { provide: APP_TITLE, useValue: 'City Chain' },
   ],
   bootstrap: [RootComponent]

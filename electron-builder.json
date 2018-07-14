@@ -1,0 +1,52 @@
+{
+    "appId": "org.city-chain.hub",
+    "productName": "City Hub",
+    "publish": null,
+    "directories": {
+      "output": "app-builds"
+    },
+    "win": {
+      "icon": "dist/assets/images/icon",
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
+    },
+    "linux": {
+      "icon": "dist/assets/images/",
+      "target": [
+        "deb",
+        "tar.gz"
+      ],
+      "synopsis": "City Hub: full node staking wallet.",
+      "category": "Utility",
+      "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
+    },
+    "mac": {
+      "icon": "dist/assets/images/icon.icns",
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "guid": "8f5707f5-2661-4f25-8295-2e50e2e7fc89",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "license": "src/assets/images/license_en.txt"
+    },
+    "msi": {
+      "warningsAsErrors": false
+    },
+    "extraResources": [
+      "daemon/**/*",
+      "src/assets/images/icon-tray.png",
+      "src/assets/images/license_en.txt"
+    ]
+  }
+  
