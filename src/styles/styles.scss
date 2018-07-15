@@ -223,6 +223,11 @@ body {
 		-moz-appearance: none;
 		margin-left: 1px;
 		height: 32px;
+		transition-duration: 500ms
+   }
+
+   .title-bar-btn:hover {
+       background-color: #dfab3c;
    }
 
    .title-bar-btn i {
