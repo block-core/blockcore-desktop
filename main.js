@@ -36,10 +36,11 @@ function createWindow() {
     mainWindow = new electron_1.BrowserWindow({
         width: 1150,
         height: 650,
-        frame: true,
+        frame: false,
         minWidth: 260,
         minHeight: 320,
-        title: 'City Hub'
+        title: 'City Hub',
+        icon: __dirname + '/app.ico'
     });
     if (serve) {
         require('electron-reload')(__dirname, {});

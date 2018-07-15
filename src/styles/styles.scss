@@ -99,10 +99,6 @@ body {
 	flex: 1 1 auto;
 }
 
-.app-container {
-	height: 100%;
-}
-
 .app-sidenav-content {
 	//display: flex;
 	height: 100%;
@@ -179,3 +175,58 @@ body {
 //     outline: none;
 //     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
 // }
+
+
+#title-bar-logo
+{
+	height: 32px;
+	z-index: 1000;
+	position: absolute;
+	
+}
+
+#title-bar {
+	-webkit-app-region: drag;
+	height: 28px; 
+	background-color: #dfab3c;
+	padding: none;
+	margin: 0px; 
+   }
+   
+   #title {
+	position: fixed;
+	top: 2px;
+	left: 6px; 
+   }
+   
+   #title-bar-btns {
+		-webkit-app-region: no-drag;
+		position: fixed;
+		top: 2px;
+		background-color: transparent;
+		border: none;
+		right: 6px;
+   }
+
+   #title-bar-btns button:hover {
+	background-color: #3F3F41;
+   }
+
+   html, body
+   {
+	   overflow: hidden;
+   }
+
+.app-electron
+{
+}
+
+.app-electron .login {
+	height: calc(100% - 33px);
+}
+
+.app-electron .app-container {
+	height: calc(100% - 33px);
+}
+
+
