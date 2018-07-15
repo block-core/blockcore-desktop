@@ -69,20 +69,20 @@
   <div class="app-sidenav-content">
 
     <mat-toolbar class="toolbar not-selectable" [ngClass]="{'toolbar-bottom': handset}" color="primary">
-      
-        <button *ngIf="appState.pageMode" routerLinkBack mat-icon-button>
-          <mat-icon>close</mat-icon>
-        </button>
 
-        <span *ngIf="!handset">{{appTitle$ | async}}</span>
+      <button *ngIf="appState.pageMode" routerLinkBack mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
 
-        <span *ngIf="handset && !appState.pageMode">
-          <button mat-stroked-button>Payment</button>
-        </span>
+      <span *ngIf="!handset">{{appTitle$ | async}}</span>
 
-        <span class="example-fill-remaining-space"></span>
+      <span *ngIf="handset && !appState.pageMode">
+        <button mat-stroked-button>Payment</button>
+      </span>
 
-        <!-- <button mat-icon-button>
+      <span class="example-fill-remaining-space"></span>
+
+      <!-- <button mat-icon-button>
         <mat-icon>cloud</mat-icon>
       </button>
 
@@ -90,45 +90,33 @@
         <mat-icon>cloud_off</mat-icon>
       </button> -->
 
-        <button *ngIf="!appState.pageMode" mat-icon-button routerLink="/network">
-          <mat-icon>cloud_done</mat-icon>
+      <button *ngIf="!appState.pageMode" mat-icon-button routerLink="/network">
+        <mat-icon>cloud_done</mat-icon>
+      </button>
+
+      <button *ngIf="!appState.pageMode" mat-icon-button [matMenuTriggerFor]="moreMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #moreMenu="matMenu">
+        <button mat-menu-item routerLink="/about">
+          <mat-icon>info</mat-icon>
+          <span>About</span>
         </button>
-
-        <button *ngIf="!appState.pageMode" mat-icon-button [matMenuTriggerFor]="moreMenu">
-          <mat-icon>more_vert</mat-icon>
+        <button mat-menu-item routerLink="/logout">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Log out</span>
         </button>
+      </mat-menu>
 
-        <mat-menu #moreMenu="matMenu">
-          <button mat-menu-item routerLink="/about">
-            <mat-icon>info</mat-icon>
-            <span>About</span>
-          </button>
-          <button mat-menu-item routerLink="/logout">
-            <mat-icon>power_settings_new</mat-icon>
-            <span>Log out</span>
-          </button>
-        </mat-menu>
-
-        <!-- <mat-slide-toggle class="example-margin">
+      <!-- <mat-slide-toggle class="example-margin">
         Staking
       </mat-slide-toggle> -->
     </mat-toolbar>
 
     <app-view-area>
       <div class="content-container">
-
         <router-outlet></router-outlet>
-
-        <!-- <br>
-      
-            <div class="dashboard-item" [class.mat-elevation-z2]="!isActive" [class.mat-elevation-z8]="isActive">
-      
-              <h2>Dashboard</h2>
-      
-            </div>
-      
-            <button mat-button (click)="isActive = !isActive">Toggle Elevation</button> -->
-
       </div>
     </app-view-area>
 
@@ -137,5 +125,6 @@
 </mat-drawer-container>
 
 <ng-template #anonymous>
+  <h1>YOU ARE ANONYMOUS!</h1>
   <router-outlet></router-outlet>
 </ng-template>

@@ -7,6 +7,10 @@ import { MaterialModule } from '../../material.module';
 import { AppServicesModule } from '../../services/services.module';
 import { RouterModule } from '@angular/router';
 import { AppSharedModule } from '../../shared/app-shared.module';
+import { AboutRoutingModule } from './about-routing.module';
+import { ChangesModule } from './changes/changes.module';
+import { LicensesModule } from './licenses/licenses.module';
+import { PrivacyModule } from './privacy/privacy.module';
 
 @NgModule({
     imports: [
@@ -16,7 +20,11 @@ import { AppSharedModule } from '../../shared/app-shared.module';
         AppServicesModule,
         AppSharedModule,
         MaterialModule,
-        ViewAreaModule
+        ViewAreaModule,
+        ChangesModule,
+        LicensesModule,
+        PrivacyModule,
+        AboutRoutingModule
     ],
     declarations: [
         AboutComponent,

@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import { ApplicationStateService } from '../../services/application-state.service';
+import { ApplicationStateService } from '../../../services/application-state.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { retry, tap } from 'rxjs/operators';

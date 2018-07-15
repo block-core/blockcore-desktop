@@ -14,9 +14,6 @@ import { LoginModule } from './components/login/login.module';
 import { AppServicesModule } from './services/services.module';
 import { LogoutModule } from './components/logout/logout.module';
 import { AboutModule } from './components/about/about.module';
-import { ChangesModule } from './components/changes/changes.module';
-import { LicensesModule } from './components/licenses/licenses.module';
-import { PrivacyModule } from './components/privacy/privacy.module';
 import { AppSharedModule } from './shared/app-shared.module';
 import { APP_TITLE } from './services/title.service';
 import { FormsModule } from '@angular/forms';
@@ -47,9 +44,6 @@ import { NetworkModule } from './components/network/network.module';
     LogoutModule,
     AboutModule,
     AppSharedModule,
-    ChangesModule,
-    LicensesModule,
-    PrivacyModule,
     LoadModule,
     NetworkModule,
     NotFoundModule,

@@ -23,17 +23,22 @@
                     <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
                 </mat-form-field>
                 <br>
-                <button mat-raised-button color="primary">Unlock</button>
+                <button (click)="login()" mat-raised-button color="primary">Unlock</button>
             </span>
-            <br><br>
+            <br>
+            <br>
             <mat-divider></mat-divider>
-            <br><br>
+            <br>
+            <br>
         </div>
 
         <div>
-            <button (click)="login()" mat-stroked-button>Create</button> or
-            <button (click)="login()" mat-stroked-button color="primary">Restore</button>
+            <button routerLink="/account/create" mat-stroked-button>Create</button> or
+            <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
             your account
+            <br>
+            <br>
+            <button (click)="login()" mat-stroked-button>OPEN DASHBOARD (DEBUGGING)</button> 
         </div>
     </div>
     <div class="login-banner">

@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ApplicationStateService } from '../../services/application-state.service';
+import { ApplicationStateService } from '../../../services/application-state.service';
 
 @Component({
     selector: 'app-privacy',

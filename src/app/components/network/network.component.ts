@@ -49,10 +49,12 @@ export class NetworkComponent implements OnInit, AfterContentInit {
 
     private getGeneralWalletInfo() {
         //let walletInfo = new WalletInfo(this.globalService.getWalletName());
-        const walletInfo = new WalletInfo('stratis');
+        const walletInfo = new WalletInfo('test01');
         this.apiService.getGeneralInfoTyped(walletInfo)
             .subscribe(response => {
                 this.generalInfo = response;
+
+                console.log(this.generalInfo);
 
                 // Uncomment to change the UI to simulate downloading state.
                 //this.generalInfo.lastBlockSyncedHeight = 50;
