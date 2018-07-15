@@ -26,7 +26,8 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 
 @include app-theme($app-dark-theme);
 
-$app-height: calc(100% - 33px);
+$app-title-bar-height: 32px;
+$app-height: calc(100% - 32px);
 
 .app-light-theme {
 	@include app-theme($app-light-theme);
@@ -181,7 +182,7 @@ body {
 
 #title-bar-logo
 {
-	height: 32px;
+	height: 26px;
 	z-index: 1000;
 	position: absolute;
 	
@@ -189,29 +190,48 @@ body {
 
 #title-bar {
 	-webkit-app-region: drag;
-	height: 28px; 
-	background-color: #dfab3c;
+	height: $app-title-bar-height; 
+	background-color: #0d0d0d;
 	padding: none;
 	margin: 0px; 
    }
+
    
    #title {
 	position: fixed;
-	top: 2px;
-	left: 6px; 
+	z-index: 5000;
+	top: 3px;
+	left: 3px; 
    }
    
    #title-bar-btns {
 		-webkit-app-region: no-drag;
 		position: fixed;
-		top: 2px;
+		top: 0px;
 		background-color: transparent;
 		border: none;
-		right: 6px;
+		right: 0px;
+   }
+
+   .title-bar-btn {
+		border: none;
+		background-color: transparent;
+		outline: none;
+		background-color: #0d0d0d;
+		color: #ffffff;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		margin-left: 1px;
+		height: 32px;
+   }
+
+   .title-bar-btn i {
+	   font-size: 20px;
    }
 
    #title-bar-btns button:hover {
-	background-color: #3F3F41;
+	
+	background-color: #dfab3c;
    }
 
    html, body
