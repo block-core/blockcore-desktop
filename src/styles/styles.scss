@@ -223,11 +223,25 @@ body {
 		-moz-appearance: none;
 		margin-left: 1px;
 		height: 32px;
-		transition-duration: 500ms
+		transition-duration: 500ms;
+		-webkit-transition-duration: 500ms;
+		-moz-transition-duration: 500ms;
    }
 
    .title-bar-btn:hover {
-       background-color: #dfab3c;
+	   background-color: #dfab3c;
+   }
+
+   .material-icons {
+		transition-duration: 500ms;
+		-webkit-transition-duration: 500ms;
+		-moz-transition-duration: 500ms;
+   }
+
+   .material-icons:hover {
+	   transform: rotate(360deg);
+	   -webkit-transform: rotate(360deg);
+	   -moz-transform: rotate(360deg);
    }
 
    .title-bar-btn i {
