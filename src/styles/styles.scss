@@ -26,6 +26,8 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 
 @include app-theme($app-dark-theme);
 
+$app-height: calc(100% - 33px);
+
 .app-light-theme {
 	@include app-theme($app-light-theme);
 }
@@ -222,11 +224,20 @@ body {
 }
 
 .app-electron .login {
-	height: calc(100% - 33px);
+	height: $app-height;
 }
 
 .app-electron .app-container {
-	height: calc(100% - 33px);
+	height: $app-height;
 }
 
 
+.splash-container
+{
+	height: $app-height;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-direction: column;
+}
