@@ -5,9 +5,31 @@ import * as os from 'os';
 
 let serve;
 let testnet;
+let coin;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
+coin = args.some(val => val === '--coin' || val === '-coin') || 'city';
+
+interface Coin {
+    name: string;
+    identity: string;
+    tooltip: string;
+}
+
+let availableCoins: Array<Coin>;
+availableCoins = [{ name: 'City Chain', identity: 'city', tooltip: 'City Hub' }, { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core' }, { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }];
+
+// Couldn't use .find with the current tsconfig setup.
+const selectedCoins = availableCoins.filter(c => c.identity === coin);
+let selectedCoin: Coin;
+
+if (selectedCoins.length === 0) {
+    console.error('The supplied coin parameter is invalid. Argument value: ' + coin);
+    selectedCoin = availableCoins[0];
+} else {
+    selectedCoin = selectedCoins[0];
+}
 
 let apiPort;
 if (testnet) {
@@ -49,10 +71,10 @@ function createWindow() {
     if (serve) {
         require('electron-reload')(__dirname, {
         });
-        mainWindow.loadURL('http://localhost:4200');
+        mainWindow.loadURL('http://localhost:4200?coin=' + selectedCoin.identity);
     } else {
         mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'dist/index.html'),
+            pathname: path.join(__dirname, 'dist/index.html?coin=' + selectedCoin.identity),
             protocol: 'file:',
             slashes: true
         }));
@@ -81,7 +103,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
     if (serve) {
-        console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
+        console.log('City Hub was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
     } else {
         startStratisApi();
     }
@@ -176,9 +198,9 @@ function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-        trayIcon = nativeImage.createFromPath('./src/assets/images/icon-tray.png');
+        trayIcon = nativeImage.createFromPath('./src/assets/' + selectedCoin.identity + '/icon-tray.png');
     } else {
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/icon-tray.png'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + selectedCoin.identity + '/icon-tray.png'));
     }
 
     let systemTray = new Tray(trayIcon);
@@ -196,7 +218,7 @@ function createTray() {
             }
         }
     ]);
-    systemTray.setToolTip('Stratis Core');
+    systemTray.setToolTip(selectedCoin.tooltip);
     systemTray.setContextMenu(contextMenu);
     systemTray.on('click', function () {
         if (!mainWindow.isVisible()) {

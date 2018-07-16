@@ -2,6 +2,7 @@
 
 $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 
+@import "./variables";
 @import "./themes/font";
 @import "./typography";
 //@import './material';
@@ -26,8 +27,6 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 
 @include app-theme($app-dark-theme);
 
-$app-title-bar-height: 32px;
-$app-height: calc(100% - 32px);
 
 .app-light-theme {
 	@include app-theme($app-light-theme);

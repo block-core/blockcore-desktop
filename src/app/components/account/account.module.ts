@@ -5,8 +5,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { AppServicesModule } from '../../services/services.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountRoutingModule } from './account-routing.module';
+import { AppSharedModule } from '../../shared/app-shared.module';
 
 @NgModule({
     imports: [
@@ -14,6 +15,8 @@ import { AccountRoutingModule } from './account-routing.module';
         RouterModule,
         AppServicesModule,
         FormsModule,
+        AppSharedModule,
+        ReactiveFormsModule,
         MaterialModule,
         AccountRoutingModule,
     ],

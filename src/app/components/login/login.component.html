@@ -36,14 +36,14 @@
             <button routerLink="/account/create" mat-stroked-button>Create</button> or
             <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
             your account
+            <!-- <br>
             <br>
-            <br>
-            <button (click)="login()" mat-stroked-button>OPEN DASHBOARD (DEBUGGING)</button> 
+            <button (click)="login()" mat-stroked-button>OPEN DASHBOARD (DEBUGGING)</button>  -->
         </div>
     </div>
     <div class="login-banner">
         <div class="login-banner-content">
-            <img src="/assets/city/city-chain.png" class="login-logo">
+            <img src="/assets/{{appState.coin}}/logo-full-light.png" class="login-logo">
             <br>
             <br>
             <h3>Log in to access your account</h3>

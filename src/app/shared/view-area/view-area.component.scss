@@ -1,7 +1,9 @@
+@import "../../../styles/variables";
+
 .app-view-area {
     display: block;
     width: 100%;
-    height: 100%;
+    height: $app-height;
     overflow-y: auto;
 }
 
@@ -16,8 +18,8 @@
     }
 
     .app-view-area::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
+        width: 8px;
+        height: 8px;
     }
 
     .app-view-area::-webkit-scrollbar-track {
@@ -25,8 +27,8 @@
     }
 
     .app-view-area-hover::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
+        width: 8px;
+        height: 8px;
     }
 
     .app-view-area-hover::-webkit-scrollbar-thumb {

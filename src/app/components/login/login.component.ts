@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
+import { ApplicationStateService } from '../../services/application-state.service';
 
 export interface Account {
     name: string;
@@ -28,7 +29,9 @@ export class LoginComponent implements OnInit {
     constructor(
         private readonly cd: ChangeDetectorRef,
         private authService: AuthenticationService, private router: Router,
-        private globalService: GlobalService, private apiService: ApiService) {
+        public appState: ApplicationStateService,
+        private globalService: GlobalService,
+        private apiService: ApiService) {
 
     }
 

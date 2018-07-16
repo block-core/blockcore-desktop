@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { ViewAreaModule } from './view-area/view-area.module';
 import { RouterLinkBack } from './directives/router-link-back.directive';
+import { PasswordValidationDirective } from './directives/password-validation.directive';
 
-const SHARED_DIRECTIVES = [RouterLinkBack];
+const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective];
 
 @NgModule({
     declarations: [
