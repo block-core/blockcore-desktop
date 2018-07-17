@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, Inject } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm, FormBuilder } from '@angular/forms';
@@ -6,6 +6,20 @@ import { GlobalService } from '../../../services/global.service';
 import { ApiService } from '../../../services/api.service';
 import { PasswordValidationDirective } from '../../../shared/directives/password-validation.directive';
 import { WalletCreation } from '../../../classes/wallet-creation';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
+
+export interface DialogData {
+    animal: 'panda' | 'unicorn' | 'lion';
+}
+
+@Component({
+    selector: 'app-account-create-success-dialog',
+    templateUrl: 'create-success-dialog.html',
+})
+export class CreateAccountSuccessDialog {
+    constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+}
 
 @Component({
     selector: 'app-account-create',
@@ -38,10 +52,22 @@ export class CreateAccountComponent {
     constructor(private authService: AuthenticationService,
         private router: Router,
         private fb: FormBuilder,
+        public dialog: MatDialog,
+        public snackBar: MatSnackBar,
         private globalService: GlobalService,
         private apiService: ApiService) {
 
         this.onGenerate();
+
+    }
+
+    openDialog() {
+
+        // this.dialog.open(CreateAccountSuccessDialog, {
+        //     data: {
+        //         animal: 'panda'
+        //     }
+        // });
     }
 
     public onPrint() {
@@ -101,11 +127,16 @@ export class CreateAccountComponent {
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         console.log('Wallet Created!');
+
+                        let snackBarRef = this.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                        this.router.navigateByUrl('/login');
+
                         //this.genericModalService.openModal("Wallet Created", "Your wallet has been created.<br>Keep your secret words and password safe!");
-                        this.router.navigateByUrl('/');
+                        //this.router.navigateByUrl('/');
                     }
                 },
                 error => {
+                    console.error(error);
                     // this.isCreating = false;
                     // console.log(error);
                     // if (error.status === 0) {

@@ -42,7 +42,7 @@
                     <button mat-raised-button color="primary" matStepperNext type="button">Yes, it is safe!</button>
                 </div>
             </mat-step>
-            <mat-step label="Verification" editable="false">
+            <mat-step label="Verification" editable="true">
                 <p>
                     Select the correct third word from the pass phrase (mnemonic):
                 </p>
@@ -80,7 +80,7 @@
                     <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
                 </div>
             </mat-step>
-            <mat-step label="Name" editable="false">
+            <mat-step label="Name" editable="true">
                 <p>
                     You can name your account here, or keep the default:
                 </p>
@@ -97,14 +97,14 @@
                     <button type="button" color="primary" (click)="createAccount()" matStepperNext mat-raised-button>Create account</button>
                 </div>
             </mat-step>
-            <mat-step label="Done" editable="false">
+            <!-- <mat-step label="Done" editable="false">
                 <p>
                     Success! You are ready to start using City Hub!
                 </p>
                 <div>
                     <button type="button" routerLink="/login" color="primary" mat-raised-button>Go to login</button>
                 </div>
-            </mat-step>
+            </mat-step> -->
         </mat-vertical-stepper>
     </form>
 </div>
