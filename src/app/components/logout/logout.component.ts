@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LogoutComponent {
-    @HostBinding('class.logout') hostClass = 'logout';
+    @HostBinding('class.logout') hostClass = true;
 
     constructor(private authService: AuthenticationService, private router: Router) {
 

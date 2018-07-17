@@ -13,6 +13,6 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent {
-    @HostBinding('class.about') hostClass = 'about';
+    @HostBinding('class.about') hostClass = true;
 
 }

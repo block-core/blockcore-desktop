@@ -10,7 +10,7 @@ import { NgForm } from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent {
-    @HostBinding('class.settings') hostClass = 'settings';
+    @HostBinding('class.settings') hostClass = true;
 
     autoLock = true;
     clearOnExit = false;

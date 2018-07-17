@@ -30,6 +30,61 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Find icons to use here: [Material Icons](https://material.io/tools/icons/?style=outline)
 
+## Styling guidelines
+
+Components should define a class on the container element, which has the same name as the component and its files.
+
+The login.component.ts should contain the following host binding:
+
+```ts
+@HostBinding('class.login') hostClass = true;
+```
+
+The login.component.scss should have a root class that wraps all encapsulated local types within the component.
+
+```css
+.login
+{
+    height: 100%;
+    width: 100%;
+
+    .login-container
+    {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+}
+```
+
+All classes within a component encapsulation class, should be prefixed with the classname + dash, e.g. "login-".
+
+This will generate a class definition:
+
+```css
+.login .login-container {}
+```
+
+With this configuration, it is easy to find the class that applies to an DOM element as you can quickly search for the name.
+
+Example:
+
+```html
+<div class="login-container"></div>
+```
+
+Avoid generated class names, such as the following syntax:
+
+```css
+.login
+{
+    &-container {
+        /* Do not do this. It is lazy, and makes it impossible to find definitions by searching. */
+    }
+}
+```
+
 # License
 
 MIT @ City Chain Foundation   

@@ -14,14 +14,6 @@ export interface DialogData {
 }
 
 @Component({
-    selector: 'app-account-create-success-dialog',
-    templateUrl: 'create-success-dialog.html',
-})
-export class CreateAccountSuccessDialog {
-    constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-}
-
-@Component({
     selector: 'app-account-create',
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss'],

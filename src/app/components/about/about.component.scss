@@ -1,26 +1,28 @@
-.about-card {
-    max-width: 700px;
-    margin-bottom: 30px;
-    padding-top: 20px;
-  }
-
-.about-card .mat-card-image:first-child
-    {
-    margin-top: -8px;
+.about {
+    .about-card {
+        max-width: 700px;
+        margin-bottom: 30px;
+        padding-top: 20px;
+      }
+    
+    .about-card .mat-card-image:first-child
+        {
+        margin-top: -8px;
+        }
+    
+     .about-nav-title {
+        flex: 1 1 auto;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
-
- .about-nav-title {
-    flex: 1 1 auto;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.about-nav-caret {
-    flex: 0 0 auto;
-}
-
-.about-card .mat-stroked-button {
-    margin-right: 10px;
-    margin-top: 10px;
+    
+    .about-nav-caret {
+        flex: 0 0 auto;
+    }
+    
+    .about-card .mat-stroked-button {
+        margin-right: 10px;
+        margin-top: 10px;
+    }
 }

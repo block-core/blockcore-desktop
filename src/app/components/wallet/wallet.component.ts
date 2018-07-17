@@ -8,5 +8,5 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WalletComponent {
-    @HostBinding('class.wallet') hostClass = 'wallet';
+    @HostBinding('class.wallet') hostClass = true;
 }

@@ -8,7 +8,7 @@ import { ApplicationStateService } from '../../../services/application-state.ser
     encapsulation: ViewEncapsulation.None
 })
 export class PrivacyComponent implements OnDestroy {
-    @HostBinding('class.privacy') hostClass = 'privacy';
+    @HostBinding('class.privacy') hostClass = true;
 
     constructor(public appState: ApplicationStateService) {
         this.appState.pageMode = true;

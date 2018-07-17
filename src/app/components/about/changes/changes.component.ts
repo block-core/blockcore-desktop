@@ -8,7 +8,7 @@ import { ApplicationStateService } from '../../../services/application-state.ser
     encapsulation: ViewEncapsulation.None
 })
 export class ChangesComponent implements OnDestroy {
-    @HostBinding('class.changes') hostClass = 'changes';
+    @HostBinding('class.changes') hostClass = true;
 
     constructor(public readonly appState: ApplicationStateService) {
         this.appState.pageMode = true;

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -22,6 +22,8 @@ import { delay, retryWhen } from 'rxjs/operators';
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RootComponent implements OnInit, OnDestroy {
+
+  @HostBinding('class.root') hostClass = true;
 
   private readonly destroyed$ = new Subject<void>();
   handset = false;

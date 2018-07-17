@@ -15,7 +15,7 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
     encapsulation: ViewEncapsulation.None
 })
 export class NetworkComponent implements OnInit, AfterContentInit {
-    @HostBinding('class.network') hostClass = 'network';
+    @HostBinding('class.network') hostClass = true;
     @ViewChild('grid') grid: MatGridList;
 
     public percentSyncedNumber = 0;

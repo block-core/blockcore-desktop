@@ -17,13 +17,11 @@ export interface Account {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
-    @HostBinding('class.login') hostClass = 'login';
-
-    selectedAccount: Account;
+    @HostBinding('class.login') hostClass = true;
 
     private wallets: [string];
-    public hasWallet: boolean = false;
-
+    selectedAccount: Account;
+    hasWallet = false;
     accounts: Account[] = [];
 
     constructor(

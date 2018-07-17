@@ -54,11 +54,11 @@
         <div class="fill-remaining-vertical"></div>
 
         <mat-list-item *ngIf="!showFiller" (click)="showFiller = !showFiller">
-          <mat-icon>keyboard_arrow_right</mat-icon>
+          <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
         </mat-list-item>
 
         <mat-list-item *ngIf="showFiller" (click)="showFiller = !showFiller">
-          <mat-icon>keyboard_arrow_left</mat-icon>
+          <mat-icon mat-list-icon>keyboard_arrow_left</mat-icon>
         </mat-list-item>
 
       </mat-list>

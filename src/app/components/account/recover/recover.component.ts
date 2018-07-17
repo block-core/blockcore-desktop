@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class RecoverAccountComponent {
-    @HostBinding('class.account-recover') hostClass = 'account-recover';
+    @HostBinding('class.account-recover') hostClass = true;
 
     constructor(private authService: AuthenticationService, private router: Router) {
 

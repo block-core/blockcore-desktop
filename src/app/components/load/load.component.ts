@@ -13,7 +13,7 @@ export interface Account {
     encapsulation: ViewEncapsulation.None,
 })
 export class LoadComponent {
-    @HostBinding('class.load') hostClass = 'load';
+    @HostBinding('class.load') hostClass = true;
 
     constructor(private authService: AuthenticationService, private router: Router) {
 

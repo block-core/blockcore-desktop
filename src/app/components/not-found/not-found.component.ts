@@ -8,5 +8,5 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotFoundComponent {
-    @HostBinding('class.app-not-found') hostClass = 'app-not-found';
+    @HostBinding('class.app-not-found') hostClass = true;
 }

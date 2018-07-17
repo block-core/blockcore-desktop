@@ -11,7 +11,7 @@ import { retry, tap } from 'rxjs/operators';
     encapsulation: ViewEncapsulation.None,
 })
 export class LicensesComponent implements OnDestroy, OnInit {
-    @HostBinding('class.licenses') hostClass = 'licenses';
+    @HostBinding('class.licenses') hostClass = true;
 
     selectedContent: SafeHtml;
 

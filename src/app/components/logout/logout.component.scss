@@ -1,35 +1,9 @@
-.login
+.logout
 {
-    height: 100%;
-    width: 100%;
-}
+    display: flex;
+    justify-content: center;
+	align-content: center;
+    align-items: center;
+    min-height: 200px;
 
-.login-container
-{
-    height: 100%;
-	height: 100%; /*allows both columns to span the full height of the browser window*/
-	display: flex;
-	flex-direction: row;
-}
-
-.login-content
-{
-    width: 44%;
-    min-width: 300px;
-}
-
-.login-banner
-{
-    background-color: #dfab3c;
-    width: 56%;
-}
-
-.login-banner-content
-{
-    margin: 20%;
-}
-
-.padding-20
-{
-    padding: 20px;
 }

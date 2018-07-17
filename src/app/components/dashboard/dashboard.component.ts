@@ -29,7 +29,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
-    @HostBinding('class.dashboard') hostClass = 'dashboard';
+    @HostBinding('class.dashboard') hostClass = true;
 
     displayedColumns: string[] = ['position', 'name', 'weight'];
     dataSource = ELEMENT_DATA;
