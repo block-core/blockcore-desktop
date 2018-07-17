@@ -56,6 +56,11 @@ function createWindow() {
         title: 'City Hub',
         icon: __dirname + '/app.ico'
     });
+    // Make sure links that open new window, e.g. target="_blank" launches in external window (browser).
+    mainWindow.webContents.on('new-window', function (event, linkUrl) {
+        event.preventDefault();
+        electron_1.shell.openExternal(linkUrl);
+    });
     if (serve) {
         require('electron-reload')(__dirname, {});
         mainWindow.loadURL('http://localhost:4200?coin=' + selectedCoin.identity);

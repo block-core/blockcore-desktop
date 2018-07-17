@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, shell } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -66,6 +66,12 @@ function createWindow() {
         minHeight: 320,
         title: 'City Hub',
         icon: __dirname + '/app.ico'
+    });
+
+    // Make sure links that open new window, e.g. target="_blank" launches in external window (browser).
+    mainWindow.webContents.on('new-window', function (event, linkUrl) {
+        event.preventDefault();
+        shell.openExternal(linkUrl);
     });
 
     if (serve) {

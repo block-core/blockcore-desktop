@@ -94,7 +94,8 @@
                 </p>
                 <div>
                     <button mat-raised-button matStepperPrevious type="button">Back</button>
-                    <button type="button" color="primary" (click)="createAccount()" matStepperNext mat-raised-button>Create account</button>
+                    <button type="button" color="primary" (click)="createAccount()" matStepperNext mat-raised-button [disabled]="saving">Create account</button>
+                    <div class="spinner-container" *ngIf="saving"><mat-spinner [diameter]="24"></mat-spinner></div>
                 </div>
             </mat-step>
             <!-- <mat-step label="Done" editable="false">

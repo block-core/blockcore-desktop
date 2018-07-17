@@ -237,11 +237,11 @@ body {
 		-moz-transition-duration: 500ms;
    }
 
-   .material-icons:hover {
-	   transform: rotate(360deg);
-	   -webkit-transform: rotate(360deg);
-	   -moz-transform: rotate(360deg);
-   }
+//    .material-icons:hover {
+// 	   transform: rotate(360deg);
+// 	   -webkit-transform: rotate(360deg);
+// 	   -moz-transform: rotate(360deg);
+//    }
 
    .title-bar-btn i {
 	   font-size: 20px;
@@ -278,4 +278,8 @@ body {
 	align-items: center;
 	align-content: center;
 	flex-direction: column;
+}
+
+.button-action-spinner {
+	font-size: 10px;
 }

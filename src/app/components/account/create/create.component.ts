@@ -28,7 +28,8 @@ export class CreateAccountSuccessDialog {
     encapsulation: ViewEncapsulation.None
 })
 export class CreateAccountComponent {
-    @HostBinding('class.account-create') hostClass = 'account-create';
+    @HostBinding('class.account-create') hostClass = true;
+    //@HostBinding('class') hostClass = 'account-create';
 
     public form = new FormGroup({
         accountPassword: new FormControl('', { updateOn: 'blur' }),
@@ -48,6 +49,7 @@ export class CreateAccountComponent {
     public accountName = 'main';
     public currentDate: string;
     public verification: string;
+    public saving: boolean;
 
     constructor(private authService: AuthenticationService,
         private router: Router,
@@ -95,24 +97,21 @@ export class CreateAccountComponent {
                     }
                 },
                 error => {
-                    console.log(error);
+                    console.error(error);
 
-                    // if (error.status === 0) {
-                    //     this.genericModalService.openModal(null, null);
-                    // } else if (error.status >= 400) {
-                    //     if (!error.json().errors[0]) {
-                    //         console.log(error);
-                    //     }
-                    //     else {
-                    //         this.genericModalService.openModal(null, error.json().errors[0].message);
-                    //     }
-                    // }
+                    if (error.status >= 400) {
+                        if (!error.json().errors[0]) {
+                            console.log(error);
+                        } else {
+                            let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+                        }
+                    }
                 }
-            )
-            ;
+            );
     }
 
     public createAccount() {
+        this.saving = true;
         console.log('CREATE ACCOUNT!');
         this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1));
     }
@@ -125,6 +124,8 @@ export class CreateAccountComponent {
             .createStratisWallet(wallet)
             .subscribe(
                 response => {
+                    this.saving = false;
+
                     if (response.status >= 200 && response.status < 400) {
                         console.log('Wallet Created!');
 
@@ -136,23 +137,19 @@ export class CreateAccountComponent {
                     }
                 },
                 error => {
+                    this.saving = false;
+
                     console.error(error);
-                    // this.isCreating = false;
-                    // console.log(error);
-                    // if (error.status === 0) {
-                    //     this.genericModalService.openModal(null, null);
-                    // } else if (error.status >= 400) {
-                    //     if (!error.json().errors[0]) {
-                    //         console.log(error);
-                    //     }
-                    //     else {
-                    //         this.genericModalService.openModal(null, error.json().errors[0].message);
-                    //         this.router.navigate(['/setup/create']);
-                    //     }
-                    // }
+
+                    if (error.status >= 400) {
+                        if (!error.json().errors[0]) {
+                            console.log(error);
+                        } else {
+                            let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+                        }
+                    }
                 }
-            )
-            ;
+            );
     }
 
     public onSubmit() {
