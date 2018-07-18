@@ -13,13 +13,17 @@ import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 import { GeneralInfo } from '../classes/general-info';
+import { MatSnackBar } from '@angular/material';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
  */
 @Injectable()
 export class ApiService {
-  constructor(private http: Http, private globalService: GlobalService, private electronService: ElectronService) {
+  constructor(private http: Http,
+    private globalService: GlobalService,
+    public snackBar: MatSnackBar,
+    private electronService: ElectronService) {
     this.setApiPort();
   }
 
@@ -122,11 +126,11 @@ export class ApiService {
   /**
  * Get general wallet info from the API.
  */
-  getGeneralInfoTyped(data: WalletInfo): Observable<GeneralInfo> {
+  getGeneralInfoTyped(data: WalletInfo, pollingInterval = this.pollingInterval): Observable<GeneralInfo> {
     let params: URLSearchParams = new URLSearchParams();
     params.set('Name', data.walletName);
 
-    return interval(this.pollingInterval)
+    return interval(pollingInterval)
       .pipe(startWith(0))
       .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
       .pipe(map((response: Response) => <GeneralInfo>(response.json())));
@@ -288,5 +292,17 @@ export class ApiService {
     return this.http
       .post(this.stratisApiUrl + '/node/shutdown', { headers: this.headers })
       .pipe(map((response: Response) => response));
+  }
+
+  handleError(error: any) {
+    console.error(error);
+
+    if (error.status >= 400) {
+      if (!error.json().errors[0]) {
+        console.log(error);
+      } else {
+        let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+      }
+    }
   }
 }

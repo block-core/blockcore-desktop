@@ -1,5 +1,20 @@
 # City Hub
 
+The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
+everything related to their data on the City Chain and the Smart City Platform.
+It is additionally a full features wallet app that supports multiple cryptocurrencies, 
+such as City Coin, Bitcoin and Stratis.
+
+Running the City Hub allows you to participate in staking of your City Coins, and help 
+support the global network. 
+
+Additionally you can turn on resource sharing for the Smart City Platform. If you enable 
+being an Smart City Platform node, you will receive payments for storage, network and 
+processing utilization from other users who user who needs premium services on the 
+Smart City Platform.
+
+![City Hub screenshot (2018-07-18)](doc/images/2018-07-18.png "City Hub (2018-07-18)")
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Development server

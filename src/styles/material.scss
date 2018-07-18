@@ -1,0 +1,6 @@
+
+
+/* Adds multi-line supports for tooltips */
+mat-tooltip-component > .mat-tooltip {
+	white-space: pre !important;
+}

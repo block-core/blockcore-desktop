@@ -73,7 +73,7 @@ function createWindow() {
         }));
     }
     if (serve) {
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function () {

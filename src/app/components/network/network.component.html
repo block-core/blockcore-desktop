@@ -1,5 +1,5 @@
 <div class="not-selectable">
-    <mat-progress-bar mode="determinate" ng-hide="generalInfo == null" *ngIf="!generalInfo?.isChainSynced" bufferValue="0" mode="buffer"
+    <mat-progress-bar mode="determinate" ng-hide="generalInfo == null" *ngIf="percentSyncedNumber !== 100" bufferValue="0" mode="buffer"
         [value]="percentSyncedNumber"></mat-progress-bar>
 
     <mat-grid-list class="network-grid" #grid rowHeight="2:1">
@@ -19,14 +19,14 @@
             <span class="network-label">Network</span>
             <span class="network-value">{{generalInfo?.network}}</span>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <!-- <mat-grid-tile>
             <span class="network-label" *ngIf="generalInfo?.isChainSynced">Chain Synced</span>
             <span class="network-label" *ngIf="!generalInfo?.isChainSynced">Chain Syncing</span>
             <span class="network-value" *ngIf="generalInfo?.isChainSynced">
                 <mat-icon>cloud_done</mat-icon>
             </span>
             <span class="network-value" *ngIf="!generalInfo?.isChainSynced">{{percentSynced}}</span>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
         <mat-grid-tile>
             <span class="network-label" *ngIf="percentSyncedNumber === 100">Chain Synced</span>
             <span class="network-label" *ngIf="percentSyncedNumber !== 100">Chain Syncing</span>

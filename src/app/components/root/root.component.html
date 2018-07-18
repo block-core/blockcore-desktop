@@ -1,4 +1,4 @@
-<mat-drawer-container *ngIf="userActivated; else anonymous" class="app-container" autosize>
+<mat-drawer-container *ngIf="isAuthenticated | async; else anonymous" class="app-container" autosize>
 
   <mat-drawer #drawer class="example-sidenav not-selectable" *ngIf="!handset" opened mode="side">
     <app-view-area>
@@ -6,9 +6,8 @@
         <!-- <h3 mat-subheader>Folders</h3> -->
 
         <mat-list-item class="main-menu-first" [matMenuTriggerFor]="coinMenu">
-          <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon>
-          <h4 *ngIf="showFiller" mat-line>City Chain</h4>
-          <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
+          <mat-icon [svgIcon]="coinIcon" mat-list-icon></mat-icon>
+          <h4 *ngIf="showFiller" mat-line>{{coinName}}</h4>
         </mat-list-item>
 
         <mat-menu #coinMenu="matMenu" [overlapTrigger]="false">
@@ -90,7 +89,11 @@
         <mat-icon>cloud_off</mat-icon>
       </button> -->
 
-      <button *ngIf="!appState.pageMode" mat-icon-button routerLink="/network">
+      <button *ngIf="!appState.pageMode && percentSyncedNumber !== 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+
+      <button *ngIf="!appState.pageMode && percentSyncedNumber === 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
         <mat-icon>cloud_done</mat-icon>
       </button>
 
@@ -127,7 +130,7 @@
 <ng-template #anonymous>
   <app-view-area>
     <!-- <div class="content-container"> -->
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
     <!-- </div> -->
   </app-view-area>
 </ng-template>

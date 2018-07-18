@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { ApplicationStateService } from '../../services/application-state.service';
+import { WalletInfo } from '../../classes/wallet-info';
+import { WalletLoad } from '../../classes/wallet-load';
 
 export interface Account {
     name: string;
@@ -23,6 +25,8 @@ export class LoginComponent implements OnInit {
     selectedAccount: Account;
     hasWallet = false;
     accounts: Account[] = [];
+    unlocking: boolean;
+    password = ''; // Default to empty string, not null/undefined.
 
     constructor(
         private readonly cd: ChangeDetectorRef,
@@ -66,22 +70,68 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error => {
-                    if (error.status === 0) {
-                        //this.genericModalService.openModal(null, null);
-                    } else if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            //this.genericModalService.openModal(null, error.json().errors[0].message);
-                        }
-                    }
+                    this.apiService.handleError(error);
                 }
-            )
-            ;
+            );
     }
 
-    login() {
-        this.authService.authenticated = true;
-        this.router.navigateByUrl('/dashboard');
+    unlock() {
+        this.unlocking = true;
+
+        this.globalService.setWalletName(this.selectedAccount.name);
+
+        this.globalService.setCoinName('TestStratis');
+        this.globalService.setCoinUnit('TSTRAT');
+
+        this.getCurrentNetwork();
+
+        const walletLoad = new WalletLoad(
+            this.selectedAccount.name,
+            this.password
+        );
+
+        this.loadWallet(walletLoad);
+    }
+
+    private getCurrentNetwork() {
+        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        this.apiService.getGeneralInfoOnce(walletInfo)
+            .subscribe(
+                response => {
+                    if (response.status >= 200 && response.status < 400) {
+                        let responseMessage = response.json();
+                        this.globalService.setNetwork(responseMessage.network);
+                        if (responseMessage.network === 'StratisMain') {
+                            this.globalService.setCoinName('Stratis');
+                            this.globalService.setCoinUnit('STRAT');
+                        } else if (responseMessage.network === 'StratisTest') {
+                            this.globalService.setCoinName('TestStratis');
+                            this.globalService.setCoinUnit('TSTRAT');
+                        }
+                    }
+                },
+                error => {
+                    this.apiService.handleError(error);
+                }
+            );
+    }
+
+    private loadWallet(walletLoad: WalletLoad) {
+        this.apiService.loadStratisWallet(walletLoad)
+            .subscribe(
+                response => {
+                    this.unlocking = false;
+
+                    if (response.status >= 200 && response.status < 400) {
+                        this.authService.setAuthenticated();
+                        this.router.navigateByUrl('/dashboard');
+                    }
+                },
+                error => {
+                    this.authService.setAnonymous();
+                    this.unlocking = false;
+                    this.apiService.handleError(error);
+                }
+            );
     }
 }

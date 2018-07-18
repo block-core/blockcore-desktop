@@ -89,15 +89,7 @@ export class CreateAccountComponent {
                     }
                 },
                 error => {
-                    console.error(error);
-
-                    if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
-                        }
-                    }
+                    this.apiService.handleError(error);
                 }
             );
     }
@@ -130,16 +122,7 @@ export class CreateAccountComponent {
                 },
                 error => {
                     this.saving = false;
-
-                    console.error(error);
-
-                    if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
-                        }
-                    }
+                    this.apiService.handleError(error);
                 }
             );
     }

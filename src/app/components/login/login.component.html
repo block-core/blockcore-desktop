@@ -8,7 +8,7 @@
         <div class="accounts" *ngIf="hasWallet">
             <mat-form-field>
                 <mat-select placeholder="Select account" [(ngModel)]="selectedAccount">
-                    <mat-option *ngFor="let account of accounts" [value]="account.id">
+                    <mat-option *ngFor="let account of accounts" [value]="account">
                         {{account.name}}
                     </mat-option>
                 </mat-select>
@@ -18,12 +18,12 @@
                 <br>
                 <mat-form-field appearance="outline">
                     <mat-label>Account password</mat-label>
-                    <input matInput type="password" placeholder="Fill out to unlock account">
+                    <input matInput type="password" [(ngModel)]="password" placeholder="Fill out to unlock account">
                     <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
                     <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
                 </mat-form-field>
                 <br>
-                <button (click)="login()" mat-raised-button color="primary">Unlock</button>
+                <button (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
             </span>
             <br>
             <br>
@@ -36,9 +36,6 @@
             <button routerLink="/account/create" mat-stroked-button>Create</button> or
             <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
             your account
-            <!-- <br>
-            <br>
-            <button (click)="login()" mat-stroked-button>OPEN DASHBOARD (DEBUGGING)</button>  -->
         </div>
     </div>
     <div class="login-banner">

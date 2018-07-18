@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { WalletComponent } from '../wallet/wallet.component';
@@ -14,12 +14,13 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
     styleUrls: ['./network.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class NetworkComponent implements OnInit, AfterContentInit {
+export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     @HostBinding('class.network') hostClass = true;
     @ViewChild('grid') grid: MatGridList;
 
-    public percentSyncedNumber = 0;
-    public percentSynced: string;
+    percentSyncedNumber = 0;
+    percentSynced = '0%';
+    generalInfo: GeneralInfo;
 
     gridByBreakpoint = {
         xl: 8,
@@ -29,7 +30,8 @@ export class NetworkComponent implements OnInit, AfterContentInit {
         xs: 1
     };
 
-    generalInfo: GeneralInfo;
+    private mediaObservable;
+    private walletObservable;
 
     constructor(private globalService: GlobalService,
         private apiService: ApiService,
@@ -42,15 +44,20 @@ export class NetworkComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        this.observableMedia.asObservable().subscribe((change: MediaChange) => {
+        this.mediaObservable = this.observableMedia.asObservable().subscribe((change: MediaChange) => {
             this.grid.cols = this.gridByBreakpoint[change.mqAlias];
         });
     }
 
+    ngOnDestroy() {
+        this.mediaObservable.unsubscribe();
+        this.walletObservable.unsubscribe();
+    }
+
     private getGeneralWalletInfo() {
         //let walletInfo = new WalletInfo(this.globalService.getWalletName());
-        const walletInfo = new WalletInfo('test01');
-        this.apiService.getGeneralInfoTyped(walletInfo)
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
+        this.walletObservable = this.apiService.getGeneralInfoTyped(walletInfo, 3000)
             .subscribe(response => {
                 this.generalInfo = response;
 
@@ -63,12 +70,15 @@ export class NetworkComponent implements OnInit, AfterContentInit {
                 // Translate the epoch value to a proper JavaScript date.
                 this.generalInfo.creationTime = new Date(response.creationTime * 1000);
 
-                this.percentSyncedNumber = ((this.generalInfo.lastBlockSyncedHeight / this.generalInfo.chainTip) * 100);
-                if (this.percentSyncedNumber.toFixed(0) === '100' && this.generalInfo.lastBlockSyncedHeight !== this.generalInfo.chainTip) {
-                    this.percentSyncedNumber = 99;
+                if (this.generalInfo.lastBlockSyncedHeight) {
+                    this.percentSyncedNumber = ((this.generalInfo.lastBlockSyncedHeight / this.generalInfo.chainTip) * 100);
+                    if (this.percentSyncedNumber.toFixed(0) === '100' && this.generalInfo.lastBlockSyncedHeight !== this.generalInfo.chainTip) {
+                        this.percentSyncedNumber = 99;
+                    }
+
+                    this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
                 }
 
-                this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
             });
     }
 }
