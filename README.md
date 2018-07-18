@@ -3,7 +3,7 @@
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
 It is additionally a full features wallet app that supports multiple cryptocurrencies, 
-such as City Coin, Bitcoin and Stratis.
+such as City Coin (CITY), Bitcoin (BTC) and Stratis (STRAT).
 
 Running the City Hub allows you to participate in staking of your City Coins, and help 
 support the global network. 
