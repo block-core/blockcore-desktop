@@ -14,12 +14,11 @@ const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'load'
+        redirectTo: '/load'
     },
     {
         path: 'load',
         component: LoadComponent,
-        // canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
             title: 'Loading...'
         },
@@ -35,6 +34,7 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         canActivate: [AuthenticatedUserGuard],
+        // canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
             title: 'Dashboard'
         },

@@ -5,7 +5,9 @@
             <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon> City Chain
         </div> -->
 
-        <div class="accounts" *ngIf="hasWallet">
+        <div class="login-header"></div>
+
+        <div class="login-accounts" *ngIf="hasWallet">
             <mat-form-field>
                 <mat-select placeholder="Select account" [(ngModel)]="selectedAccount">
                     <mat-option *ngFor="let account of accounts" [value]="account">
@@ -23,19 +25,22 @@
                     <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
                 </mat-form-field>
                 <br>
-                <button (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
+                <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
+                <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
             </span>
-            <br>
-            <br>
-            <mat-divider></mat-divider>
-            <br>
-            <br>
+            <mat-divider *ngIf="selectedAccount == null"></mat-divider>
         </div>
 
-        <div>
-            <button routerLink="/account/create" mat-stroked-button>Create</button> or
-            <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
-            your account
+        <div class="login-actions" *ngIf="selectedAccount == null">
+            <div>
+                <button routerLink="/account/create" mat-stroked-button>Create</button> or
+                <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
+                your account
+            </div>
+        </div>
+
+        <div class="login-mode">
+            <button mat-button (click)="changeMode()">Change mode</button>
         </div>
     </div>
     <div class="login-banner">

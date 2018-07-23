@@ -41,6 +41,16 @@ export class LoginComponent implements OnInit {
         this.getWalletFiles();
     }
 
+    changeMode() {
+        localStorage.removeItem('Mode');
+        this.router.navigateByUrl('/load');
+    }
+
+    cancel()
+    {
+        this.selectedAccount = null;
+    }
+
     private getWalletFiles() {
         this.apiService.getWalletFiles()
             .subscribe(

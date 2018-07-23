@@ -24,7 +24,11 @@ export class ApiService {
     private globalService: GlobalService,
     public snackBar: MatSnackBar,
     private electronService: ElectronService) {
-    this.setApiPort();
+
+    if (this.electronService.ipcRenderer) {
+      this.setApiPort();
+    }
+
   }
 
   private headers = new Headers({ 'Content-Type': 'application/json' });

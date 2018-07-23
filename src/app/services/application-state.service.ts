@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, APP_INITIALIZER } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable, Subject } from 'rxjs';
 
@@ -9,6 +9,7 @@ export class ApplicationStateService {
         private readonly titleService: TitleService,
     ) {
         this.coin = this.getParam('coin') || 'city';
+        this.mode = localStorage.getItem('Mode') || 'full';
     }
 
     coin: string;
@@ -16,6 +17,8 @@ export class ApplicationStateService {
     pageMode = false;
 
     handset = false;
+
+    mode: string;
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;

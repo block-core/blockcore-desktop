@@ -67,8 +67,10 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.isAuthenticated = authService.isAuthenticated();
 
-    let applicationVersion = this.electronService.remote.app.getVersion();
-    console.log('Version: ' + applicationVersion);
+    if (this.electronService.remote) {
+      let applicationVersion = this.electronService.remote.app.getVersion();
+      console.log('Version: ' + applicationVersion);
+    }
 
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
@@ -103,6 +105,10 @@ export class RootComponent implements OnInit, OnDestroy {
       //.pipe(delay(5000))
       .pipe(retryWhen(errors => errors.pipe(delay(2000))))
       .subscribe(() => this.startApp());
+
+    if (this.router.url !== '/load') {
+      this.router.navigateByUrl('/load');
+    }
   }
 
   private updateNetworkInfo() {
@@ -118,9 +124,10 @@ export class RootComponent implements OnInit, OnDestroy {
   private startApp() {
     console.log('Connected to daemon.');
 
-    if (this.router.url !== '/login') {
-      this.router.navigateByUrl('/login');
-    }
+    // if (this.router.url !== '/login') {
+    //   //this.router.navigateByUrl('/login');
+    //   //this.router.navigateByUrl('/load');
+    // }
   }
 
   private stopWalletInfoUpdates() {
