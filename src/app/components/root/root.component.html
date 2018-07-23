@@ -1,0 +1,136 @@
+<mat-drawer-container *ngIf="isAuthenticated | async; else anonymous" class="app-container" autosize>
+
+  <mat-drawer #drawer class="example-sidenav not-selectable" *ngIf="!handset" opened mode="side">
+    <app-view-area>
+      <mat-list class="main-menu">
+        <!-- <h3 mat-subheader>Folders</h3> -->
+
+        <mat-list-item class="main-menu-first" [matMenuTriggerFor]="coinMenu">
+          <mat-icon [svgIcon]="coinIcon" mat-list-icon></mat-icon>
+          <h4 *ngIf="showFiller" mat-line>{{coinName}}</h4>
+        </mat-list-item>
+
+        <mat-menu #coinMenu="matMenu" [overlapTrigger]="false">
+          <button mat-menu-item disabled>
+            <mat-icon svgIcon="city-logo"></mat-icon>
+            <span>City Chain</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon svgIcon="stratis-logo"></mat-icon>
+            <span>Stratis</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon svgIcon="bitcoin-logo"></mat-icon>
+            <span>Bitcoin</span>
+          </button>
+        </mat-menu>
+
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/dashboard">
+          <mat-icon mat-list-icon>dashboard</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>Dashboard</h4>
+          <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
+        </mat-list-item>
+        <!-- <mat-divider></mat-divider>
+      <h3 mat-subheader>Notes</h3> -->
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/wallet">
+          <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>Wallet</h4>
+          <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+        </mat-list-item>
+
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/settings">
+          <mat-icon mat-list-icon>settings</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>Settings</h4>
+          <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+        </mat-list-item>
+
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/logout">
+          <mat-icon mat-list-icon>power_settings_new</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>Log out</h4>
+          <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+        </mat-list-item>
+
+        <div class="fill-remaining-vertical"></div>
+
+        <mat-list-item *ngIf="!showFiller" (click)="showFiller = !showFiller">
+          <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
+        </mat-list-item>
+
+        <mat-list-item *ngIf="showFiller" (click)="showFiller = !showFiller">
+          <mat-icon mat-list-icon>keyboard_arrow_left</mat-icon>
+        </mat-list-item>
+
+      </mat-list>
+    </app-view-area>
+  </mat-drawer>
+
+
+  <div class="app-sidenav-content">
+
+    <mat-toolbar class="toolbar not-selectable" [ngClass]="{'toolbar-bottom': handset}" color="primary">
+
+      <button *ngIf="appState.pageMode" routerLinkBack mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <span *ngIf="!handset">{{appTitle$ | async}}</span>
+
+      <span *ngIf="handset && !appState.pageMode">
+        <button mat-stroked-button>Payment</button>
+      </span>
+
+      <span class="example-fill-remaining-space"></span>
+
+      <!-- <button mat-icon-button>
+        <mat-icon>cloud</mat-icon>
+      </button>
+
+      <button mat-icon-button>
+        <mat-icon>cloud_off</mat-icon>
+      </button> -->
+
+      <button *ngIf="!appState.pageMode && percentSyncedNumber !== 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+
+      <button *ngIf="!appState.pageMode && percentSyncedNumber === 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
+        <mat-icon>cloud_done</mat-icon>
+      </button>
+
+      <button *ngIf="!appState.pageMode" mat-icon-button [matMenuTriggerFor]="moreMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #moreMenu="matMenu">
+        <button mat-menu-item routerLink="/about">
+          <mat-icon>info</mat-icon>
+          <span>About</span>
+        </button>
+        <button mat-menu-item routerLink="/logout">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Log out</span>
+        </button>
+      </mat-menu>
+
+      <!-- <mat-slide-toggle class="example-margin">
+        Staking
+      </mat-slide-toggle> -->
+    </mat-toolbar>
+
+    <app-view-area>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </app-view-area>
+
+  </div>
+
+</mat-drawer-container>
+
+<ng-template #anonymous>
+  <app-view-area>
+    <!-- <div class="content-container"> -->
+    <router-outlet></router-outlet>
+    <!-- </div> -->
+  </app-view-area>
+</ng-template>

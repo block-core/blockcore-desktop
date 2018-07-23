@@ -1,0 +1,291 @@
+@import "~@angular/material/theming";
+
+$roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
+
+@import "./variables";
+@import "./themes/font";
+@import "./typography";
+@import './material';
+
+//@import './themes/palettes/green.palette';
+@import "./themes/palettes/orange.palette";
+@import "./themes/palettes/red.palette";
+@import "./themes/palettes/light-gray.palette";
+@import "./themes/palettes/dark-gray.palette";
+
+@import "./themes/light/background";
+@import "./themes/light/foreground";
+@import "./themes/light/theme";
+
+@import "./themes/dark/background";
+@import "./themes/dark/foreground";
+@import "./themes/dark/theme";
+
+@import "./themes/theming";
+
+@include mat-core($app-typography);
+
+@include app-theme($app-dark-theme);
+
+
+.app-light-theme {
+	@include app-theme($app-light-theme);
+}
+
+.app-dark-theme {
+	@include app-theme($app-dark-theme);
+}
+
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background-color: #f8f8f8;
+	font-family: mat-font-family($app-typography);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 28px;
+}
+
+// @media screen and (max-width: 599px) {
+// 	.toolbar {
+// 	}
+// }
+
+.toolbar-bottom {
+	order: 100;
+}
+
+.toolbar {
+	flex-shrink: 0;
+	display: inline-flex;
+}
+
+.content-container {
+	//overflow: scroll;
+	flex-grow: 1; /*ensures that the container will take up the full height of the parent container*/
+	//overflow-y: auto; /*adds scroll to this container*/
+	overflow: hidden;
+}
+
+.content
+{
+	margin: 30px;
+}
+
+@media screen and (max-width: 599px) {
+	.content
+{
+	margin: 16px;
+}
+}
+
+.example-fill-remaining-space {
+	/* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+	flex: 1 1 auto;
+}
+
+.fill-remaining-vertical {
+	/* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+	flex: 1 1 auto;
+}
+
+.app-sidenav-content {
+	//display: flex;
+	height: 100%;
+	overflow: hidden;
+	//align-items: center;
+	//justify-content: center;
+
+	height: 100%; /*allows both columns to span the full height of the browser window*/
+	display: flex;
+	flex-direction: column;
+}
+
+.example-sidenav {
+	//padding: 10px;
+}
+
+.main-menu {
+
+}
+
+.main-menu .mat-list-item {
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	cursor: pointer;
+}
+
+.main-menu .mat-list-item:hover {
+	background-color: #f0f0f0;
+}
+
+.mat-list-item-focus {
+	border-right: 3px solid #dfab3c !important;
+}
+
+.main-menu .main-menu-active {
+	border-right: 3px solid #dfab3c;
+}
+
+.main-menu h4 {
+	//color: red! important;
+	margin-right: 4px; /* To offset some of the left padding on icons */
+}
+
+.mat-list {
+	padding-top: 0 !important;
+}
+
+.main-menu-first {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	//background-color: #dfab3c;
+}
+
+.dashboard-item {
+	width: 80%;
+	margin: 40px;
+}
+
+.not-selectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+  }
+
+// ::-webkit-scrollbar-track {
+// 	background-color: orange;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//     background-color: ornage;
+//     outline: none;
+//     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
+// }
+
+
+#title-bar-logo
+{
+	height: 26px;
+	z-index: 1000;
+	position: absolute;
+	
+}
+
+#title-bar {
+	-webkit-app-region: drag;
+	height: $app-title-bar-height; 
+	background-color: #0d0d0d;
+	padding: none;
+	margin: 0px; 
+   }
+
+   
+   #title {
+	position: fixed;
+	z-index: 5000;
+	top: 3px;
+	left: 3px; 
+   }
+   
+   #title-bar-btns {
+		-webkit-app-region: no-drag;
+		position: fixed;
+		top: 0px;
+		background-color: transparent;
+		border: none;
+		right: 0px;
+   }
+
+   .title-bar-btn {
+		border: none;
+		background-color: transparent;
+		outline: none;
+		background-color: #0d0d0d;
+		color: #ffffff;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		margin-left: 1px;
+		height: 32px;
+		transition-duration: 500ms;
+		-webkit-transition-duration: 500ms;
+		-moz-transition-duration: 500ms;
+   }
+
+   .title-bar-btn:hover {
+	   background-color: #dfab3c;
+   }
+
+   .material-icons {
+		transition-duration: 500ms;
+		-webkit-transition-duration: 500ms;
+		-moz-transition-duration: 500ms;
+   }
+
+//    .material-icons:hover {
+// 	   transform: rotate(360deg);
+// 	   -webkit-transform: rotate(360deg);
+// 	   -moz-transform: rotate(360deg);
+//    }
+
+   .title-bar-btn i {
+	   font-size: 20px;
+   }
+
+   #title-bar-btns button:hover {
+	
+	background-color: #dfab3c;
+   }
+
+   html, body
+   {
+	   overflow: hidden;
+   }
+
+.app-electron
+{
+}
+
+.app-electron .login {
+	height: $app-height;
+}
+
+.app-electron .app-container {
+	height: $app-height;
+}
+
+
+.splash-container
+{
+	height: $app-height;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-direction: column;
+}
+
+.button-action-spinner {
+	font-size: 10px;
+}
+
+.content-centered
+{
+
+}
+

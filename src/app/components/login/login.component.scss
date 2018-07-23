@@ -1,0 +1,96 @@
+.login
+{
+    height: 100%;
+    width: 100%;
+
+    .login-container
+    {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .login-content
+    {
+        width: 44%;
+        min-width: 240px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 200px;
+    }
+
+    .login-unlock-button {
+        margin-bottom: 20px;
+    }
+
+    .login-cancel-button {
+        margin-right: 10px;
+    }
+
+    .login-logo
+    {
+        width: 100%;
+    }
+
+    .login-header{
+        flex-grow: 1;
+    }
+
+    .login-accounts {
+        flex-grow: 0;
+    }
+
+    .login-actions
+    {
+        flex-grow: 0;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        margin-top: 20px;
+    }
+    
+    .login-mode
+    {
+        flex-grow: 2;
+        align-items: flex-end;
+        justify-content: center;
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .login-banner
+    {
+        background-color: #dfab3c;
+        width: 56%;
+        background-image: url('/assets/city/splash-image.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        text-align: center;
+    }
+
+    .login-banner-content
+    {
+        margin: 20%;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .login
+    {
+        .login-container {
+            flex-direction: column;
+        }
+
+        .login-content{
+            width: 100%;
+        }
+
+        .login-banner {
+            width: 100%;
+            flex-grow: 1;
+        }
+    }
+}

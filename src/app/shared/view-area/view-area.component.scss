@@ -1,0 +1,41 @@
+@import "../../../styles/variables";
+
+.app-view-area {
+    display: block;
+    width: 100%;
+    height: $app-height;
+    overflow-y: auto;
+}
+
+@media (pointer: fine) {
+    // .app-view-area::-webkit-scrollbar {
+    //     width: 5px;
+    //     height: 5px;
+    // }
+
+    .app-view-area::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    .app-view-area::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .app-view-area::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .app-view-area-hover::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .app-view-area-hover::-webkit-scrollbar-thumb {
+        background: #585858;
+    }
+
+    .app-view-area-hover::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}

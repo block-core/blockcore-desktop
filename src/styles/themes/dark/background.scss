@@ -1,0 +1,21 @@
+@import '../palettes/dark-gray.palette';
+
+$app-dark-theme-background: (
+    status-bar: black,
+    app-bar:    map_get($app-dark-gray, 900),
+    background: map_get($app-dark-gray, 800),
+    hover:      rgba(white, 0.04), 
+    card:       map_get($app-dark-gray, 700),
+    card-2:     map_get($app-dark-gray, 600),
+    card-3:     map_get($app-dark-gray, 500),
+    dialog:     map_get($app-dark-gray, 700),
+    disabled-button: rgba(white, 0.12),
+    raised-button: map-get($app-dark-gray, 700),
+    focused-button: $light-focused,
+    selected-button: map_get($app-dark-gray, 700),
+    selected-disabled-button: map_get($app-dark-gray, 700),
+    disabled-button-toggle: black,
+    unselected-chip: map_get($app-dark-gray, 700),
+    disabled-list-option: black,
+);
+$mat-dark-theme-background: map-merge($mat-dark-theme-background, $app-dark-theme-background);

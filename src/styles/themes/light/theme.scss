@@ -1,0 +1,8 @@
+@import '../palettes/orange.palette';
+@import '../palettes/red.palette';
+
+$app-primary-palette: mat-palette($app-orange-palette, 500, 200, 900);
+$app-accent-palette:  mat-palette($app-orange-palette, 500, 200, 900);
+$app-warn-palette:    mat-palette($app-red-palette, 500, 200, 900);
+
+$app-light-theme: mat-light-theme($app-primary-palette, $app-accent-palette, $app-warn-palette);

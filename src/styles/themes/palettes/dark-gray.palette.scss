@@ -1,0 +1,34 @@
+@import '~@angular/material/theming';
+
+$app-dark-gray: (
+    50: #e4e5e7,
+    100: #babfc3,
+    200: #8c949a,
+    300: #616972,
+    400: #414a52,
+    500: #323a42,
+    600: #272e36,
+    700: #1e232a,
+    800: #151920,
+    900: #0c0f13,
+    A100: #e4e5e7,
+    A200: #8c949a,
+    A400: #414a52,
+    A700: #1e232a,
+    contrast: (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text,
+        A100: $dark-primary-text,
+        A200: $dark-primary-text,
+        A400: $light-primary-text,
+        A700: $light-primary-text,
+    )
+);

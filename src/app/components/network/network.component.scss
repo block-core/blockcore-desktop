@@ -1,0 +1,51 @@
+.network {
+    mat-grid-tile {
+        //background: lightcoral;
+    }
+
+    .network-grid
+    {
+        border-bottom: 1px solid silver;
+    }
+
+    .network-label {
+        font-color: gray;
+        //padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .network-value
+    {
+        font-size: 1.6em;
+    }
+
+    .mat-grid-tile .mat-figure {
+        flex-direction: column !important;
+    }
+
+    .mat-grid-tile {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
+
+    .network-grid > .mat-grid-title {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
+
+    .network-grid .mat-icon {
+        font-size: 1.6em !important;
+    }
+}
+
+//  .network-grid .mat-progress-bar {
+//      width: 80% !important;
+//  }
+ 
+//  .network-progress-container {
+//      padding-left: 30px !important;
+//      padding-right: 30px !important;
+//      margin-left: 30px !important;
+//      margin-right: 30px !important;
+//      width: 100%;
+//  }

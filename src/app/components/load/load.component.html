@@ -1,0 +1,20 @@
+<div class="splash-container not-selectable">
+
+    <div class=""><img src="/assets/{{appState.coin}}/logo-full-dark.png" class="load-logo"></div>
+
+    <mat-form-field>
+        <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
+            <mat-option *ngFor="let mode of modes" [value]="mode">
+                {{mode.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-checkbox class="example-margin" [(ngModel)]="remember">Remember mode</mat-checkbox>
+    <br><br>
+    <button (click)="launch()" [disabled]="selectedMode == null" mat-raised-button color="primary">Start</button>
+
+    <!-- <mat-spinner></mat-spinner>
+    <span class="load-text">Connecting... please wait.</span> -->
+
+</div>

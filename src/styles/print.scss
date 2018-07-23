@@ -1,0 +1,54 @@
+@media print {
+    .print-visible {
+      display: inline-block;
+    }
+  
+    .print-hidden {
+      display: none !important;
+    }
+  
+    .mnemonic {
+        font-size: 1.6rem !important;
+        //padding-top: 20% !important;
+    }
+  
+    header {
+        display: none !important;
+    }
+  
+    //   html,
+    //   body {
+    //     font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    //       Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    //     margin: 0;
+    //     padding: 0;
+    //     overflow: hidden;
+    //     background-color: white;
+    //     font-size: 2rem;
+    //   }
+  
+    //   .btn {
+    //     display: none;
+    //   }
+  
+    //   body {
+    //     display: none;
+    //   }
+  
+    //   .tble {
+    //     background-color: #cd853f;
+    //     border: 1px solid green;
+    //     -webkit-print-color-adjust: exact;
+    //     /*above line of codes will set the table background-color and change the border color when we give the print and preview (print preview only when we see on print preview via browser) command*/
+    //   }
+  }
+  
+  @media screen {
+    .print-hidden {
+    }
+  
+    .print-visible {
+      display: none;
+    }
+  }
+  

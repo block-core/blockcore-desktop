@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+
+$app-orange-palette: (
+    50 : #FFF3E0,
+    100 : #FFE0B2,
+    200 : #FFCC80,
+    300 : #FFB74D,
+    400 : #FFA726,
+    //500 : #FF9800,
+    500 : #dfab3c,
+    600 : #FB8C00,
+    700 : #F57C00,
+    800 : #EF6C00,
+    900 : #E65100,
+    A100 : #FFD180,
+    A200 : #FFAB40,
+    A400 : #FF9100,
+    A700 : #FF6D00,
+    contrast: (
+        50 : $dark-primary-text,
+        100 : $dark-primary-text,
+        200 : $dark-primary-text,
+        300 : $dark-primary-text,
+        400 : $light-primary-text,
+        500 : $light-primary-text,
+        600 : $light-primary-text,
+        700 : $light-primary-text,
+        800 : $light-primary-text,
+        900 : $light-primary-text,
+        A100 : $dark-primary-text,
+        A200 : $dark-primary-text,
+        A400 : $light-primary-text,
+        A700 : $light-primary-text,
+    )
+);

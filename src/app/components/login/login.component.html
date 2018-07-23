@@ -1,0 +1,54 @@
+<div class="login-container not-selectable">
+    <div class="login-content">
+
+        <!-- <div>
+            <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon> City Chain
+        </div> -->
+
+        <div class="login-header"></div>
+
+        <div class="login-accounts" *ngIf="hasWallet">
+            <mat-form-field>
+                <mat-select placeholder="Select account" [(ngModel)]="selectedAccount">
+                    <mat-option *ngFor="let account of accounts" [value]="account">
+                        {{account.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <span *ngIf="selectedAccount != null">
+                <br>
+                <mat-form-field appearance="outline">
+                    <mat-label>Account password</mat-label>
+                    <input matInput type="password" [(ngModel)]="password" placeholder="Fill out to unlock account">
+                    <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+                    <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
+                </mat-form-field>
+                <br>
+                <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
+                <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
+            </span>
+            <mat-divider *ngIf="selectedAccount == null"></mat-divider>
+        </div>
+
+        <div class="login-actions" *ngIf="selectedAccount == null">
+            <div>
+                <button routerLink="/account/create" mat-stroked-button>Create</button> or
+                <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>
+                your account
+            </div>
+        </div>
+
+        <div class="login-mode">
+            <button mat-button (click)="changeMode()">Change mode</button>
+        </div>
+    </div>
+    <div class="login-banner">
+        <div class="login-banner-content">
+            <img src="/assets/{{appState.coin}}/logo-full-light.png" class="login-logo">
+            <br>
+            <br>
+            <h3>Log in to access your account</h3>
+        </div>
+    </div>
+</div>
