@@ -39,7 +39,7 @@
                 </p>
                 <div>
                     <button mat-raised-button matStepperPrevious type="button">Back</button>
-                    <button mat-raised-button color="primary" matStepperNext type="button">Yes, it is safe!</button>
+                    <button mat-raised-button color="primary" [disabled]="!mnemonic" matStepperNext type="button">Yes, it is safe!</button>
                 </div>
             </mat-step>
             <mat-step label="Verification" editable="true">

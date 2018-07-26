@@ -15,10 +15,17 @@ interface Coin {
     name: string;
     identity: string;
     tooltip: string;
+    apiPort?: number;
+    apiTestPort?: number;
+    apiRegTestPort?: number;
 }
 
 let availableCoins: Array<Coin>;
-availableCoins = [{ name: 'City Chain', identity: 'city', tooltip: 'City Hub' }, { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core' }, { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }];
+availableCoins = [
+    { name: 'City Chain', identity: 'city', tooltip: 'City Hub', apiPort: 4335, apiTestPort: 14335, apiRegTestPort: 24335 },
+    { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, apiTestPort: 37221, apiRegTestPort: 37221 },
+    { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }
+];
 
 // Couldn't use .find with the current tsconfig setup.
 const selectedCoins = availableCoins.filter(c => c.identity === coin);
@@ -33,9 +40,9 @@ if (selectedCoins.length === 0) {
 
 let apiPort;
 if (testnet) {
-    apiPort = 38221;
+    apiPort = selectedCoin.apiTestPort;
 } else {
-    apiPort = 37221;
+    apiPort = selectedCoin.apiPort;
 }
 
 ipcMain.on('get-port', (event, arg) => {

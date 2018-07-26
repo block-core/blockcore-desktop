@@ -84,7 +84,6 @@ export class CreateAccountComponent {
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         this.mnemonic = response.json();
-
                         this.verification = this.mnemonic.split(' ')[2];
                     }
                 },

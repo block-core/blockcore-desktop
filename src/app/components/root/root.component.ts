@@ -101,10 +101,6 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.apiService.getWalletFiles()
-      //.pipe(delay(5000))
-      .pipe(retryWhen(errors => errors.pipe(delay(2000))))
-      .subscribe(() => this.startApp());
 
     if (this.router.url !== '/load') {
       this.router.navigateByUrl('/load');
@@ -115,7 +111,9 @@ export class RootComponent implements OnInit, OnDestroy {
     // Need to use same name and icon for TEST networks or not, so perhaps figure out the best way to find the identifier? 
     // Perhaps just "indexof" and have a local array definition in the app?
     //const coinUnit = this.globalService.getCoinUnit().toLowerCase();
-    const coinUnit = this.globalService.getCoinName().toLowerCase();
+    let coinUnit = this.globalService.getCoinName().toLowerCase();
+    coinUnit = coinUnit.replace('regtest', '');
+    coinUnit = coinUnit.replace('test', '');
 
     this.coinIcon = coinUnit + '-logo';
     this.coinName = this.globalService.getCoinName();

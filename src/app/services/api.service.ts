@@ -307,6 +307,8 @@ export class ApiService {
       } else {
         let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
       }
+    } else {
+      let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
     }
   }
 }

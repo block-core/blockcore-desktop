@@ -12,7 +12,11 @@ serve = args.some(function (val) { return val === '--serve' || val === '-serve';
 testnet = args.some(function (val) { return val === '--testnet' || val === '-testnet'; });
 coin = args.some(function (val) { return val === '--coin' || val === '-coin'; }) || 'city';
 var availableCoins;
-availableCoins = [{ name: 'City Chain', identity: 'city', tooltip: 'City Hub' }, { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core' }, { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }];
+availableCoins = [
+    { name: 'City Chain', identity: 'city', tooltip: 'City Hub', apiPort: 4335, apiTestPort: 14335, apiRegTestPort: 24335 },
+    { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, apiTestPort: 37221, apiRegTestPort: 37221 },
+    { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }
+];
 // Couldn't use .find with the current tsconfig setup.
 var selectedCoins = availableCoins.filter(function (c) { return c.identity === coin; });
 var selectedCoin;
@@ -25,10 +29,10 @@ else {
 }
 var apiPort;
 if (testnet) {
-    apiPort = 38221;
+    apiPort = selectedCoin.apiTestPort;
 }
 else {
-    apiPort = 37221;
+    apiPort = selectedCoin.apiPort;
 }
 electron_1.ipcMain.on('get-port', function (event, arg) {
     event.returnValue = apiPort;

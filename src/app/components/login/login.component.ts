@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/load');
     }
 
-    cancel()
-    {
+    cancel() {
         this.selectedAccount = null;
     }
 
@@ -90,8 +89,8 @@ export class LoginComponent implements OnInit {
 
         this.globalService.setWalletName(this.selectedAccount.name);
 
-        this.globalService.setCoinName('TestStratis');
-        this.globalService.setCoinUnit('TSTRAT');
+        this.globalService.setCoinName('City Coin');
+        this.globalService.setCoinUnit('CITY');
 
         this.getCurrentNetwork();
 
@@ -105,18 +104,36 @@ export class LoginComponent implements OnInit {
 
     private getCurrentNetwork() {
         let walletInfo = new WalletInfo(this.globalService.getWalletName());
+
         this.apiService.getGeneralInfoOnce(walletInfo)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         let responseMessage = response.json();
+
                         this.globalService.setNetwork(responseMessage.network);
-                        if (responseMessage.network === 'StratisMain') {
+
+                        if (responseMessage.network === 'CityMain') {
+                            this.globalService.setCoinName('City');
+                            this.globalService.setCoinUnit('CITY');
+                        } else if (responseMessage.network === 'CityTest') {
+                            this.globalService.setCoinName('CityTest');
+                            this.globalService.setCoinUnit('TCITY');
+                        } else if (responseMessage.network === 'CityRegTest') {
+                            this.globalService.setCoinName('CityRegTest');
+                            this.globalService.setCoinUnit('TCITY');
+                        } else if (responseMessage.network === 'StratisMain') {
                             this.globalService.setCoinName('Stratis');
                             this.globalService.setCoinUnit('STRAT');
                         } else if (responseMessage.network === 'StratisTest') {
                             this.globalService.setCoinName('TestStratis');
                             this.globalService.setCoinUnit('TSTRAT');
+                        } else if (responseMessage.network === 'Main') {
+                            this.globalService.setCoinName('Bitcoin');
+                            this.globalService.setCoinUnit('BTC');
+                        } else if (responseMessage.network === 'Test') {
+                            this.globalService.setCoinName('BitcoinTest');
+                            this.globalService.setCoinUnit('TBTC');
                         }
                     }
                 },

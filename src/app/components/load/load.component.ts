@@ -1,12 +1,14 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, NgZone } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { HubConnectionBuilder } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import { HDNode, Transaction } from 'bitcoinjs-lib';
+import { ApiService } from '../../services/api.service';
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
+import { delay, retryWhen } from 'rxjs/operators';
 
 export interface Mode {
     name: string;
@@ -22,12 +24,20 @@ export class LoadComponent {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: Mode;
+    loading: boolean;
     hasWallet = false;
     modes: Mode[] = [];
     remember: boolean;
     connection: signalR.HubConnection;
+    delayed = false;
+    apiSubscription: any;
 
-    constructor(private authService: AuthenticationService, private router: Router, private appState: ApplicationStateService) {
+    constructor(
+        private authService: AuthenticationService,
+        private router: Router,
+        private zone: NgZone,
+        private apiService: ApiService,
+        private appState: ApplicationStateService) {
 
         this.modes = [
             { id: 'simple', name: 'Mobile' },
@@ -50,11 +60,38 @@ export class LoadComponent {
 
         this.appState.mode = this.selectedMode.id;
 
+        if (this.appState.mode === 'full') {
+            this.loading = true;
+            this.fullNodeConnect();
+        }
+    }
+
+    fullNodeConnect() {
+        // Do we need to keep a pointer to this timeout and remove it, or does the zone handle that?
+        this.zone.run(() => {
+            setTimeout(() => {
+                this.delayed = true;
+            }, 5000);
+        });
+
+        this.apiSubscription = this.apiService.getWalletFiles()
+            .pipe(retryWhen(errors => errors.pipe(delay(2000))))
+            .subscribe(() => this.start());
+    }
+
+    start() {
+        this.loading = false;
         this.router.navigateByUrl('/login');
     }
 
-    simpleWalletConnect() {
+    cancel() {
+        this.apiSubscription.unsubscribe();
+        this.loading = false;
+        this.delayed = false;
+        this.appState.mode = null;
+    }
 
+    simpleWalletConnect() {
         // Meet the new stack for real-time web communication: ASP.NET Core SignalR
         // Learn more: https://www.youtube.com/watch?v=Lws0zOaseIM
 
