@@ -143,17 +143,16 @@ export class ApiService {
   /**
    * Get wallet balance info from the API.
    */
-  // getWalletBalance(data: WalletInfo): Observable<any> {
-  //   let params: URLSearchParams = new URLSearchParams();
-  //   params.set('walletName', data.walletName);
-  //   params.set('accountName', "account 0");
+  getWalletBalance(data: WalletInfo): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('walletName', data.walletName);
+    params.set('accountName', "account 0");
 
-  //   return Observable
-  //     .pipe(interval(this.pollingInterval))
-  //     .startWith(0)
-  //     .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({ headers: this.headers, search: params })))
-  //     .map((response: Response) => response);
-  // }
+    return interval(this.pollingInterval)
+      .pipe(startWith(0))
+      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(map((response: Response) => response));
+  }
 
   /**
    * Get the maximum sendable amount for a given fee from the API
@@ -173,17 +172,16 @@ export class ApiService {
   /**
    * Get a wallets transaction history info from the API.
    */
-  // getWalletHistory(data: WalletInfo): Observable<any> {
-  //   let params: URLSearchParams = new URLSearchParams();
-  //   params.set('walletName', data.walletName);
-  //   params.set('accountName', 'account 0');
+  getWalletHistory(data: WalletInfo): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('walletName', data.walletName);
+    params.set('accountName', 'account 0');
 
-  //   return Observable
-  //     .interval(this.pollingInterval)
-  //     .startWith(0)
-  //     .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({ headers: this.headers, search: params })))
-  //     .map((response: Response) => response);
-  // }
+    return interval(this.pollingInterval)
+      .pipe(startWith(0))
+      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(map((response: Response) => response));
+  }
 
   /**
    * Get an unused receive address for a certain wallet from the API.
@@ -272,13 +270,12 @@ export class ApiService {
   /**
    * Get staking info
    */
-  // getStakingInfo(): Observable<any> {
-  //   return Observable
-  //     .interval(this.pollingInterval)
-  //     .startWith(0)
-  //     .switchMap(() => this.http.get(this.stratisApiUrl + '/miner/getstakinginfo'))
-  //     .map((response: Response) => response);
-  // }
+  getStakingInfo(): Observable<any> {
+    return interval(this.pollingInterval)
+      .pipe(startWith(0))
+      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/miner/getstakinginfo')))
+      .pipe(map((response: Response) => response));
+  }
 
   /**
     * Stop staking

@@ -1,0 +1,67 @@
+<div class="content content-centered">
+    <h1 *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
+
+    <form *ngIf="!showAll">
+        <div>
+            <div class="mx-auto mb-2">
+                <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+            </div>
+            <div class="col-9 mx-auto mb-4">
+                <code class="d-inline-block">{{ address }}</code>
+
+                <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+                    <mat-icon>file_copy</mat-icon>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <button *ngIf="showAll" mat-stroked-button (click)="showOneAddress()">← Back to one address</button>
+
+    <form *ngIf="showAll">
+
+        <br>
+        <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+            <mat-tab label="Unused">
+                <div class="tab-pane">
+                    <div *ngFor="let unusedAddress of unusedAddresses" class="tab-pane-line">
+                        <code class="d-inline-block">{{ unusedAddress }}</code>
+                        <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="unusedAddress" (click)="onCopiedClick()">
+                            <mat-icon>file_copy</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Used">
+                <div class="tab-pane">
+                    <div *ngFor="let usedAddress of usedAddresses" class="tab-pane-line">
+                        <code class="d-inline-block">{{ usedAddress }}</code>
+
+                        <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="usedAddress" (click)="onCopiedClick()">
+                            <mat-icon>file_copy</mat-icon>
+                        </button>
+
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Change">
+                <div class="tab-pane">
+                    <div *ngFor="let changeAddress of changeAddresses" class="tab-pane-line">
+                        <code class="d-inline-block">{{ changeAddress }}</code>
+
+                        <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="changeAddress" (click)="onCopiedClick()">
+                            <mat-icon>file_copy</mat-icon>
+                        </button>
+
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+    </form>
+
+    <div>
+        <button *ngIf="!showAll" mat-stroked-button (click)="showAllAddresses()">Show all addresses</button>
+    </div>
+
+</div>

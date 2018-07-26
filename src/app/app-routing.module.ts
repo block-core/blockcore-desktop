@@ -3,7 +3,6 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AuthenticatedUserGuard } from './modules/authentication/guards/authenticated-user.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { WalletComponent } from './components/wallet/wallet.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
@@ -39,14 +38,14 @@ const routes: Routes = [
             title: 'Dashboard'
         },
     },
-    {
-        path: 'wallet',
-        component: WalletComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Wallet'
-        },
-    },
+    // {
+    //     path: 'wallet',
+    //     component: WalletComponent,
+    //     canActivate: [AuthenticatedUserGuard],
+    //     data: {
+    //         title: 'Wallet'
+    //     },
+    // },
     {
         path: 'settings',
         component: SettingsComponent,
@@ -74,6 +73,10 @@ const routes: Routes = [
     {
         path: 'about',
         loadChildren: './components/about/about.module#AboutModule'
+    },
+    {
+        path: 'wallet',
+        loadChildren: './components/wallet/wallet.module#WalletModule'
     },
     {
         path: 'account',
