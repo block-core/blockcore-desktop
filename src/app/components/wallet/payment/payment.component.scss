@@ -1,0 +1,23 @@
+.payment
+{
+    .content {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        height: calc(100%);
+        min-height: 420px;
+    }
+
+    .payment-icon {
+        font-size: 48px;
+    }
+
+    button {
+        padding: 30px 10px;
+        width: 90%;
+        margin-bottom: 20px;
+    }
+}

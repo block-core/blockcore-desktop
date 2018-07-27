@@ -4,8 +4,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
     selector: 'app-wallet',
     templateUrl: './wallet.component.html',
     styleUrls: ['./wallet.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class WalletComponent {
     @HostBinding('class.wallet') hostClass = true;

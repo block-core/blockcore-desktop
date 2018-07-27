@@ -22,7 +22,7 @@ import { DetailsService } from '../../services/details.service';
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class RootComponent implements OnInit, OnDestroy {
 
@@ -45,6 +45,8 @@ export class RootComponent implements OnInit, OnDestroy {
   generalInfo: GeneralInfo;
 
   isAuthenticated: Observable<boolean>;
+  menuMode = 'side';
+  menuOpened = true;
 
   // TODO: Change into Observable.
   // get userActivated(): boolean {
@@ -60,6 +62,7 @@ export class RootComponent implements OnInit, OnDestroy {
     private router: Router,
     public detailsService: DetailsService,
     private apiService: ApiService,
+    private readonly cd: ChangeDetectorRef,
     private globalService: GlobalService,
     private readonly breakpointObserver: BreakpointObserver,
   ) {
@@ -74,6 +77,13 @@ export class RootComponent implements OnInit, OnDestroy {
       console.log('Version: ' + applicationVersion);
     }
 
+    // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
+    const isSmallScreen = breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
+
+    console.log('SMALL SCREEN:', isSmallScreen);
+
+    this.menuOpened = !isSmallScreen;
+
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
@@ -81,9 +91,15 @@ export class RootComponent implements OnInit, OnDestroy {
       if (result.matches) {
         appState.handset = true;
         this.handset = true;
+        //this.showMenu = false;
+        this.menuMode = 'over';
+        this.showFiller = true;
       } else {
         appState.handset = false;
         this.handset = false;
+        this.menuOpened = true;
+        this.menuMode = 'side';
+        this.showFiller = false;
       }
     });
 
@@ -105,6 +121,11 @@ export class RootComponent implements OnInit, OnDestroy {
   closeDetails(reason: string) {
     this.detailsService.hide();
     //this.sidenav.close();
+  }
+
+  openMenu() {
+    this.menuOpened = true;
+    this.cd.detectChanges();
   }
 
   ngOnInit() {

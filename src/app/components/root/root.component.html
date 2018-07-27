@@ -5,11 +5,11 @@
   </mat-sidenav-container>
  -->
 
-<mat-drawer-container (backdropClick)="closeDetails('backdrop')" *ngIf="isAuthenticated | async; else anonymous" class="app-container"
-  autosize>
+<mat-drawer-container (backdropClick)="closeDetails('backdrop')" *ngIf="isAuthenticated | async; else anonymous" class="app-container" autosize>
 
-  <mat-drawer #details mode="over" (keydown.escape)="closeDetails('escape')" [opened]="detailsService.opened" position="end">
-    
+  <mat-drawer #details mode="over" [ngClass]="{'details-full-width': handset}" (keydown.escape)="closeDetails('escape')" [opened]="detailsService.opened"
+    position="end">
+
     <button (click)="closeDetails('toggle button')" mat-icon-button>
       <mat-icon>close</mat-icon>
     </button>
@@ -19,7 +19,7 @@
     <app-details *ngIf="detailsService.item"></app-details>
   </mat-drawer>
 
-  <mat-drawer #drawer class="example-sidenav not-selectable" *ngIf="!handset" opened mode="side">
+  <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [(mode)]="menuMode">
     <app-view-area>
       <mat-list class="main-menu">
         <!-- <h3 mat-subheader>Folders</h3> -->
@@ -71,11 +71,11 @@
 
         <div class="fill-remaining-vertical"></div>
 
-        <mat-list-item *ngIf="!showFiller" (click)="showFiller = !showFiller">
+        <mat-list-item *ngIf="!handset && !showFiller" (click)="showFiller = !showFiller">
           <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
         </mat-list-item>
 
-        <mat-list-item *ngIf="showFiller" (click)="showFiller = !showFiller">
+        <mat-list-item *ngIf="!handset && showFiller" (click)="showFiller = !showFiller">
           <mat-icon mat-list-icon>keyboard_arrow_left</mat-icon>
         </mat-list-item>
 
@@ -94,7 +94,8 @@
       <span *ngIf="!handset">{{appTitle$ | async}}</span>
 
       <span *ngIf="handset && !appState.pageMode">
-        <button mat-stroked-button>Payment</button>
+        <button mat-stroked-button routerLink="/wallet/payment">
+          <mat-icon>credit_card</mat-icon> Payment</button>
       </span>
 
       <span class="example-fill-remaining-space"></span>
@@ -115,8 +116,12 @@
         <mat-icon>cloud_done</mat-icon>
       </button>
 
-      <button *ngIf="!appState.pageMode" mat-icon-button [matMenuTriggerFor]="moreMenu">
+      <button *ngIf="!appState.pageMode && !appState.handset" mat-icon-button [matMenuTriggerFor]="moreMenu">
         <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <button *ngIf="!appState.pageMode && appState.handset" mat-icon-button (click)="openMenu()">
+        <mat-icon>apps</mat-icon>
       </button>
 
       <mat-menu #moreMenu="matMenu">

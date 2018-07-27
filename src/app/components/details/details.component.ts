@@ -6,9 +6,9 @@ import { Subscription } from 'rxjs';
 import { TransactionInfo } from '../../classes/transaction-info';
 import { WalletInfo } from '../../classes/wallet-info';
 import { MatSnackBar } from '@angular/material';
+import { ApplicationStateService } from '../../services/application-state.service';
 
 // Until Angular supports improved named routing and lazy-loading, we'll have to use this details controller for all details pain.
-
 @Component({
     selector: 'app-details',
     templateUrl: './details.component.html',
@@ -27,6 +27,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private lastBlockSyncedHeight: number;
 
     constructor(
+        public appState: ApplicationStateService,
         private detailsService: DetailsService,
         private apiService: ApiService,
         public snackBar: MatSnackBar,

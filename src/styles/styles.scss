@@ -82,6 +82,10 @@ body {
 	margin: 30px;
 }
 
+.content-big-margin {
+	margin: 60px;
+}
+
 @media screen and (max-width: 599px) {
 	.content
 {
@@ -111,10 +115,6 @@ body {
 	height: 100%; /*allows both columns to span the full height of the browser window*/
 	display: flex;
 	flex-direction: column;
-}
-
-.example-sidenav {
-	//padding: 10px;
 }
 
 .main-menu {

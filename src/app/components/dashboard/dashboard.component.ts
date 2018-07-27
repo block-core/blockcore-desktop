@@ -7,6 +7,7 @@ import { TransactionInfo } from '../../classes/transaction-info';
 import { Router } from '@angular/router';
 import { WalletInfo } from '../../classes/wallet-info';
 import { DetailsService } from '../../services/details.service';
+import { ApplicationStateService } from '../../services/application-state.service';
 
 
 export interface PeriodicElement {
@@ -63,6 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     constructor(private apiService: ApiService,
         private globalService: GlobalService,
         private router: Router,
+        public appState: ApplicationStateService,
         private detailsService: DetailsService,
         private fb: FormBuilder) {
         this.buildStakingForm();

@@ -4,6 +4,7 @@ import { AuthenticatedUserGuard } from '../../modules/authentication/guards/auth
 import { WalletComponent } from './wallet.component';
 import { SendComponent } from './send/send.component';
 import { ReceiveComponent } from './receive/receive.component';
+import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
     {
@@ -28,6 +29,15 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Receive',
+            prefix: 'Wallet'
+        },
+    },
+    {
+        path: 'payment',
+        component: PaymentComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Payment',
             prefix: 'Wallet'
         },
     }
