@@ -6,6 +6,7 @@ import { MaterialModule } from '../../material.module';
 import { ViewAreaModule } from '../../shared/view-area/view-area.module';
 import { AppServicesModule } from '../../services/services.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
+import { DetailsModule } from '../details/details.module';
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import { AppSharedModule } from '../../shared/app-shared.module';
         MaterialModule,
         AppServicesModule,
         AppSharedModule,
+        DetailsModule,
         ViewAreaModule
     ],
     declarations: [

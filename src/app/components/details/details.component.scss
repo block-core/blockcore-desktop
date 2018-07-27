@@ -1,0 +1,23 @@
+.details {
+
+    .details-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .details-row {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 8px;
+    }
+
+    .details-row-title {
+        font-weight: bold;
+        width: 120px;
+    }
+
+    .details-row-value {
+    }
+
+
+}

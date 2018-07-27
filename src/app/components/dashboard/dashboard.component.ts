@@ -2,10 +2,11 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnI
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TransactionInfo } from '../../classes/transaction-info';
 import { Router } from '@angular/router';
 import { WalletInfo } from '../../classes/wallet-info';
+import { DetailsService } from '../../services/details.service';
 
 
 export interface PeriodicElement {
@@ -59,8 +60,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     displayedColumns: string[] = ['position', 'name', 'weight'];
     dataSource = ELEMENT_DATA;
 
-    constructor(private apiService: ApiService, private globalService: GlobalService, private router: Router, private fb: FormBuilder) {
-
+    constructor(private apiService: ApiService,
+        private globalService: GlobalService,
+        private router: Router,
+        private detailsService: DetailsService,
+        private fb: FormBuilder) {
+        this.buildStakingForm();
     }
 
     ngOnInit() {
@@ -71,6 +76,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.cancelSubscriptions();
+    }
+
+    private buildStakingForm(): void {
+        this.stakingForm = this.fb.group({
+            "walletPassword": ["", Validators.required]
+        });
+    }
+
+    public openTransactionDetails(transaction: TransactionInfo) {
+
+        this.detailsService.show(transaction);
+
+        //const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static", keyboard: false });
+        //modalRef.componentInstance.transaction = transaction;
     }
 
     private cancelSubscriptions() {

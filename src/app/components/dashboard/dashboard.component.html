@@ -1,4 +1,5 @@
 <div class="content">
+
   <section id="GUI" class="light">
     <section id="content" class="col-11 mx-auto">
       <div class="jumbotron jumbotron-fluid">
@@ -19,8 +20,8 @@
             </div>
             <div class="col text-right">
               <p>
+                <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
                 <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
-                <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>
               </p>
             </div>
           </div>
@@ -69,7 +70,12 @@
                       </td>
                       <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
                       <td class="text-center">
-                        <a class="link" (click)="openTransactionDetailDialog(transaction)">details</a>
+
+                          <!-- <button (click)="openTransactionDetails(transaction)" class="transaction-details-button" mat-icon-button>
+                              <mat-icon>info</mat-icon>
+                            </button> -->
+
+                        <a class="link" (click)="openTransactionDetails(transaction)">view</a>
                       </td>
                     </tr>
                   </tbody>
@@ -83,7 +89,9 @@
           <!-- /TRANSACTIONS -->
 
           <!-- STAKING -->
-          <br><br><br>
+          <br>
+          <br>
+          <br>
           <section class="col-4" *ngIf="hasBalance">
             <div class="card" *ngIf="!stakingEnabled">
               <div class="card-header">Staking</div>

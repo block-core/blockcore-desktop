@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { ApplicationStateService } from './application-state.service';
 import { TitleService } from './title.service';
+import { DetailsService } from './details.service';
 
 @NgModule({
     declarations: [
@@ -11,6 +12,6 @@ import { TitleService } from './title.service';
     imports: [
 
     ],
-    providers: [AuthenticationService, ApplicationStateService, TitleService]
+    providers: [AuthenticationService, ApplicationStateService, TitleService, DetailsService]
 })
 export class AppServicesModule { }

@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { delay, retryWhen } from 'rxjs/operators';
 import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
+import { DetailsService } from '../../services/details.service';
 
 @Component({
   selector: 'app-root',
@@ -57,6 +58,7 @@ export class RootComponent implements OnInit, OnDestroy {
     private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private router: Router,
+    public detailsService: DetailsService,
     private apiService: ApiService,
     private globalService: GlobalService,
     private readonly breakpointObserver: BreakpointObserver,
@@ -98,6 +100,11 @@ export class RootComponent implements OnInit, OnDestroy {
 
   get appTitle$(): Observable<string> {
     return this.titleService.$title;
+  }
+
+  closeDetails(reason: string) {
+    this.detailsService.hide();
+    //this.sidenav.close();
   }
 
   ngOnInit() {

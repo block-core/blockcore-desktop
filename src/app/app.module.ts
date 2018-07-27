@@ -24,6 +24,7 @@ import { GlobalService } from './services/global.service';
 import { HttpModule } from '@angular/http';
 import { LoadModule } from './components/load/load.module';
 import { NetworkModule } from './components/network/network.module';
+import { DetailsModule } from './components/details/details.module';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { NetworkModule } from './components/network/network.module';
     LoadModule,
     NetworkModule,
     NotFoundModule,
+    DetailsModule,
     AppRoutingModule,
   ],
   exports: [

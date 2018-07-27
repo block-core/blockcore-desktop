@@ -8,4 +8,22 @@
             width: 100%;
         }
     }
+
+    .transaction-details-button
+    {
+        height: 10px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .transaction-details-button .mat-icon
+    {
+        font-size: 10px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .link {
+        cursor: pointer;
+    }
 }

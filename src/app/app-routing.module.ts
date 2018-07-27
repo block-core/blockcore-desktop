@@ -36,16 +36,8 @@ const routes: Routes = [
         // canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
             title: 'Dashboard'
-        },
+        }
     },
-    // {
-    //     path: 'wallet',
-    //     component: WalletComponent,
-    //     canActivate: [AuthenticatedUserGuard],
-    //     data: {
-    //         title: 'Wallet'
-    //     },
-    // },
     {
         path: 'settings',
         component: SettingsComponent,

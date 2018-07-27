@@ -1,4 +1,23 @@
-<mat-drawer-container *ngIf="isAuthenticated | async; else anonymous" class="app-container" autosize>
+<!-- <mat-sidenav-container>
+    <mat-sidenav>Start</mat-sidenav>
+    <mat-sidenav position="end">End</mat-sidenav>
+    <mat-sidenav-content>Main</mat-sidenav-content>
+  </mat-sidenav-container>
+ -->
+
+<mat-drawer-container (backdropClick)="closeDetails('backdrop')" *ngIf="isAuthenticated | async; else anonymous" class="app-container"
+  autosize>
+
+  <mat-drawer #details mode="over" (keydown.escape)="closeDetails('escape')" [opened]="detailsService.opened" position="end">
+    
+    <button (click)="closeDetails('toggle button')" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <h1 class="details-title">Transaction details</h1>
+
+    <app-details *ngIf="detailsService.item"></app-details>
+  </mat-drawer>
 
   <mat-drawer #drawer class="example-sidenav not-selectable" *ngIf="!handset" opened mode="side">
     <app-view-area>
@@ -63,7 +82,6 @@
       </mat-list>
     </app-view-area>
   </mat-drawer>
-
 
   <div class="app-sidenav-content">
 
