@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { LoadComponent } from './components/load/load.component';
 import { NetworkComponent } from './components/network/network.component';
+import { MerchantsComponent } from './components/merchants/merchants.component';
 
 const routes: Routes = [
     {
@@ -37,6 +38,14 @@ const routes: Routes = [
         data: {
             title: 'Dashboard'
         }
+    },
+    {
+        path: 'merchants',
+        component: MerchantsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Merchants'
+        },
     },
     {
         path: 'settings',

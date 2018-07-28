@@ -1,156 +1,83 @@
 <div class="content">
+  <mat-card>
+    <div>
+      <h2>Balance</h2>
+      <p>
+        <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+        <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+      </p>
+      <ul>
+        <li>
+          <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+          <em> (unconfirmed)</em>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p>
+        <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
+        <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
+      </p>
+    </div>
+  </mat-card>
 
-  <section id="GUI" class="light">
-    <section id="content" class="col-11 mx-auto">
+  <mat-card>
+    <h2>Sellers in your region</h2>
+    <p>No sellers in your current area.</p>
+    <em>Delivered in partnership with coinmap by Trezor.</em>
+  </mat-card>
 
-      <mat-card>
-        <div class="jumbotron jumbotron-fluid">
-          <div class="col-12">
-            <div class="row d-flex align-items-center">
-              <div class="col-9 text-left">
-                <h3>Spendable balance</h3>
-                <p class="lead">
-                  <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-                  <small class="text-uppercase"> {{ coinUnit }}</small>
-                </p>
-                <ul class="list-unstyled">
-                  <li>
-                    <strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-                    <em> (unconfirmed)</em>
-                  </li>
-                </ul>
-              </div>
-              <div class="col text-right">
-                <p>
-                  <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
-                  <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mat-card>
+  <mat-card>
+    <h2>Buy coins</h2>
 
+    <p>
+      You can buy coins from selected partners, and from exchanges.
+    </p>
 
-      <!-- CONTENT -->
-      <section class="col-12">
-        <!-- NO TRANSACTIONS -->
-        <div class="row">
-          <ng-template #noTransactions>
-            <section class="col-12 text-center my-4">
-              <img src="./assets/images/notransactions.svg">
-            </section>
-            <div class="col-12 text-center">
-              <!-- <p>Click the down arrow for a receive address.</p> -->
-            </div>
-          </ng-template>
-        </div>
-        <!-- /NO TRANSACTIONS -->
+    <p>
+      Soon you will be able to buy City Coins directly in City Hub. Until then, please visit our website for a list of partners
+      and exchanges.
+    </p>
 
-        <div class="row" *ngIf="transactionArray; else noTransactions">
-          <!-- TRANSACTIONS -->
+    <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
+  </mat-card>
 
+  <mat-card>
+    <h2>Add coins</h2>
 
-          <mat-card>
-            <div class="col-8">
-              <div class="card">
-                <h3>Latest Transactions</h3>
-                <div class="card-body">
-                  <table class="table table-sm">
-                    <tbody *ngFor="let transaction of transactionArray; let i=index">
-                      <tr *ngIf="i<5">
-                        <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock">
-                          <span class="bubble bg-warning"></span>
-                        </th>
-                        <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock">
-                          <span class="bubble bg-success"></span>
-                        </th>
-                        <td class="text-uppercase text-left" *ngIf="!appState.handset">{{ transaction.transactionType }}</td>
-                        <td class="text-left" *ngIf="transaction.transactionType == 'sent'">
-                          <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
-                        </td>
-                        <td class="text-left" *ngIf="transaction.transactionType == 'received'">
-                          <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
-                        </td>
-                        <td class="text-left" *ngIf="transaction.transactionType == 'staked'">
-                          <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
-                        </td>
-                        <td class="text-left" *ngIf="!appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-                        <td class="text-left" *ngIf="appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'short' }}</td>
-                        <td class="text-center">
+    <p>
+      If you received an e-mail with City Coins, you can fill out the key you received in the e-mail to add those coins to your
+      wallet.
+    </p>
 
-                          <!-- <button (click)="openTransactionDetails(transaction)" class="transaction-details-button" mat-icon-button>
-                              <mat-icon>info</mat-icon>
-                            </button> -->
+    <mat-form-field appearance="outline">
+      <mat-label>Coin code</mat-label>
+      <input matInput type="text" id="inputCode" placeholder="Fill out code">
+    </mat-form-field>
 
-                          <a class="link" (click)="openTransactionDetails(transaction)">view</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="text-center my-2">
-                    <button mat-stroked-button color="primary" routerLink="/wallet/history">View History</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </mat-card>
+    <br>
 
+    <button mat-stroked-button>Add Coins</button>
+  </mat-card>
 
-          <!-- /TRANSACTIONS -->
+  <mat-card>
+    <h2>Sweep paper wallet</h2>
 
-          <!-- STAKING -->
-          <mat-card>
+    <p>
+      You can add more coins to your wallet by sweeping paper wallets. When you sweep a paper wallet, all the coins are moved from
+      the original address and into your current wallet.
+    </p>
 
-            <section class="col-4" *ngIf="hasBalance">
-              <div class="card" *ngIf="!stakingEnabled">
-                <h3>Staking</h3>
-                <div class="card-body">
-                  <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
-                  <br>
-                  <form class="form-inline mb-3" [formGroup]="stakingForm">
-                    <div class="form-group">
-                      <mat-form-field appearance="outline">
-                        <mat-label>Account password</mat-label>
-                        <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
-                      </mat-form-field>
-                      <br>
-                      <button type="button" mat-stroked-button id="flipcard" [disabled]="isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div id="staking" class="card" *ngIf="stakingEnabled">
-                <div class="card-header">
-                  <h3>Staking</h3>
-                </div>
-                <div class="card-body">
-                  <ul class="list-unstyled mb-3">
-                    <li *ngIf="isStarting">Waiting for staking to start...</li>
-                    <li>Your weight is
-                      <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
-                    </li>
-                    <li>Network weight is
-                      <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
-                    </li>
-                    <li class="mt-2">Expected reward time is:</li>
-                    <li>
-                      <strong>{{ dateTime }}</strong>
-                    </li>
-                  </ul>
-                  <button type="button" mat-stroked-button [disabled]="isStopping" (click)="stopStaking()">Stop Staking</button>
-                </div>
-              </div>
-            </section>
-          </mat-card>
+    <p>
+      After the transfer is complete, you should avoid reusing the paper wallet for security reasons.
+    </p>
 
-        </div>
-      </section>
-      <!-- /CONTENT -->
-    </section>
-    <!-- /CONTAINER-->
-  </section>
-  <!-- /GUI-->
+    <p>
+      Supported formats: WIF, BIP38, Mini private key.
+    </p>
+
+    <button mat-stroked-button>Sweep Wallet</button>
+  </mat-card>
 
 </div>
 

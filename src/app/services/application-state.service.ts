@@ -18,6 +18,8 @@ export class ApplicationStateService {
 
     handset = false;
 
+    fullHeight = false;
+
     mode: string;
 
     get appTitle$(): Observable<string> {

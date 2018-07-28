@@ -1,1 +1,157 @@
-WALLET
+<div class="content">
+
+    <mat-card>
+        <div>
+            <h2>Balance</h2>
+            <p>
+                <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+            </p>
+            <ul>
+                <li>
+                    <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                    <em> (unconfirmed)</em>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
+                <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
+            </p>
+        </div>
+    </mat-card>
+
+    <mat-card>
+        <section class="col-4" *ngIf="wallet.hasBalance">
+            <div class="card" *ngIf="!wallet.stakingEnabled">
+                <h2>Staking</h2>
+                <div class="card-body">
+                    <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
+                    <br>
+                    <form class="form-inline mb-3" [formGroup]="stakingForm">
+                        <div class="form-group">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Account password</mat-label>
+                                <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                            </mat-form-field>
+                            <br>
+                            <button type="button" mat-stroked-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="staking" class="card" *ngIf="wallet.stakingEnabled">
+                <div class="card-header">
+                    <h2>Staking</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-3">
+                        <li *ngIf="wallet.isStarting">Waiting for staking to start...</li>
+                        <li>Your weight is
+                            <strong>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                        </li>
+                        <li>Network weight is
+                            <strong>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                        </li>
+                        <li class="mt-2">Expected reward time is:</li>
+                        <li>
+                            <strong>{{ wallet.dateTime }}</strong>
+                        </li>
+                    </ul>
+                    <button type="button" mat-stroked-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
+                </div>
+            </div>
+        </section>
+    </mat-card>
+
+    <h2>Transactions</h2>
+
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+        <mat-tab label="All">
+            <div class="tab-pane">
+
+                <ng-template [ngIf]="!wallet.transactionArray">
+                    <p class="wallet-no-transactions">
+                        <em>No transactions in your wallet. You might need to wait for the network to synchronize.</em>
+                    </p>
+                </ng-template>
+
+                <div class="mat-elevation-z8">
+                    <table class="wallet-transactions-table" mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="transactionType">
+                            <th mat-header-cell *matHeaderCellDef> Type </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                
+                                <mat-icon class="wallet-confirmed-icon" *ngIf="!transaction.transactionConfirmedInBlock">warning</mat-icon>
+                                <mat-icon class="wallet-confirmed-icon" *ngIf="transaction.transactionConfirmedInBlock">check</mat-icon>
+                                
+                                {{transaction.transactionType}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="transactionAmount">
+                            <th mat-header-cell *matHeaderCellDef> Amount </th>
+
+                            <td mat-cell *matCellDef="let transaction">
+
+                                <span *ngIf="transaction.transactionType == 'sent'">
+                                    <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{
+                                        wallet.coinUnit }}
+                                    </strong>
+                                </span>
+
+                                <span *ngIf="transaction.transactionType == 'received'">
+                                    <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{
+                                        wallet.coinUnit }}
+                                    </strong>
+                                </span>
+
+                                <span *ngIf="transaction.transactionType == 'staked'">
+                                    <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{
+                                        wallet.coinUnit }}
+                                    </strong>
+                                </span>
+
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="transactionTimestamp">
+                            <th mat-header-cell *matHeaderCellDef> Date </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span *ngIf="!appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</span>
+                                <span *ngIf="appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'short' }}</span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <a class="link" (click)="openTransactionDetails(transaction)">view</a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Received">
+            <div class="tab-pane">
+                <!-- <div *ngFor="let usedAddress of usedAddresses" class="tab-pane-line">
+                        <code class="d-inline-block">{{ usedAddress }}</code>
+                    </div> -->
+            </div>
+        </mat-tab>
+        <mat-tab label="Sent">
+            <div class="tab-pane">
+                <!-- <div *ngFor="let changeAddress of changeAddresses" class="tab-pane-line">
+                        <code class="d-inline-block">{{ changeAddress }}</code>
+                    </div> -->
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

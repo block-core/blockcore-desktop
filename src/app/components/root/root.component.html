@@ -5,7 +5,8 @@
   </mat-sidenav-container>
  -->
 
-<mat-drawer-container (backdropClick)="closeDetails('backdrop')" *ngIf="isAuthenticated | async; else anonymous" class="app-container" autosize>
+<mat-drawer-container (backdropClick)="closeDetails('backdrop')" *ngIf="isAuthenticated | async; else anonymous" class="app-container"
+  autosize>
 
   <mat-drawer #details mode="over" [ngClass]="{'details-full-width': handset}" (keydown.escape)="closeDetails('escape')" [opened]="detailsService.opened"
     position="end">
@@ -57,10 +58,20 @@
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
         </mat-list-item>
 
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/merchants">
+          <mat-icon mat-list-icon>map</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>Merchants</h4>
+        </mat-list-item>
+
         <mat-list-item routerLinkActive="main-menu-active" routerLink="/settings">
           <mat-icon mat-list-icon>settings</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Settings</h4>
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
+        </mat-list-item>
+
+        <mat-list-item *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/about">
+          <mat-icon mat-list-icon>info</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>About</h4>
         </mat-list-item>
 
         <mat-list-item routerLinkActive="main-menu-active" routerLink="/logout">
@@ -141,7 +152,7 @@
     </mat-toolbar>
 
     <app-view-area>
-      <div class="content-container">
+      <div class="content-container" [ngClass]="{'content-container-full': appState.fullHeight}">
         <router-outlet></router-outlet>
       </div>
     </app-view-area>

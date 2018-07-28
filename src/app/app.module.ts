@@ -25,6 +25,7 @@ import { HttpModule } from '@angular/http';
 import { LoadModule } from './components/load/load.module';
 import { NetworkModule } from './components/network/network.module';
 import { DetailsModule } from './components/details/details.module';
+import { MerchantsModule } from './components/merchants/merchants.module';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { DetailsModule } from './components/details/details.module';
     LoadModule,
     NetworkModule,
     NotFoundModule,
+    MerchantsModule,
     DetailsModule,
     AppRoutingModule,
   ],
@@ -58,7 +60,7 @@ import { DetailsModule } from './components/details/details.module';
     ApiService,
     ElectronService,
     GlobalService,
-    { provide: APP_TITLE, useValue: 'City Chain' },
+    { provide: APP_TITLE, useValue: 'City Hub' },
   ],
   bootstrap: [RootComponent]
 })

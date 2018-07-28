@@ -1,4 +1,24 @@
 .wallet
 {
-    
+    .mat-card {
+        margin-bottom: 20px;
+    }
+
+    .link {
+        cursor: pointer;
+    }
+
+    .wallet-no-transactions {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .wallet-transactions-table {
+        width: 100%;
+    }
+
+    .wallet-confirmed-icon {
+        font-size: 14px;
+    }
+      
 }

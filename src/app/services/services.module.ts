@@ -4,6 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { ApplicationStateService } from './application-state.service';
 import { TitleService } from './title.service';
 import { DetailsService } from './details.service';
+import { WalletService } from './wallet.service';
 
 @NgModule({
     declarations: [
@@ -12,6 +13,6 @@ import { DetailsService } from './details.service';
     imports: [
 
     ],
-    providers: [AuthenticationService, ApplicationStateService, TitleService, DetailsService]
+    providers: [AuthenticationService, ApplicationStateService, TitleService, DetailsService, WalletService]
 })
 export class AppServicesModule { }
