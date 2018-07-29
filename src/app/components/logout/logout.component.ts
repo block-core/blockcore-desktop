@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
     selector: 'app-logout',
@@ -16,12 +17,15 @@ export class LogoutComponent {
 
     constructor(private authService: AuthenticationService,
         private globalService: GlobalService,
+        private wallet: WalletService,
         private apiService: ApiService,
         private router: Router) {
 
     }
 
     logout() {
+        this.wallet.stop();
+
         this.authService.setAnonymous();
 
         this.apiService.stopStaking()

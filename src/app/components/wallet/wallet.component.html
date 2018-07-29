@@ -22,47 +22,45 @@
         </div>
     </mat-card>
 
-    <mat-card>
-        <section class="col-4" *ngIf="wallet.hasBalance">
-            <div class="card" *ngIf="!wallet.stakingEnabled">
+    <mat-card *ngIf="wallet.hasBalance">
+        <div class="card" *ngIf="!wallet.stakingEnabled">
+            <h2>Staking</h2>
+            <div class="card-body">
+                <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
+                <br>
+                <form [formGroup]="stakingForm">
+                    <div class="form-group">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Account password</mat-label>
+                            <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                        </mat-form-field>
+                        <br>
+                        <button type="button" mat-stroked-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="staking" class="card" *ngIf="wallet.stakingEnabled">
+            <div class="card-header">
                 <h2>Staking</h2>
-                <div class="card-body">
-                    <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
-                    <br>
-                    <form class="form-inline mb-3" [formGroup]="stakingForm">
-                        <div class="form-group">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Account password</mat-label>
-                                <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
-                            </mat-form-field>
-                            <br>
-                            <button type="button" mat-stroked-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
-                        </div>
-                    </form>
-                </div>
             </div>
-            <div id="staking" class="card" *ngIf="wallet.stakingEnabled">
-                <div class="card-header">
-                    <h2>Staking</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-3">
-                        <li *ngIf="wallet.isStarting">Waiting for staking to start...</li>
-                        <li>Your weight is
-                            <strong>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
-                        </li>
-                        <li>Network weight is
-                            <strong>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
-                        </li>
-                        <li class="mt-2">Expected reward time is:</li>
-                        <li>
-                            <strong>{{ wallet.dateTime }}</strong>
-                        </li>
-                    </ul>
-                    <button type="button" mat-stroked-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
-                </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-3">
+                    <li *ngIf="wallet.isStarting">Waiting for staking to start...</li>
+                    <li>Your weight is
+                        <strong>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                    </li>
+                    <li>Network weight is
+                        <strong>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                    </li>
+                    <li class="mt-2">Expected reward time is:</li>
+                    <li>
+                        <strong>{{ wallet.dateTime }}</strong>
+                    </li>
+                </ul>
+                <button type="button" mat-stroked-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
             </div>
-        </section>
+        </div>
     </mat-card>
 
     <h2>Transactions</h2>
@@ -83,10 +81,10 @@
                         <ng-container matColumnDef="transactionType">
                             <th mat-header-cell *matHeaderCellDef> Type </th>
                             <td mat-cell *matCellDef="let transaction">
-                                
+
                                 <mat-icon class="wallet-confirmed-icon" *ngIf="!transaction.transactionConfirmedInBlock">warning</mat-icon>
                                 <mat-icon class="wallet-confirmed-icon" *ngIf="transaction.transactionConfirmedInBlock">check</mat-icon>
-                                
+
                                 {{transaction.transactionType}} </td>
                         </ng-container>
 

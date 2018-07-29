@@ -52,22 +52,30 @@ export class WalletService {
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
         private fb: FormBuilder) {
-        //this.buildStakingForm();
 
-        this.startSubscriptions();
-        this.walletName = this.globalService.getWalletName();
-        this.coinUnit = this.globalService.getCoinUnit();
     }
 
-    // ngOnDestroy() {
-    //     this.cancelSubscriptions();
-    // }
+    public start() {
+        this.walletName = this.globalService.getWalletName();
+        this.coinUnit = this.globalService.getCoinUnit();
+        this.startSubscriptions();
+    }
 
-    // private buildStakingForm(): void {
-    //     this.stakingForm = this.fb.group({
-    //         "walletPassword": ["", Validators.required]
-    //     });
-    // }
+    public stop() {
+        this.walletName = '';
+        this.coinUnit = '';
+        this.confirmedBalance = null;
+        this.unconfirmedBalance = null;
+        this.active = false;
+        this.transactionArray = [];
+        this.cancelSubscriptions();
+    }
+
+    private cancelSubscriptions() {
+        this.walletBalanceSubscription.unsubscribe();
+        this.walletHistorySubscription.unsubscribe();
+        this.stakingInfoSubscription.unsubscribe();
+    }
 
     private startSubscriptions() {
         this.getWalletBalance();

@@ -125,8 +125,4 @@ export class CreateAccountComponent {
                 }
             );
     }
-
-    public onSubmit() {
-        console.log('FORM SUBMIT');
-    }
 }

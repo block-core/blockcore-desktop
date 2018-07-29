@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { WalletInfo } from '../../classes/wallet-info';
 import { WalletLoad } from '../../classes/wallet-load';
+import { WalletService } from '../../services/wallet.service';
 
 export interface Account {
     name: string;
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit {
         private authService: AuthenticationService, private router: Router,
         public appState: ApplicationStateService,
         private globalService: GlobalService,
+        private wallet: WalletService,
         private apiService: ApiService) {
 
     }
@@ -151,10 +153,12 @@ export class LoginComponent implements OnInit {
 
                     if (response.status >= 200 && response.status < 400) {
                         this.authService.setAuthenticated();
+                        this.wallet.start();
                         this.router.navigateByUrl('/dashboard');
                     }
                 },
                 error => {
+                    this.wallet.stop();
                     this.authService.setAnonymous();
                     this.unlocking = false;
                     this.apiService.handleError(error);
