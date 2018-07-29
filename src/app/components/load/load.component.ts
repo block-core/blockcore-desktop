@@ -47,9 +47,17 @@ export class LoadComponent {
             //{ id: 'readonly', name: 'Read-only' }
         ];
 
-        // If user has choosen to remember mode, we'll redirect directly to login.
-        if (localStorage.getItem('Mode') != null) {
-            this.router.navigateByUrl('/login');
+        const existingMode = localStorage.getItem('Mode');
+
+        // If user has choosen to remember mode, we'll redirect directly to login, when connected.
+        if (existingMode != null) {
+
+            this.appState.mode = existingMode;
+
+            if (existingMode === 'full') {
+                this.loading = true;
+                this.fullNodeConnect();
+            }
         }
     }
 

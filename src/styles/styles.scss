@@ -41,25 +41,17 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-}
-
-html {
 	height: 100%;
+	overflow: hidden;
 }
 
 body {
-	height: 100%;
 	background-color: #f8f8f8;
 	font-family: mat-font-family($app-typography);
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 28px;
 }
-
-// @media screen and (max-width: 599px) {
-// 	.toolbar {
-// 	}
-// }
 
 .toolbar-bottom {
 	order: 100;
@@ -96,15 +88,9 @@ body {
 
 @media screen and (max-width: 599px) {
 	.content
-{
-	margin: 16px;
-}
-}
-
-.example-fill-remaining-space {
-	/* This fills the remaining space, by using flexbox. 
-         Every toolbar row uses a flexbox row layout. */
-	flex: 1 1 auto;
+	{
+		margin: 16px;
+	}
 }
 
 .fill-remaining-vertical {
@@ -114,19 +100,11 @@ body {
 }
 
 .app-sidenav-content {
-	//display: flex;
 	height: 100%;
 	overflow: hidden;
-	//align-items: center;
-	//justify-content: center;
-
 	height: 100%; /*allows both columns to span the full height of the browser window*/
 	display: flex;
 	flex-direction: column;
-}
-
-.main-menu {
-
 }
 
 .main-menu .mat-list-item {
@@ -148,7 +126,6 @@ body {
 }
 
 .main-menu h4 {
-	//color: red! important;
 	margin-right: 4px; /* To offset some of the left padding on icons */
 }
 
@@ -159,7 +136,6 @@ body {
 .main-menu-first {
 	padding-top: 8px;
 	padding-bottom: 8px;
-	//background-color: #dfab3c;
 }
 
 .dashboard-item {
@@ -186,8 +162,15 @@ body {
 //     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
 // }
 
+.title-bar {
+	-webkit-app-region: drag;
+	height: $app-title-bar-height; 
+	background-color: #0d0d0d;
+	padding: none;
+	margin: 0px; 
+}
 
-#title-bar-logo
+.title-bar-logo
 {
 	height: 26px;
 	margin-left: 3px;
@@ -196,75 +179,48 @@ body {
 	
 }
 
-#title-bar {
-	-webkit-app-region: drag;
-	height: $app-title-bar-height; 
-	background-color: #0d0d0d;
-	padding: none;
-	margin: 0px; 
-   }
-
-   
-   #title {
+.title-bar-title {
 	position: fixed;
 	z-index: 5000;
 	top: 3px;
 	left: 3px; 
-   }
-   
-   #title-bar-btns {
-		-webkit-app-region: no-drag;
-		position: fixed;
-		top: 0px;
-		background-color: transparent;
-		border: none;
-		right: 0px;
-   }
+}
 
-   .title-bar-btn {
-		border: none;
-		background-color: transparent;
-		outline: none;
-		background-color: #0d0d0d;
-		color: #ffffff;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		margin-left: 1px;
-		height: 32px;
-		transition-duration: 500ms;
-		-webkit-transition-duration: 500ms;
-		-moz-transition-duration: 500ms;
-   }
+.title-bar-actions {
+	-webkit-app-region: no-drag;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	background-color: transparent;
+	border: none;
+}
 
-   .title-bar-btn:hover {
-	   background-color: #dfab3c;
-   }
-
-   .material-icons {
-		transition-duration: 500ms;
-		-webkit-transition-duration: 500ms;
-		-moz-transition-duration: 500ms;
-   }
-
-//    .material-icons:hover {
-// 	   transform: rotate(360deg);
-// 	   -webkit-transform: rotate(360deg);
-// 	   -moz-transform: rotate(360deg);
-//    }
-
-   .title-bar-btn i {
-	   font-size: 20px;
-   }
-
-   #title-bar-btns button:hover {
+.title-bar-button {
+	border: none;
+	background-color: transparent;
+	outline: none;
+	color: #ffffff;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	height: 32px;
+	width: 45px;
 	
-	background-color: #dfab3c;
-   }
+	// transition-duration: 100ms;
+	// -webkit-transition-duration: 100ms;
+	// -moz-transition-duration: 100ms;
+}
 
-   html, body
-   {
-	   overflow: hidden;
-   }
+.title-bar-button:hover {
+	background-color: #dfab3c;
+}
+
+.title-bar-button-close:hover {
+	background-color: #E81123;
+}
+
+.title-bar-button i {
+	font-size: 20px;
+}
 
 .app-electron
 {
@@ -277,7 +233,6 @@ body {
 .app-electron .app-container {
 	height: $app-height;
 }
-
 
 .splash-container
 {
@@ -292,9 +247,3 @@ body {
 .button-action-spinner {
 	font-size: 10px;
 }
-
-.content-centered
-{
-
-}
-
