@@ -72,9 +72,17 @@ export class WalletService {
     }
 
     private cancelSubscriptions() {
-        this.walletBalanceSubscription.unsubscribe();
-        this.walletHistorySubscription.unsubscribe();
-        this.stakingInfoSubscription.unsubscribe();
+        if (this.walletBalanceSubscription) {
+            this.walletBalanceSubscription.unsubscribe();
+        }
+
+        if (this.walletHistorySubscription) {
+            this.walletHistorySubscription.unsubscribe();
+        }
+
+        if (this.stakingInfoSubscription) {
+            this.stakingInfoSubscription.unsubscribe();
+        }
     }
 
     private startSubscriptions() {
