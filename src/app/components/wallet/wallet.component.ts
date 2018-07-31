@@ -82,7 +82,6 @@ export class WalletComponent implements OnInit {
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
-
         this.dataSource.data = this.wallet.transactionArray;
     }
 

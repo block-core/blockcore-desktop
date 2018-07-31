@@ -1,5 +1,5 @@
 <div class="content content-centered">
-    <h1 *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
+    <h1 class="mat-h1" *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
 
     <form *ngIf="!showAll">
         <div>

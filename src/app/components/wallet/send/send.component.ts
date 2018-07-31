@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { GlobalService } from '../../../services/global.service';
 import { ApiService } from '../../../services/api.service';
@@ -10,6 +11,7 @@ import { CoinNotationPipe } from '../../../shared/pipes/coin-notation.pipe';
 import { FeeEstimation } from '../../../classes/fee-estimation';
 import { TransactionSending } from '../../../classes/transaction-sending';
 import { WalletInfo } from '../../../classes/wallet-info';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-send',
@@ -32,8 +34,14 @@ export class SendComponent implements OnInit, OnDestroy {
     private transaction: TransactionBuilding;
     private walletBalanceSubscription: Subscription;
 
+    public showInputField = true;
+    public showSendingField = false;
+    public showConfirmationField = false;
+
     constructor(public readonly appState: ApplicationStateService,
         private apiService: ApiService,
+        private location: Location,
+        private router: Router,
         private globalService: GlobalService,
         private fb: FormBuilder
     ) {
@@ -56,26 +64,26 @@ export class SendComponent implements OnInit, OnDestroy {
         'amount': '',
         'fee': '',
         'password': ''
-      };
-    
-      validationMessages = {
+    };
+
+    validationMessages = {
         'address': {
-          'required': 'An address is required.',
-          'minlength': 'An address is at least 26 characters long.'
+            'required': 'An address is required.',
+            'minlength': 'An address is at least 26 characters long.'
         },
         'amount': {
-          'required': 'An amount is required.',
-          'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-          'min': "The amount has to be more or equal to 0.00001 Stratis.",
-          'max': 'The total transaction amount exceeds your available balance.'
+            'required': 'An amount is required.',
+            'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
+            'min': "The amount has to be more or equal to 0.00001 Stratis.",
+            'max': 'The total transaction amount exceeds your available balance.'
         },
         'fee': {
-          'required': 'A fee is required.'
+            'required': 'A fee is required.'
         },
         'password': {
-          'required': 'Your password is required.'
+            'required': 'Your password is required.'
         }
-      };
+    };
 
     private buildSendForm(): void {
         this.sendForm = this.fb.group({
@@ -87,6 +95,10 @@ export class SendComponent implements OnInit, OnDestroy {
 
         this.sendForm.valueChanges.pipe(debounceTime(300))
             .subscribe(data => this.onValueChanged(data));
+    }
+
+    cancel() {
+        this.location.back();
     }
 
     onValueChanged(data?: any) {
@@ -133,10 +145,9 @@ export class SendComponent implements OnInit, OnDestroy {
                         // this.genericModalService.openModal(null, null);
                         this.apiError = "Something went wrong while connecting to the API. Please restart the application."
                     } else if (error.status >= 400) {
+                        this.apiService.handleError(error);
                         if (!error.json().errors[0]) {
-                            console.log(error);
                         } else {
-                            // this.genericModalService.openModal(null, error.json().errors[0].message);
                             this.apiError = error.json().errors[0].message;
                         }
                     }
@@ -170,8 +181,10 @@ export class SendComponent implements OnInit, OnDestroy {
                     if (error.status === 0) {
                         // this.genericModalService.openModal(null, null);
                     } else if (error.status >= 400) {
+
+                        this.apiService.handleError(error);
+
                         if (!error.json().errors[0]) {
-                            console.log(error);
                         }
                         else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
@@ -213,13 +226,21 @@ export class SendComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     console.log(error);
+
                     this.isSending = false;
+                    this.showInputField = true;
+                    this.showConfirmationField = false;
+                    this.showSendingField = false;
+
                     if (error.status === 0) {
                         // this.genericModalService.openModal(null, null);
                         this.apiError = "Something went wrong while connecting to the API. Please restart the application."
                     } else if (error.status >= 400) {
+
+                        this.apiService.handleError(error);
+
                         if (!error.json().errors[0]) {
-                            console.log(error);
+
                         } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
                             this.apiError = error.json().errors[0].message;
@@ -229,6 +250,7 @@ export class SendComponent implements OnInit, OnDestroy {
                 () => {
                     this.estimatedFee = this.responseMessage.fee;
                     this.transactionHex = this.responseMessage.hex;
+
                     if (this.isSending) {
                         this.sendTransaction(this.transactionHex);
                     }
@@ -238,6 +260,11 @@ export class SendComponent implements OnInit, OnDestroy {
 
     public send() {
         this.isSending = true;
+
+        this.showInputField = false;
+        this.showConfirmationField = false;
+        this.showSendingField = true;
+
         this.buildTransaction();
     }
 
@@ -258,8 +285,11 @@ export class SendComponent implements OnInit, OnDestroy {
                         // this.genericModalService.openModal(null, null);
                         this.apiError = "Something went wrong while connecting to the API. Please restart the application."
                     } else if (error.status >= 400) {
+
+                        this.apiService.handleError(error);
+
                         if (!error.json().errors[0]) {
-                            console.log(error);
+
                         } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
                             this.apiError = error.json().errors[0].message;
@@ -288,8 +318,11 @@ export class SendComponent implements OnInit, OnDestroy {
                         this.cancelSubscriptions();
                         // this.genericModalService.openModal(null, null);
                     } else if (error.status >= 400) {
+
+                        this.apiService.handleError(error);
+
                         if (!error.json().errors[0]) {
-                            console.log(error);
+
                         } else {
                             if (error.json().errors[0].description) {
                                 // this.genericModalService.openModal(null, error.json().errors[0].message);
@@ -303,10 +336,17 @@ export class SendComponent implements OnInit, OnDestroy {
             );
     }
 
+    // public get sentAmount(): number {
+    //     return Number(this.transaction.amount);
+    // }
+
     private openConfirmationModal() {
 
         console.log('Show confirmation TX: ', this.transaction);
         console.log('Show confirmation FEE: ', this.estimatedFee);
+
+        this.showSendingField = false;
+        this.showConfirmationField = true;
 
         // const modalRef = this.modalService.open(SendConfirmationComponent, { backdrop: "static" });
         // modalRef.componentInstance.transaction = this.transaction;

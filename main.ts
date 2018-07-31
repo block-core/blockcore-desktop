@@ -22,8 +22,8 @@ interface Coin {
 
 let availableCoins: Array<Coin>;
 availableCoins = [
-    { name: 'City Chain', identity: 'city', tooltip: 'City Hub', apiPort: 4335, apiTestPort: 14335, apiRegTestPort: 24335 },
-    { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, apiTestPort: 37221, apiRegTestPort: 37221 },
+    { name: 'City Chain', identity: 'city', tooltip: 'City Hub', apiPort: 4335, apiRegTestPort: 14335, apiTestPort: 24335 },
+    { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, apiRegTestPort: 37221, apiTestPort: 37221 },
     { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }
 ];
 

@@ -21,4 +21,38 @@
         font-size: 14px;
     }
       
+    .wallet-split-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .wallet-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
+
+    .wallet-split-right {
+       flex-grow: 1;
+       width: 35%;
+       align-self: center;
+    }
+
+    @media screen and (max-width: 599px) {
+        .wallet-split-card
+        {
+            flex-direction: column;
+        }
+
+        .wallet-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
+
+        .wallet-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+         }
+    }
 }

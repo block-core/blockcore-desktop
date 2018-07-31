@@ -1,6 +1,7 @@
 <div class="content">
-  <mat-card>
-    <div>
+  <mat-card class="dashboard-split-card">
+
+    <div class="dashboard-split-left">
       <h2>Balance</h2>
       <p>
         <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
@@ -12,23 +13,28 @@
           <em> (unconfirmed)</em>
         </li>
       </ul>
-    </div>
-    <div>
+
       <p>
-        <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
-        <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
-      </p>
+          <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
+          <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
+        </p>
+
     </div>
+
+    <div class="dashboard-split-right mat-caption">
+        When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed. This is normal and expected. Within a few minutes, your balance should be updated.
+    </div>
+
   </mat-card>
 
   <mat-card>
-    <h2>Sellers in your region</h2>
+    <h2 class="mat-h2">Sellers in your region</h2>
     <p>No sellers in your current area.</p>
     <em>Delivered in partnership with coinmap by Trezor.</em>
   </mat-card>
 
   <mat-card>
-    <h2>Buy coins</h2>
+    <h2 class="mat-h2">Buy coins</h2>
 
     <p>
       You can buy coins from selected partners, and from exchanges.
@@ -43,7 +49,7 @@
   </mat-card>
 
   <mat-card>
-    <h2>Add coins</h2>
+    <h2 class="mat-h2">Add coins</h2>
 
     <p>
       If you received an e-mail with City Coins, you can fill out the key you received in the e-mail to add those coins to your
@@ -61,7 +67,7 @@
   </mat-card>
 
   <mat-card>
-    <h2>Sweep paper wallet</h2>
+    <h2 class="mat-h2">Sweep paper wallet</h2>
 
     <p>
       You can add more coins to your wallet by sweeping paper wallets. When you sweep a paper wallet, all the coins are moved from
