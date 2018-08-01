@@ -1,3 +1,3 @@
 [submodule "city-chain"]
 	path = city-chain
-	url = https://github.com/CityChainFoundation/city-chain.git
+	url = https://github.com/CityChainFoundation/city-chain
