@@ -48,27 +48,23 @@ if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
 cd $env:APPVEYOR_BUILD_FOLDER/city-chain/src/City.Chain
 dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\daemon
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
-
-#if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
-
-# exit
-
-# Write-Host "building City Hub" -foregroundcolor "magenta"
-# cd $env:APPVEYOR_BUILD_FOLDER
-# npm run build:prod
-# if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+Write-Host "building City Hub" -foregroundcolor "magenta"
+cd $env:APPVEYOR_BUILD_FOLDER
+npm run build:prod
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-# Write-Host "packaging City Hub" -foregroundcolor "magenta"
-# npx electron-builder build --windows --$env:arch
-# if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-# Write-Host "[$env:configuration][$env:win_runtime] FINISHED City Hub packaging" -foregroundcolor "magenta"
+Write-Host "packaging City Hub" -foregroundcolor "magenta"
+npx electron-builder build --windows --$env:arch
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
+Write-Host "[$env:configuration][$env:win_runtime] FINISHED City Hub packaging" -foregroundcolor "magenta"
 
-# dir
-# cd app-builds
-# # replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
-# Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
-# dir      
-# Write-Host "[$env:configuration][$env:win_runtime] Done! Your installer is:" -foregroundcolor "green"
-# Get-ChildItem -Path "*.exe" | foreach-object {$_.Fullname}
-# if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+dir
+cd app-builds
+# replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
+Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
+dir      
+Write-Host "[$env:configuration][$env:win_runtime] Done! Your installer is:" -foregroundcolor "green"
+Get-ChildItem -Path "*.exe" | foreach-object {$_.Fullname}
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }

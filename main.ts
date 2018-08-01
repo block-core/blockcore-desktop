@@ -159,7 +159,7 @@ function startDaemon(chain: Chain) {
         daemonName += '.exe';
     }
 
-    const daemonPath = folderPath + daemonName;
+    const daemonPath = path.resolve(folderPath, daemonName);
 
     launchDaemon(daemonPath, chain);
 }
@@ -212,11 +212,16 @@ function launchDaemon(apiPath: string, chain: Chain) {
 }
 
 function shutdownDaemon() {
+
+    if (!chain) {
+        return;
+    }
+
     if (process.platform !== 'darwin' && !serve) {
         var http = require('http');
         const options = {
             hostname: 'localhost',
-            port: this.chain.apiPort,
+            port: chain.apiPort,
             path: '/api/node/shutdown',
             method: 'POST'
         };
@@ -255,7 +260,7 @@ function createTray() {
 
     systemTray.setToolTip(coin.tooltip);
     systemTray.setContextMenu(contextMenu);
-    
+
     systemTray.on('click', function () {
         if (!mainWindow.isVisible()) {
             mainWindow.show();

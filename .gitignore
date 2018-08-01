@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /build
+/daemon
 
 # dependencies
 /node_modules

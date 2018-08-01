@@ -23,7 +23,7 @@ Write-Host "--> git submodule" -foregroundcolor "magenta"
 git submodule update --init --recursive
 
 Write-Host "--> npm install" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+cd $env:APPVEYOR_BUILD_FOLDER
 npm install --verbose
 
 Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -51,7 +51,7 @@ dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_B
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 Write-Host "building City Hub" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+cd $env:APPVEYOR_BUILD_FOLDER
 npm run build:prod
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       

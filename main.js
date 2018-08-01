@@ -128,7 +128,7 @@ function startDaemon(chain) {
     if (os.platform() === 'win32') {
         daemonName += '.exe';
     }
-    var daemonPath = folderPath + daemonName;
+    var daemonPath = path.resolve(folderPath, daemonName);
     launchDaemon(daemonPath, chain);
 }
 function getDaemonPath() {
@@ -170,11 +170,14 @@ function launchDaemon(apiPath, chain) {
     });
 }
 function shutdownDaemon() {
+    if (!chain) {
+        return;
+    }
     if (process.platform !== 'darwin' && !serve) {
         var http = require('http');
         var options = {
             hostname: 'localhost',
-            port: this.chain.apiPort,
+            port: chain.apiPort,
             path: '/api/node/shutdown',
             method: 'POST'
         };

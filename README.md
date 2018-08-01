@@ -75,6 +75,10 @@ To update with the latest City Chain daemon, make sure you update the submodule 
 git submodule foreach git pull origin master
 ```
 
+```sh
+git submodule update --init --force --remote
+```
+
 ## Contribution
 
 To learn more about contribution to this repo, please refer to the [documentation](https://github.com/CityChainFoundation/documentation) repo.
