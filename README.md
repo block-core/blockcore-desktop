@@ -1,4 +1,13 @@
-# City Hub
+City Hub
+===============
+
+Your portal into City Chain
+----------------------------
+
+[![Build status][1]][2]
+
+[1]: https://ci.appveyor.com/api/projects/status/q795v9urpt9hw9j0/branch/master?svg=true
+[2]: https://ci.appveyor.com/project/citychain/city-hub
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
