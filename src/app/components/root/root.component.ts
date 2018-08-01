@@ -16,6 +16,7 @@ import { delay, retryWhen } from 'rxjs/operators';
 import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
+// import { autoUpdater } from 'electron-updater';
 
 @Component({
   selector: 'app-root',
@@ -80,14 +81,11 @@ export class RootComponent implements OnInit, OnDestroy {
     // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
     const isSmallScreen = breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
 
-    console.log('SMALL SCREEN:', isSmallScreen);
-
     this.menuOpened = !isSmallScreen;
 
     breakpointObserver.observe([
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
-      console.log(result);
       if (result.matches) {
         appState.handset = true;
         this.handset = true;
@@ -112,10 +110,46 @@ export class RootComponent implements OnInit, OnDestroy {
       }
     });
 
+
+    // Hook up to updater events.
+    // TODO: Migrate to an AppUpdateService.
+    // autoUpdater.on('checking-for-update', () => {
+    //   console.log('Checking for update...');
+    // })
+    // autoUpdater.on('update-available', (info) => {
+    //   console.log('Update available.');
+    // })
+    // autoUpdater.on('update-not-available', (info) => {
+    //   console.log('Update not available.');
+    // })
+    // autoUpdater.on('error', (err) => {
+    //   console.log('Error in auto-updater. ' + err);
+    // })
+    // autoUpdater.on('download-progress', (progressObj) => {
+    //   let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    //   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    //   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    //   console.log(log_message);
+    // })
+    // autoUpdater.on('update-downloaded', (info) => {
+    //   console.log('Update downloaded');
+
+    //   setTimeout(() => {
+    //     // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
+    //     //autoUpdater.quitAndInstall(); 
+    //   }, 10000);
+
+    //});
+
   }
 
   get appTitle$(): Observable<string> {
     return this.titleService.$title;
+  }
+
+  checkForUpdates(){
+    // TODO: Implement custom updater UI.
+    this.apiService.checkForUpdate();
   }
 
   closeDetails(reason: string) {

@@ -8,19 +8,22 @@ export class ApplicationStateService {
     constructor(
         private readonly titleService: TitleService,
     ) {
-        this.coin = this.getParam('coin') || 'city';
+        this.chain = this.getParam('chain') || 'city';
         this.mode = localStorage.getItem('Mode') || 'full';
+        this.network = localStorage.getItem('Network') || 'main';
     }
 
-    coin: string;
+    chain: string;
+
+    mode: string;
+
+    network: string;
 
     pageMode = false;
 
     handset = false;
 
     fullHeight = false;
-
-    mode: string;
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;

@@ -14,31 +14,75 @@ import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 import { GeneralInfo } from '../classes/general-info';
 import { MatSnackBar } from '@angular/material';
+import { environment } from '../../environments/environment';
+import { ApplicationStateService } from './application-state.service';
+import { ChainService } from './chain.service';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
  */
 @Injectable()
 export class ApiService {
-  constructor(private http: Http,
-    private globalService: GlobalService,
-    public snackBar: MatSnackBar,
-    private electronService: ElectronService) {
-
-    if (this.electronService.ipcRenderer) {
-      this.setApiPort();
-    }
-
-  }
 
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private pollingInterval = 3000;
   private apiPort;
   private stratisApiUrl;
+  private daemon;
 
-  setApiPort() {
-    this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
-    this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+  constructor(private http: Http,
+    private globalService: GlobalService,
+    private appState: ApplicationStateService,
+    public snackBar: MatSnackBar,
+    private chains: ChainService,
+    private electronService: ElectronService) {
+
+  }
+
+  /** Initialized the daemon running in the background, by sending configuration that has been picked by user, including chain, network and mode. */
+  initialize() {
+
+    // Get the current network (main, regtest, testnet), current blockchain (city, stratis, bitcoin) and the mode (full, light, mobile)
+    var chain = this.chains.getChain(this.appState.chain, this.appState.network);
+    chain.mode = this.appState.mode;
+
+    console.log(chain);
+
+    // For mobile mode, we won't launch any daemons.
+    if (chain.mode === 'mobile') {
+
+    }
+    else {
+      if (this.electronService.ipcRenderer) {
+        this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
+        console.log('Daemon result: ', this.daemon);
+        this.setApiPort(chain.apiPort);
+      }
+    }
+  }
+
+  checkForUpdate() {
+    if (this.electronService.ipcRenderer) {
+      this.daemon = this.electronService.ipcRenderer.sendSync('check-for-update');
+      console.log('Check for update result: ', this.daemon);
+    }
+  }
+
+  setApiPort(port: number) {
+    // Get the selected coin from launch parameters. If they are not available, we will use the one supplied during build,
+    // to ensure that launching a test network binary, should by default connect to testnet.
+
+    // if (environment.environment === 'TESTNET') {
+    //   this.apiPort = this.coin.apiTestPort;
+    // } else if (environment.environment === 'REGTEST')
+    // {
+    //   this.apiPort = this.coin.apiRegTestPort;  
+    // }
+    // else {
+    //   this.apiPort = this.coin.apiPort;
+    // }
+
+    this.stratisApiUrl = 'http://localhost:' + port + '/api';
   }
 
   /**

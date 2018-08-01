@@ -35,13 +35,13 @@
             <mat-icon svgIcon="city-logo"></mat-icon>
             <span>City Chain</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item disabled>
             <mat-icon svgIcon="stratis-logo"></mat-icon>
-            <span>Stratis</span>
+            <span>Stratis (Coming soon)</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item disabled>
             <mat-icon svgIcon="bitcoin-logo"></mat-icon>
-            <span>Bitcoin</span>
+            <span>Bitcoin (Coming soon)</span>
           </button>
         </mat-menu>
 
@@ -139,6 +139,10 @@
         <button mat-menu-item routerLink="/about">
           <mat-icon>info</mat-icon>
           <span>About</span>
+        </button>
+        <button mat-menu-item (click)="checkForUpdates()">
+          <mat-icon>system_update</mat-icon>
+          <span>Check for Updates</span>
         </button>
         <button mat-menu-item routerLink="/logout">
           <mat-icon>power_settings_new</mat-icon>

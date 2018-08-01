@@ -3,57 +3,57 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
-let serve;
-let testnet;
-let coin;
-const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve' || val === '-serve');
-testnet = args.some(val => val === '--testnet' || val === '-testnet');
-coin = args.some(val => val === '--coin' || val === '-coin') || 'city';
+// TODO: Figure out why we can't use this import style for the updater?
+// import { autoUpdater } from 'electron-updater';
+const autoUpdater = require("electron-updater").autoUpdater;
 
-interface Coin {
+const args = process.argv.slice(1);
+const serve = args.some(val => val === '--serve' || val === '-serve');
+const coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
+let chain: Chain;
+
+interface Chain {
     name: string;
     identity: string;
     tooltip: string;
+    port: number;
+    rpcPort: number;
     apiPort?: number;
-    apiTestPort?: number;
-    apiRegTestPort?: number;
+    wsPort?: number;
+    network: string;
+    mode?: string;
 }
 
-let availableCoins: Array<Coin>;
-availableCoins = [
-    { name: 'City Chain', identity: 'city', tooltip: 'City Hub', apiPort: 4335, apiRegTestPort: 14335, apiTestPort: 24335 },
-    { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, apiRegTestPort: 37221, apiTestPort: 37221 },
-    { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin' }
-];
+ipcMain.on('start-daemon', (event, arg: Chain) => {
 
-// Couldn't use .find with the current tsconfig setup.
-const selectedCoins = availableCoins.filter(c => c.identity === coin);
-let selectedCoin: Coin;
+    // The "chain" object is supplied over the IPC channel and we should consider
+    // it potentially "hostile", if anyone can inject anything in the app and perform
+    // a call to the node backend here. Since we are launching a process here,
+    // we should make sure to wash and validate the object properly to make it
+    // harder to perform a remote execution exploit through this interface.
+    assert(isNumber(arg.port));
+    assert(isNumber(arg.rpcPort));
+    assert(isNumber(arg.apiPort));
+    assert(isNumber(arg.wsPort));
+    assert(arg.network.length < 10);
 
-if (selectedCoins.length === 0) {
-    console.error('The supplied coin parameter is invalid. Argument value: ' + coin);
-    selectedCoin = availableCoins[0];
-} else {
-    selectedCoin = selectedCoins[0];
-}
+    this.chain = arg;
 
-let apiPort;
-if (testnet) {
-    apiPort = selectedCoin.apiTestPort;
-} else {
-    apiPort = selectedCoin.apiPort;
-}
-
-ipcMain.on('get-port', (event, arg) => {
-    event.returnValue = apiPort;
+    if (serve) {
+        const msg = 'City Hub was started in development mode. This requires the user to be running the Full Node Daemons himself.';
+        writeLog(msg);
+        event.returnValue = msg;
+    } else {
+        writeLog(this.chain);
+        startDaemon(this.chain);
+        event.returnValue = 'OK';
+    }
 });
 
-try {
-    require('dotenv').config();
-} catch {
-    console.log('asar');
-}
+ipcMain.on('check-for-update', (event, arg: Chain) => {
+    autoUpdater.checkForUpdatesAndNotify();
+    event.returnValue = 'OK';
+});
 
 require('electron-context-menu')({
     showInspectElement: serve
@@ -68,12 +68,14 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1150,
         height: 650,
-        frame: false,
+        frame: true,
         minWidth: 260,
-        minHeight: 320,
+        minHeight: 400,
         title: 'City Hub',
         icon: __dirname + '/app.ico'
     });
+
+    mainWindow.setMenu(null);
 
     // Make sure links that open new window, e.g. target="_blank" launches in external window (browser).
     mainWindow.webContents.on('new-window', function (event, linkUrl) {
@@ -82,19 +84,18 @@ function createWindow() {
     });
 
     if (serve) {
-        require('electron-reload')(__dirname, {
-        });
-        mainWindow.loadURL('http://localhost:4200?coin=' + selectedCoin.identity);
+        require('electron-reload')(__dirname, {});
+        mainWindow.loadURL('http://localhost:4200?coin=' + coin.identity);
     } else {
         mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'dist/index.html?coin=' + selectedCoin.identity),
+            pathname: path.join(__dirname, 'dist/index.html'),
             protocol: 'file:',
             slashes: true
         }));
     }
 
     if (serve) {
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     }
 
     // Emitted when the window is going to close.
@@ -115,29 +116,23 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-    if (serve) {
-        console.log('City Hub was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
-    } else {
-        startStratisApi();
-    }
     createTray();
     createWindow();
-    if (os.platform() === 'darwin') {
-        createMenu();
-    }
+    autoUpdater.checkForUpdatesAndNotify();
 });
 
-app.on('before-quit', () => {
-    closeStratisApi();
-});
+// app.on('before-quit', () => {
+//     shutdownDaemon();
+// });
+
+const quit = () => {
+    shutdownDaemon();
+    app.quit();
+};
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    quit();
 });
 
 app.on('activate', () => {
@@ -148,75 +143,101 @@ app.on('activate', () => {
     }
 });
 
-function closeStratisApi() {
-    // if (process.platform !== 'darwin' && !serve) {
-    if (process.platform !== 'darwin' && !serve && !testnet) {
-        var http2 = require('http');
-        const options1 = {
-            hostname: 'localhost',
-            port: 37221,
-            path: '/api/node/shutdown',
-            method: 'POST'
-        };
+function startDaemon(chain: Chain) {
+    const folderPath = getDaemonPath();
+    let daemonName;
 
-        const req = http2.request(options1, (res) => { });
-        req.write('');
-        req.end();
-
-    } else if (process.platform !== 'darwin' && !serve && testnet) {
-        var http2 = require('http');
-        const options2 = {
-            hostname: 'localhost',
-            port: 38221,
-            path: '/api/node/shutdown',
-            method: 'POST'
-        };
-
-        const req = http2.request(options2, (res) => { });
-        req.write('');
-        req.end();
+    if (chain.identity === 'city') {
+        daemonName = 'City.Chain';
+    } else if (chain.identity === 'stratis') {
+        daemonName = 'Stratis.StratisD';
+    } else if (chain.identity === 'bitcoin') {
+        daemonName = 'Stratis.StratisD';
     }
+
+    if (os.platform() === 'win32') {
+        daemonName += '.exe';
+    }
+
+    const daemonPath = folderPath + daemonName;
+
+    launchDaemon(daemonPath, chain);
 }
 
-function startStratisApi() {
-    var stratisProcess;
-    const spawnStratis = require('child_process').spawn;
-
-    // Start Stratis Daemon
-    let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
+function getDaemonPath() {
+    let apiPath;
     if (os.platform() === 'win32') {
-        apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
+        apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
     } else if (os.platform() === 'linux') {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
     } else {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
     }
 
-    if (!testnet) {
-        stratisProcess = spawnStratis(apiPath, {
-            detached: true
-        });
-    } else if (testnet) {
-        stratisProcess = spawnStratis(apiPath, ['-testnet'], {
-            detached: true
-        });
+    return apiPath;
+}
+
+function launchDaemon(apiPath: string, chain: Chain) {
+    var daemonProcess;
+    const spawnDaemon = require('child_process').spawn;
+
+    let commandLineArguments = [];
+
+    commandLineArguments.push("-port=" + chain.port);
+    commandLineArguments.push("-rpcport=" + chain.rpcPort);
+    commandLineArguments.push("-apiport=" + chain.apiPort);
+    commandLineArguments.push("-wsport=" + chain.wsPort);
+
+    if (chain.mode === 'light') {
+        commandLineArguments.push("-light");
     }
 
-    stratisProcess.stdout.on('data', (data) => {
-        writeLog(`Stratis: ${data}`);
+    if (chain.network !== 'main') {
+        commandLineArguments.push("-" + chain.network); // "-testnet" or "-regtest"
+    }
+
+    // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
+    //if (chain.dataDir != null)
+    //commandLineArguments.push("-datadir=" + chain.dataDir);
+
+    writeLog("Starting daemon with parameters: " + commandLineArguments);
+
+    daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
+        detached: false
     });
+
+    daemonProcess.stdout.on('data', (data) => {
+        writeLog(`City Hub: ${data}`);
+    });
+}
+
+function shutdownDaemon() {
+    if (process.platform !== 'darwin' && !serve) {
+        var http = require('http');
+        const options = {
+            hostname: 'localhost',
+            port: this.chain.apiPort,
+            path: '/api/node/shutdown',
+            method: 'POST'
+        };
+
+        const req = http.request(options, (res) => { });
+        req.write('');
+        req.end();
+    }
 }
 
 function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-        trayIcon = nativeImage.createFromPath('./src/assets/' + selectedCoin.identity + '/icon-tray.png');
+        trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.png');
     } else {
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + selectedCoin.identity + '/icon-tray.png'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + coin.identity + '/icon-tray.png'));
     }
 
     let systemTray = new Tray(trayIcon);
+
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Hide/Show',
@@ -231,8 +252,10 @@ function createTray() {
             }
         }
     ]);
-    systemTray.setToolTip(selectedCoin.tooltip);
+
+    systemTray.setToolTip(coin.tooltip);
     systemTray.setContextMenu(contextMenu);
+    
     systemTray.on('click', function () {
         if (!mainWindow.isVisible()) {
             mainWindow.show();
@@ -254,25 +277,12 @@ function writeLog(msg) {
     console.log(msg);
 }
 
-function createMenu() {
-    var menuTemplate = [{
-        label: app.getName(),
-        submenu: [
-            { label: 'About ' + app.getName(), selector: 'orderFrontStandardAboutPanel:' },
-            { label: 'Quit', accelerator: 'Command+Q', click: function () { app.quit(); } }
-        ]
-    }, {
-        label: 'Edit',
-        submenu: [
-            { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-            { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
-            { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-            { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-            { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-            { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
-        ]
-    }
-    ];
+function isNumber(value: string | number): boolean {
+    return !isNaN(Number(value.toString()));
+}
 
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+function assert(result: boolean) {
+    if (result !== true) {
+        throw new Error('The chain configuration is invalid. Unable to continue.');
+    }
 }

@@ -27,7 +27,6 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 
 @include app-theme($app-dark-theme);
 
-
 .app-light-theme {
 	@include app-theme($app-light-theme);
 }
@@ -162,6 +161,10 @@ body {
 //     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
 // }
 
+
+/* Styling for custom chrome. Temporarily removed, might consider reintroduce in the future. */
+
+/*
 .title-bar {
 	-webkit-app-region: drag;
 	height: $app-title-bar-height; 
@@ -221,6 +224,7 @@ body {
 .title-bar-button i {
 	font-size: 20px;
 }
+*/
 
 .app-electron
 {

@@ -45,6 +45,22 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Find icons to use here: [Material Icons](https://material.io/tools/icons/?style=outline)
 
+## Register GitHub publish token
+
+Run this PowerShell command:
+
+```ps
+ [Environment]::SetEnvironmentVariable("GH_TOKEN","<YOUR_TOKEN_HERE>","User")
+```
+
+## Package
+
+To package for various OSes, you should supply the configuration as an additional parameter:
+
+```sh
+npm run build:windows -- -c testnet
+```
+
 ## Contribution
 
 To learn more about contribution to this repo, please refer to the [documentation](https://github.com/CityChainFoundation/documentation) repo.

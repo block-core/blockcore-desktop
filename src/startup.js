@@ -1,14 +1,13 @@
 
 (function () {
 
-  function getParam(n) {
-    var half = location.search.split(n + '=')[1];
-    return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
-  }
+  // function getParam(n) {
+  //   var half = location.search.split(n + '=')[1];
+  //   return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
+  // }
 
-  const coin = getParam('coin') || 'city';
-
-  console.log('Selected coin: ' + coin);
+  // const coin = getParam('coin') || 'city';
+  // console.log('Selected coin: ' + coin);
 
   // We don't really want to change the whole branding, City Hub will support multiple coins. But if anyone
   // want to fork and release a more generic app with multi-coin support, they could change top-logo this way.
@@ -19,27 +18,27 @@
     document.body.classList.add('app-electron');
   }
 
-  const remote = require('electron').remote;
+  //const remote = require('electron').remote;
 
   function init() {
-    document.getElementById("min-btn").addEventListener("click", function (e) {
-      const window = remote.getCurrentWindow();
-      window.minimize();
-    });
+    // document.getElementById("min-btn").addEventListener("click", function (e) {
+    //   const window = remote.getCurrentWindow();
+    //   window.minimize();
+    // });
 
-    document.getElementById("max-btn").addEventListener("click", function (e) {
-      const window = remote.getCurrentWindow();
-      if (!window.isMaximized()) {
-        window.maximize();
-      } else {
-        window.unmaximize();
-      }
-    });
+    // document.getElementById("max-btn").addEventListener("click", function (e) {
+    //   const window = remote.getCurrentWindow();
+    //   if (!window.isMaximized()) {
+    //     window.maximize();
+    //   } else {
+    //     window.unmaximize();
+    //   }
+    // });
 
-    document.getElementById("close-btn").addEventListener("click", function (e) {
-      const window = remote.getCurrentWindow();
-      window.close();
-    });
+    // document.getElementById("close-btn").addEventListener("click", function (e) {
+    //   const window = remote.getCurrentWindow();
+    //   window.close();
+    // });
   };
 
   document.onreadystatechange = function () {
@@ -47,4 +46,5 @@
       init();
     }
   };
+  
 })();

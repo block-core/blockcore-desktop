@@ -10,10 +10,11 @@ const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
 import { delay, retryWhen } from 'rxjs/operators';
 
-export interface Mode {
+export interface ListItem {
     name: string;
     id: string;
 }
+
 @Component({
     selector: 'app-load',
     templateUrl: './load.component.html',
@@ -23,10 +24,12 @@ export interface Mode {
 export class LoadComponent {
     @HostBinding('class.load') hostClass = true;
 
-    selectedMode: Mode;
+    selectedMode: ListItem;
+    selectedNetwork: ListItem;
     loading: boolean;
     hasWallet = false;
-    modes: Mode[] = [];
+    modes: ListItem[] = [];
+    networks: ListItem[] = [];
     remember: boolean;
     connection: signalR.HubConnection;
     delayed = false;
@@ -40,38 +43,50 @@ export class LoadComponent {
         private appState: ApplicationStateService) {
 
         this.modes = [
-            { id: 'simple', name: 'Mobile' },
-            { id: 'light', name: 'Light' },
+            //{ id: 'simple', name: 'Mobile' }, // Disabled in beta release.
+            //{ id: 'light', name: 'Light' }, // Disabled in beta release.
             { id: 'full', name: 'Full' },
             //{ id: 'pos', name: 'Point-of-Sale (POS)' },
             //{ id: 'readonly', name: 'Read-only' }
+        ];
+
+        this.networks = [
+            //{ id: 'main', name: 'Main' }, // Disabled in beta release.
+            { id: 'testnet', name: 'Test' },
+            //{ id: 'regtest', name: 'RegTest' } // Disabled in beta release.
         ];
 
         const existingMode = localStorage.getItem('Mode');
 
         // If user has choosen to remember mode, we'll redirect directly to login, when connected.
         if (existingMode != null) {
+            this.initialize();
+        }
+    }
 
-            this.appState.mode = existingMode;
+    initialize() {
+        this.apiService.initialize();
 
-            if (existingMode === 'full') {
-                this.loading = true;
-                this.fullNodeConnect();
-            }
+        if (this.appState.mode === 'full') {
+            this.loading = true;
+            this.fullNodeConnect();
         }
     }
 
     launch() {
         if (this.remember) {
             localStorage.setItem('Mode', this.selectedMode.id);
+            localStorage.setItem('Network', this.selectedNetwork.id);
+        }
+        else {
+            localStorage.removeItem('Mode');
+            localStorage.removeItem('Network');
         }
 
         this.appState.mode = this.selectedMode.id;
+        this.appState.network = this.selectedNetwork.id;
 
-        if (this.appState.mode === 'full') {
-            this.loading = true;
-            this.fullNodeConnect();
-        }
+        this.initialize();
     }
 
     fullNodeConnect() {

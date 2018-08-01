@@ -26,6 +26,8 @@ import { LoadModule } from './components/load/load.module';
 import { NetworkModule } from './components/network/network.module';
 import { DetailsModule } from './components/details/details.module';
 import { MerchantsModule } from './components/merchants/merchants.module';
+import { environment } from '../environments/environment';
+import { ChainService } from './services/chain.service';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { MerchantsModule } from './components/merchants/merchants.module';
   ],
   providers: [
     ApiService,
+    ChainService,
     ElectronService,
     GlobalService,
     { provide: APP_TITLE, useValue: 'City Hub' },
@@ -66,6 +69,9 @@ import { MerchantsModule } from './components/merchants/merchants.module';
 })
 export class AppModule {
   constructor(theming: Theming) {
+
+    console.log(environment.environment);
+
     theming.start();
   }
 }

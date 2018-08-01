@@ -1,52 +1,74 @@
 {
     "appId": "org.city-chain.hub",
     "productName": "City Hub",
-    "publish": null,
+    "asar": true,
+    "publish": [{
+      "provider": "github",
+      "owner": "CityChainFoundation",
+      "repo": "city-hub"
+    }],
+    "files": [
+      "dist/**",
+      "main.js"
+    ],
     "directories": {
-      "output": "app-builds"
+      "output": "build"
     },
     "win": {
-      "icon": "dist/assets/images/icon",
+      "icon": "dist/assets/icon.ico",
       "target": [
-        "nsis"
+        "nsis:x64"
       ],
-      "artifactName": "${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
+      "artifactName": "City.Hub-${version}-${os}-x64.${ext}"
     },
     "linux": {
       "icon": "dist/assets/images/",
       "target": [
-        "deb",
-        "tar.gz"
+        "AppImage:x64"
       ],
-      "synopsis": "City Hub: full node staking wallet.",
+      "synopsis": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
       "category": "Utility",
-      "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
     },
     "mac": {
-      "icon": "dist/assets/images/icon.icns",
+      "icon": "dist/assets/icon.icns",
       "target": [
         "dmg"
       ],
       "category": "public.app-category.productivity",
-      "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true,
       "deleteAppDataOnUninstall": true,
-      "guid": "8f5707f5-2661-4f25-8295-2e50e2e7fc89",
+      "guid": "42ba105c-858b-41cc-94bc-2b8c5ee5c6b4",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "license": "src/assets/images/license_en.txt"
+      "license": "dist/assets/license.txt"
     },
     "msi": {
       "warningsAsErrors": false
     },
     "extraResources": [
       "daemon/**/*",
-      "src/assets/images/icon-tray.png",
-      "src/assets/images/license_en.txt"
+      "dist/assets/icon-tray.ico",
+      "dist/assets/license.txt"
     ]
   }
   

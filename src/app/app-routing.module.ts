@@ -20,7 +20,7 @@ const routes: Routes = [
         path: 'load',
         component: LoadComponent,
         data: {
-            title: 'Loading...'
+            title: 'Setup'
         },
     },
     {
