@@ -61,6 +61,20 @@ To package for various OSes, you should supply the configuration as an additiona
 npm run build:windows -- -c testnet
 ```
 
+Additionally there are two PowerShell scripts to build Windows packages. These are located in the scripts folder:
+
+```ps
+.\build-win-x64-package.ps1
+```
+
+## City Chain daemon
+
+To update with the latest City Chain daemon, make sure you update the submodule that links to city-chain:
+
+```sh
+git submodule foreach git pull origin master
+```
+
 ## Contribution
 
 To learn more about contribution to this repo, please refer to the [documentation](https://github.com/CityChainFoundation/documentation) repo.
