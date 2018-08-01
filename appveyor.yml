@@ -51,8 +51,8 @@ install:
       Write-Host "--> git submodule" -foregroundcolor "magenta"
       git submodule update --init --recursive
       
-      Write-Host "--> node 6" -foregroundcolor "magenta"
-      Install-Product node 6
+      Write-Host "--> node 8" -foregroundcolor "magenta"
+      Install-Product node 8
       
       Write-Host "--> npm config" -foregroundcolor "magenta"
       npm config set unsafe-perm=true
@@ -104,7 +104,7 @@ build_script:
       Write-Host "[$env:configuration][$env:win_runtime] Finished FullNode.UI packaging" -foregroundcolor "magenta"
       
       dir
-      cd app-builds
+      cd build
       # replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
       Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
       dir      

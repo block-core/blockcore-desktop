@@ -61,7 +61,7 @@ if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 Write-Host "[$env:configuration][$env:win_runtime] FINISHED City Hub packaging" -foregroundcolor "magenta"
 
 dir
-cd app-builds
+cd build
 # replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
 Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
 dir      
