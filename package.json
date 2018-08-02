@@ -1,6 +1,6 @@
 {
   "name": "cityhub",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "author": {
     "name": "City Chain Foundation",
@@ -36,8 +36,10 @@
     "build:linux": "npm run builder -- --linux",
     "build:windows": "npm run builder -- --windows",
     "build:mac": "npm run builder -- --mac",
-    "build:all": "npm run builder:main -- -mwl",
-    "publish": "npm run builder:main --  -wl -p always",
+    "build:all": "npm run builder -- -mwl",
+    "publish": "npm run builder --  -wl -p always",
+    "publish:windows": "npm run builder --  -w -p always",
+    "publish:linux": "npm run builder --  -l -p always",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e"
   },
