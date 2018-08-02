@@ -24,9 +24,14 @@
         <mat-checkbox class="example-margin" [(ngModel)]="remember">Remember</mat-checkbox>
         <br>
         <br>
-        <button (click)="launch()" [disabled]="selectedMode == null" mat-raised-button color="primary">Start</button>
-     </ng-template>
-     
+        <button (click)="launch()" [disabled]="selectedMode == null || selectedNetwork == null" mat-raised-button color="primary">Start</button>
+        <br>
+        <p class="mat-caption">
+            During PREVIEW RELEASE testing, <br>these options are set by default.
+        </p>
+
+    </ng-template>
+
     <!-- <button (click)="simpleWalletConnect()" mat-raised-button>Simple Wallet (Connect)</button>
     <button (click)="simpleWalletWatch()" mat-raised-button>Simple Wallet (Watch)</button>
     <button (click)="simpleWalletBalance()" mat-raised-button>Simple Wallet (Balance)</button> -->
@@ -34,7 +39,10 @@
     <ng-template #spinner>
         <mat-spinner></mat-spinner>
         <span class="load-text">Connecting... please wait.</span>
-        <span *ngIf="delayed"><br><button (click)="cancel()" mat-raised-button color="primary">Cancel</button></span>
-     </ng-template>
+        <span *ngIf="delayed">
+            <br>
+            <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+        </span>
+    </ng-template>
 
 </div>

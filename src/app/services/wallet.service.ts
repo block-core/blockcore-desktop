@@ -21,8 +21,12 @@ import { ApplicationStateService } from './application-state.service';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class WalletService {
+
+    static singletonInstance: WalletService;
 
     /** Set to true to make the wallet update wallet status at higher frequency. Set to false when high refresh rate is not needed. */
     public active = false;
@@ -52,6 +56,12 @@ export class WalletService {
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
         private fb: FormBuilder) {
+
+        if (!WalletService.singletonInstance) {
+            WalletService.singletonInstance = this;
+        }
+
+        return WalletService.singletonInstance;
 
     }
 

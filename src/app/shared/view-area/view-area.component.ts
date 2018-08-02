@@ -4,8 +4,7 @@ import { Component, Input, HostBinding, ChangeDetectionStrategy, ViewEncapsulati
     selector: 'app-view-area',
     templateUrl: './view-area.component.html',
     styleUrls: ['./view-area.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class ViewAreaComponent {
 

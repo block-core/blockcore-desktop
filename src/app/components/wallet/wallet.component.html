@@ -23,12 +23,14 @@
 
         <div class="wallet-split-right mat-caption">
             When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed.
+            <br>
             This is normal and expected. Within a few minutes, your balance should be updated.
         </div>
     </mat-card>
 
-    <mat-card *ngIf="wallet.hasBalance">
-        <div class="card" *ngIf="!wallet.stakingEnabled">
+    <mat-card *ngIf="wallet.hasBalance" class="wallet-split-card">
+
+        <div class="wallet-split-left" *ngIf="!wallet.stakingEnabled">
             <h2 class="mat-h2">Staking</h2>
             <div class="card-body">
                 <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
@@ -45,27 +47,36 @@
                 </form>
             </div>
         </div>
-        <div id="staking" class="card" *ngIf="wallet.stakingEnabled">
-            <div class="card-header">
-                <h2 class="mat-h2">Staking</h2>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled mb-3">
-                    <li *ngIf="wallet.isStarting">Waiting for staking to start...</li>
-                    <li>Your weight is
-                        <strong>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
-                    </li>
-                    <li>Network weight is
-                        <strong>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
-                    </li>
-                    <li class="mt-2">Expected reward time is:</li>
-                    <li>
-                        <strong>{{ wallet.dateTime }}</strong>
-                    </li>
-                </ul>
+
+        <div id="staking" class="wallet-split-left" *ngIf="wallet.stakingEnabled">
+
+            <h2 class="mat-h2">Staking</h2>
+            <ul>
+                <li *ngIf="wallet.isStarting">Waiting for staking to start...</li>
+                <li>Your weight is
+                    <strong>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                </li>
+                <li>Network weight is
+                    <strong>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</strong>
+                </li>
+                <li class="mt-2">Expected reward time is:</li>
+                <li>
+                    <strong>{{ wallet.dateTime }}</strong>
+                </li>
+            </ul>
+
+            <p>
                 <button type="button" mat-stroked-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
-            </div>
+            </p>
         </div>
+
+        <div class="wallet-split-right mat-caption">
+            You can stake the balance you have in your wallet.
+            <br> The longer you stake, the higher your weight will become.<br>
+             The longer you have your coins in the wallet, the higher your weight
+            gets and it improves your chance of staking.
+        </div>
+
     </mat-card>
 
     <h2 class="mat-h2">Transactions</h2>

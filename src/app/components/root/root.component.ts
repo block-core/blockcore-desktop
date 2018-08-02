@@ -16,7 +16,6 @@ import { delay, retryWhen } from 'rxjs/operators';
 import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
-// import { autoUpdater } from 'electron-updater';
 
 @Component({
   selector: 'app-root',
@@ -57,7 +56,7 @@ export class RootComponent implements OnInit, OnDestroy {
   constructor(
     private readonly titleService: TitleService,
     private readonly authService: AuthenticationService,
-    public readonly appState: ApplicationStateService,
+    public appState: ApplicationStateService,
     private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private router: Router,
@@ -75,6 +74,8 @@ export class RootComponent implements OnInit, OnDestroy {
 
     if (this.electronService.remote) {
       let applicationVersion = this.electronService.remote.app.getVersion();
+
+      this.appState.version = applicationVersion;
       console.log('Version: ' + applicationVersion);
     }
 
@@ -109,38 +110,6 @@ export class RootComponent implements OnInit, OnDestroy {
         this.stopWalletInfoUpdates();
       }
     });
-
-
-    // Hook up to updater events.
-    // TODO: Migrate to an AppUpdateService.
-    // autoUpdater.on('checking-for-update', () => {
-    //   console.log('Checking for update...');
-    // })
-    // autoUpdater.on('update-available', (info) => {
-    //   console.log('Update available.');
-    // })
-    // autoUpdater.on('update-not-available', (info) => {
-    //   console.log('Update not available.');
-    // })
-    // autoUpdater.on('error', (err) => {
-    //   console.log('Error in auto-updater. ' + err);
-    // })
-    // autoUpdater.on('download-progress', (progressObj) => {
-    //   let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    //   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    //   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    //   console.log(log_message);
-    // })
-    // autoUpdater.on('update-downloaded', (info) => {
-    //   console.log('Update downloaded');
-
-    //   setTimeout(() => {
-    //     // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
-    //     //autoUpdater.quitAndInstall(); 
-    //   }, 10000);
-
-    //});
-
   }
 
   get appTitle$(): Observable<string> {

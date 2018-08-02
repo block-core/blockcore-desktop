@@ -16,8 +16,7 @@ export interface Account {
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit {
     @HostBinding('class.login') hostClass = true;
@@ -63,16 +62,28 @@ export class LoginComponent implements OnInit {
 
                         if (this.wallets.length > 0) {
                             this.hasWallet = true;
+                            var lastUsedWallet = localStorage.getItem('Wallet');
 
                             for (let wallet in this.wallets) {
-
                                 var id = wallet;
                                 var name = this.wallets[wallet].slice(0, -12);
 
-                                this.accounts.push({ id: id, name: name });
+                                let account = { id: id, name: name };
 
-                                this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
+                                this.accounts.push(account);
+                                
+                                if (lastUsedWallet && lastUsedWallet === name) {
+                                    this.selectedAccount = account;
+                                }
+
+                                //this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
                             }
+                            
+                            // If no wallet has been selected, pick the first one.
+                            if (!this.selectedAccount) {
+                                this.selectedAccount = this.accounts[0];
+                            }
+
                         } else {
                             this.hasWallet = false;
                         }
@@ -154,6 +165,9 @@ export class LoginComponent implements OnInit {
                     if (response.status >= 200 && response.status < 400) {
                         this.authService.setAuthenticated();
                         this.wallet.start();
+
+                        localStorage.setItem('Wallet', this.wallet.walletName);
+
                         this.router.navigateByUrl('/dashboard');
                     }
                 },

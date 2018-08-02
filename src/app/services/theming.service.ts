@@ -15,9 +15,19 @@ export enum Theme {
 })
 export class Theming {
 
+    static singletonInstance: Theming;
+
     constructor(
         private readonly overlayContainer: OverlayContainer
-    ) { }
+    ) {
+
+        if (!Theming.singletonInstance) {
+            Theming.singletonInstance = this;
+        }
+
+        return Theming.singletonInstance;
+
+    }
 
     get currentTheme(): Theme {
         return this.getCurrentTheme();

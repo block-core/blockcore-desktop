@@ -10,11 +10,20 @@ export const APP_TITLE = new InjectionToken<string>('App Title Postfix');
     providedIn: 'root'
 })
 export class TitleService {
+
+    static singletonInstance: TitleService;
+
     constructor(
         private readonly router: Router,
         @Inject(DOCUMENT) private readonly document: any,
         @Optional() @Inject(APP_TITLE) private readonly appTitle: any) {
-        this.initialize();
+
+        if (!TitleService.singletonInstance) {
+            this.initialize();
+            TitleService.singletonInstance = this;
+        }
+
+        return TitleService.singletonInstance;
     }
 
     get $title(): Observable<string> {

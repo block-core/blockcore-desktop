@@ -9,8 +9,7 @@ import { WalletService } from '../../services/wallet.service';
     selector: 'app-logout',
     templateUrl: './logout.component.html',
     styleUrls: ['./logout.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class LogoutComponent {
     @HostBinding('class.logout') hostClass = true;

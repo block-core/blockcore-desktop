@@ -2,16 +2,30 @@ import { Injectable, APP_INITIALIZER } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable, Subject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ApplicationStateService {
+
+    // TODO: Figure out when multiple instance of singleton services is fixed for lazy-loaded routing/modules in Angular.
+    // See details here: https://github.com/angular/angular/issues/12889#issuecomment-395720894
+    static singletonInstance: ApplicationStateService;
 
     constructor(
         private readonly titleService: TitleService,
     ) {
-        this.chain = this.getParam('chain') || 'city';
-        this.mode = localStorage.getItem('Mode') || 'full';
-        this.network = localStorage.getItem('Network') || 'main';
+        if (!ApplicationStateService.singletonInstance) {
+            this.chain = this.getParam('chain') || 'city';
+            this.mode = localStorage.getItem('Mode') || 'full';
+            this.network = localStorage.getItem('Network') || 'main';
+
+            ApplicationStateService.singletonInstance = this;
+        }
+
+        return ApplicationStateService.singletonInstance;
     }
+
+    version: string;
 
     chain: string;
 

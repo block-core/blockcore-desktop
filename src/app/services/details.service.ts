@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DetailsService {
+
+    static singletonInstance: DetailsService;
 
     public item: any;
 
     constructor() {
+
+        if (!DetailsService.singletonInstance) {
+            DetailsService.singletonInstance = this;
+        }
+
+        return DetailsService.singletonInstance;
 
     }
 

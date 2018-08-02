@@ -2,7 +2,7 @@
     <mat-progress-bar mode="determinate" ng-hide="generalInfo == null" *ngIf="percentSyncedNumber !== 100" bufferValue="0" mode="buffer"
         [value]="percentSyncedNumber"></mat-progress-bar>
 
-    <mat-grid-list class="network-grid" #grid rowHeight="2:1">
+    <mat-grid-list class="network-grid" [cols]="columns" rowHeight="2:1" #grid>
         <mat-grid-tile>
             <span class="network-label">Block Height</span>
             <span class="network-value">{{generalInfo?.chainTip}}</span>
@@ -19,6 +19,7 @@
             <span class="network-label">Network</span>
             <span class="network-value">{{generalInfo?.network}}</span>
         </mat-grid-tile>
+
         <!-- <mat-grid-tile>
             <span class="network-label" *ngIf="generalInfo?.isChainSynced">Chain Synced</span>
             <span class="network-label" *ngIf="!generalInfo?.isChainSynced">Chain Syncing</span>

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, shell, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -6,6 +6,9 @@ import * as os from 'os';
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
 const autoUpdater = require("electron-updater").autoUpdater;
+//const { autoUpdater } = require('electron-updater');
+
+autoUpdater.autoDownload = false
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
@@ -51,13 +54,64 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
 });
 
 ipcMain.on('check-for-update', (event, arg: Chain) => {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
+    //autoUpdater.checkForUpdatesAndNotify();
     event.returnValue = 'OK';
 });
 
 require('electron-context-menu')({
     showInspectElement: serve
 });
+
+
+// Hook up to updater events.
+// TODO: Migrate to an AppUpdateService.
+autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for update...');
+})
+
+autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+        type: 'info',
+        title: 'Found Updates',
+        message: 'Found updates, do you want update now?',
+        buttons: ['Sure', 'No']
+    }, (buttonIndex) => {
+        if (buttonIndex === 0) {
+            autoUpdater.downloadUpdate()
+        }
+        else {
+            //updater.enabled = true
+            //updater = null
+        }
+    })
+})
+
+autoUpdater.on('update-not-available', () => {
+    dialog.showMessageBox({
+        title: 'No Updates',
+        message: 'Current version is up-to-date.'
+    })
+    
+    //updater.enabled = true
+    //updater = null
+})
+
+autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+        title: 'Install Updates',
+        message: 'Updates downloaded, application will be quit for update...'
+    }, () => {
+        setImmediate(() => autoUpdater.quitAndInstall())
+    })
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    console.log(log_message);
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -118,8 +172,28 @@ function createWindow() {
 app.on('ready', () => {
     createTray();
     createWindow();
-    autoUpdater.checkForUpdatesAndNotify();
+    registerAutoUpdater();
 });
+
+
+function registerAutoUpdater() {
+    console.log('REGISTER AUTO UPDATER EVENTS!');
+
+    autoUpdater.checkForUpdates();
+
+
+    // autoUpdater.on('update-downloaded', (info) => {
+    //     console.log('Update downloaded');
+
+    //     setTimeout(() => {
+    //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
+    //         //autoUpdater.quitAndInstall(); 
+    //     }, 10000);
+
+    // });
+
+    //autoUpdater.checkForUpdatesAndNotify();
+}
 
 // app.on('before-quit', () => {
 //     shutdownDaemon();

@@ -12,23 +12,35 @@ export interface Chain {
     mode?: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ChainService {
+
+    static singletonInstance: ChainService;
 
     private availableChains: Array<Chain>;
 
     constructor() {
-        this.availableChains = [
-            { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 4333, rpcPort: 4334, apiPort: 4335, wsPort: 4336, network: 'main' },
-            { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 14333, rpcPort: 14334, apiPort: 14335, wsPort: 14336, network: 'regtest' },
-            { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 24333, rpcPort: 24334, apiPort: 24335, wsPort: 24336, network: 'testnet' },
 
-            { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, network: 'main' },
-            { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 37221, network: 'regtest' },
-            { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 37221, network: 'testnet' },
+        if (!ChainService.singletonInstance) {
 
-            { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin', network: 'main' }
-        ];
+            this.availableChains = [
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 4333, rpcPort: 4334, apiPort: 4335, wsPort: 4336, network: 'main' },
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 14333, rpcPort: 14334, apiPort: 14335, wsPort: 14336, network: 'regtest' },
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 24333, rpcPort: 24334, apiPort: 24335, wsPort: 24336, network: 'testnet' },
+    
+                { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, network: 'main' },
+                { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 37221, network: 'regtest' },
+                { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 37221, network: 'testnet' },
+    
+                { name: 'Bitcoin', identity: 'bitcoin', tooltip: 'Stratis: Bitcoin', network: 'main' }
+            ];
+
+            ChainService.singletonInstance = this;
+        }
+
+        return ChainService.singletonInstance;
     }
 
     /** Retrieves a configuration for a blockchain, including the right network name and ports. */

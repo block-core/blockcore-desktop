@@ -6,8 +6,7 @@ import { NgForm } from '@angular/forms';
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent {
     @HostBinding('class.settings') hostClass = true;

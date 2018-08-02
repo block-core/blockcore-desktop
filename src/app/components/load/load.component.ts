@@ -56,6 +56,10 @@ export class LoadComponent {
             //{ id: 'regtest', name: 'RegTest' } // Disabled in beta release.
         ];
 
+        this.selectedMode = this.modes[0];
+        this.selectedNetwork = this.networks[0];
+        this.remember = true;
+
         const existingMode = localStorage.getItem('Mode');
 
         // If user has choosen to remember mode, we'll redirect directly to login, when connected.

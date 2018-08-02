@@ -1,8 +1,21 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GlobalService {
-  constructor() {}
+
+  static singletonInstance: GlobalService;
+
+  constructor() {
+
+    if (!GlobalService.singletonInstance) {
+      GlobalService.singletonInstance = this;
+    }
+
+    return GlobalService.singletonInstance;
+
+  }
 
   private walletPath: string;
   private currentWalletName: string;
@@ -39,7 +52,7 @@ export class GlobalService {
     return this.coinType;
   }
 
-  setCoinType (coinType: number) {
+  setCoinType(coinType: number) {
     this.coinType = coinType;
   }
 

@@ -21,14 +21,12 @@ import { ChainService } from './chain.service';
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService {
 
-  private headers = new Headers({ 'Content-Type': 'application/json' });
-  private pollingInterval = 3000;
-  private apiPort;
-  private stratisApiUrl;
-  private daemon;
+  static singletonInstance: ApiService;
 
   constructor(private http: Http,
     private globalService: GlobalService,
@@ -37,7 +35,19 @@ export class ApiService {
     private chains: ChainService,
     private electronService: ElectronService) {
 
+    if (!ApiService.singletonInstance) {
+      ApiService.singletonInstance = this;
+    }
+
+    return ApiService.singletonInstance;
+    
   }
+
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private pollingInterval = 3000;
+  private apiPort;
+  private stratisApiUrl;
+  private daemon;
 
   /** Initialized the daemon running in the background, by sending configuration that has been picked by user, including chain, network and mode. */
   initialize() {

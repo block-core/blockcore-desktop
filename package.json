@@ -1,6 +1,6 @@
 {
   "name": "cityhub",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "author": {
     "name": "City Chain Foundation",
@@ -22,7 +22,6 @@
     "postinstall:web": "node postinstall-web",
     "postinstall:electron": "node postinstall",
     "start": "npm run postinstall:electron && npm run electron:tsc && npm-run-all -p ng:serve electron:serve",
-    "start:dev": "npm run start -- -c dev",
     "start:prod": "npm run start -- -c production",
     "ng": "ng",
     "build": "npm run postinstall:electron && npm run electron:tsc && ng build",
@@ -57,7 +56,7 @@
     "@angular/compiler": "6.1.0",
     "@angular/compiler-cli": "6.1.0",
     "@angular/core": "6.1.0",
-    "@angular/flex-layout": "^6.0.0-beta.16",
+    "@angular/flex-layout": "6.0.0-beta.17",
     "@angular/forms": "6.1.0",
     "@angular/http": "6.1.0",
     "@angular/language-service": "6.1.0",

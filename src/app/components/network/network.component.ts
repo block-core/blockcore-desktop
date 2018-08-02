@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { WalletComponent } from '../wallet/wallet.component';
@@ -16,11 +16,12 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 })
 export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     @HostBinding('class.network') hostClass = true;
-    @ViewChild('grid') grid: MatGridList;
+    //@ViewChild('grid') grid: MatGridList;
 
     percentSyncedNumber = 0;
     percentSynced = '0%';
     generalInfo: GeneralInfo;
+    columns = 4;
 
     gridByBreakpoint = {
         xl: 8,
@@ -35,6 +36,7 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
 
     constructor(private globalService: GlobalService,
         private apiService: ApiService,
+        private readonly cd: ChangeDetectorRef,
         private observableMedia: ObservableMedia) {
 
     }
@@ -44,8 +46,10 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     }
 
     ngAfterContentInit() {
+        // There is a bug with this, does not always trigger when navigating back and forth, and resizing.
+        // This means the number of grids sometimes defaults to 4, even though the screen is small.
         this.mediaObservable = this.observableMedia.asObservable().subscribe((change: MediaChange) => {
-            this.grid.cols = this.gridByBreakpoint[change.mqAlias];
+            this.columns = this.gridByBreakpoint[change.mqAlias];
         });
     }
 
@@ -55,8 +59,8 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     }
 
     private getGeneralWalletInfo() {
-        //let walletInfo = new WalletInfo(this.globalService.getWalletName());
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
+
         this.walletObservable = this.apiService.getGeneralInfoTyped(walletInfo, 3000)
             .subscribe(response => {
                 this.generalInfo = response;
@@ -79,6 +83,7 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
                     this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
                 }
 
+                this.cd.markForCheck();
             });
     }
 }

@@ -8,6 +8,8 @@ var os = require("os");
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
 var autoUpdater = require("electron-updater").autoUpdater;
+//const { autoUpdater } = require('electron-updater');
+autoUpdater.autoDownload = false;
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve' || val === '-serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
@@ -36,11 +38,55 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     }
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
+    //autoUpdater.checkForUpdatesAndNotify();
     event.returnValue = 'OK';
 });
 require('electron-context-menu')({
     showInspectElement: serve
+});
+// Hook up to updater events.
+// TODO: Migrate to an AppUpdateService.
+autoUpdater.on('checking-for-update', function () {
+    console.log('Checking for update...');
+});
+autoUpdater.on('update-available', function () {
+    electron_1.dialog.showMessageBox({
+        type: 'info',
+        title: 'Found Updates',
+        message: 'Found updates, do you want update now?',
+        buttons: ['Sure', 'No']
+    }, function (buttonIndex) {
+        if (buttonIndex === 0) {
+            autoUpdater.downloadUpdate();
+        }
+        else {
+            //updater.enabled = true
+            //updater = null
+        }
+    });
+});
+autoUpdater.on('update-not-available', function () {
+    electron_1.dialog.showMessageBox({
+        title: 'No Updates',
+        message: 'Current version is up-to-date.'
+    });
+    //updater.enabled = true
+    //updater = null
+});
+autoUpdater.on('update-downloaded', function () {
+    electron_1.dialog.showMessageBox({
+        title: 'Install Updates',
+        message: 'Updates downloaded, application will be quit for update...'
+    }, function () {
+        setImmediate(function () { return autoUpdater.quitAndInstall(); });
+    });
+});
+autoUpdater.on('download-progress', function (progressObj) {
+    var log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    console.log(log_message);
 });
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -93,8 +139,20 @@ function createWindow() {
 electron_1.app.on('ready', function () {
     createTray();
     createWindow();
-    autoUpdater.checkForUpdatesAndNotify();
+    registerAutoUpdater();
 });
+function registerAutoUpdater() {
+    console.log('REGISTER AUTO UPDATER EVENTS!');
+    autoUpdater.checkForUpdates();
+    // autoUpdater.on('update-downloaded', (info) => {
+    //     console.log('Update downloaded');
+    //     setTimeout(() => {
+    //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
+    //         //autoUpdater.quitAndInstall(); 
+    //     }, 10000);
+    // });
+    //autoUpdater.checkForUpdatesAndNotify();
+}
 // app.on('before-quit', () => {
 //     shutdownDaemon();
 // });
