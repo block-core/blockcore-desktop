@@ -4,10 +4,16 @@ City Hub
 Your portal into City Chain
 ----------------------------
 
-[![Build status][1]][2]
+| Windows | Linux | OS X |
+| :---- | :------ | :---- |
+[![Windows build status][1]][2] | [![Linux build status][3]][4] | [![OS X build status][5]][6] | 
 
 [1]: https://ci.appveyor.com/api/projects/status/q795v9urpt9hw9j0/branch/master?svg=true
 [2]: https://ci.appveyor.com/project/citychain/city-hub
+[3]: https://travis-ci.org/CityChainFoundation/city-hub.svg?branch=master
+[4]: https://travis-ci.org/CityChainFoundation/city-hub
+[5]: https://travis-ci.org/CityChainFoundation/city-hub.svg?branch=master
+[6]: https://travis-ci.org/CityChainFoundation/city-hub
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
