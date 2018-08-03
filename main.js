@@ -5,14 +5,12 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
-var log = require('electron-log');
 var autoUpdater = require("electron-updater").autoUpdater;
-autoUpdater.logger = log;
-log.transports.file.level = 'info';
-// Write to this file, must be set before first logging
-log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
-log.transports.file.streamConfig = { flags: 'w' };
-log.info('App starting...');
+// const log = require('electron-log');
+// autoUpdater.logger = log;
+// log.transports.file.level = 'info';
+// log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
+// log.transports.file.streamConfig = { flags: 'w' };
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
 //const autoUpdater = require("electron-updater").autoUpdater;
@@ -297,8 +295,8 @@ function createTray() {
     });
 }
 function writeLog(msg) {
-    //console.log(msg);
-    log.info(msg);
+    console.log(msg);
+    //log.info(msg);
 }
 function isNumber(value) {
     return !isNaN(Number(value.toString()));
