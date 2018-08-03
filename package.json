@@ -1,6 +1,6 @@
 {
   "name": "cityhub",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "license": "MIT",
   "author": {
     "name": "City Chain Foundation",
@@ -45,6 +45,7 @@
   "private": true,
   "dependencies": {
     "electron-context-menu": "^0.10.0",
+    "electron-log": "^2.2.16",
     "electron-updater": "^3.0.3"
   },
   "devDependencies": {

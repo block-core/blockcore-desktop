@@ -33,7 +33,8 @@
     "mac": {
       "icon": "dist/assets/icon.icns",
       "target": [
-        "dmg+zip"
+        "dmg",
+        "zip"
       ],
       "category": "public.app-category.productivity",
       "artifactName": "City.Hub-${version}-${os}-${arch}.${ext}"

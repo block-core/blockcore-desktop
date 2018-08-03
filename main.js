@@ -5,9 +5,17 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
+var log = require('electron-log');
+var autoUpdater = require("electron-updater").autoUpdater;
+autoUpdater.logger = log;
+log.transports.file.level = 'info';
+// Write to this file, must be set before first logging
+log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
+log.transports.file.streamConfig = { flags: 'w' };
+log.info('App starting...');
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
-var autoUpdater = require("electron-updater").autoUpdater;
+//const autoUpdater = require("electron-updater").autoUpdater;
 //const { autoUpdater } = require('electron-updater');
 autoUpdater.autoDownload = false;
 var args = process.argv.slice(1);
@@ -38,6 +46,10 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     }
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
+    electron_1.dialog.showMessageBox({
+        title: 'Updates',
+        message: 'Checking if there is any updates...'
+    });
     autoUpdater.checkForUpdates();
     //autoUpdater.checkForUpdatesAndNotify();
     event.returnValue = 'OK';
@@ -48,7 +60,7 @@ require('electron-context-menu')({
 // Hook up to updater events.
 // TODO: Migrate to an AppUpdateService.
 autoUpdater.on('checking-for-update', function () {
-    console.log('Checking for update...');
+    writeLog('Checking for update...');
 });
 autoUpdater.on('update-available', function () {
     electron_1.dialog.showMessageBox({
@@ -86,7 +98,7 @@ autoUpdater.on('download-progress', function (progressObj) {
     var log_message = "Download speed: " + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    console.log(log_message);
+    writeLog(log_message);
 });
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -142,7 +154,7 @@ electron_1.app.on('ready', function () {
     registerAutoUpdater();
 });
 function registerAutoUpdater() {
-    console.log('REGISTER AUTO UPDATER EVENTS!');
+    writeLog('REGISTER AUTO UPDATER EVENTS!');
     autoUpdater.checkForUpdates();
     // autoUpdater.on('update-downloaded', (info) => {
     //     console.log('Update downloaded');
@@ -285,7 +297,8 @@ function createTray() {
     });
 }
 function writeLog(msg) {
-    console.log(msg);
+    //console.log(msg);
+    log.info(msg);
 }
 function isNumber(value) {
     return !isNaN(Number(value.toString()));

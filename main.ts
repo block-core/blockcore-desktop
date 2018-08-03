@@ -3,12 +3,20 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+const { autoUpdater } = require("electron-updater");
+
+// const log = require('electron-log');
+// autoUpdater.logger = log;
+// log.transports.file.level = 'info';
+// log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
+// log.transports.file.streamConfig = { flags: 'w' };
+
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
-const autoUpdater = require("electron-updater").autoUpdater;
+//const autoUpdater = require("electron-updater").autoUpdater;
 //const { autoUpdater } = require('electron-updater');
 
-autoUpdater.autoDownload = false
+autoUpdater.autoDownload = false;
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
@@ -54,6 +62,12 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
 });
 
 ipcMain.on('check-for-update', (event, arg: Chain) => {
+
+    dialog.showMessageBox({
+        title: 'Updates',
+        message: 'Checking if there is any updates...'
+    })
+
     autoUpdater.checkForUpdates();
     //autoUpdater.checkForUpdatesAndNotify();
     event.returnValue = 'OK';
@@ -67,7 +81,7 @@ require('electron-context-menu')({
 // Hook up to updater events.
 // TODO: Migrate to an AppUpdateService.
 autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for update...');
+    writeLog('Checking for update...');
 })
 
 autoUpdater.on('update-available', () => {
@@ -92,7 +106,7 @@ autoUpdater.on('update-not-available', () => {
         title: 'No Updates',
         message: 'Current version is up-to-date.'
     })
-    
+
     //updater.enabled = true
     //updater = null
 })
@@ -110,7 +124,7 @@ autoUpdater.on('download-progress', (progressObj) => {
     let log_message = "Download speed: " + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    console.log(log_message);
+    writeLog(log_message);
 })
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -177,7 +191,7 @@ app.on('ready', () => {
 
 
 function registerAutoUpdater() {
-    console.log('REGISTER AUTO UPDATER EVENTS!');
+    writeLog('REGISTER AUTO UPDATER EVENTS!');
 
     autoUpdater.checkForUpdates();
 
@@ -354,6 +368,7 @@ function createTray() {
 
 function writeLog(msg) {
     console.log(msg);
+    //log.info(msg);
 }
 
 function isNumber(value: string | number): boolean {
