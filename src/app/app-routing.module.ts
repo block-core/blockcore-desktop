@@ -9,6 +9,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { LoadComponent } from './components/load/load.component';
 import { NetworkComponent } from './components/network/network.component';
 import { MerchantsComponent } from './components/merchants/merchants.component';
+import { UpdateComponent } from './components/update/update.component';
 
 const routes: Routes = [
     {
@@ -69,6 +70,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Network Status'
+        },
+    },
+    {
+        path: 'update',
+        component: UpdateComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Update City Hub'
         },
     },
     {

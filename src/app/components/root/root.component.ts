@@ -16,6 +16,7 @@ import { delay, retryWhen } from 'rxjs/operators';
 import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
+import { UpdateService } from '../../services/update.service';
 
 @Component({
   selector: 'app-root',
@@ -60,6 +61,7 @@ export class RootComponent implements OnInit, OnDestroy {
     private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private router: Router,
+    private updateService: UpdateService,
     public detailsService: DetailsService,
     private apiService: ApiService,
     private readonly cd: ChangeDetectorRef,
@@ -117,8 +119,7 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   checkForUpdates(){
-    // TODO: Implement custom updater UI.
-    this.apiService.checkForUpdate();
+    this.updateService.checkForUpdate();
   }
 
   closeDetails(reason: string) {
@@ -132,6 +133,8 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // We'll check for updates in the startup of the app.
+    this.checkForUpdates();
 
     if (this.router.url !== '/load') {
       this.router.navigateByUrl('/load');
@@ -148,15 +151,6 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.coinIcon = coinUnit + '-logo';
     this.coinName = this.globalService.getCoinName();
-  }
-
-  private startApp() {
-    console.log('Connected to daemon.');
-
-    // if (this.router.url !== '/login') {
-    //   //this.router.navigateByUrl('/login');
-    //   //this.router.navigateByUrl('/load');
-    // }
   }
 
   private stopWalletInfoUpdates() {

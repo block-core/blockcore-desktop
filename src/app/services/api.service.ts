@@ -71,13 +71,6 @@ export class ApiService {
     }
   }
 
-  checkForUpdate() {
-    if (this.electronService.ipcRenderer) {
-      this.daemon = this.electronService.ipcRenderer.sendSync('check-for-update');
-      console.log('Check for update result: ', this.daemon);
-    }
-  }
-
   setApiPort(port: number) {
     // Get the selected coin from launch parameters. If they are not available, we will use the one supplied during build,
     // to ensure that launching a test network binary, should by default connect to testnet.

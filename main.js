@@ -5,7 +5,7 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
-var autoUpdater = require("electron-updater").autoUpdater;
+var autoUpdater = require('electron-updater').autoUpdater;
 // const log = require('electron-log');
 // autoUpdater.logger = log;
 // log.transports.file.level = 'info';
@@ -15,11 +15,19 @@ var autoUpdater = require("electron-updater").autoUpdater;
 // import { autoUpdater } from 'electron-updater';
 //const autoUpdater = require("electron-updater").autoUpdater;
 //const { autoUpdater } = require('electron-updater');
+// We don't want to support auto download.
 autoUpdater.autoDownload = false;
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+var mainWindow = null;
+var contents = null;
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve' || val === '-serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
 var chain;
+require('electron-context-menu')({
+    showInspectElement: serve
+});
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
     // The "chain" object is supplied over the IPC channel and we should consider
     // it potentially "hostile", if anyone can inject anything in the app and perform
@@ -44,63 +52,67 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     }
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
-    electron_1.dialog.showMessageBox({
-        title: 'Updates',
-        message: 'Checking if there is any updates...'
-    });
     autoUpdater.checkForUpdates();
-    //autoUpdater.checkForUpdatesAndNotify();
-    event.returnValue = 'OK';
+    //event.returnValue = 'OK';
 });
-require('electron-context-menu')({
-    showInspectElement: serve
+electron_1.ipcMain.on('download-update', function (event, arg) {
+    autoUpdater.downloadUpdate();
+    //event.returnValue = 'OK';
 });
-// Hook up to updater events.
-// TODO: Migrate to an AppUpdateService.
+electron_1.ipcMain.on('install-update', function (event, arg) {
+    autoUpdater.quitAndInstall();
+    //setImmediate(() => autoUpdater.quitAndInstall());
+    //event.returnValue = 'OK';
+});
 autoUpdater.on('checking-for-update', function () {
+    contents.send('checking-for-update');
     writeLog('Checking for update...');
 });
-autoUpdater.on('update-available', function () {
-    electron_1.dialog.showMessageBox({
-        type: 'info',
-        title: 'Found Updates',
-        message: 'Found updates, do you want update now?',
-        buttons: ['Sure', 'No']
-    }, function (buttonIndex) {
-        if (buttonIndex === 0) {
-            autoUpdater.downloadUpdate();
-        }
-        else {
-            //updater.enabled = true
-            //updater = null
-        }
-    });
+autoUpdater.on('error', function (error) {
+    contents.send('update-error', error);
 });
-autoUpdater.on('update-not-available', function () {
-    electron_1.dialog.showMessageBox({
-        title: 'No Updates',
-        message: 'Current version is up-to-date.'
-    });
+autoUpdater.on('update-available', function (info) {
+    contents.send('update-available', info);
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: 'Found Updates',
+    //     message: 'Found updates, do you want update now?',
+    //     buttons: ['Sure', 'No']
+    // }, (buttonIndex) => {
+    //     if (buttonIndex === 0) {
+    //         autoUpdater.downloadUpdate()
+    //     }
+    //     else {
+    //         //updater.enabled = true
+    //         //updater = null
+    //     }
+    // })
+});
+autoUpdater.on('update-not-available', function (info) {
+    contents.send('update-not-available', info);
+    // dialog.showMessageBox({
+    //     title: 'No Updates',
+    //     message: 'Current version is up-to-date.'
+    // })
     //updater.enabled = true
     //updater = null
 });
-autoUpdater.on('update-downloaded', function () {
-    electron_1.dialog.showMessageBox({
-        title: 'Install Updates',
-        message: 'Updates downloaded, application will be quit for update...'
-    }, function () {
-        setImmediate(function () { return autoUpdater.quitAndInstall(); });
-    });
+autoUpdater.on('update-downloaded', function (info) {
+    contents.send('update-downloaded', info);
+    // dialog.showMessageBox({
+    //     title: 'Install Updates',
+    //     message: 'Updates downloaded, application will be quit for update...'
+    // }, () => {
+    //     setImmediate(() => autoUpdater.quitAndInstall())
+    // })
 });
 autoUpdater.on('download-progress', function (progressObj) {
+    contents.send('download-progress', progressObj);
     var log_message = "Download speed: " + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
     writeLog(log_message);
 });
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-var mainWindow = null;
 function createWindow() {
     // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
@@ -112,6 +124,7 @@ function createWindow() {
         title: 'City Hub',
         icon: __dirname + '/app.ico'
     });
+    contents = mainWindow.webContents;
     mainWindow.setMenu(null);
     // Make sure links that open new window, e.g. target="_blank" launches in external window (browser).
     mainWindow.webContents.on('new-window', function (event, linkUrl) {
@@ -153,7 +166,7 @@ electron_1.app.on('ready', function () {
 });
 function registerAutoUpdater() {
     writeLog('REGISTER AUTO UPDATER EVENTS!');
-    autoUpdater.checkForUpdates();
+    //autoUpdater.checkForUpdates();
     // autoUpdater.on('update-downloaded', (info) => {
     //     console.log('Update downloaded');
     //     setTimeout(() => {

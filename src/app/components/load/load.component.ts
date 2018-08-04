@@ -98,7 +98,7 @@ export class LoadComponent {
         this.zone.run(() => {
             setTimeout(() => {
                 this.delayed = true;
-            }, 5000);
+            }, 8000);
         });
 
         this.apiSubscription = this.apiService.getWalletFiles()

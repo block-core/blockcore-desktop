@@ -98,6 +98,14 @@ git submodule update --init --force --remote
 
 To learn more about contribution to this repo, please refer to the [documentation](https://github.com/CityChainFoundation/documentation) repo.
 
+## Security
+
+Security is always a very important concern, and City Hub has more built-in features that most normal wallets. More features, 
+means more exposure to potential security issues.
+
+It is important that all contributors are well aware of security principles, and especially regarding Electron, 
+more details here: [Electron Security](https://electronjs.org/docs/tutorial/security)
+
 # License
 
 MIT @ City Chain Foundation   

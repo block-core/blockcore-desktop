@@ -119,6 +119,10 @@
         <mat-icon>cloud_off</mat-icon>
       </button> -->
 
+      <button mat-icon-button *ngIf="updateService.available" matTooltip="Update available. Click to view details." routerLink="/update">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+
       <button *ngIf="!appState.pageMode && percentSyncedNumber !== 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
         <mat-icon>cloud_download</mat-icon>
       </button>
