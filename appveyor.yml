@@ -133,8 +133,8 @@ deploy:
   tag: $(APPVEYOR_REPO_TAG_NAME)
   auth_token:
     secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
-  draft: false
-  prerelease: true
+  draft: true
+  prerelease: false
   force_update: true
   on:
     branch: master                 # release from master branch only
