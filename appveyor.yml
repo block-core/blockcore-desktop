@@ -27,7 +27,7 @@ build:
 
 environment:
   GH_TOKEN:
-    secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
+    secure: 3W2XZSQPVcVkwDviSdgOzMZK6TWAkkqXF0C0xe2n/5c1Ro70rKl5IxC1OsOMDDx1
   matrix:
   - win_runtime: win-x64
     arch: x64
@@ -95,7 +95,7 @@ build_script:
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\daemon
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix building City Hub" -foregroundcolor "magenta"
+      Write-Host "$env:log_prefix building City Hub with secret $env:GH_TOKEN" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER
       npm run publish:windows
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
@@ -136,7 +136,7 @@ artifacts:
 # - provider: GitHub
 #   tag: $(APPVEYOR_REPO_TAG_NAME)
 #   auth_token:
-#     secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
+#     secure: 3W2XZSQPVcVkwDviSdgOzMZK6TWAkkqXF0C0xe2n/5c1Ro70rKl5IxC1OsOMDDx1
 #   draft: true
 #   prerelease: false
 #   force_update: true
