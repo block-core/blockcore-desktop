@@ -26,6 +26,8 @@ build:
   parallel: true
 
 environment:
+  GH_TOKEN:
+    secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
   matrix:
   - win_runtime: win-x64
     arch: x64
@@ -101,7 +103,7 @@ build_script:
       Write-Host "$env:log_prefix packaging the City Hub" -foregroundcolor "magenta"
       npx electron-builder build --windows --$env:arch
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-      Write-Host "[$env:configuration][$env:win_runtime] Finished FullNode.UI packaging" -foregroundcolor "magenta"
+      Write-Host "[$env:configuration][$env:win_runtime] Finished City Hub packaging" -foregroundcolor "magenta"
       
       dir
       cd build
