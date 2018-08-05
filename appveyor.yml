@@ -32,9 +32,9 @@ environment:
   - win_runtime: win-x64
     arch: x64
     plat: win32
-  - win_runtime: win-x86
-    arch: ia32
-    plat: win32
+  # - win_runtime: win-x86
+  #   arch: ia32
+  #   plat: win32
 
 # build cache to preserve files/folders between builds
 cache:
@@ -97,19 +97,21 @@ build_script:
       
       Write-Host "$env:log_prefix building City Hub" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER
-      npm run build:prod
+      npm run publish:windows
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix packaging the City Hub" -foregroundcolor "magenta"
-      npx electron-builder build --windows --$env:arch
+      #Write-Host "$env:log_prefix packaging the City Hub" -foregroundcolor "magenta"
+      #npx electron-builder build --windows --$env:arch
+      
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
+      
       Write-Host "[$env:configuration][$env:win_runtime] Finished City Hub packaging" -foregroundcolor "magenta"
       
-      dir
-      cd build
+      #dir
+      #cd build
       # replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
-      Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
-      dir      
+      #Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
+      #dir      
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
     
 test_script:
@@ -130,13 +132,13 @@ artifacts:
 #      deployment configuration    #
 #----------------------------------#
 
-deploy:
-- provider: GitHub
-  tag: $(APPVEYOR_REPO_TAG_NAME)
-  auth_token:
-    secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
-  draft: true
-  prerelease: false
-  force_update: true
-  on:
-    branch: master                 # release from master branch only
+# deploy:
+# - provider: GitHub
+#   tag: $(APPVEYOR_REPO_TAG_NAME)
+#   auth_token:
+#     secure: Cpy9Gq2fafl7Q8Wqpamv89vv8bOQHjFsjZyYFmBCWK3GR5jH8QTITyEhiBJ3DDNQ
+#   draft: true
+#   prerelease: false
+#   force_update: true
+#   on:
+#     branch: master
