@@ -20,16 +20,16 @@ export class SettingsComponent {
     constructor(public readonly theme: Theming) {
         this.selectedTheme = theme.currentTheme;
 
-        if (localStorage.getItem('AutoLock') === 'false') {
+        if (localStorage.getItem('Settings:AutoLock') === 'false') {
             this.autoLock = false;
         }
 
-        if (localStorage.getItem('ClearOnExit') === 'true') {
+        if (localStorage.getItem('Settings:ClearOnExit') === 'true') {
             this.clearOnExit = true;
         }
 
-        this.selectedLanguage = localStorage.getItem('Language') || 'en-US';
-        this.selectedCurrency = localStorage.getItem('Currency') || 'USD';
+        this.selectedLanguage = localStorage.getItem('Settings:Language') || 'en-US';
+        this.selectedCurrency = localStorage.getItem('Settings:Currency') || 'USD';
     }
 
     onAutoLockChanged(event) {
@@ -47,9 +47,9 @@ export class SettingsComponent {
     }
 
     onChanged(event) {
-        localStorage.setItem('Language', this.selectedLanguage);
-        localStorage.setItem('Currency', this.selectedCurrency);
-        localStorage.setItem('AutoLock', this.autoLock ? 'true' : 'false');
-        localStorage.setItem('ClearOnExit', this.clearOnExit ? 'true' : 'false');
+        localStorage.setItem('Settings:Language', this.selectedLanguage);
+        localStorage.setItem('Settings:Currency', this.selectedCurrency);
+        localStorage.setItem('Settings:AutoLock', this.autoLock ? 'true' : 'false');
+        localStorage.setItem('Settings:ClearOnExit', this.clearOnExit ? 'true' : 'false');
     }
 }

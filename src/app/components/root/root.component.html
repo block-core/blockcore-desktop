@@ -25,12 +25,14 @@
       <mat-list class="main-menu">
         <!-- <h3 mat-subheader>Folders</h3> -->
 
-        <mat-list-item class="main-menu-first" [matMenuTriggerFor]="coinMenu">
+        <!-- <mat-list-item class="main-menu-first" [matMenuTriggerFor]="coinMenu"></mat-list-item> -->
+        <mat-list-item class="main-menu-first">
           <mat-icon [svgIcon]="coinIcon" mat-list-icon></mat-icon>
           <h4 *ngIf="showFiller" mat-line>{{coinName}}</h4>
         </mat-list-item>
 
-        <mat-menu #coinMenu="matMenu" [overlapTrigger]="false">
+        <!-- Menu hidden until support for multiple blockchains is released. -->
+        <!-- <mat-menu #coinMenu="matMenu" [overlapTrigger]="false">
           <button mat-menu-item disabled>
             <mat-icon svgIcon="city-logo"></mat-icon>
             <span>City Chain</span>
@@ -43,7 +45,7 @@
             <mat-icon svgIcon="bitcoin-logo"></mat-icon>
             <span>Bitcoin (Coming soon)</span>
           </button>
-        </mat-menu>
+        </mat-menu> -->
 
         <mat-list-item routerLinkActive="main-menu-active" routerLink="/dashboard">
           <mat-icon mat-list-icon>dashboard</mat-icon>
@@ -82,11 +84,11 @@
 
         <div class="fill-remaining-vertical"></div>
 
-        <mat-list-item *ngIf="!handset && !showFiller" (click)="showFiller = !showFiller">
+        <mat-list-item *ngIf="!handset && !showFiller" (click)="toggleFiller()">
           <mat-icon mat-list-icon>keyboard_arrow_right</mat-icon>
         </mat-list-item>
 
-        <mat-list-item *ngIf="!handset && showFiller" (click)="showFiller = !showFiller">
+        <mat-list-item *ngIf="!handset && showFiller" (click)="toggleFiller()">
           <mat-icon mat-list-icon>keyboard_arrow_left</mat-icon>
         </mat-list-item>
 
@@ -159,7 +161,7 @@
       </mat-slide-toggle> -->
     </mat-toolbar>
 
-    <app-view-area>
+    <app-view-area class="app-view-area-main">
       <div class="content-container" [ngClass]="{'content-container-full': appState.fullHeight}">
         <router-outlet></router-outlet>
       </div>

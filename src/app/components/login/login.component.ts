@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
 
                         if (this.wallets.length > 0) {
                             this.hasWallet = true;
-                            var lastUsedWallet = localStorage.getItem('Wallet');
+                            var lastUsedWallet = localStorage.getItem('Network:Wallet');
 
                             for (let wallet in this.wallets) {
                                 var id = wallet;
@@ -166,7 +166,7 @@ export class LoginComponent implements OnInit {
                         this.authService.setAuthenticated();
                         this.wallet.start();
 
-                        localStorage.setItem('Wallet', this.wallet.walletName);
+                        localStorage.setItem('Network:Wallet', this.wallet.walletName);
 
                         this.router.navigateByUrl('/dashboard');
                     }

@@ -209,7 +209,7 @@ export class SendComponent implements OnInit, OnDestroy {
             this.sendForm.get("fee").value,
             // TO DO: use coin notation
             this.estimatedFee / 100000000,
-            true,
+            false,
             false
         );
 

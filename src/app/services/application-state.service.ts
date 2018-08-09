@@ -16,8 +16,8 @@ export class ApplicationStateService {
     ) {
         if (!ApplicationStateService.singletonInstance) {
             this.chain = this.getParam('chain') || 'city';
-            this.mode = localStorage.getItem('Mode') || 'full';
-            this.network = localStorage.getItem('Network') || 'main';
+            this.mode = localStorage.getItem('Network:Mode') || 'full';
+            this.network = localStorage.getItem('Network:Network') || 'main';
 
             ApplicationStateService.singletonInstance = this;
         }

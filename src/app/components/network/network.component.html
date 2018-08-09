@@ -1,7 +1,4 @@
 <div class="not-selectable">
-    <mat-progress-bar mode="determinate" ng-hide="generalInfo == null" *ngIf="percentSyncedNumber !== 100" bufferValue="0" mode="buffer"
-        [value]="percentSyncedNumber"></mat-progress-bar>
-
     <mat-grid-list class="network-grid" [cols]="columns" rowHeight="2:1" #grid>
         <mat-grid-tile>
             <span class="network-label">Block Height</span>
@@ -41,4 +38,6 @@
             <span class="network-value">{{generalInfo?.creationTime.toDateString()}}</span>
         </mat-grid-tile>
     </mat-grid-list>
+    <mat-progress-bar mode="determinate" ng-hide="generalInfo == null" *ngIf="percentSyncedNumber !== 100" bufferValue="0" mode="buffer"
+    [value]="percentSyncedNumber"></mat-progress-bar>
 </div>

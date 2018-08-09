@@ -60,7 +60,7 @@ export class LoadComponent {
         this.selectedNetwork = this.networks[0];
         this.remember = true;
 
-        const existingMode = localStorage.getItem('Mode');
+        const existingMode = localStorage.getItem('Network:Mode');
 
         // If user has choosen to remember mode, we'll redirect directly to login, when connected.
         if (existingMode != null) {
@@ -79,12 +79,12 @@ export class LoadComponent {
 
     launch() {
         if (this.remember) {
-            localStorage.setItem('Mode', this.selectedMode.id);
-            localStorage.setItem('Network', this.selectedNetwork.id);
+            localStorage.setItem('Network:Mode', this.selectedMode.id);
+            localStorage.setItem('Network:Network', this.selectedNetwork.id);
         }
         else {
-            localStorage.removeItem('Mode');
-            localStorage.removeItem('Network');
+            localStorage.removeItem('Network:Mode');
+            localStorage.removeItem('Network:Network');
         }
 
         this.appState.mode = this.selectedMode.id;

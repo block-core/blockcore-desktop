@@ -11,7 +11,7 @@ import { TitleService } from '../../services/title.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { ElectronService } from 'ngx-electron';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { delay, retryWhen } from 'rxjs/operators';
 import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
@@ -34,7 +34,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   handset = false;
   title = 'app';
-  showFiller = false;
+  showFiller = true;
   isActive = false;
   networkStatusTooltip = '';
 
@@ -72,6 +72,10 @@ export class RootComponent implements OnInit, OnDestroy {
     iconRegistry.addSvgIcon('city-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/city/logo.svg'));
     iconRegistry.addSvgIcon('bitcoin-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/bitcoin/logo.svg'));
 
+    console.log('Expanded:', localStorage.getItem('Menu:Expanded'));
+
+    this.loadFiller();
+    
     this.isAuthenticated = authService.isAuthenticated();
 
     if (this.electronService.remote) {
@@ -100,7 +104,8 @@ export class RootComponent implements OnInit, OnDestroy {
         this.handset = false;
         this.menuOpened = true;
         this.menuMode = 'side';
-        this.showFiller = false;
+        this.loadFiller();
+
       }
     });
 
@@ -112,19 +117,43 @@ export class RootComponent implements OnInit, OnDestroy {
         this.stopWalletInfoUpdates();
       }
     });
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+
+      const contentContainer = document.querySelector('.app-view-area-main') || window;
+      contentContainer.scrollTo(0, 0);
+    });
+
   }
 
   get appTitle$(): Observable<string> {
     return this.titleService.$title;
   }
 
-  checkForUpdates(){
+  loadFiller() {
+    if (localStorage.getItem('Menu:Expanded') === 'false') {
+      this.showFiller = false;
+    } else {
+      this.showFiller = true;
+    }
+  }
+
+  checkForUpdates() {
     this.updateService.checkForUpdate();
   }
 
   closeDetails(reason: string) {
     this.detailsService.hide();
     //this.sidenav.close();
+  }
+
+  toggleFiller() {
+    this.showFiller = !this.showFiller;
+
+    localStorage.setItem('Menu:Expanded', this.showFiller ? 'true' : 'false');
   }
 
   openMenu() {
