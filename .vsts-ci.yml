@@ -1,23 +1,22 @@
 phases:
 - phase: Windows
-  queue: Hosted VS2017
+  queue:
+    demands: agent.os -equals Windows_NT
   steps:
   - script: echo hello from Windows
-  - script: build arch=$(buildArch) config=$(buildConfig)
-
 - phase: macOS
-  queue: Hosted macOS Preview
+  queue:
+    demands: agent.os -equals Darwin
   steps:
   - script: echo hello from macOS
-  - script: build arch=$(buildArch) config=$(buildConfig)
-
 - phase: Linux
-  queue: Hosted Linux Preview
+  queue:
+    demands: agent.os -equals Linux
   steps:
   - script: echo hello from Linux
-  - script: build arch=$(buildArch) config=$(buildConfig)
+  
 
-name: $(BuildDefinitionName)_$(Date:yyyyMMdd)$(Rev:.rr)
+#name: $(BuildDefinitionName)_$(Date:yyyyMMdd)$(Rev:.rr)
 
 # queue:
 #   parallel: 2 # Limit to two agents at a time
