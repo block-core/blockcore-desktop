@@ -1,3 +1,28 @@
+
+queue:
+  parallel: 2 # Limit to two agents at a time
+  matrix:
+    x64_release:
+      queue: Hosted VS2017
+      buildArch: x64
+      buildConfig: release
+    x86_release:
+      queue: Hosted VS2017
+      buildArch: x86
+      buildConfig: release
+    linux:
+      queue: Hosted Linux Preview
+      buildArch: x64
+      buildConfig: release
+    mac:
+      queue: Hosted macOS Preview
+      buildArch: x64
+      buildConfig: release
+#steps:
+#- script: build arch=$(buildArch) config=$(buildConfig)
+
+name: $(BuildDefinitionName)_$(Date:yyyyMMdd)$(Rev:.rr)
+
 steps:
 
 - script: |
@@ -17,4 +42,3 @@ steps:
     MyName: $(Agent.MachineName)
   condition: and(succeeded(), in(variables['agent.os'], 'darwin', 'linux'))
   displayName: Greeting from macOS or Linux machine
-  
