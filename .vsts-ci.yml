@@ -1,14 +1,6 @@
 phases:
 - phase: Windows
   queue: Hosted VS2017
-    parallel: 2
-    matrix:
-      x64_release:
-        buildArch: x64
-        buildConfig: release
-      x86_release:
-        buildArch: x86
-        buildConfig: release
   steps:
   - script: echo hello from Windows
   - script: build arch=$(buildArch) config=$(buildConfig)
