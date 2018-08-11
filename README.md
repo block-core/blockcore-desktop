@@ -24,6 +24,51 @@ Smart City Platform.
 
 ![City Hub screenshot (2018-07-18)](doc/images/2018-08-11.png "City Hub (2018-08-11)")
 
+## Installation
+
+You'll find the latest releases on the [releases]([releases]) tab. Make sure you pick the latest release.
+
+### Auto Updates
+
+City Hub have built in support for updates. They are not installed automatically, but you as
+a user are in control. On each startup, City Hub will check for a new version. Additionally if
+you have been running City Hub for a long time, you can perform a manual update check in the menu.
+
+When an update is available, there will appear an icon on the menu. Click this icon, to see
+update information and perform a download and installation.
+
+### Windows (x64)
+
+For Windows, we decided to only support 64-bit installations of Windows. If you are running
+a 32-bit installation, please let us know by reporting an issue to survey the market demand.
+
+Simply download the latest win-x64.exe file from the [releases]([releases]) page and run
+the installer. You might need to approve installation of unsigned installer. This will only
+be required until we have a signed release available.
+
+### Linux (Ubuntu)
+
+For Linux, we decided to use the new AppImage installer format. This is included in a lot of
+Linux distributions, including Ubuntu.
+
+Download the latest linux-x86_64.AppImage from the [releases]([releases]) page.
+
+Open a terminal, navigate to the download folder and make the .AppImage an executeable with 
+the following command:
+
+```
+$ chmod a+x City.Chain*.AppImage
+```
+
+Then you can simply run the installer:
+
+```
+$ ./City.Chain*.AppImage
+```
+
+### Mac (DMG)
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Development server
