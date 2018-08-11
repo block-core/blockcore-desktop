@@ -1,63 +1,29 @@
+# City Hub - Continuous Integration Setup for VSTS
+
 phases:
-- phase: Windows
-  queue:
-    demands: agent.os -equals Windows_NT
-  steps:
-  - script: echo hello from Windows
-- phase: macOS
-  queue:
-    demands: agent.os -equals Darwin
-  steps:
-  - script: echo hello from macOS
-- phase: Linux
-  queue:
-    demands: agent.os -equals Linux
-  steps:
-  - script: echo hello from Linux
-  
+- template: build.yml
+  parameters:
+    name: macOS
+    platform: mac
+    queue: Hosted macOS Preview
 
-#name: $(BuildDefinitionName)_$(Date:yyyyMMdd)$(Rev:.rr)
+- template: build.yml
+  parameters:
+    name: Linux
+    platform: linux
+    queue: Hosted Linux Preview
 
-# queue:
-#   parallel: 2 # Limit to two agents at a time
-#   matrix:
-#     x64_release:
-#       queue: Hosted VS2017
-#       buildArch: x64
-#       buildConfig: release
-#     x86_release:
-#       queue: Hosted VS2017
-#       buildArch: x86
-#       buildConfig: release
-#     linux:
-#       queue: Hosted Linux Preview
-#       buildArch: x64
-#       buildConfig: release
-#     mac:
-#       queue: Hosted macOS Preview
-#       buildArch: x64
-#       buildConfig: release
-#steps:
-#- script: build arch=$(buildArch) config=$(buildConfig)
+- template: build.yml
+  parameters:
+    name: Windows_x86
+    platform: win
+    arch: x86
+    queue: Hosted VS2017
 
+- template: build.yml
+  parameters:
+    name: Windows_x64
+    platform: win
+    queue: Hosted VS2017
 
-
-# steps:
-
-# - script: |
-#     echo hello world from %MyName%
-#     echo Agent.HomeDirectory is %CD%
-#   workingDirectory: $(Agent.HomeDirectory)
-#   env:
-#     MyName: $(Agent.MachineName)
-#   condition: and(succeeded(), eq(variables['agent.os'], 'windows_nt'))
-#   displayName: Greeting from Windows machine
-
-# - script: |
-#     echo hello world from $MyName
-#     echo Agent.HomeDirectory is $PWD
-#   workingDirectory: $(Agent.HomeDirectory)
-#   env:
-#     MyName: $(Agent.MachineName)
-#   condition: and(succeeded(), in(variables['agent.os'], 'darwin', 'linux'))
-#   displayName: Greeting from macOS or Linux machine
+name: $(BuildDefinitionName)_$(Date:yyyyMMdd)$(Rev:.rr)

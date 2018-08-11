@@ -14,8 +14,8 @@ Your portal into City Chain
 [4]: https://travis-ci.org/CityChainFoundation/city-hub
 [5]: https://travis-ci.org/CityChainFoundation/city-hub.svg?branch=master
 [6]: https://travis-ci.org/CityChainFoundation/city-hub
-[7]: https://citychain.visualstudio.com/city-hub/_apis/build/status/1?branch=master
-[8]: https://citychain.visualstudio.com/city-hub/_build/latest?definitionId=1&branch=master
+[7]: https://citychain.visualstudio.com/city-chain/_apis/build/status/2?branch=master
+[8]: https://citychain.visualstudio.com/city-chain/_build/latest?definitionId=2&branch=master
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
@@ -86,15 +86,8 @@ Additionally there are two PowerShell scripts to build Windows packages. These a
 
 ## City Chain daemon
 
-To update with the latest City Chain daemon, make sure you update the submodule that links to city-chain:
-
-```sh
-git submodule foreach git pull origin master
-```
-
-```sh
-git submodule update --init --force --remote
-```
+To update with the latest City Chain daemon, you must edit the build.yml and edit the parameter named "daemon". Make sure you set it
+to a public released and tested version of the City Chain daemon.
 
 ## Contribution
 
