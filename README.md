@@ -4,18 +4,10 @@ City Hub
 Your portal into City Chain
 ----------------------------
 
-| Windows | Linux | OS X | Build Status |
-| :---- | :------ | :---- | :---- |
-[![Windows build status][1]][2] | [![Linux build status][3]][4] | [![OS X build status][5]][6] | [![VSTS build status][7]][8] | 
+[![VSTS build status][1]][2]
 
-[1]: https://ci.appveyor.com/api/projects/status/q795v9urpt9hw9j0/branch/master?svg=true
-[2]: https://ci.appveyor.com/project/citychain/city-hub
-[3]: https://travis-ci.org/CityChainFoundation/city-hub.svg?branch=master
-[4]: https://travis-ci.org/CityChainFoundation/city-hub
-[5]: https://travis-ci.org/CityChainFoundation/city-hub.svg?branch=master
-[6]: https://travis-ci.org/CityChainFoundation/city-hub
-[7]: https://citychain.visualstudio.com/city-chain/_apis/build/status/2?branch=master
-[8]: https://citychain.visualstudio.com/city-chain/_build/latest?definitionId=2&branch=master
+[1]: https://citychain.visualstudio.com/city-chain/_apis/build/status/2?branch=master
+[2]: https://citychain.visualstudio.com/city-chain/_build/latest?definitionId=2&branch=master
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
@@ -30,7 +22,7 @@ being an Smart City Platform node, you will receive payments for storage, networ
 processing utilization from other users who user who needs premium services on the 
 Smart City Platform.
 
-![City Hub screenshot (2018-07-18)](doc/images/2018-07-18.png "City Hub (2018-07-18)")
+![City Hub screenshot (2018-07-18)](doc/images/2018-08-11.png "City Hub (2018-08-11)")
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
