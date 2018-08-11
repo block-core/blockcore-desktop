@@ -4,7 +4,7 @@ parameters:
   name: ''
   queue: ''
   platform: ''
-  daemon: '0.0.2' # Version of the daemon to download, upgrade when newer is released.
+  daemon: '0.0.20' # Version of the daemon to download, upgrade when newer is released.
   arch: 'x64' # Only overriden by 32-bit Windows
   configuration: 'Release' # Only do Debug if specified
 
@@ -68,7 +68,21 @@ phases:
       destinationFolder: daemon
 
   - task: Npm@1
+    displayName: npm run build
+    condition: and(succeeded(), ne(variables['build.sourcebranch'], 'refs/heads/master')) # Only run BUILD, not PUBLISH for PRs.
+    inputs:
+      command: custom
+      verbose: false
+      ${{ if eq(parameters.platform, 'win') }}:
+        customCommand: ${{ format('run build:{0}:{1}', parameters.platform, parameters.arch) }} 
+      ${{ if ne(parameters.platform, 'win') }}:
+        customCommand: ${{ format('run build:{0}', parameters.platform) }} 
+    env:
+      GH_TOKEN: $(GH_TOKEN)
+
+  - task: Npm@1
     displayName: npm run publish
+    condition: and(succeeded(), eq(variables['build.sourcebranch'], 'refs/heads/master'))
     inputs:
       command: custom
       verbose: false
