@@ -42,6 +42,8 @@ export class WalletComponent implements OnInit {
         private fb: FormBuilder
     ) {
         this.buildStakingForm();
+
+        this.appState.pageMode = false;
     }
 
     private buildStakingForm(): void {

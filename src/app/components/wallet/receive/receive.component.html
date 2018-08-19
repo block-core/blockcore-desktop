@@ -3,15 +3,23 @@
 
     <form *ngIf="!showAll">
         <div>
-            <div class="mx-auto mb-2">
+            <div>
                 <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
             </div>
-            <div class="col-9 mx-auto mb-4">
+            <div>
                 <code class="d-inline-block">{{ address }}</code>
 
                 <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
                     <mat-icon>file_copy</mat-icon>
                 </button>
+            </div>
+            <div *ngIf="wallet.isSingleAddressMode">
+                <p class="mat-caption">
+                    You have enabled Single-Address-Mode in settings, the address above is always the same address. If you enable staking with
+                    the Single-Address-Mode, you will receive staking rewards on generated change addresses, not on the single
+                    address above.
+                </p>
+                <br>
             </div>
         </div>
     </form>

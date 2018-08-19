@@ -16,6 +16,7 @@ export class SettingsComponent {
     selectedTheme: string;
     selectedLanguage: string;
     selectedCurrency: string;
+    selectedWalletMode: string;
 
     constructor(public readonly theme: Theming) {
         this.selectedTheme = theme.currentTheme;
@@ -28,8 +29,7 @@ export class SettingsComponent {
             this.clearOnExit = true;
         }
 
-        this.selectedLanguage = localStorage.getItem('Settings:Language') || 'en-US';
-        this.selectedCurrency = localStorage.getItem('Settings:Currency') || 'USD';
+        this.selectedWalletMode = localStorage.getItem('Settings:WalletMode') || 'multi';
     }
 
     onAutoLockChanged(event) {
@@ -47,6 +47,7 @@ export class SettingsComponent {
     }
 
     onChanged(event) {
+        localStorage.setItem('Settings:WalletMode', this.selectedWalletMode);
         localStorage.setItem('Settings:Language', this.selectedLanguage);
         localStorage.setItem('Settings:Currency', this.selectedCurrency);
         localStorage.setItem('Settings:AutoLock', this.autoLock ? 'true' : 'false');

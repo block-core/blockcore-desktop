@@ -255,6 +255,19 @@ export class ApiService {
       .pipe(map((response: Response) => response));
   }
 
+    /**
+   * Get an unused receive address for a certain wallet from the API.
+   */
+  getFirstReceiveAddress(data: WalletInfo): Observable<any> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('walletName', data.walletName);
+    params.set('accountName', "account 0"); //temporary
+
+    return this.http
+      .get(this.stratisApiUrl + '/wallet/firstaddress', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(map((response: Response) => response));
+  }
+
   /**
    * Get multiple unused receive addresses for a certain wallet from the API.
    */

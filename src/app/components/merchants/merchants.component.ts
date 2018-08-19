@@ -12,6 +12,7 @@ export class MerchantsComponent implements OnDestroy, OnInit {
 
     constructor(private appState: ApplicationStateService) {
         this.appState.fullHeight = true;
+        this.appState.pageMode = true;
     }
 
     ngOnInit() {

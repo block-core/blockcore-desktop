@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { WalletService } from '../../services/wallet.service';
+import { ApplicationStateService } from '../../services/application-state.service';
 
 @Component({
     selector: 'app-logout',
@@ -18,8 +19,9 @@ export class LogoutComponent {
         private globalService: GlobalService,
         private wallet: WalletService,
         private apiService: ApiService,
+        private appState: ApplicationStateService,
         private router: Router) {
-
+        this.appState.pageMode = true;
     }
 
     logout() {

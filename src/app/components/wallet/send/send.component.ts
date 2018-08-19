@@ -12,6 +12,7 @@ import { FeeEstimation } from '../../../classes/fee-estimation';
 import { TransactionSending } from '../../../classes/transaction-sending';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { Router } from '@angular/router';
+import { WalletService } from '../../../services/wallet.service';
 
 @Component({
     selector: 'app-send',
@@ -42,6 +43,7 @@ export class SendComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private location: Location,
         private router: Router,
+        private wallet: WalletService,
         private globalService: GlobalService,
         private fb: FormBuilder
     ) {
@@ -210,7 +212,8 @@ export class SendComponent implements OnInit, OnDestroy {
             // TO DO: use coin notation
             this.estimatedFee / 100000000,
             true,
-            false
+            false,
+            this.wallet.isSingleAddressMode
         );
 
         let transactionData;

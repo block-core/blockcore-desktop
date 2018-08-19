@@ -62,7 +62,18 @@ export class WalletService {
         }
 
         return WalletService.singletonInstance;
+    }
 
+    get walletMode(): string {
+        return localStorage.getItem('Settings:WalletMode') || 'multi';
+    }
+
+    get isMultiAddressMode(): boolean {
+        return this.walletMode !== 'single';
+    }
+
+    get isSingleAddressMode(): boolean {
+        return this.walletMode === 'single';
     }
 
     public start() {

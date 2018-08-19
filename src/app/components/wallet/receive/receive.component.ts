@@ -4,6 +4,7 @@ import { ApiService } from '../../../services/api.service';
 import { GlobalService } from '../../../services/global.service';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { MatSnackBar } from '@angular/material';
+import { WalletService } from '../../../services/wallet.service';
 
 @Component({
     selector: 'app-receive',
@@ -28,6 +29,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         public readonly appState: ApplicationStateService,
         private apiService: ApiService,
         public snackBar: MatSnackBar,
+        private wallet: WalletService,
         private globalService: GlobalService) {
 
         this.appState.pageMode = true;
@@ -35,7 +37,12 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getUnusedReceiveAddresses();
+        if (this.wallet.isMultiAddressMode) {
+            this.getUnusedReceiveAddress();
+        }
+        else {
+            this.getFirstReceiveAddress();
+        }
     }
 
     ngOnDestroy() {
@@ -53,11 +60,37 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     public showOneAddress() {
-        this.getUnusedReceiveAddresses();
+        this.getUnusedReceiveAddress();
         this.showAll = false;
     }
 
-    private getUnusedReceiveAddresses() {
+    private getFirstReceiveAddress() {
+        let walletInfo = new WalletInfo(this.globalService.getWalletName())
+        this.apiService.getFirstReceiveAddress(walletInfo)
+            .subscribe(
+                response => {
+                    if (response.status >= 200 && response.status < 400) {
+                        this.address = response.json();
+                        this.qrString = "city:" + response.json();
+                    }
+                },
+                error => {
+                    console.log(error);
+                    if (error.status === 0) {
+                        // this.genericModalService.openModal(null, null);
+                    } else if (error.status >= 400) {
+                        if (!error.json().errors[0]) {
+                            console.log(error);
+                        } else {
+                            // this.genericModalService.openModal(null, error.json().errors[0].message);
+                        }
+                    }
+                }
+            )
+            ;
+    }
+
+    private getUnusedReceiveAddress() {
         let walletInfo = new WalletInfo(this.globalService.getWalletName())
         this.apiService.getUnusedReceiveAddress(walletInfo)
             .subscribe(

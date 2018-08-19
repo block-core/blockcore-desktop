@@ -66,4 +66,43 @@
         </mat-card-content>
     </mat-card>
 
+
+    <mat-card class="settings-card">
+        <mat-card-header>
+            <mat-icon mat-card-avatar>account_balance_wallet</mat-icon>
+            <mat-card-title>Wallet Options</mat-card-title>
+            <mat-card-subtitle>Settings that applies to your wallet.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <h3 class="mat-h3">Wallet Mode</h3>
+
+            <mat-radio-group (change)="onChanged($event)" [(ngModel)]="selectedWalletMode">
+                <mat-radio-button value="multi">Multi-Address-Mode</mat-radio-button>
+                <br>
+                <mat-radio-button value="single">Single-Address-Mode</mat-radio-button>
+            </mat-radio-group>
+
+            <!-- DISABLED UNTIL IMPLEMENTED! -->
+            <!-- <h3 class="mat-h3">Language</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
+                    <mat-option value="nb-NO">Norsk</mat-option>
+                    <mat-option value="en-US">English</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <h3 class="mat-h3">Currency</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="NOK">NOK</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+        </mat-card-content>
+    </mat-card>
+
 </div>

@@ -117,7 +117,7 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
         width: 1150,
-        height: 650,
+        height: 800,
         frame: true,
         minWidth: 260,
         minHeight: 400,

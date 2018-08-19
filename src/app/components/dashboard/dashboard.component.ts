@@ -72,6 +72,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         // Make sure we update wallet at higher frequency.
         this.wallet.active = true;
+
+        this.appState.pageMode = true;
     }
 
     ngOnInit() {
