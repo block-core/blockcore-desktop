@@ -4,8 +4,8 @@
 
     <mat-card class="history-search-card">
         <mat-form-field class="history-form-field">
-            <input matInput type="text" placeholder="Enter block number or block hash and press search." (keyup.enter)="search($event)" [(ngModel)]="searchInput">
-            <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <input matInput type="text" placeholder="Enter block number or block hash and press search." (keyup.enter)="search()" [(ngModel)]="searchInput">
+            <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
@@ -51,8 +51,6 @@
                 </table>
 
                 <mat-paginator pageSize="10" showFirstLastButtons></mat-paginator>
-
-                <div [innerHTML]="selectedContent"></div>
             </div>
         </mat-tab>
         <mat-tab label="Transactions">

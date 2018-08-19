@@ -28,7 +28,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
     private generalWalletInfoSubscription: Subscription;
     private lastBlockSyncedHeight: number;
-    private blocks: any = [];
+    public blocks: any = [];
     private transactions: any = [];
 
     displayedColumns: string[] = ['height', 'hash', 'time', 'transactions'];
