@@ -29,6 +29,7 @@ import { MerchantsModule } from './components/merchants/merchants.module';
 import { environment } from '../environments/environment';
 import { ChainService } from './services/chain.service';
 import { UpdateModule } from './components/update/update.module';
+import { HistoryModule } from './components/history/history.module';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { UpdateModule } from './components/update/update.module';
     UpdateModule,
     MerchantsModule,
     DetailsModule,
+    HistoryModule,
     AppRoutingModule,
   ],
   exports: [

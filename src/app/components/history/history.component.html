@@ -1,0 +1,100 @@
+<div class="content">
+
+    <div *ngIf="undefined === blocks">Loading...</div>
+
+    <mat-card class="history-search-card">
+        <mat-form-field class="history-form-field">
+            <input matInput type="text" placeholder="Enter block number or block hash and press search." (keyup.enter)="search($event)" [(ngModel)]="searchInput">
+            <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button class="history-search-button" (click)="search()" [disabled]="searchInput.length == 0" mat-stroked-button>Search</button>
+        <button class="history-search-button" (click)="refresh()" [disabled]="loading" mat-stroked-button>Refresh</button>
+    </mat-card>
+
+    <mat-tab-group mat-stretch-tabs class="history-block-stretched-tabs mat-elevation-z4">
+        <mat-tab label="Blocks">
+            <div class="tab-pane">
+
+                <table class="history-table mat-elevation-z8" mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="height">
+                        <th mat-header-cell *matHeaderCellDef> Number </th>
+                        <td mat-cell *matCellDef="let block">
+                            <a routerLink="/block/{{block.hash}}">{{block.height}}</a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hash">
+                        <th mat-header-cell *matHeaderCellDef> Hash </th>
+
+                        <td mat-cell *matCellDef="let block">
+                            {{block.hash}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="time">
+                        <th mat-header-cell *matHeaderCellDef> Date </th>
+                        <td mat-cell *matCellDef="let block">{{block.time * 1000 | date:'dd-MM-yyyy HH:mm'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="transactions">
+                        <th mat-header-cell *matHeaderCellDef> Transactions </th>
+                        <td mat-cell class="history-table-right" *matCellDef="let block">
+                            {{block.transactions.length}}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <mat-paginator pageSize="10" showFirstLastButtons></mat-paginator>
+
+                <div [innerHTML]="selectedContent"></div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Transactions">
+            <div class="tab-pane">
+
+                <table class="transactions-table mat-elevation-z8" mat-table [dataSource]="dataSourceTransactions">
+
+                    <ng-container matColumnDef="txid">
+                        <th mat-header-cell *matHeaderCellDef> Transaction Id </th>
+                        <td mat-cell *matCellDef="let transaction">
+                            <a routerLink="/history/transaction/{{transaction.txid}}">{{transaction.txid}}</a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="output">
+                        <th mat-header-cell *matHeaderCellDef> Output </th>
+                        <td mat-cell class="history-table-right" *matCellDef="let transaction">{{transaction.output}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="inputs">
+                        <th mat-header-cell *matHeaderCellDef> Inputs </th>
+                        <td mat-cell class="history-table-right" *matCellDef="let transaction">{{transaction.vin.length}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="outputs">
+                        <th mat-header-cell *matHeaderCellDef> Outputs </th>
+                        <td mat-cell class="history-table-right" *matCellDef="let transaction">{{transaction.vout.length}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="size">
+                        <th mat-header-cell *matHeaderCellDef> Size </th>
+                        <td mat-cell class="history-table-right" *matCellDef="let transaction">{{transaction.size}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsTransactions"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTransactions;"></tr>
+                </table>
+
+                <em class="info-label">Only last 10 transactions is supported. Paging will be available in a future update.</em>
+                <!-- <mat-paginator pageSize="10" showFirstLastButtons></mat-paginator> -->
+
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

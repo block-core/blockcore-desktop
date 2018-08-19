@@ -75,7 +75,7 @@ export class RootComponent implements OnInit, OnDestroy {
     console.log('Expanded:', localStorage.getItem('Menu:Expanded'));
 
     this.loadFiller();
-    
+
     this.isAuthenticated = authService.isAuthenticated();
 
     if (this.electronService.remote) {
@@ -162,8 +162,11 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // We'll check for updates in the startup of the app.
-    this.checkForUpdates();
+
+    setTimeout(() => {
+      // We'll check for updates in the startup of the app.
+      this.checkForUpdates();
+    }, 10000);
 
     if (this.router.url !== '/load') {
       this.router.navigateByUrl('/load');

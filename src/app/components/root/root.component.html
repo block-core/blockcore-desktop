@@ -60,6 +60,11 @@
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
         </mat-list-item>
 
+        <mat-list-item routerLinkActive="main-menu-active" routerLink="/history">
+          <mat-icon mat-list-icon>history</mat-icon>
+          <h4 *ngIf="showFiller" mat-line>History</h4>
+        </mat-list-item>
+
         <mat-list-item routerLinkActive="main-menu-active" routerLink="/merchants">
           <mat-icon mat-list-icon>map</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Merchants</h4>

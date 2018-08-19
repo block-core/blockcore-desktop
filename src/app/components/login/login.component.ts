@@ -30,11 +30,12 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private readonly cd: ChangeDetectorRef,
-        private authService: AuthenticationService, private router: Router,
-        public appState: ApplicationStateService,
+        private authService: AuthenticationService, 
+        private router: Router,
         private globalService: GlobalService,
         private wallet: WalletService,
-        private apiService: ApiService) {
+        private apiService: ApiService,
+        public appState: ApplicationStateService) {
 
     }
 

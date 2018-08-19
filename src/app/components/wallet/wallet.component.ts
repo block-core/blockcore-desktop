@@ -52,7 +52,11 @@ export class WalletComponent implements OnInit {
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
-        this.dataSource.data = this.wallet.transactionArray;
+
+        // "Cannot read property 'length' of undefined" error when setting to empty value.
+        if (this.wallet.transactionArray != null) {
+            this.dataSource.data = this.wallet.transactionArray;
+        }
     }
 
     public stopStaking() {

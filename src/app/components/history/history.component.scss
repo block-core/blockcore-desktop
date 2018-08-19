@@ -1,0 +1,33 @@
+.history
+{
+    .history-table {
+        width: 100%;
+    }
+
+    .transactions-table {
+        width: 100%;
+    }
+
+    .history-table-right {
+        text-align: right;
+    }
+
+    .history-form-field
+    {
+        width: calc(100% - 220px);
+    }
+
+    .history-search-button {
+        width: 90px;
+        margin-left: 20px;
+    }
+
+    .history-search-card {
+        margin-bottom: 10px;
+    }
+
+    .info-label {
+        display: inline-block;
+        padding: 10px;
+    }
+}

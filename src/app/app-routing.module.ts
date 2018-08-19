@@ -10,6 +10,7 @@ import { LoadComponent } from './components/load/load.component';
 import { NetworkComponent } from './components/network/network.component';
 import { MerchantsComponent } from './components/merchants/merchants.component';
 import { UpdateComponent } from './components/update/update.component';
+import { HistoryComponent } from './components/history/history.component';
 
 const routes: Routes = [
     {
@@ -91,6 +92,10 @@ const routes: Routes = [
     {
         path: 'account',
         loadChildren: './components/account/account.module#AccountModule'
+    },
+    {
+        path: 'history',
+        loadChildren: './components/history/history.module#HistoryModule'
     },
     {
         path: '**',

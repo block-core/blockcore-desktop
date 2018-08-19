@@ -108,6 +108,9 @@ export class WalletService {
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         let balanceResponse = response.json();
+
+                        console.log('RESPONSE: ', balanceResponse);
+
                         //TO DO - add account feature instead of using first entry in array
                         this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
                         this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;

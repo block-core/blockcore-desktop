@@ -1,0 +1,51 @@
+.block
+{
+    .content-cards
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .block-details
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .block-details-label
+    {
+        width: 120px;
+        margin-right: 20px;
+    }
+
+    .block-details-value
+    {
+    }
+
+    .block-details-card
+    {
+        margin-right: 20px;
+        margin-bottom: 20px;
+        flex: 1 1 auto;
+        width: 50%;
+    }
+
+    .block-navigate-card
+    {
+        //margin-right: 20px;
+        margin-bottom: 20px;
+        padding: 2px;
+        //flex: 1 1 auto;
+        width: 50px;
+    }
+
+    .tab-pane
+    {
+        padding: 10px;
+    }
+
+    .transactions-table {
+        width: 100%;
+    }
+
+}

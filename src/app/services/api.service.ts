@@ -159,6 +159,18 @@ export class ApiService {
       .pipe(map((response: Response) => response));
   }
 
+   /**
+   * Get general wallet info from the API once.
+   */
+  getGeneralInfoOnceTyped(data: WalletInfo): Observable<GeneralInfo> {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('Name', data.walletName);
+
+    return this.http
+      .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(map((response: Response) => <GeneralInfo>(response.json())));
+  }
+
   /**
    * Get general wallet info from the API.
    */

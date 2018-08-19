@@ -1,0 +1,49 @@
+.transaction
+{
+    .content-cards
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .transaction-details
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .transaction-details-label
+    {
+        width: 120px;
+        margin-right: 20px;
+    }
+
+    .transaction-details-value
+    {
+    }
+
+    .transaction-details-card
+    {
+        margin-right: 20px;
+        margin-bottom: 20px;
+        flex: 1 1 auto;
+        width: 50%;
+    }
+
+    .transaction-navigate-card
+    {
+        margin-bottom: 20px;
+        padding: 2px;
+        width: 50px;
+    }
+
+    .tab-pane
+    {
+        padding: 10px;
+    }
+
+    .transactions-table {
+        width: 100%;
+    }
+
+}

@@ -1,0 +1,36 @@
+<div class="content">
+
+    <div *ngIf="!transaction">Loading...</div>
+
+    <div class="content-cards" *ngIf="transaction">
+
+        <mat-card class="transaction-details-card">
+            <h2>Info</h2>
+
+            <div class="transaction-details">
+                <div class="transaction-details-label">Output</div>
+                <div class="transaction-details-value">{{transaction.output}} {{coinUnit}}</div>
+            </div>
+        </mat-card>
+
+        <mat-card class="transaction-details-card" *ngIf="transaction">
+            <h2>Details</h2>
+
+        </mat-card>
+    </div>
+
+    <mat-tab-group mat-stretch-tabs *ngIf="transaction" class="history-transaction-stretched-tabs mat-elevation-z4">
+        <mat-tab label="Inputs / Outputs">
+            <div class="tab-pane">
+                <em>Not supported. Will be available in a future update.</em>
+            </div>
+        </mat-tab>
+        <mat-tab label="Raw Transaction">
+            <div class="tab-pane">
+                <em>
+                    {{transactionJson}}
+                </em>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
