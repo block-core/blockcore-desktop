@@ -16,6 +16,6 @@ export class AboutComponent {
     @HostBinding('class.about') hostClass = true;
 
     constructor(public appState: ApplicationStateService) {
-        this.appState.pageMode = true;
+        this.appState.pageMode = false;
     }
 }

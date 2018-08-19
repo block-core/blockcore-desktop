@@ -48,7 +48,7 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        
+        this.appState.pageMode = false;
     }
 
     public onCopiedClick() {

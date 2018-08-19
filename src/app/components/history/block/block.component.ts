@@ -103,7 +103,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-
+        this.appState.pageMode = false;
     }
 
     getBlock() {
