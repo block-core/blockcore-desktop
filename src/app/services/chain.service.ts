@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Logger } from './logger.service';
 
 export interface Chain {
     name: string;
@@ -10,6 +11,7 @@ export interface Chain {
     wsPort?: number;
     network: string;
     mode?: string;
+    genesisDate?: Date;
 }
 
 @Injectable({
@@ -21,14 +23,14 @@ export class ChainService {
 
     private availableChains: Array<Chain>;
 
-    constructor() {
+    constructor(private log: Logger) {
 
         if (!ChainService.singletonInstance) {
 
             this.availableChains = [
-                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 4333, rpcPort: 4334, apiPort: 4335, wsPort: 4336, network: 'main' },
-                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 14333, rpcPort: 14334, apiPort: 14335, wsPort: 14336, network: 'regtest' },
-                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 24333, rpcPort: 24334, apiPort: 24335, wsPort: 24336, network: 'testnet' },
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 4333, rpcPort: 4334, apiPort: 4335, wsPort: 4336, network: 'main', genesisDate: new Date(2018, 6, 1) },
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 14333, rpcPort: 14334, apiPort: 14335, wsPort: 14336, network: 'regtest', genesisDate: new Date(2018, 6, 1) },
+                { name: 'City Chain', identity: 'city', tooltip: 'City Hub', port: 24333, rpcPort: 24334, apiPort: 24335, wsPort: 24336, network: 'testnet', genesisDate: new Date(2018, 6, 1) },
     
                 { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 38221, network: 'main' },
                 { name: 'Stratis', identity: 'stratis', tooltip: 'Stratis Core', apiPort: 37221, network: 'regtest' },
@@ -50,7 +52,7 @@ export class ChainService {
         let selectedChain: Chain;
 
         if (selectedChains.length === 0) {
-            console.error('The supplied coin parameter is invalid. First available chain selected as default. Argument value: ' + name);
+            this.log.error('The supplied coin parameter is invalid. First available chain selected as default. Argument value: ' + name)
             selectedChain = this.availableChains[0];
         } else {
             selectedChain = selectedChains[0];

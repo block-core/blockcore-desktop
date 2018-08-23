@@ -7,7 +7,6 @@ import { AboutComponent } from './about.component';
 import { AuthenticatedUserGuard } from '../../modules/authentication/guards/authenticated-user.guard';
 
 const routes: Routes = [
-    // { path: '', redirectTo: 'account', pathMatch: 'full'},
     {
         path: '', component: AboutComponent,
         canActivate: [AuthenticatedUserGuard],

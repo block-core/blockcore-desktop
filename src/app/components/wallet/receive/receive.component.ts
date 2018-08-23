@@ -5,6 +5,7 @@ import { GlobalService } from '../../../services/global.service';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { MatSnackBar } from '@angular/material';
 import { WalletService } from '../../../services/wallet.service';
+import { Logger } from '../../../services/logger.service';
 
 @Component({
     selector: 'app-receive',
@@ -29,6 +30,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         public readonly appState: ApplicationStateService,
         private apiService: ApiService,
         public snackBar: MatSnackBar,
+        private log: Logger,
         private wallet: WalletService,
         private globalService: GlobalService) {
 
@@ -75,16 +77,16 @@ export class ReceiveComponent implements OnInit, OnDestroy {
                     }
                 },
                 error => {
-                    console.log(error);
-                    if (error.status === 0) {
-                        // this.genericModalService.openModal(null, null);
-                    } else if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            // this.genericModalService.openModal(null, error.json().errors[0].message);
-                        }
-                    }
+                    this.log.error('Failed to get first receive address:', error);
+                    // if (error.status === 0) {
+                    //     // this.genericModalService.openModal(null, null);
+                    // } else if (error.status >= 400) {
+                    //     if (!error.json().errors[0]) {
+                    //         console.log(error);
+                    //     } else {
+                    //         // this.genericModalService.openModal(null, error.json().errors[0].message);
+                    //     }
+                    // }
                 }
             )
             ;
@@ -101,16 +103,16 @@ export class ReceiveComponent implements OnInit, OnDestroy {
                     }
                 },
                 error => {
-                    console.log(error);
-                    if (error.status === 0) {
-                        // this.genericModalService.openModal(null, null);
-                    } else if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            // this.genericModalService.openModal(null, error.json().errors[0].message);
-                        }
-                    }
+                    this.log.error('Failed to get unused receive address:', error);
+                    // if (error.status === 0) {
+                    //     // this.genericModalService.openModal(null, null);
+                    // } else if (error.status >= 400) {
+                    //     if (!error.json().errors[0]) {
+                    //         console.log(error);
+                    //     } else {
+                    //         // this.genericModalService.openModal(null, error.json().errors[0].message);
+                    //     }
+                    // }
                 }
             )
             ;
@@ -141,18 +143,18 @@ export class ReceiveComponent implements OnInit, OnDestroy {
                     }
                 },
                 error => {
-                    console.log(error);
-                    if (error.status === 0) {
-                        // this.genericModalService.openModal(null, null);
-                    } else if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            // this.genericModalService.openModal(null, error.json().errors[0].message);
-                        }
-                    }
+                    this.log.error('Failed to get addresses:', error);
+
+                    // if (error.status === 0) {
+                    //     // this.genericModalService.openModal(null, null);
+                    // } else if (error.status >= 400) {
+                    //     if (!error.json().errors[0]) {
+                    //         console.log(error);
+                    //     } else {
+                    //         // this.genericModalService.openModal(null, error.json().errors[0].message);
+                    //     }
+                    // }
                 }
-            )
-            ;
+            );
     }
 }

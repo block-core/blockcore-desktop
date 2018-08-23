@@ -8,6 +8,9 @@ export class AuthenticationService {
 
     static singletonInstance: AuthenticationService;
 
+    private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasAuthenticated());
+    private authenticated = false;
+
     constructor() {
 
         if (!AuthenticationService.singletonInstance) {
@@ -17,10 +20,6 @@ export class AuthenticationService {
         return AuthenticationService.singletonInstance;
 
     }
-
-    private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasAuthenticated());
-
-    private authenticated = false;
 
     isAuthenticated(): Observable<boolean> {
         return this.isAuthenticatedSubject.asObservable();

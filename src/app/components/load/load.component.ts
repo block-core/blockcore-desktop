@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, NgZone } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, NgZone, OnDestroy } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
@@ -8,7 +8,8 @@ import { HDNode, Transaction } from 'bitcoinjs-lib';
 import { ApiService } from '../../services/api.service';
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
-import { delay, retryWhen } from 'rxjs/operators';
+import { delay, retryWhen, catchError, retry } from 'rxjs/operators';
+import { Logger } from '../../services/logger.service';
 
 export interface ListItem {
     name: string;
@@ -21,7 +22,7 @@ export interface ListItem {
     styleUrls: ['./load.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
-export class LoadComponent {
+export class LoadComponent implements OnDestroy {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: ListItem;
@@ -38,6 +39,7 @@ export class LoadComponent {
     constructor(
         private authService: AuthenticationService,
         private router: Router,
+        private log: Logger,
         private zone: NgZone,
         private apiService: ApiService,
         private appState: ApplicationStateService) {
@@ -61,6 +63,10 @@ export class LoadComponent {
         this.remember = true;
 
         const existingMode = localStorage.getItem('Network:Mode');
+
+        //this.log.info(`Mode: ${this.selectedMode}, Network: ${this.selectedNetwork}.`);
+        this.log.info('Mode:', this.selectedMode);
+        this.log.info('Network:', this.selectedNetwork);
 
         // If user has choosen to remember mode, we'll redirect directly to login, when connected.
         if (existingMode != null) {
@@ -98,7 +104,7 @@ export class LoadComponent {
         this.zone.run(() => {
             setTimeout(() => {
                 this.delayed = true;
-            }, 8000);
+            }, 30000); // Make sure it is fairly high, we don't want users to immediatly perform advanced reset options when they don't need to.
         });
 
         this.apiSubscription = this.apiService.getWalletFiles()
@@ -111,53 +117,64 @@ export class LoadComponent {
         this.router.navigateByUrl('/login');
     }
 
+    ngOnDestroy() {
+        this.unsubscribe();
+    }
+
+    unsubscribe() {
+        if (this.apiSubscription) {
+            this.apiSubscription.unsubscribe();
+        }
+    }
+
     cancel() {
-        this.apiSubscription.unsubscribe();
+        this.unsubscribe();
+
         this.loading = false;
         this.delayed = false;
         this.appState.mode = null;
     }
 
-    simpleWalletConnect() {
-        // Meet the new stack for real-time web communication: ASP.NET Core SignalR
-        // Learn more: https://www.youtube.com/watch?v=Lws0zOaseIM
+    // simpleWalletConnect() {
+    //     // Meet the new stack for real-time web communication: ASP.NET Core SignalR
+    //     // Learn more: https://www.youtube.com/watch?v=Lws0zOaseIM
 
-        this.connection = new signalR.HubConnectionBuilder()
-            .withUrl('http://localhost:8081/wallet')
-            .build();
+    //     this.connection = new signalR.HubConnectionBuilder()
+    //         .withUrl('http://localhost:8081/wallet')
+    //         .build();
 
-        this.connection.on('ReceiveMessage', (user, message) => {
-            console.log(user);
-            console.log(message);
-        });
+    //     this.connection.on('ReceiveMessage', (user, message) => {
+    //         console.log(user);
+    //         console.log(message);
+    //     });
 
-        this.connection.on('txs', (transactions) => {
+    //     this.connection.on('txs', (transactions) => {
 
-            console.log(transactions);
+    //         console.log(transactions);
 
-            // TODO: Update a bitcore-lib fork to add support for Stratis/City Chain.
-            // var tx1 = transactions[0];
-            // var tx = bitcoin.Transaction.fromHex(tx1.value.hex);
-        });
+    //         // TODO: Update a bitcore-lib fork to add support for Stratis/City Chain.
+    //         // var tx1 = transactions[0];
+    //         // var tx = bitcoin.Transaction.fromHex(tx1.value.hex);
+    //     });
 
-        const self = this;
+    //     const self = this;
 
-        // Transport fallback functionality is now built into start.
-        this.connection.start()
-            .then(function () {
-                console.log('connection started');
-                self.connection.invoke('CreateWallet', 'cityhub-mobile-0.0.1', '2018-01-01', ['SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ']).catch(err => console.error(err.toString()));
-            })
-            .catch(error => {
-                console.error(error.message);
-            });
-    }
+    //     // Transport fallback functionality is now built into start.
+    //     this.connection.start()
+    //         .then(function () {
+    //             console.log('connection started');
+    //             self.connection.invoke('CreateWallet', 'cityhub-mobile-0.0.1', '2018-01-01', ['SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ']).catch(err => console.error(err.toString()));
+    //         })
+    //         .catch(error => {
+    //             console.error(error.message);
+    //         });
+    // }
 
-    simpleWalletWatch() {
-        this.connection.invoke('Watch', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
-    }
+    // simpleWalletWatch() {
+    //     this.connection.invoke('Watch', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
+    // }
 
-    simpleWalletBalance() {
-        this.connection.invoke('Balance', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
-    }
+    // simpleWalletBalance() {
+    //     this.connection.invoke('Balance', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
+    // }
 }

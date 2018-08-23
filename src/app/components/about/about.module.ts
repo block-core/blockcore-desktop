@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ViewAreaModule } from '../../shared/view-area/view-area.module';
 import { MaterialModule } from '../../material.module';
-import { AppServicesModule } from '../../services/services.module';
 import { RouterModule } from '@angular/router';
 import { AppSharedModule } from '../../shared/app-shared.module';
 import { AboutRoutingModule } from './about-routing.module';
@@ -17,7 +16,6 @@ import { PrivacyModule } from './privacy/privacy.module';
         CommonModule,
         RouterModule,
         HttpClientModule,
-        AppServicesModule,
         AppSharedModule,
         MaterialModule,
         ViewAreaModule,

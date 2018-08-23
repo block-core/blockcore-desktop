@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { Observable, interval } from 'rxjs';
-import { map, withLatestFrom, startWith, switchMap, } from 'rxjs/operators';
+import { Observable, interval, throwError } from 'rxjs';
+import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
-import { Mnemonic } from '../classes/mnemonic';
 import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
@@ -17,6 +16,8 @@ import { MatSnackBar } from '@angular/material';
 import { environment } from '../../environments/environment';
 import { ApplicationStateService } from './application-state.service';
 import { ChainService } from './chain.service';
+import { Logger } from './logger.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -28,64 +29,59 @@ export class ApiService {
 
   static singletonInstance: ApiService;
 
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private pollingInterval = 3000;
+  private daemon;
+
+  public apiUrl: string;
+  public genesisDate: Date;
+  public apiPort: number;
+
   constructor(private http: Http,
     private globalService: GlobalService,
     private appState: ApplicationStateService,
-    public snackBar: MatSnackBar,
+    private log: Logger,
     private chains: ChainService,
-    private electronService: ElectronService) {
+    private electronService: ElectronService,
+    public snackBar: MatSnackBar) {
 
     if (!ApiService.singletonInstance) {
       ApiService.singletonInstance = this;
     }
 
     return ApiService.singletonInstance;
-    
   }
-
-  private headers = new Headers({ 'Content-Type': 'application/json' });
-  private pollingInterval = 3000;
-  private apiPort;
-  private stratisApiUrl;
-  private daemon;
 
   /** Initialized the daemon running in the background, by sending configuration that has been picked by user, including chain, network and mode. */
   initialize() {
-
     // Get the current network (main, regtest, testnet), current blockchain (city, stratis, bitcoin) and the mode (full, light, mobile)
     var chain = this.chains.getChain(this.appState.chain, this.appState.network);
     chain.mode = this.appState.mode;
+    this.genesisDate = chain.genesisDate;
 
-    console.log(chain);
+    this.log.info('Api Service, Chain: ', chain);
 
     // For mobile mode, we won't launch any daemons.
     if (chain.mode === 'mobile') {
 
-    }
-    else {
+    } else {
       if (this.electronService.ipcRenderer) {
         this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
-        console.log('Daemon result: ', this.daemon);
+
+        if (this.daemon !== 'OK') {
+          this.snackBar.open(this.daemon, null, { duration: 10000 });
+        }
+
+        this.log.info('Daemon result: ', this.daemon);
         this.setApiPort(chain.apiPort);
       }
     }
   }
 
+  /** Set the API port to connect with full node API. This will differ depending on coin and network. */
   setApiPort(port: number) {
-    // Get the selected coin from launch parameters. If they are not available, we will use the one supplied during build,
-    // to ensure that launching a test network binary, should by default connect to testnet.
-
-    // if (environment.environment === 'TESTNET') {
-    //   this.apiPort = this.coin.apiTestPort;
-    // } else if (environment.environment === 'REGTEST')
-    // {
-    //   this.apiPort = this.coin.apiRegTestPort;  
-    // }
-    // else {
-    //   this.apiPort = this.coin.apiPort;
-    // }
-
-    this.stratisApiUrl = 'http://localhost:' + port + '/api';
+    this.apiPort = port;
+    this.apiUrl = 'http://localhost:' + port + '/api';
   }
 
   /**
@@ -93,7 +89,8 @@ export class ApiService {
    */
   getWalletFiles(): Observable<any> {
     return this.http
-      .get(this.stratisApiUrl + '/wallet/files')
+      .get(this.apiUrl + '/wallet/files')
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -107,34 +104,38 @@ export class ApiService {
     params.set('wordCount', '12');
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/mnemonic', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
   /**
-   * Create a new Stratis wallet.
+   * Create a new wallet.
    */
-  createStratisWallet(data: WalletCreation): Observable<any> {
+  createWallet(data: WalletCreation): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/wallet/create/', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
   /**
-   * Recover a Stratis wallet.
+   * Recover a wallet.
    */
-  recoverStratisWallet(data: WalletRecovery): Observable<any> {
+  recoverWallet(data: WalletRecovery): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/wallet/recover/', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
   /**
-   * Load a Stratis wallet
+   * Load a wallet
    */
-  loadStratisWallet(data: WalletLoad): Observable<any> {
+  loadWallet(data: WalletLoad): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/wallet/load/', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -143,7 +144,8 @@ export class ApiService {
    */
   getWalletStatus(): Observable<any> {
     return this.http
-      .get(this.stratisApiUrl + '/wallet/status')
+      .get(this.apiUrl + '/wallet/status')
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -155,19 +157,21 @@ export class ApiService {
     params.set('Name', data.walletName);
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
-   /**
-   * Get general wallet info from the API once.
-   */
+  /**
+  * Get general wallet info from the API once.
+  */
   getGeneralInfoOnceTyped(data: WalletInfo): Observable<GeneralInfo> {
     let params: URLSearchParams = new URLSearchParams();
     params.set('Name', data.walletName);
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => <GeneralInfo>(response.json())));
   }
 
@@ -182,7 +186,8 @@ export class ApiService {
       .pipe(startWith(0))
       //.pipe(switchMap)
       //.startWith(0)
-      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -195,7 +200,8 @@ export class ApiService {
 
     return interval(pollingInterval)
       .pipe(startWith(0))
-      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => <GeneralInfo>(response.json())));
   }
 
@@ -209,7 +215,8 @@ export class ApiService {
 
     return interval(this.pollingInterval)
       .pipe(startWith(0))
-      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/balance', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -224,7 +231,8 @@ export class ApiService {
     params.set('allowUnconfirmed', 'true');
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/maxbalance', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/maxbalance', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -238,7 +246,8 @@ export class ApiService {
 
     return interval(this.pollingInterval)
       .pipe(startWith(0))
-      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/history', new RequestOptions({ headers: this.headers, search: params }))))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -251,20 +260,22 @@ export class ApiService {
     params.set('accountName', "account 0"); //temporary
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/unusedaddress', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
-    /**
-   * Get an unused receive address for a certain wallet from the API.
-   */
+  /**
+ * Get an unused receive address for a certain wallet from the API.
+ */
   getFirstReceiveAddress(data: WalletInfo): Observable<any> {
     let params: URLSearchParams = new URLSearchParams();
     params.set('walletName', data.walletName);
     params.set('accountName', "account 0"); //temporary
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/firstaddress', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/firstaddress', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -278,7 +289,8 @@ export class ApiService {
     params.set('count', count);
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/unusedaddresses', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -291,7 +303,8 @@ export class ApiService {
     params.set('accountName', 'account 0'); //temporary
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/addresses', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -308,7 +321,8 @@ export class ApiService {
     params.set('allowUnconfirmed', 'true');
 
     return this.http
-      .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({ headers: this.headers, search: params }))
+      .get(this.apiUrl + '/wallet/estimate-txfee', new RequestOptions({ headers: this.headers, search: params }))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -317,7 +331,8 @@ export class ApiService {
    */
   buildTransaction(data: TransactionBuilding): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/wallet/build-transaction', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/wallet/build-transaction', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -326,7 +341,8 @@ export class ApiService {
    */
   sendTransaction(data: TransactionSending): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/wallet/send-transaction', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -335,7 +351,8 @@ export class ApiService {
    */
   startStaking(data: any): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/miner/startstaking', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/miner/startstaking', JSON.stringify(data), { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -345,7 +362,8 @@ export class ApiService {
   getStakingInfo(): Observable<any> {
     return interval(this.pollingInterval)
       .pipe(startWith(0))
-      .pipe(switchMap(() => this.http.get(this.stratisApiUrl + '/miner/getstakinginfo')))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/miner/getstakinginfo')))
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -354,7 +372,8 @@ export class ApiService {
     */
   stopStaking(): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/miner/stopstaking', { headers: this.headers })
+      .post(this.apiUrl + '/miner/stopstaking', { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
@@ -363,21 +382,98 @@ export class ApiService {
    */
   shutdownNode(): Observable<any> {
     return this.http
-      .post(this.stratisApiUrl + '/node/shutdown', { headers: this.headers })
+      .post(this.apiUrl + '/node/shutdown', { headers: this.headers })
+      .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
 
-  handleError(error: any) {
-    console.error(error);
+  // private handleError(error: HttpErrorResponse | any) {
+  //   if (error.error instanceof ErrorEvent) {
+  //     // A client-side or network error occurred. Handle it accordingly.
+  //     this.log.error('An error occurred:', error.error.message);
+  //   } else {
+  //     // The backend returned an unsuccessful response code.
+  //     // The response body may contain clues as to what went wrong,
+  //     this.log.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.errors}`);
+  //   }
+  //   // return an observable with a user-facing error message
+  //   return throwError('Something bad happened; please try again later.');
+  // };
 
-    if (error.status >= 400) {
-      if (!error.json().errors[0]) {
-        console.log(error);
-      } else {
-        let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
-      }
-    } else {
-      let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
+  handleError(error: HttpErrorResponse | any) {
+    if (this.log == null) {
+      console.error(error);
+      return throwError('Something bad happened; please try again later.');
     }
-  }
+
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      this.log.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      this.log.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.errors}`);
+    }
+
+    //   if (error.status === 0) {
+    //     // this.cancelSubscriptions();
+    //     // this.genericModalService.openModal(null, null);
+    // } else if (error.status >= 400) {
+    //     if (!error.json().errors[0]) {
+    //         console.log(error);
+    //     } else {
+    //         if (error.json().errors[0].description) {
+    //             // this.genericModalService.openModal(null, error.json().errors[0].message);
+    //         } else {
+    //             // this.cancelSubscriptions();
+    //             // this.startSubscriptions();
+    //         }
+    //     }
+    // }
+
+    this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+    //this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
+
+    //   if (error.status >= 400) {
+    //     if (!error.json().errors[0]) {
+    //       //console.log(error);
+    //     } else {
+    //       let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+    //     }
+    //   } else {
+    //     let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
+    //   }
+
+    // return an observable with a user-facing error message
+    return throwError('Something bad happened; please try again later.');
+  };
+
+  // handleError(error: HttpErrorResponse | any) {
+  //   this.log.error('HTTP API failure:', error);
+
+  //   if (error.error instanceof ErrorEvent) {
+  //     // A client-side or network error occurred. Handle it accordingly.
+  //     this.log.error('An error occurred:', error.error.message);
+  //   } else {
+  //     // The backend returned an unsuccessful response code.
+  //     // The response body may contain clues as to what went wrong,
+  //     this.log.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.errors}`);
+  //   }
+
+  //   if (error.status >= 400) {
+  //     if (!error.json().errors[0]) {
+  //       //console.log(error);
+  //     } else {
+  //       let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+  //     }
+  //   } else {
+  //     let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
+  //   }
+  // }
 }

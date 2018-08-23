@@ -57,7 +57,7 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
     }
 
     private getTransaction(id: string) {
-        var url = 'http://localhost:24335/api/transactions/' + id + '?api-version=2.0';
+        var url = this.apiService.apiUrl + '/transactions/' + id + '?api-version=2.0';
 
         this.http
             .get<any>(url)

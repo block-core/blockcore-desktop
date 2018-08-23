@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './login.component';
+import { AdvancedComponent } from './advanced.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
@@ -13,11 +13,11 @@ import { FormsModule } from '@angular/forms';
         MaterialModule,
     ],
     declarations: [
-        LoginComponent,
+        AdvancedComponent,
     ],
     exports: [
-        LoginComponent,
+        AdvancedComponent,
     ],
 })
-export class LoginModule {
+export class AdvancedModule {
 }

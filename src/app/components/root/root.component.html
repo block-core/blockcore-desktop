@@ -130,11 +130,11 @@
         <mat-icon>arrow_downward</mat-icon>
       </button>
 
-      <button *ngIf="!appState.pageMode && percentSyncedNumber !== 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
+      <button *ngIf="!appState.pageMode && walletService.percentSyncedNumber !== 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
         <mat-icon>cloud_download</mat-icon>
       </button>
 
-      <button *ngIf="!appState.pageMode && percentSyncedNumber === 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
+      <button *ngIf="!appState.pageMode && walletService.percentSyncedNumber === 100" mat-icon-button [matTooltip]="networkStatusTooltip" routerLink="/network">
         <mat-icon>cloud_done</mat-icon>
       </button>
 

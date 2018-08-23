@@ -10,6 +10,7 @@ import { GlobalService } from '../../../services/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PAGE_DOWN, PAGE_UP, HOME, END } from '@angular/cdk/keycodes';
 import { WalletInfo } from '../../../classes/wallet-info';
+import { Logger } from '../../../services/logger.service';
 
 @Component({
     selector: 'app-history-block',
@@ -30,8 +31,6 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @HostListener('window:keyup', ['$event'])
     keyEvent(event: KeyboardEvent) {
-        console.log(event);
-
         if (event.keyCode === PAGE_UP) {
             this.increment();
         }
@@ -53,6 +52,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
+        private log: Logger,
         private apiService: ApiService,
         public snackBar: MatSnackBar,
         private route: ActivatedRoute,
@@ -82,13 +82,18 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     }
 
     private handleError(error: HttpErrorResponse | any) {
+        if (!this.log) {
+            console.error(error);
+            return throwError('Something bad happened; please try again later.');
+        }
+
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
-            console.error('An error occurred:', error.error.message);
+            this.log.error('An error occurred:', error.error.message);
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
-            console.error(
+            this.log.error(
                 `Backend returned code ${error.status}, ` +
                 `body was: ${error.errors}`);
         }
@@ -109,8 +114,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     getBlock() {
         this.route.params.subscribe(params => {
 
-            // TODO: Get API port by current active network configuration.
-            var url = 'http://localhost:24335/api/blocks/' + params.id + '?api-version=2.0';
+            var url = this.apiService.apiUrl + '/blocks/' + params.id + '?api-version=2.0';
 
             this.http
                 .get<any[]>(url)
@@ -120,7 +124,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
                         this.block = item;
                         this.blockJson = JSON.stringify(item);
 
-                        console.log('BLOCK', item);
+                        this.log.info('BLOCK', item);
 
                         var inputs = 0;
                         var outputs = 0;

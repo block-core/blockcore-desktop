@@ -11,6 +11,7 @@ import { NetworkComponent } from './components/network/network.component';
 import { MerchantsComponent } from './components/merchants/merchants.component';
 import { UpdateComponent } from './components/update/update.component';
 import { HistoryComponent } from './components/history/history.component';
+import { AdvancedComponent } from './components/advanced/advanced.component';
 
 const routes: Routes = [
     {
@@ -23,6 +24,13 @@ const routes: Routes = [
         component: LoadComponent,
         data: {
             title: 'Setup'
+        },
+    },
+    {
+        path: 'advanced',
+        component: AdvancedComponent,
+        data: {
+            title: 'Advanced Tools'
         },
     },
     {

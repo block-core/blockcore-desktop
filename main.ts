@@ -61,7 +61,7 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     this.chain = arg;
 
     if (serve) {
-        const msg = 'City Hub was started in development mode. This requires the user to be running the Full Node Daemons himself.';
+        const msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
     } else {

@@ -1,30 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AuthenticationService } from './authentication.service';
-import { ApplicationStateService } from './application-state.service';
-import { TitleService } from './title.service';
-import { DetailsService } from './details.service';
-import { WalletService } from './wallet.service';
-import { ChainService } from './chain.service';
-import { ApiService } from './api.service';
-import { GlobalService } from './global.service';
+// import { BrowserModule } from '@angular/platform-browser';
+// import { NgModule } from '@angular/core';
+// import { AuthenticationService } from './authentication.service';
+// import { ApplicationStateService } from './application-state.service';
+// import { TitleService } from './title.service';
+// import { DetailsService } from './details.service';
+// import { WalletService } from './wallet.service';
+// import { ChainService } from './chain.service';
+// import { ApiService } from './api.service';
+// import { GlobalService } from './global.service';
 
-@NgModule({
-    declarations: [
+// @NgModule({
+//     declarations: [
 
-    ],
-    imports: [
+//     ],
+//     imports: [
 
-    ],
-    providers: [
-        // ChainService, 
-        // ApiService, 
-        // AuthenticationService, 
-        // GlobalService,
-        // ApplicationStateService, 
-        // TitleService, 
-        // DetailsService, 
-        // WalletService
-    ]
-})
-export class AppServicesModule { }
+//     ],
+//     providers: [
+
+//     ]
+// })
+// export class AppServicesModule { }

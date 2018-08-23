@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { GeneralInfo } from '../../classes/general-info';
 import { MatGridList } from '@angular/material';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
     selector: 'app-network',
@@ -16,11 +17,7 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 })
 export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     @HostBinding('class.network') hostClass = true;
-    //@ViewChild('grid') grid: MatGridList;
 
-    percentSyncedNumber = 0;
-    percentSynced = '0%';
-    generalInfo: GeneralInfo;
     columns = 4;
 
     gridByBreakpoint = {
@@ -32,17 +29,16 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     };
 
     private mediaObservable;
-    private walletObservable;
 
     constructor(private globalService: GlobalService,
         private apiService: ApiService,
         private readonly cd: ChangeDetectorRef,
-        private observableMedia: ObservableMedia) {
+        private observableMedia: ObservableMedia,
+        public walletService: WalletService) {
 
     }
 
     ngOnInit() {
-        this.getGeneralWalletInfo();
     }
 
     ngAfterContentInit() {
@@ -55,35 +51,5 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
 
     ngOnDestroy() {
         this.mediaObservable.unsubscribe();
-        this.walletObservable.unsubscribe();
-    }
-
-    private getGeneralWalletInfo() {
-        const walletInfo = new WalletInfo(this.globalService.getWalletName());
-
-        this.walletObservable = this.apiService.getGeneralInfoTyped(walletInfo, 3000)
-            .subscribe(response => {
-                this.generalInfo = response;
-
-                console.log(this.generalInfo);
-
-                // Uncomment to change the UI to simulate downloading state.
-                //this.generalInfo.lastBlockSyncedHeight = 50;
-                //this.generalInfo.isChainSynced = false;
-
-                // Translate the epoch value to a proper JavaScript date.
-                this.generalInfo.creationTime = new Date(response.creationTime * 1000);
-
-                if (this.generalInfo.lastBlockSyncedHeight) {
-                    this.percentSyncedNumber = ((this.generalInfo.lastBlockSyncedHeight / this.generalInfo.chainTip) * 100);
-                    if (this.percentSyncedNumber.toFixed(0) === '100' && this.generalInfo.lastBlockSyncedHeight !== this.generalInfo.chainTip) {
-                        this.percentSyncedNumber = 99;
-                    }
-
-                    this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
-                }
-
-                this.cd.markForCheck();
-            });
     }
 }

@@ -80,7 +80,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     }
     
     private getLatestTransactions() {
-        var url = 'http://localhost:24335/api/transactions?api-version=2.0';
+        var url = this.apiService.apiUrl + '/transactions?api-version=2.0';
 
         this.http
         .get<any[]>(url)
@@ -109,7 +109,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     }
 
     private getLatestBlocks() {
-        var url = 'http://localhost:24335/api/blocks?api-version=2.0';
+        var url = this.apiService.apiUrl + '/blocks?api-version=2.0';
 
         this.loading = true;
 

@@ -41,7 +41,8 @@
         <span class="load-text">Connecting... please wait.</span>
         <span *ngIf="delayed">
             <br>
-            <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+            <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>&nbsp;
+            <button routerLink="/advanced" mat-raised-button>Advanced</button>
         </span>
     </ng-template>
 

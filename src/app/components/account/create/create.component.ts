@@ -8,10 +8,7 @@ import { PasswordValidationDirective } from '../../../shared/directives/password
 import { WalletCreation } from '../../../classes/wallet-creation';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
-
-export interface DialogData {
-    animal: 'panda' | 'unicorn' | 'lion';
-}
+import { Logger } from '../../../services/logger.service';
 
 @Component({
     selector: 'app-account-create',
@@ -21,7 +18,6 @@ export interface DialogData {
 })
 export class CreateAccountComponent {
     @HostBinding('class.account-create') hostClass = true;
-    //@HostBinding('class') hostClass = 'account-create';
 
     public form = new FormGroup({
         accountPassword: new FormControl('', { updateOn: 'blur' }),
@@ -46,6 +42,7 @@ export class CreateAccountComponent {
     constructor(private authService: AuthenticationService,
         private router: Router,
         private fb: FormBuilder,
+        private log: Logger,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
         private globalService: GlobalService,
@@ -55,26 +52,13 @@ export class CreateAccountComponent {
 
     }
 
-    openDialog() {
-
-        // this.dialog.open(CreateAccountSuccessDialog, {
-        //     data: {
-        //         animal: 'panda'
-        //     }
-        // });
-    }
-
     public onPrint() {
         window.print();
     }
 
     public onGenerate() {
-        //this.mnemonic = '123';
-        //this.mnemonic = bip39.generateMnemonic();
-
         this.getNewMnemonic();
         this.currentDate = new Date().toDateString();
-        // var text = document.getElementById('community-private-key').value;
     }
 
     private getNewMnemonic() {
@@ -95,28 +79,24 @@ export class CreateAccountComponent {
 
     public createAccount() {
         this.saving = true;
-        console.log('CREATE ACCOUNT!');
+        this.log.info('Create account:', this.accountName);
         this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1));
     }
 
     private createWallet(wallet: WalletCreation) {
-
-        console.log('Creating wallet with: ', wallet);
+        this.log.info('Creating wallet with: ', wallet);
 
         this.apiService
-            .createStratisWallet(wallet)
+            .createWallet(wallet)
             .subscribe(
                 response => {
                     this.saving = false;
 
                     if (response.status >= 200 && response.status < 400) {
-                        console.log('Wallet Created!');
+                        this.log.info('Wallet Created!');
 
                         let snackBarRef = this.snackBar.open('Account successfully created!', null, { duration: 3000 });
                         this.router.navigateByUrl('/login');
-
-                        //this.genericModalService.openModal("Wallet Created", "Your wallet has been created.<br>Keep your secret words and password safe!");
-                        //this.router.navigateByUrl('/');
                     }
                 },
                 error => {

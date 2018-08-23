@@ -8,11 +8,6 @@
 }
 
 @media (pointer: fine) {
-    // .app-view-area::-webkit-scrollbar {
-    //     width: 5px;
-    //     height: 5px;
-    // }
-
     .app-view-area::-webkit-scrollbar-thumb {
         background: transparent;
     }

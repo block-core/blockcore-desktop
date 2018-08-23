@@ -7,6 +7,7 @@ import { TransactionInfo } from '../../classes/transaction-info';
 import { WalletInfo } from '../../classes/wallet-info';
 import { MatSnackBar } from '@angular/material';
 import { ApplicationStateService } from '../../services/application-state.service';
+import { WalletService } from '../../services/wallet.service';
 
 // Until Angular supports improved named routing and lazy-loading, we'll have to use this details controller for all details pain.
 @Component({
@@ -18,90 +19,45 @@ import { ApplicationStateService } from '../../services/application-state.servic
 export class DetailsComponent implements OnInit, OnDestroy {
     @HostBinding('class.details') hostClass = true;
 
-    // @Input() transaction: TransactionInfo;
-
     public copied = false;
     public coinUnit: string;
-    public confirmations: number;
-    private generalWalletInfoSubscription: Subscription;
-    private lastBlockSyncedHeight: number;
 
     constructor(
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
         private apiService: ApiService,
+        private walletService: WalletService,
         public snackBar: MatSnackBar,
         private globalService: GlobalService
     ) {
 
-        // this.transaction = detailsService.item;
     }
 
     get transaction(): TransactionInfo {
         return this.detailsService.item;
     }
 
+    get confirmations(): number {
+        if (this.transaction) {
+            if (this.transaction.transactionConfirmedInBlock) {
+                return this.walletService.lastBlockSyncedHeight - Number(this.transaction.transactionConfirmedInBlock) + 1;
+            } else {
+                return 0;
+            }
+        }
+
+        return 0;
+    }
+
     ngOnInit() {
-        this.startSubscriptions();
         this.coinUnit = this.globalService.getCoinUnit();
     }
 
     ngOnDestroy() {
-        this.cancelSubscriptions();
     }
 
     public onCopiedClick() {
         let snackBarRef = this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
         return false;
-    }
-
-    private getGeneralWalletInfo() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
-
-        this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
-            .subscribe(
-                response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        let generalWalletInfoResponse = response.json();
-                        this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
-                        this.getConfirmations(this.transaction);
-                    }
-                },
-                error => {
-                    console.log(error);
-                    if (error.status === 0) {
-                        // this.genericModalService.openModal(null, null);
-                    } else if (error.status >= 400) {
-                        if (!error.json().errors[0]) {
-                            console.log(error);
-                        } else {
-                            if (error.json().errors[0].description) {
-                                // this.genericModalService.openModal(null, error.json().errors[0].message);
-                            } else {
-                                this.cancelSubscriptions();
-                                this.startSubscriptions();
-                            }
-                        }
-                    }
-                }
-            );
-    }
-
-    private getConfirmations(transaction: TransactionInfo) {
-        if (transaction.transactionConfirmedInBlock) {
-            this.confirmations = this.lastBlockSyncedHeight - Number(transaction.transactionConfirmedInBlock) + 1;
-        } else {
-            this.confirmations = 0;
-        }
-    }
-
-    private cancelSubscriptions() {
-        if (this.generalWalletInfoSubscription) {
-            this.generalWalletInfoSubscription.unsubscribe();
-        }
-    }
-
-    private startSubscriptions() {
-        this.getGeneralWalletInfo();
     }
 }

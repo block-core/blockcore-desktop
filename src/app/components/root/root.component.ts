@@ -4,7 +4,6 @@ import { MatIconRegistry } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { TitleService } from '../../services/title.service';
@@ -12,11 +11,11 @@ import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { ElectronService } from 'ngx-electron';
 import { Router, NavigationEnd } from '@angular/router';
-import { delay, retryWhen } from 'rxjs/operators';
-import { WalletInfo } from '../../classes/wallet-info';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
 import { UpdateService } from '../../services/update.service';
+import { Logger } from '../../services/logger.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +35,6 @@ export class RootComponent implements OnInit, OnDestroy {
   title = 'app';
   showFiller = true;
   isActive = false;
-  networkStatusTooltip = '';
 
   coinName: string;
   coinIcon: string;
@@ -61,9 +59,11 @@ export class RootComponent implements OnInit, OnDestroy {
     private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private router: Router,
+    private log: Logger,
     private updateService: UpdateService,
     public detailsService: DetailsService,
     private apiService: ApiService,
+    private walletService: WalletService,
     private readonly cd: ChangeDetectorRef,
     private globalService: GlobalService,
     private readonly breakpointObserver: BreakpointObserver,
@@ -72,7 +72,7 @@ export class RootComponent implements OnInit, OnDestroy {
     iconRegistry.addSvgIcon('city-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/city/logo.svg'));
     iconRegistry.addSvgIcon('bitcoin-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/bitcoin/logo.svg'));
 
-    console.log('Expanded:', localStorage.getItem('Menu:Expanded'));
+    this.log.info('Expanded:', localStorage.getItem('Menu:Expanded'));
 
     this.loadFiller();
 
@@ -82,7 +82,7 @@ export class RootComponent implements OnInit, OnDestroy {
       let applicationVersion = this.electronService.remote.app.getVersion();
 
       this.appState.version = applicationVersion;
-      console.log('Version: ' + applicationVersion);
+      this.log.info('Version: ' + applicationVersion);
     }
 
     // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
@@ -96,7 +96,6 @@ export class RootComponent implements OnInit, OnDestroy {
       if (result.matches) {
         appState.handset = true;
         this.handset = true;
-        //this.showMenu = false;
         this.menuMode = 'over';
         this.showFiller = true;
       } else {
@@ -105,16 +104,13 @@ export class RootComponent implements OnInit, OnDestroy {
         this.menuOpened = true;
         this.menuMode = 'side';
         this.loadFiller();
-
       }
     });
 
     this.authService.isAuthenticated().subscribe(auth => {
       if (auth) {
         this.updateNetworkInfo();
-        this.startWalletInfoUpdates();
       } else {
-        this.stopWalletInfoUpdates();
       }
     });
 
@@ -127,6 +123,12 @@ export class RootComponent implements OnInit, OnDestroy {
       contentContainer.scrollTo(0, 0);
     });
 
+  }
+
+  get networkStatusTooltip(): string {
+    if (this.walletService.generalInfo) {
+      return 'Connections: ' + this.walletService.generalInfo.connectedNodes + '\nBlock Height: ' + this.walletService.generalInfo.chainTip + '\nSynced: ' + this.walletService.percentSynced;
+    }
   }
 
   get appTitle$(): Observable<string> {
@@ -147,12 +149,10 @@ export class RootComponent implements OnInit, OnDestroy {
 
   closeDetails(reason: string) {
     this.detailsService.hide();
-    //this.sidenav.close();
   }
 
   toggleFiller() {
     this.showFiller = !this.showFiller;
-
     localStorage.setItem('Menu:Expanded', this.showFiller ? 'true' : 'false');
   }
 
@@ -166,7 +166,7 @@ export class RootComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       // We'll check for updates in the startup of the app.
       this.checkForUpdates();
-    }, 10000);
+    }, 12000);
 
     if (this.router.url !== '/load') {
       this.router.navigateByUrl('/load');
@@ -183,43 +183,6 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.coinIcon = coinUnit + '-logo';
     this.coinName = this.globalService.getCoinName();
-  }
-
-  private stopWalletInfoUpdates() {
-    if (this.walletObservable) {
-      this.walletObservable.unsubscribe();
-    }
-  }
-
-  /** Gets the wallet status every 10 seconds, used to update the cloud status icon. */
-  private startWalletInfoUpdates() {
-    //let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.walletObservable = this.apiService.getGeneralInfoTyped(walletInfo, 10000)
-      .subscribe(response => {
-        this.generalInfo = response;
-
-        console.log(this.generalInfo);
-
-        // Uncomment to change the UI to simulate downloading state.
-        //this.generalInfo.lastBlockSyncedHeight = 50;
-        //this.generalInfo.isChainSynced = false;
-
-        // Translate the epoch value to a proper JavaScript date.
-        this.generalInfo.creationTime = new Date(response.creationTime * 1000);
-
-        if (this.generalInfo.lastBlockSyncedHeight) {
-          this.percentSyncedNumber = ((this.generalInfo.lastBlockSyncedHeight / this.generalInfo.chainTip) * 100);
-          if (this.percentSyncedNumber.toFixed(0) === '100' && this.generalInfo.lastBlockSyncedHeight !== this.generalInfo.chainTip) {
-            this.percentSyncedNumber = 99;
-          }
-
-          this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
-        }
-
-        this.networkStatusTooltip = 'Connections: ' + this.generalInfo.connectedNodes + '\nBlock Height: ' + this.generalInfo.chainTip + '\nSynced: ' + this.percentSynced;
-
-      });
   }
 
   ngOnDestroy() {

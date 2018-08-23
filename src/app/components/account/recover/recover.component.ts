@@ -6,6 +6,7 @@ import { PasswordValidationDirective } from '../../../shared/directives/password
 import { WalletRecovery } from '../../../classes/wallet-recovery';
 import { ApiService } from '../../../services/api.service';
 import { MatSnackBar } from '@angular/material';
+import { ApplicationStateService } from '../../../services/application-state.service';
 
 @Component({
     selector: 'app-account-recover',
@@ -42,11 +43,10 @@ export class RecoverAccountComponent {
     constructor(private authService: AuthenticationService,
         public snackBar: MatSnackBar,
         private router: Router,
+        private appState: ApplicationStateService,
         private apiService: ApiService) {
 
-        // TODO: Set to initial release date.
-        // This should actually be based on the choosen network, so different for City Chain, Stratis, Bitcoin and others.
-        this.minDate = new Date(2018, 6, 1);
+        this.minDate = this.apiService.genesisDate;
         this.maxDate = new Date(); // Set to current date.
 
         this.accountName = 'main';
@@ -65,7 +65,7 @@ export class RecoverAccountComponent {
 
     private recoverWallet(recoverWallet: WalletRecovery) {
         this.apiService
-            .recoverStratisWallet(recoverWallet)
+            .recoverWallet(recoverWallet)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {

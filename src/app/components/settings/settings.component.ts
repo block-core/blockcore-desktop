@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { Theming } from '../../services/theming.service';
-import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-settings',

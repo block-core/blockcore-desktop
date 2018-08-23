@@ -11,7 +11,6 @@ import { NotFoundModule } from './components/not-found/not-found.module';
 import { WalletModule } from './components/wallet/wallet.module';
 import { SettingsModule } from './components/settings/settings.module';
 import { LoginModule } from './components/login/login.module';
-import { AppServicesModule } from './services/services.module';
 import { LogoutModule } from './components/logout/logout.module';
 import { AboutModule } from './components/about/about.module';
 import { AppSharedModule } from './shared/app-shared.module';
@@ -30,6 +29,8 @@ import { environment } from '../environments/environment';
 import { ChainService } from './services/chain.service';
 import { UpdateModule } from './components/update/update.module';
 import { HistoryModule } from './components/history/history.module';
+import { AdvancedModule } from './components/advanced/advanced.module';
+import { Logger } from './services/logger.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,6 @@ import { HistoryModule } from './components/history/history.module';
     HttpModule,
     FormsModule,
     HttpClientModule,
-    AppServicesModule,
     MaterialModule,
     RootModule,
     DashboardModule,
@@ -56,6 +56,7 @@ import { HistoryModule } from './components/history/history.module';
     UpdateModule,
     MerchantsModule,
     DetailsModule,
+    AdvancedModule,
     HistoryModule,
     AppRoutingModule,
   ],
@@ -72,10 +73,8 @@ import { HistoryModule } from './components/history/history.module';
   bootstrap: [RootComponent]
 })
 export class AppModule {
-  constructor(theming: Theming) {
-
-    console.log(environment.environment);
-
+  constructor(theming: Theming, log: Logger) {
+    log.info('Environment: ' + environment.environment);
     theming.start();
   }
 }

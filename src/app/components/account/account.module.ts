@@ -4,7 +4,6 @@ import { RecoverAccountComponent } from './recover/recover.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
-import { AppServicesModule } from '../../services/services.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountRoutingModule } from './account-routing.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
@@ -13,7 +12,6 @@ import { AppSharedModule } from '../../shared/app-shared.module';
     imports: [
         CommonModule,
         RouterModule,
-        AppServicesModule,
         FormsModule,
         AppSharedModule,
         ReactiveFormsModule,

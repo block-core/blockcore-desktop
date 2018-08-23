@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject, Observable } from 'rxjs';
-// import { Logger } from '../../core/services/logging/logger.service';
+import { Logger } from './logger.service';
 // import { APP_CONFIG } from '../../core/injection-tokens/app-config-token';
 // import { AppConfig } from '../../../../environments/app-config.model';
 
@@ -18,6 +18,7 @@ export class Theming {
     static singletonInstance: Theming;
 
     constructor(
+        private readonly log: Logger,
         private readonly overlayContainer: OverlayContainer
     ) {
 
@@ -68,8 +69,10 @@ export class Theming {
 
     toggle() {
         if (this.currentTheme === Theme.Dark) {
+            this.log.verbose('Toggle theme to "Light" theme.');
             this.light();
         } else {
+            this.log.verbose('Toggle theme to "Dark" theme.');
             this.dark();
         }
     }

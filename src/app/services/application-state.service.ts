@@ -1,6 +1,6 @@
-import { Injectable, APP_INITIALIZER } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TitleService } from './title.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'

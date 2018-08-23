@@ -41,7 +41,7 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(arg.network.length < 10);
     _this.chain = arg;
     if (serve) {
-        var msg = 'City Hub was started in development mode. This requires the user to be running the Full Node Daemons himself.';
+        var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
     }

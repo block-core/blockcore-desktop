@@ -158,7 +158,7 @@ export class LoginComponent implements OnInit {
     }
 
     private loadWallet(walletLoad: WalletLoad) {
-        this.apiService.loadStratisWallet(walletLoad)
+        this.apiService.loadWallet(walletLoad)
             .subscribe(
                 response => {
                     this.unlocking = false;
