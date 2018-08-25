@@ -31,6 +31,7 @@ import { UpdateModule } from './components/update/update.module';
 import { HistoryModule } from './components/history/history.module';
 import { AdvancedModule } from './components/advanced/advanced.module';
 import { Logger } from './services/logger.service';
+import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { Logger } from './services/logger.service';
     MerchantsModule,
     DetailsModule,
     AdvancedModule,
+    PaperWalletModule,
     HistoryModule,
     AppRoutingModule,
   ],

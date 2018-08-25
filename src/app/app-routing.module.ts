@@ -12,6 +12,7 @@ import { MerchantsComponent } from './components/merchants/merchants.component';
 import { UpdateComponent } from './components/update/update.component';
 import { HistoryComponent } from './components/history/history.component';
 import { AdvancedComponent } from './components/advanced/advanced.component';
+import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
 
 const routes: Routes = [
     {
@@ -47,6 +48,14 @@ const routes: Routes = [
         // canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
             title: 'Dashboard'
+        }
+    },
+    {
+        path: 'paperwallet',
+        component: PaperWalletComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Paperwallet'
         }
     },
     {
