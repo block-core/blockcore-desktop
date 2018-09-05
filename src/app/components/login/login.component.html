@@ -20,7 +20,7 @@
                 <br>
                 <mat-form-field appearance="outline">
                     <mat-label>Account password</mat-label>
-                    <input matInput type="password" [(ngModel)]="password" placeholder="Fill out to unlock account">
+                    <input matInput type="password" (keyup.enter)="unlock()" [(ngModel)]="password" placeholder="Fill out to unlock account">
                     <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
                     <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
                 </mat-form-field>
