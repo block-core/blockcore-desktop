@@ -6,6 +6,8 @@ import { TransactionInfo } from '../classes/transaction-info';
 import { ApplicationStateService } from './application-state.service';
 import { ApiService } from './api.service';
 import { GeneralInfo } from '../classes/general-info';
+import { Logger } from './logger.service';
+import { StakingInfo } from '../classes/staking-info';
 
 @Injectable({
     providedIn: 'root'
@@ -35,13 +37,16 @@ export class WalletService {
     public isStarting: boolean;
     public isStopping: boolean;
     public hasBalance = false;
-    public generalInfo: GeneralInfo;
     public percentSyncedNumber = 0;
     public percentSynced = '0%';
+
+    public generalInfo: GeneralInfo;
+    public stakingInfo: StakingInfo;
 
     constructor(
         private apiService: ApiService,
         private globalService: GlobalService,
+        private log: Logger,
         public appState: ApplicationStateService
     ) {
 
@@ -110,6 +115,8 @@ export class WalletService {
         this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
             .subscribe(
                 response => {
+                    this.log.info('Get wallet balance:', response);
+
                     if (response.status >= 200 && response.status < 400) {
                         let balanceResponse = response.json();
                         this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
@@ -134,6 +141,8 @@ export class WalletService {
         this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
             .subscribe(
                 response => {
+                    this.log.info('Get history:', response);
+
                     if (response.status >= 200 && response.status < 400) {
                         if (!!response.json().history && response.json().history[0].transactionsHistory.length > 0) {
                             historyResponse = response.json().history[0].transactionsHistory;
@@ -187,6 +196,8 @@ export class WalletService {
         this.apiService.startStaking(walletData)
             .subscribe(
                 response => {
+                    this.log.info('Start staking:', response);
+
                     if (response.status >= 200 && response.status < 400) {
                         this.stakingEnabled = true;
                     }
@@ -205,6 +216,8 @@ export class WalletService {
         this.apiService.stopStaking()
             .subscribe(
                 response => {
+                    this.log.info('Stop staking:', response);
+
                     if (response.status >= 200 && response.status < 400) {
                         this.stakingEnabled = false;
                     }
@@ -215,12 +228,18 @@ export class WalletService {
             );
     }
 
+    // "{"enabled":true,"staking":true,"errors":null,"currentBlockSize":151,"currentBlockTx":1,"pooledTx":0,"difficulty":143238.23770936558,"searchInterval":16,"weight":173749360622480,"netStakeWeight":16433501129748,"expectedTime":6}"
+
     private getStakingInfo() {
         this.stakingInfoSubscription = this.apiService.getStakingInfo()
             .subscribe(
                 response => {
+                    this.log.info('Get staking info:', response);
+
                     if (response.status >= 200 && response.status < 400) {
-                        const stakingResponse = response.json();
+                        const stakingResponse = <StakingInfo>response.json();
+                        this.stakingInfo = stakingResponse;
+
                         this.stakingEnabled = stakingResponse.enabled;
                         this.stakingActive = stakingResponse.staking;
                         this.stakingWeight = stakingResponse.weight;
@@ -246,6 +265,8 @@ export class WalletService {
         this.generalWalletInfoSubscription = this.apiService.getGeneralInfoTyped(walletInfo)
             .subscribe(
                 response => {
+                    this.log.info('Get wallet info:', response);
+
                     this.generalInfo = response;
                     this.lastBlockSyncedHeight = this.generalInfo.lastBlockSyncedHeight;
 
@@ -297,7 +318,9 @@ export class WalletService {
         }
 
         if (dateString === "") {
-            dateString = "Unknown";
+            // If dateString is empty at this time, we'll append the seconds. Normally we don't 
+            // care to show the seconds.
+            dateString = numSeconds + ' seconds';
         }
 
         return dateString;

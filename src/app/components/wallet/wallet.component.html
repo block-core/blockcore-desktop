@@ -67,6 +67,29 @@
             <p>
                 <button type="button" mat-stroked-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
             </p>
+
+            <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Details
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Show advanced details
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+              
+                  Staking: {{wallet.stakingInfo.staking}}<br>
+                  Errors: {{wallet.stakingInfo.errors}}<br>
+                  CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
+                  CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
+                  PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
+                  Difficulty: {{wallet.stakingInfo.difficulty}}<br>
+                  Search interval: {{wallet.stakingInfo.searchInterval}}<br>
+                  
+                </mat-expansion-panel>
+              </mat-accordion>
+
         </div>
 
         <div class="wallet-split-right mat-caption">

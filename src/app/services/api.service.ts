@@ -408,16 +408,19 @@ export class ApiService {
       return throwError('Something bad happened; please try again later.');
     }
 
+    var errorMessage = '';
+
     if (error.error instanceof ErrorEvent) {
+      errorMessage = 'An error occurred:' + error.error.message;
       // A client-side or network error occurred. Handle it accordingly.
-      this.log.error('An error occurred:', error.error.message);
     } else {
+      errorMessage = `Backend returned code ${error.status}, ` +
+      `body was: ${error.errors}`;
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      this.log.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.errors}`);
     }
+
+    this.log.error(errorMessage);
 
     //   if (error.status === 0) {
     //     // this.cancelSubscriptions();
@@ -435,7 +438,7 @@ export class ApiService {
     //     }
     // }
 
-    this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
+    this.snackBar.open(errorMessage, null, { duration: 4000 });
     //this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
 
     //   if (error.status >= 400) {

@@ -1,6 +1,6 @@
 export class WalletCreation {
 
-  constructor(name: string, mnemonic: string, password: string, folderPath: string = null, passPhrase: string = null) {
+  constructor(name: string, mnemonic: string, password: string, passPhrase: string, folderPath: string = null) {
     this.name = name;
     this.mnemonic = mnemonic;
     this.password = password;
@@ -11,6 +11,6 @@ export class WalletCreation {
   name: string;
   mnemonic: string;
   password: string;
+  passPhrase: string;
   folderPath?: string;
-  passPhrase?: string;
 }

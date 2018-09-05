@@ -20,6 +20,7 @@ export class RecoverAccountComponent {
     public minDate: Date;
     public maxDate: Date;
     public mnemonic: string;
+    public seedExtension = '';
     public password1 = '';
     public password2 = '';
     public accountName = 'main';
@@ -29,6 +30,7 @@ export class RecoverAccountComponent {
 
     public form = new FormGroup({
         accountPassword: new FormControl('', { updateOn: 'blur' }),
+        seedExtension: new FormControl('', { updateOn: 'blur' }),
         accountMnemonic: new FormControl('', Validators.required),
         accountDate: new FormControl('', Validators.required),
         accountPasswordConfirmation: new FormControl('', { updateOn: 'blur' }),
@@ -58,7 +60,7 @@ export class RecoverAccountComponent {
         const recoveryDate = new Date(this.form.get('accountDate').value);
         recoveryDate.setDate(recoveryDate.getDate() - 1);
 
-        this.walletRecovery = new WalletRecovery(this.accountName, this.mnemonic, this.password1, recoveryDate);
+        this.walletRecovery = new WalletRecovery(this.accountName, this.mnemonic, this.password1, this.seedExtension, recoveryDate);
 
         this.recoverWallet(this.walletRecovery);
     }

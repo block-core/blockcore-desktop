@@ -20,6 +20,7 @@ export class CreateAccountComponent {
     @HostBinding('class.account-create') hostClass = true;
 
     public form = new FormGroup({
+        seedExtension: new FormControl('', { updateOn: 'blur' }),
         accountPassword: new FormControl('', { updateOn: 'blur' }),
         accountPasswordConfirmation: new FormControl('', { updateOn: 'blur' }),
         accountName: new FormControl('', Validators.compose([
@@ -34,6 +35,7 @@ export class CreateAccountComponent {
     public mnemonic: string;
     public password1 = '';
     public password2 = '';
+    public seedExtension = '';
     public accountName = 'main';
     public currentDate: string;
     public verification: string;
@@ -80,7 +82,7 @@ export class CreateAccountComponent {
     public createAccount() {
         this.saving = true;
         this.log.info('Create account:', this.accountName);
-        this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1));
+        this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1, this.seedExtension));
     }
 
     private createWallet(wallet: WalletCreation) {

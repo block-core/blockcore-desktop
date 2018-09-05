@@ -33,10 +33,20 @@
         </mat-card>
 
         <mat-card>
+
+            <h2 class="mat-h2">What is your personal extension word, you used when you created your account?</h2>
+
+            <p>
+                <mat-form-field class="input-full-width">
+                    <textarea matInput formControlName="seedExtension" [(ngModel)]="seedExtension" id="seedExtension" placeholder="Enter your extension word (can be empty)"></textarea>
+                </mat-form-field>
+            </p>
+        </mat-card>
+
+        <mat-card>
             <h2 class="mat-h2">What is the password for your account?</h2>
 
-            <p>You can protect your 12-word mnemonic with a personal password. Fill it out below, if you did set a password
-                when you created your account. If you left password empty before, you must leave it empty again.</p>
+            <p>You can protect your wallet (pass phrase + extension word) with a password. You can choose your own password, and you can choose something other than what you had before. You will be prompted to enter this passord every time your start City Hub.</p>
             <p>
                 <mat-form-field class="input-full-width">
                     <input matInput type="password" [formGroup]="form" [(ngModel)]="password1" placeholder="Enter your password" name="accountPassword"

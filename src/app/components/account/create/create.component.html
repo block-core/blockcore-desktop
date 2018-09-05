@@ -26,7 +26,7 @@
             </mat-step>
             <mat-step label="Pass phrase (mnemonic)" editable="true">
                 <div>
-                    <strong>Your personal pass phrase:</strong>
+                    <strong>Your pass phrase:</strong>
                     <div class="mnemonic">{{mnemonic}}
                         <button (click)="onPrint()" mat-icon-button title="Print your mnemonic">
                             <mat-icon aria-label="Print">print</mat-icon>
@@ -34,12 +34,17 @@
                     </div>
                 </div>
                 <p>
-                    It is important that you remember this sentence and save it securely. You can click the printer icon to save as PDF or print
-                    to paper, or write it down carefully and correctly.
+                    It is important that you remember this sentence (the order is important) and save it securely. You can click the printer
+                    icon to save as PDF or print to paper, or write it down carefully and correctly.
+                </p>
+                <p>
+                    <strong>IMPORTANT:</strong><br> - Never disclose this sentence to anyone.<br> - Never type this sentence
+                    on a website.<br> - Do not store it electronically.
                 </p>
                 <div>
                     <button mat-raised-button matStepperPrevious type="button">Back</button>
-                    <button mat-raised-button color="primary" [disabled]="!mnemonic" matStepperNext type="button">Yes, it is safe!</button>
+                    <button mat-raised-button color="primary" [disabled]="!mnemonic" matStepperNext type="button">Yes, it
+                        is safe!</button>
                 </div>
             </mat-step>
             <mat-step label="Verification" editable="true">
@@ -53,11 +58,35 @@
                     <button type="button" color="primary" mat-raised-button>cute</button>
                 </div>
             </mat-step>
+            <mat-step label="Extension word" editable="true">
+                <div *ngIf="mnemonic">
+                    <strong>Your personal extension word:</strong>
+                    <p>
+                        If you want to increase the security of your wallet, you can enter your personal extension word. This adds a two-factor security
+                        to your wallet, meaning that you will need both the pass phrase (mnemonic) of 12 words, which you
+                        have written down for backup, and the extension word you enter below.</p>
+                    <p>Make sure you can easily remember this extension word. If you loose it, then you will not be able
+                        to restore your wallet, even if you have a backup of the pass phrase (mnemonic). Do not overestimate
+                        your ability to remember this word.</p>
+                    <p>If you do not want to use a personal extension word, you can leave this field empty. Leaving the field
+                        empty, will allow anyone with your pass phrase (mnemonic) to restore your account.</p>
+                    <p>
+                        <mat-form-field class="input-full-width">
+                            <input matInput type="text" [formGroup]="form" [(ngModel)]="seedExtension" placeholder="Enter any extension word (can be empty)" name="seedExtension"
+                                formControlName="seedExtension">
+                        </mat-form-field>
+                    </p>
+                </div>
+                <div>
+                    <button mat-raised-button matStepperPrevious type="button">Back</button>
+                    <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+                </div>
+            </mat-step>
             <mat-step label="Password" editable="true">
                 <div *ngIf="mnemonic">
-                    <strong>Your personal password:</strong>
-                    <p>You can protect your pass phrase with a personal password. It is strongly adviced that you use a password
-                        to protect your pass phrase. This will greatly improve your safety. It is not required to use a password.
+                    <strong>Your wallet password:</strong>
+                    <p>You can protect your wallet (pass phrase + extension word) with a password. It is strongly adviced that you use a password
+                        to protect your pass phrase. This will greatly improve your safety, and it will use this password to encrypt your wallet, which is persisted to local disk. <!-- Currently full node API require password. "It is not required to use a password."" -->
                         You will be prompted to enter this passord every time your start City Hub.</p>
                     <p>
                         <mat-form-field class="input-full-width">
@@ -94,8 +123,12 @@
                 </p>
                 <div>
                     <button mat-raised-button matStepperPrevious type="button">Back</button>
-                    <button type="button" color="primary" (click)="createAccount()" matStepperNext mat-raised-button [disabled]="saving">Create account</button>
-                    <div class="spinner-container" *ngIf="saving"><mat-spinner [diameter]="24"></mat-spinner></div>
+                    <button type="button" color="primary" (click)="createAccount()" matStepperNext mat-raised-button [disabled]="saving">Create
+                        account
+                    </button>
+                    <div class="spinner-container" *ngIf="saving">
+                        <mat-spinner [diameter]="24"></mat-spinner>
+                    </div>
                 </div>
             </mat-step>
             <!-- <mat-step label="Done" editable="false">
