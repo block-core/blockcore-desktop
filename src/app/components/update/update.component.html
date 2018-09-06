@@ -13,7 +13,7 @@
             <p *ngIf="updateService.progress && updateService.progress.percent !== 100">
                 <mat-progress-bar mode="determinate" bufferValue="0" mode="buffer" [value]="updateService.progress.percent"></mat-progress-bar>
                 <br>({{updateService.progress.transferred}}/{{updateService.progress.total}})
-                <br>{{updateService.progress.bytesPerSecond}} bytes per second.
+                <br>{{updateService.progress.bytesPerSecond}}/sec.
             </p>
             <p *ngIf="updateService.progress && updateService.progress.percent === 100">
                 <mat-icon>check_circle_outline</mat-icon> Download completed!
