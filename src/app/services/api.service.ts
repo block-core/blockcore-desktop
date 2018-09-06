@@ -351,7 +351,7 @@ export class ApiService {
    */
   startStaking(data: any): Observable<any> {
     return this.http
-      .post(this.apiUrl + '/miner/startstaking', JSON.stringify(data), { headers: this.headers })
+      .post(this.apiUrl + '/staking/startstaking', JSON.stringify(data), { headers: this.headers })
       .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
@@ -362,7 +362,7 @@ export class ApiService {
   getStakingInfo(): Observable<any> {
     return interval(this.pollingInterval)
       .pipe(startWith(0))
-      .pipe(switchMap(() => this.http.get(this.apiUrl + '/miner/getstakinginfo')))
+      .pipe(switchMap(() => this.http.get(this.apiUrl + '/staking/getstakinginfo')))
       .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
@@ -372,7 +372,7 @@ export class ApiService {
     */
   stopStaking(): Observable<any> {
     return this.http
-      .post(this.apiUrl + '/miner/stopstaking', { headers: this.headers })
+      .post(this.apiUrl + '/staking/stopstaking', { headers: this.headers })
       .pipe(catchError(this.handleError))
       .pipe(map((response: Response) => response));
   }
