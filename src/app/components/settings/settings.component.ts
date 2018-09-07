@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { Theming } from '../../services/theming.service';
+import { AppModes } from '../../shared/app-modes';
 
 @Component({
     selector: 'app-settings',
@@ -16,8 +17,9 @@ export class SettingsComponent {
     selectedLanguage: string;
     selectedCurrency: string;
     selectedWalletMode: string;
+    selectedMode: string;
 
-    constructor(public readonly theme: Theming) {
+    constructor(public readonly theme: Theming, public appModes: AppModes) {
         this.selectedTheme = theme.currentTheme;
 
         if (localStorage.getItem('Settings:AutoLock') === 'false') {
@@ -29,6 +31,7 @@ export class SettingsComponent {
         }
 
         this.selectedWalletMode = localStorage.getItem('Settings:WalletMode') || 'multi';
+        this.selectedMode = localStorage.getItem('Settings:Mode') || 'basic';
     }
 
     onAutoLockChanged(event) {
@@ -46,6 +49,10 @@ export class SettingsComponent {
     }
 
     onChanged(event) {
+
+        this.appModes.activate(this.selectedMode);
+
+        localStorage.setItem('Settings:Mode', this.selectedMode);
         localStorage.setItem('Settings:WalletMode', this.selectedWalletMode);
         localStorage.setItem('Settings:Language', this.selectedLanguage);
         localStorage.setItem('Settings:Currency', this.selectedCurrency);

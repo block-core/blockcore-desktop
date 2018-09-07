@@ -16,6 +16,7 @@ import { DetailsService } from '../../services/details.service';
 import { UpdateService } from '../../services/update.service';
 import { Logger } from '../../services/logger.service';
 import { WalletService } from '../../services/wallet.service';
+import { AppModes } from '../../shared/app-modes';
 
 @Component({
   selector: 'app-root',
@@ -56,6 +57,7 @@ export class RootComponent implements OnInit, OnDestroy {
     private readonly titleService: TitleService,
     private readonly authService: AuthenticationService,
     public appState: ApplicationStateService,
+    public appModes: AppModes,
     private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private router: Router,

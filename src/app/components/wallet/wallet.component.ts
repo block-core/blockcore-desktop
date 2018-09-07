@@ -8,6 +8,7 @@ import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { TransactionInfo } from '../../classes/transaction-info';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { AppModes } from '../../shared/app-modes';
 
 @Component({
     selector: 'app-wallet',
@@ -39,6 +40,7 @@ export class WalletComponent implements OnInit {
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
         public wallet: WalletService,
+        public appModes: AppModes,
         private fb: FormBuilder
     ) {
         this.buildStakingForm();

@@ -47,30 +47,30 @@
           </button>
         </mat-menu> -->
 
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/dashboard">
+        <mat-list-item *ngIf="appModes.enabled('dashboard')" routerLinkActive="main-menu-active" routerLink="/dashboard">
           <mat-icon mat-list-icon>dashboard</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Dashboard</h4>
           <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
         </mat-list-item>
         <!-- <mat-divider></mat-divider>
       <h3 mat-subheader>Notes</h3> -->
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/wallet">
+        <mat-list-item *ngIf="appModes.enabled('wallet')" routerLinkActive="main-menu-active" routerLink="/wallet">
           <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Wallet</h4>
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
         </mat-list-item>
 
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/history">
+        <mat-list-item *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
           <mat-icon mat-list-icon>history</mat-icon>
           <h4 *ngIf="showFiller" mat-line>History</h4>
         </mat-list-item>
 
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/merchants">
+        <mat-list-item *ngIf="appModes.enabled('merchants')" routerLinkActive="main-menu-active" routerLink="/merchants">
           <mat-icon mat-list-icon>map</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Merchants</h4>
         </mat-list-item>
 
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/settings">
+        <mat-list-item *ngIf="appModes.enabled('settings')" routerLinkActive="main-menu-active" routerLink="/settings">
           <mat-icon mat-list-icon>settings</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Settings</h4>
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
@@ -81,7 +81,7 @@
           <h4 *ngIf="showFiller" mat-line>About</h4>
         </mat-list-item>
 
-        <mat-list-item routerLinkActive="main-menu-active" routerLink="/logout">
+        <mat-list-item *ngIf="appModes.enabled('logout')" routerLinkActive="main-menu-active" routerLink="/logout">
           <mat-icon mat-list-icon>power_settings_new</mat-icon>
           <h4 *ngIf="showFiller" mat-line>Log out</h4>
           <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->

@@ -43,6 +43,16 @@
                 <mat-radio-button value="app-light-theme">Light theme</mat-radio-button>
             </mat-radio-group>
 
+            <h3 class="mat-h3">Mode</h3>
+
+            <mat-form-field>
+                <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedMode">
+                    <mat-option *ngFor="let mode of appModes.available" [value]="mode.id">
+                        {{mode.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>
 

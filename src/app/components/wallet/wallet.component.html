@@ -27,7 +27,7 @@
         </div>
     </mat-card>
 
-    <mat-card *ngIf="wallet.hasBalance" class="wallet-split-card">
+    <mat-card *ngIf="wallet.hasBalance && appModes.enabled('staking')" class="wallet-split-card">
 
         <div class="wallet-split-left" *ngIf="!wallet.stakingEnabled">
             <h2 class="mat-h2">Staking</h2>
