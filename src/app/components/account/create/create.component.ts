@@ -67,10 +67,10 @@ export class CreateAccountComponent {
             .getNewMnemonic()
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.mnemonic = response.json();
-                        this.verification = this.mnemonic.split(' ')[2];
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.mnemonic = response;
+                    this.verification = this.mnemonic.split(' ')[2];
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);

@@ -1,13 +1,13 @@
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { DetailsService } from '../../../services/details.service';
 import { ApiService } from '../../../services/api.service';
 import { GlobalService } from '../../../services/global.service';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-history-transaction',
@@ -59,7 +59,7 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
         const url = this.apiService.apiUrl + '/transactions/' + id + '?api-version=2.0';
 
         this.http
-            .get<any>(url)
+            .get(url)
             .pipe(map(data => data)).subscribe(
                 item => {
                     this.transaction = item;

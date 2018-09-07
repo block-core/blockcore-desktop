@@ -71,10 +71,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         this.apiService.getFirstReceiveAddress(walletInfo)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.address = response.json();
-                        this.qrString = 'city:' + response.json();
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.address = response;
+                    this.qrString = 'city:' + response;
+                    // }
                 },
                 error => {
                     this.log.error('Failed to get first receive address:', error);
@@ -98,10 +98,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         this.apiService.getUnusedReceiveAddress(walletInfo)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.address = response.json();
-                        this.qrString = 'city:' + response.json();
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.address = response;
+                    this.qrString = 'city:' + response;
+                    // }
                 },
                 error => {
                     this.log.error('Failed to get unused receive address:', error);
@@ -125,24 +125,23 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         this.apiService.getAllAddresses(walletInfo)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.allAddresses = [];
-                        this.usedAddresses = [];
-                        this.unusedAddresses = [];
-                        this.changeAddresses = [];
-                        this.allAddresses = response.json().addresses;
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.allAddresses = [];
+                    this.usedAddresses = [];
+                    this.unusedAddresses = [];
+                    this.changeAddresses = [];
+                    this.allAddresses = response.addresses;
 
-                        for (const address of this.allAddresses) {
-                            if (address.isUsed) {
-                                this.usedAddresses.push(address.address);
-                            } else if (address.isChange) {
-                                this.changeAddresses.push(address.address);
-                            } else {
-                                this.unusedAddresses.push(address.address);
-                            }
+                    for (const address of this.allAddresses) {
+                        if (address.isUsed) {
+                            this.usedAddresses.push(address.address);
+                        } else if (address.isChange) {
+                            this.changeAddresses.push(address.address);
+                        } else {
+                            this.unusedAddresses.push(address.address);
                         }
-
                     }
+                    // }
                 },
                 error => {
                     this.log.error('Failed to get addresses:', error);

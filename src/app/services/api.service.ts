@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable, interval, throwError } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
@@ -17,7 +17,7 @@ import { environment } from '../../environments/environment';
 import { ApplicationStateService } from './application-state.service';
 import { ChainService } from './chain.service';
 import { Logger } from './logger.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -26,10 +26,9 @@ import { HttpErrorResponse } from '@angular/common/http';
     providedIn: 'root'
 })
 export class ApiService {
-
     static singletonInstance: ApiService;
 
-    private headers = new Headers({ 'Content-Type': 'application/json' });
+    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     private pollingInterval = 3000;
     private daemon;
 
@@ -37,7 +36,7 @@ export class ApiService {
     public genesisDate: Date;
     public apiPort: number;
 
-    constructor(private http: Http,
+    constructor(private http: HttpClient,
         private globalService: GlobalService,
         private appState: ApplicationStateService,
         private log: Logger,
@@ -98,13 +97,15 @@ export class ApiService {
      * Get a new mnemonic
      */
     getNewMnemonic(): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('language', 'English');
-
-        params.set('wordCount', '12');
+        const search = new HttpParams({
+            fromObject: {
+                language: 'English',
+                wordCount: '12',
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/mnemonic', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/mnemonic', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -153,11 +154,14 @@ export class ApiService {
      * Get general wallet info from the API once.
      */
     getGeneralInfoOnce(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('Name', data.walletName);
+        const search = new HttpParams({
+            fromObject: {
+                Name: data.walletName
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -166,27 +170,33 @@ export class ApiService {
     * Get general wallet info from the API once.
     */
     getGeneralInfoOnceTyped(data: WalletInfo): Observable<GeneralInfo> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('Name', data.walletName);
+        const search = new HttpParams({
+            fromObject: {
+                Name: data.walletName
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
-            .pipe(map((response: Response) => <GeneralInfo>(response.json())));
+            .pipe(map((response: GeneralInfo) => <GeneralInfo>(response)));
     }
 
     /**
      * Get general wallet info from the API.
      */
     getGeneralInfo(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('Name', data.walletName);
+        const search = new HttpParams({
+            fromObject: {
+                Name: data.walletName
+            }
+        });
 
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             // .pipe(switchMap)
             // .startWith(0)
-            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })))
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -195,27 +205,33 @@ export class ApiService {
    * Get general wallet info from the API.
    */
     getGeneralInfoTyped(data: WalletInfo, pollingInterval = this.pollingInterval): Observable<GeneralInfo> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('Name', data.walletName);
+        const search = new HttpParams({
+            fromObject: {
+                Name: data.walletName
+            }
+        });
 
         return interval(pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', new RequestOptions({ headers: this.headers, search: params }))))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })))
             .pipe(catchError(this.handleError))
-            .pipe(map((response: Response) => <GeneralInfo>(response.json())));
+            .pipe(map((response: GeneralInfo) => response));
     }
 
     /**
      * Get wallet balance info from the API.
      */
     getWalletBalance(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0');
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0'
+            }
+        });
 
         return interval(this.pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/balance', new RequestOptions({ headers: this.headers, search: params }))))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/balance', { headers: this.headers, params: search })))
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -224,14 +240,17 @@ export class ApiService {
      * Get the maximum sendable amount for a given fee from the API
      */
     getMaximumBalance(data): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0');
-        params.set('feeType', data.feeType);
-        params.set('allowUnconfirmed', 'true');
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0',
+                feeType: data.feeType,
+                allowUnconfirmed: 'true'
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/maxbalance', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/maxbalance', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -240,13 +259,16 @@ export class ApiService {
      * Get a wallets transaction history info from the API.
      */
     getWalletHistory(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0');
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0'
+            }
+        });
 
         return interval(this.pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/history', new RequestOptions({ headers: this.headers, search: params }))))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/history', { headers: this.headers, params: search })))
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -255,12 +277,15 @@ export class ApiService {
      * Get an unused receive address for a certain wallet from the API.
      */
     getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0'); // temporary
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0'
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/unusedaddress', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/unusedaddress', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -269,12 +294,15 @@ export class ApiService {
    * Get an unused receive address for a certain wallet from the API.
    */
     getFirstReceiveAddress(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0'); // temporary
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0'
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/firstaddress', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/firstaddress', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -283,13 +311,16 @@ export class ApiService {
      * Get multiple unused receive addresses for a certain wallet from the API.
      */
     getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0'); // temporary
-        params.set('count', count);
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0',
+                count: count
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/unusedaddresses', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/unusedaddresses', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -298,12 +329,15 @@ export class ApiService {
      * Get get all addresses for an account of a wallet from the API.
      */
     getAllAddresses(data: WalletInfo): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', 'account 0'); // temporary
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0'
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/addresses', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/addresses', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }
@@ -312,16 +346,19 @@ export class ApiService {
      * Estimate the fee of a transaction
      */
     estimateFee(data: FeeEstimation): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('walletName', data.walletName);
-        params.set('accountName', data.accountName);
-        params.set('destinationAddress', data.destinationAddress);
-        params.set('amount', data.amount);
-        params.set('feeType', data.feeType);
-        params.set('allowUnconfirmed', 'true');
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: data.accountName,
+                destinationAddress: data.destinationAddress,
+                amount: data.amount,
+                feeType: data.feeType,
+                allowUnconfirmed: 'true'
+            }
+        });
 
         return this.http
-            .get(this.apiUrl + '/wallet/estimate-txfee', new RequestOptions({ headers: this.headers, search: params }))
+            .get(this.apiUrl + '/wallet/estimate-txfee', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError))
             .pipe(map((response: Response) => response));
     }

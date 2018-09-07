@@ -6,9 +6,9 @@ import { Subscription } from 'rxjs';
 import { TransactionInfo } from '../../classes/transaction-info';
 import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
 import { ApplicationStateService } from '../../services/application-state.service';
-import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-history',

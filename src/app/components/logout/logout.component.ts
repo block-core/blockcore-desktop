@@ -32,9 +32,9 @@ export class LogoutComponent {
         this.apiService.stopStaking()
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        console.log('Staking was stopped.');
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    console.log('Staking was stopped.');
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);

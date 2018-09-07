@@ -22,8 +22,8 @@
         </div>
 
         <div class="wallet-split-right mat-caption">
-            When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed.
-            <br> This is normal and expected. Within a few minutes, your balance should be updated.
+            When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed.<br>
+            This is normal and expected. Within a few minutes, your balance should be updated.
         </div>
     </mat-card>
 
@@ -70,25 +70,25 @@
 
             <mat-accordion>
                 <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Details
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      Show advanced details
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-              
-                  Staking: {{wallet.stakingInfo.staking}}<br>
-                  Errors: {{wallet.stakingInfo.errors}}<br>
-                  CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
-                  CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
-                  PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
-                  Difficulty: {{wallet.stakingInfo.difficulty}}<br>
-                  Search interval: {{wallet.stakingInfo.searchInterval}}<br>
-                  
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Details
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Show advanced details
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    Staking: {{wallet.stakingInfo.staking}}<br>
+                    Errors: {{wallet.stakingInfo.errors}}<br>
+                    CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
+                    CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
+                    PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
+                    Difficulty: {{wallet.stakingInfo.difficulty}}<br>
+                    Search interval: {{wallet.stakingInfo.searchInterval}}<br>
+
                 </mat-expansion-panel>
-              </mat-accordion>
+            </mat-accordion>
 
         </div>
 
@@ -104,7 +104,7 @@
 
     <div *ngIf="wallet.isSingleAddressMode">
         <p class="mat-caption">
-            You have enabled Single-Address-Mode in settings, this changes the behavior of the transaction history. When you perform a transaction, the history below will show both 
+            You have enabled Single-Address-Mode in settings, this changes the behavior of the transaction history. When you perform a transaction, the history below will show both
             sent and received (change coins). Normally the change coins are never shown in the transaction history.
         </p>
         <br>
@@ -126,10 +126,8 @@
                         <ng-container matColumnDef="transactionType">
                             <th mat-header-cell *matHeaderCellDef> Type </th>
                             <td mat-cell *matCellDef="let transaction">
-                                <mat-icon class="wallet-confirmed-icon" matTooltip="Transaction not confirmed in any blocks yet." matTooltipPosition="right"
-                                    *ngIf="!transaction.transactionConfirmedInBlock">warning</mat-icon>
-                                <mat-icon class="wallet-confirmed-icon" matTooltip="Confirmed in block #{{transaction.transactionConfirmedInBlock}}" matTooltipPosition="right"
-                                    *ngIf="transaction.transactionConfirmedInBlock">check</mat-icon>
+                                <mat-icon class="wallet-confirmed-icon" matTooltip="Transaction not confirmed in any blocks yet." matTooltipPosition="right" *ngIf="!transaction.transactionConfirmedInBlock">warning</mat-icon>
+                                <mat-icon class="wallet-confirmed-icon" matTooltip="Confirmed in block #{{transaction.transactionConfirmedInBlock}}" matTooltipPosition="right" *ngIf="transaction.transactionConfirmedInBlock">check</mat-icon>
                                 {{transaction.transactionType}}
                             </td>
                         </ng-container>

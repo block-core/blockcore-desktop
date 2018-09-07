@@ -13,8 +13,8 @@ var autoUpdater = require('electron-updater').autoUpdater;
 // log.transports.file.streamConfig = { flags: 'w' };
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
-//const autoUpdater = require("electron-updater").autoUpdater;
-//const { autoUpdater } = require('electron-updater');
+// const autoUpdater = require("electron-updater").autoUpdater;
+// const { autoUpdater } = require('electron-updater');
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
@@ -53,16 +53,16 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
     autoUpdater.checkForUpdates();
-    //event.returnValue = 'OK';
+    // event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('download-update', function (event, arg) {
     autoUpdater.downloadUpdate();
-    //event.returnValue = 'OK';
+    // event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('install-update', function (event, arg) {
     autoUpdater.quitAndInstall();
-    //setImmediate(() => autoUpdater.quitAndInstall());
-    //event.returnValue = 'OK';
+    // setImmediate(() => autoUpdater.quitAndInstall());
+    // event.returnValue = 'OK';
 });
 autoUpdater.on('checking-for-update', function () {
     contents.send('checking-for-update');
@@ -94,8 +94,8 @@ autoUpdater.on('update-not-available', function (info) {
     //     title: 'No Updates',
     //     message: 'Current version is up-to-date.'
     // })
-    //updater.enabled = true
-    //updater = null
+    // updater.enabled = true
+    // updater = null
 });
 autoUpdater.on('update-downloaded', function (info) {
     contents.send('update-downloaded', info);
@@ -108,9 +108,9 @@ autoUpdater.on('update-downloaded', function (info) {
 });
 autoUpdater.on('download-progress', function (progressObj) {
     contents.send('download-progress', progressObj);
-    var log_message = "Download speed: " + progressObj.bytesPerSecond;
+    var log_message = 'Download speed: ' + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
 });
 function createWindow() {
@@ -166,15 +166,15 @@ electron_1.app.on('ready', function () {
 });
 function registerAutoUpdater() {
     writeLog('REGISTER AUTO UPDATER EVENTS!');
-    //autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdates();
     // autoUpdater.on('update-downloaded', (info) => {
     //     console.log('Update downloaded');
     //     setTimeout(() => {
     //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
-    //         //autoUpdater.quitAndInstall(); 
+    //         //autoUpdater.quitAndInstall();
     //     }, 10000);
     // });
-    //autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.checkForUpdatesAndNotify();
 }
 // app.on('before-quit', () => {
 //     shutdownDaemon();
@@ -229,20 +229,20 @@ function launchDaemon(apiPath, chain) {
     var daemonProcess;
     var spawnDaemon = require('child_process').spawn;
     var commandLineArguments = [];
-    commandLineArguments.push("-port=" + chain.port);
-    commandLineArguments.push("-rpcport=" + chain.rpcPort);
-    commandLineArguments.push("-apiport=" + chain.apiPort);
-    commandLineArguments.push("-wsport=" + chain.wsPort);
+    commandLineArguments.push('-port=' + chain.port);
+    commandLineArguments.push('-rpcport=' + chain.rpcPort);
+    commandLineArguments.push('-apiport=' + chain.apiPort);
+    commandLineArguments.push('-wsport=' + chain.wsPort);
     if (chain.mode === 'light') {
-        commandLineArguments.push("-light");
+        commandLineArguments.push('-light');
     }
     if (chain.network !== 'main') {
-        commandLineArguments.push("-" + chain.network); // "-testnet" or "-regtest"
+        commandLineArguments.push('-' + chain.network); // "-testnet" or "-regtest"
     }
     // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
-    //if (chain.dataDir != null)
-    //commandLineArguments.push("-datadir=" + chain.dataDir);
-    writeLog("Starting daemon with parameters: " + commandLineArguments);
+    // if (chain.dataDir != null)
+    // commandLineArguments.push("-datadir=" + chain.dataDir);
+    writeLog('Starting daemon with parameters: ' + commandLineArguments);
     daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
         detached: false
     });
@@ -309,7 +309,7 @@ function createTray() {
 }
 function writeLog(msg) {
     console.log(msg);
-    //log.info(msg);
+    // log.info(msg);
 }
 function isNumber(value) {
     return !isNaN(Number(value.toString()));

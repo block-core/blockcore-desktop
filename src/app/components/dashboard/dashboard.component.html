@@ -1,54 +1,55 @@
 <div class="content">
-  <mat-card class="dashboard-split-card">
+    <mat-card class="dashboard-split-card">
 
-    <div class="dashboard-split-left">
-      <h2>Balance</h2>
-      <p>
-        <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-        <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
-      </p>
-      <ul>
-        <li>
-          <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-          <em> (unconfirmed)</em>
-        </li>
-      </ul>
+        <div class="dashboard-split-left">
+            <h2>Balance</h2>
+            <p>
+                <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+            </p>
+            <ul>
+                <li>
+                    <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                    <em> (unconfirmed)</em>
+                </li>
+            </ul>
 
-      <p>
-          <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
-          <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
-        </p>
+            <p>
+                <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
+                <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
+            </p>
 
-    </div>
+        </div>
 
-    <div class="dashboard-split-right mat-caption">
-        When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed. This is normal and expected. Within a few minutes, your balance should be updated.
-    </div>
+        <div class="dashboard-split-right mat-caption">
+            When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed.<br>
+            This is normal and expected. Within a few minutes, your balance should be updated.
+        </div>
 
-  </mat-card>
+    </mat-card>
 
-  <!-- <mat-card>
+    <!-- <mat-card>
     <h2 class="mat-h2">Sellers in your region</h2>
     <p>No sellers in your current area.</p>
     <em>Delivered in partnership with coinmap by Trezor.</em>
   </mat-card> -->
 
-  <mat-card>
-    <h2 class="mat-h2">Buy coins</h2>
+    <mat-card>
+        <h2 class="mat-h2">Buy coins</h2>
 
-    <p>
-      You can buy coins from selected partners, and from exchanges.
-    </p>
+        <p>
+            You can buy coins from selected partners, and from exchanges.
+        </p>
 
-    <p>
-      Soon you will be able to buy City Coins directly in City Hub. Until then, please visit our website for a list of partners
-      and exchanges.
-    </p>
+        <p>
+            Soon you will be able to buy City Coins directly in City Hub. Until then, please visit our website for a list of partners
+            and exchanges.
+        </p>
 
-    <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
-  </mat-card>
+        <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
+    </mat-card>
 
-  <!-- <mat-card>
+    <!-- <mat-card>
     <h2 class="mat-h2">Add coins</h2>
 
     <p>
@@ -66,34 +67,34 @@
     <button mat-stroked-button disabled>Add Coins</button> (Coming soon)
   </mat-card> -->
 
-  <mat-card>
-    <h2 class="mat-h2">Make a paper wallet</h2>
+    <mat-card>
+        <h2 class="mat-h2">Make a paper wallet</h2>
 
-    <p>
-      If you need to store coins safely for an extended time, or if you want to give away coins as a gift, you can do so with a paperwallet.
-    </p>
+        <p>
+            If you need to store coins safely for an extended time, or if you want to give away coins as a gift, you can do so with a paperwallet.
+        </p>
 
-    <button mat-stroked-button routerLink="/paperwallet">Create Paper Wallet</button>
-  </mat-card>
+        <button mat-stroked-button routerLink="/paperwallet">Create Paper Wallet</button>
+    </mat-card>
 
-  <mat-card>
-    <h2 class="mat-h2">Sweep paper wallet</h2>
+    <mat-card>
+        <h2 class="mat-h2">Sweep paper wallet</h2>
 
-    <p>
-      You can add more coins to your wallet by sweeping paper wallets. When you sweep a paper wallet, all the coins are moved from
-      the original address and into your current wallet.
-    </p>
+        <p>
+            You can add more coins to your wallet by sweeping paper wallets. When you sweep a paper wallet, all the coins are moved from
+            the original address and into your current wallet.
+        </p>
 
-    <p>
-      After the transfer is complete, you should avoid reusing the paper wallet for security reasons.
-    </p>
+        <p>
+            After the transfer is complete, you should avoid reusing the paper wallet for security reasons.
+        </p>
 
-    <p>
-      Supported formats: WIF, BIP38, Mini private key.
-    </p>
+        <p>
+            Supported formats: WIF, BIP38, Mini private key.
+        </p>
 
-    <button mat-stroked-button disabled>Sweep Wallet</button> (Coming soon)
-  </mat-card>
+        <button mat-stroked-button disabled>Sweep Wallet</button> (Coming soon)
+    </mat-card>
 
 </div>
 

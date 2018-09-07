@@ -56,42 +56,40 @@ export class LoginComponent implements OnInit {
         this.apiService.getWalletFiles()
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        const responseMessage = response.json();
-                        this.wallets = responseMessage.walletsFiles;
-                        this.globalService.setWalletPath(responseMessage.walletsPath);
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.wallets = response.walletsFiles;
+                    this.globalService.setWalletPath(response.walletsPath);
 
-                        if (this.wallets.length > 0) {
-                            this.hasWallet = true;
-                            const lastUsedWallet = localStorage.getItem('Network:Wallet');
+                    if (this.wallets.length > 0) {
+                        this.hasWallet = true;
+                        const lastUsedWallet = localStorage.getItem('Network:Wallet');
 
-                            // tslint:disable-next-line:forin
-                            for (const wallet in this.wallets) {
-                                const id = wallet;
-                                const name = this.wallets[wallet].slice(0, -12);
+                        // tslint:disable-next-line:forin
+                        for (const wallet in this.wallets) {
+                            const id = wallet;
+                            const name = this.wallets[wallet].slice(0, -12);
+                            const account = { id: id, name: name };
 
-                                const account = { id: id, name: name };
+                            this.accounts.push(account);
 
-                                this.accounts.push(account);
-
-                                if (lastUsedWallet && lastUsedWallet === name) {
-                                    this.selectedAccount = account;
-                                }
-
-                                // this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
+                            if (lastUsedWallet && lastUsedWallet === name) {
+                                this.selectedAccount = account;
                             }
 
-                            // If no wallet has been selected, pick the first one.
-                            if (!this.selectedAccount) {
-                                this.selectedAccount = this.accounts[0];
-                            }
-
-                        } else {
-                            this.hasWallet = false;
+                            // this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
                         }
 
-                        this.cd.markForCheck();
+                        // If no wallet has been selected, pick the first one.
+                        if (!this.selectedAccount) {
+                            this.selectedAccount = this.accounts[0];
+                        }
+
+                    } else {
+                        this.hasWallet = false;
                     }
+
+                    this.cd.markForCheck();
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);
@@ -123,34 +121,34 @@ export class LoginComponent implements OnInit {
         this.apiService.getGeneralInfoOnce(walletInfo)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        const responseMessage = response.json();
+                    // if (response.status >= 200 && response.status < 400) {
+                    const responseMessage = response;
 
-                        this.globalService.setNetwork(responseMessage.network);
+                    this.globalService.setNetwork(responseMessage.network);
 
-                        if (responseMessage.network === 'CityMain') {
-                            this.globalService.setCoinName('City');
-                            this.globalService.setCoinUnit('CITY');
-                        } else if (responseMessage.network === 'CityTest') {
-                            this.globalService.setCoinName('CityTest');
-                            this.globalService.setCoinUnit('TCITY');
-                        } else if (responseMessage.network === 'CityRegTest') {
-                            this.globalService.setCoinName('CityRegTest');
-                            this.globalService.setCoinUnit('TCITY');
-                        } else if (responseMessage.network === 'StratisMain') {
-                            this.globalService.setCoinName('Stratis');
-                            this.globalService.setCoinUnit('STRAT');
-                        } else if (responseMessage.network === 'StratisTest') {
-                            this.globalService.setCoinName('TestStratis');
-                            this.globalService.setCoinUnit('TSTRAT');
-                        } else if (responseMessage.network === 'Main') {
-                            this.globalService.setCoinName('Bitcoin');
-                            this.globalService.setCoinUnit('BTC');
-                        } else if (responseMessage.network === 'Test') {
-                            this.globalService.setCoinName('BitcoinTest');
-                            this.globalService.setCoinUnit('TBTC');
-                        }
+                    if (responseMessage.network === 'CityMain') {
+                        this.globalService.setCoinName('City');
+                        this.globalService.setCoinUnit('CITY');
+                    } else if (responseMessage.network === 'CityTest') {
+                        this.globalService.setCoinName('CityTest');
+                        this.globalService.setCoinUnit('TCITY');
+                    } else if (responseMessage.network === 'CityRegTest') {
+                        this.globalService.setCoinName('CityRegTest');
+                        this.globalService.setCoinUnit('TCITY');
+                    } else if (responseMessage.network === 'StratisMain') {
+                        this.globalService.setCoinName('Stratis');
+                        this.globalService.setCoinUnit('STRAT');
+                    } else if (responseMessage.network === 'StratisTest') {
+                        this.globalService.setCoinName('TestStratis');
+                        this.globalService.setCoinUnit('TSTRAT');
+                    } else if (responseMessage.network === 'Main') {
+                        this.globalService.setCoinName('Bitcoin');
+                        this.globalService.setCoinUnit('BTC');
+                    } else if (responseMessage.network === 'Test') {
+                        this.globalService.setCoinName('BitcoinTest');
+                        this.globalService.setCoinUnit('TBTC');
                     }
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);
@@ -164,14 +162,14 @@ export class LoginComponent implements OnInit {
                 response => {
                     this.unlocking = false;
 
-                    if (response.status >= 200 && response.status < 400) {
-                        this.authService.setAuthenticated();
-                        this.wallet.start();
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.authService.setAuthenticated();
+                    this.wallet.start();
 
-                        localStorage.setItem('Network:Wallet', this.wallet.walletName);
+                    localStorage.setItem('Network:Wallet', this.wallet.walletName);
 
-                        this.router.navigateByUrl('/dashboard');
-                    }
+                    this.router.navigateByUrl('/dashboard');
+                    // }
                 },
                 error => {
                     this.wallet.stop();

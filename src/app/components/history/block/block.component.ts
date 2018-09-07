@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
-import { Subscription, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+// import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { DetailsService } from '../../../services/details.service';
@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PAGE_DOWN, PAGE_UP, HOME, END } from '@angular/cdk/keycodes';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { Logger } from '../../../services/logger.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-history-block',
@@ -81,7 +82,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/history/block/' + (this.block.height - 1));
     }
 
-    private handleError(error: HttpErrorResponse | any) {
+    private handleError(error: any) {
         if (!this.log) {
             console.error(error);
             return throwError('Something bad happened; please try again later.');

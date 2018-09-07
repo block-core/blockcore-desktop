@@ -117,17 +117,17 @@ export class WalletService {
                 response => {
                     this.log.info('Get wallet balance:', response);
 
-                    if (response.status >= 200 && response.status < 400) {
-                        const balanceResponse = response.json();
-                        this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
-                        this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+                    // if (response.status >= 200 && response.status < 400) {
+                    const balanceResponse = response;
+                    this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+                    this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
 
-                        if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
-                            this.hasBalance = true;
-                        } else {
-                            this.hasBalance = false;
-                        }
+                    if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
+                        this.hasBalance = true;
+                    } else {
+                        this.hasBalance = false;
                     }
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);
@@ -143,12 +143,12 @@ export class WalletService {
                 response => {
                     this.log.info('Get history:', response);
 
-                    if (response.status >= 200 && response.status < 400) {
-                        if (!!response.json().history && response.json().history[0].transactionsHistory.length > 0) {
-                            historyResponse = response.json().history[0].transactionsHistory;
-                            this.getTransactionInfo(historyResponse);
-                        }
+                    // if (response.status >= 200 && response.status < 400) {
+                    if (!!response.history && response.history[0].transactionsHistory.length > 0) {
+                        historyResponse = response.history[0].transactionsHistory;
+                        this.getTransactionInfo(historyResponse);
                     }
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);
@@ -218,9 +218,9 @@ export class WalletService {
                 response => {
                     this.log.info('Stop staking:', response);
 
-                    if (response.status >= 200 && response.status < 400) {
-                        this.stakingEnabled = false;
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.stakingEnabled = false;
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);
@@ -236,22 +236,22 @@ export class WalletService {
                 response => {
                     this.log.info('Get staking info:', response);
 
-                    if (response.status >= 200 && response.status < 400) {
-                        const stakingResponse = <StakingInfo>response.json();
-                        this.stakingInfo = stakingResponse;
+                    // if (response.status >= 200 && response.status < 400) {
+                    const stakingResponse = <StakingInfo>response;
+                    this.stakingInfo = stakingResponse;
 
-                        this.stakingEnabled = stakingResponse.enabled;
-                        this.stakingActive = stakingResponse.staking;
-                        this.stakingWeight = stakingResponse.weight;
-                        this.netStakingWeight = stakingResponse.netStakeWeight;
-                        this.expectedTime = stakingResponse.expectedTime;
-                        this.dateTime = this.secondsToString(this.expectedTime);
-                        if (this.stakingActive) {
-                            this.isStarting = false;
-                        } else {
-                            this.isStopping = false;
-                        }
+                    this.stakingEnabled = stakingResponse.enabled;
+                    this.stakingActive = stakingResponse.staking;
+                    this.stakingWeight = stakingResponse.weight;
+                    this.netStakingWeight = stakingResponse.netStakeWeight;
+                    this.expectedTime = stakingResponse.expectedTime;
+                    this.dateTime = this.secondsToString(this.expectedTime);
+                    if (this.stakingActive) {
+                        this.isStarting = false;
+                    } else {
+                        this.isStopping = false;
                     }
+                    // }
                 },
                 error => {
                     this.apiService.handleError(error);

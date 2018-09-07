@@ -142,9 +142,9 @@ export class SendComponent implements OnInit, OnDestroy {
             .getMaximumBalance(data)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        balanceResponse = response.json();
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    balanceResponse = response;
+                    // }
                 },
                 error => {
                     console.log(error);
@@ -179,9 +179,9 @@ export class SendComponent implements OnInit, OnDestroy {
         this.apiService.estimateFee(transaction)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.responseMessage = response.json();
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    this.responseMessage = response;
+                    // }
                 },
                 error => {
                     console.log(error);
@@ -225,10 +225,10 @@ export class SendComponent implements OnInit, OnDestroy {
             .buildTransaction(this.transaction)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        console.log(response);
-                        this.responseMessage = response.json();
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    console.log(response);
+                    this.responseMessage = response;
+                    // }
                 },
                 error => {
                     console.log(error);
@@ -312,11 +312,11 @@ export class SendComponent implements OnInit, OnDestroy {
         this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        const balanceResponse = response.json();
-                        // TO DO - add account feature instead of using first entry in array
-                        this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
-                    }
+                    // if (response.status >= 200 && response.status < 400) {
+                    const balanceResponse = response;
+                    // TO DO - add account feature instead of using first entry in array
+                    this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
+                    // }
                 },
                 error => {
                     console.log(error);

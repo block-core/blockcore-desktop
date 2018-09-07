@@ -1,8 +1,8 @@
 import { Component, HostBinding, OnDestroy, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
 import { retry, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-licenses',
@@ -46,6 +46,6 @@ export class LicensesComponent implements OnDestroy, OnInit {
                         this.cd.markForCheck();
                     },
                 ),
-        ).subscribe();
+            ).subscribe();
     }
 }
