@@ -16,7 +16,7 @@ import { Logger } from '../../../services/logger.service';
 export class ReceiveComponent implements OnInit, OnDestroy {
     @HostBinding('class.receive') hostClass = true;
 
-    public address: any = "";
+    public address: any = '';
     public qrString: any;
     public copied = false;
     public showAll = false;
@@ -41,8 +41,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.wallet.isMultiAddressMode) {
             this.getUnusedReceiveAddress();
-        }
-        else {
+        } else {
             this.getFirstReceiveAddress();
         }
     }
@@ -52,7 +51,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     public onCopiedClick() {
-        let snackBarRef = this.snackBar.open('Your address has been copied to your clipboard.', null, { duration: 3000 });
+        this.snackBar.open('Your address has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }
 
@@ -67,13 +66,14 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getFirstReceiveAddress() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName())
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
+
         this.apiService.getFirstReceiveAddress(walletInfo)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         this.address = response.json();
-                        this.qrString = "city:" + response.json();
+                        this.qrString = 'city:' + response.json();
                     }
                 },
                 error => {
@@ -93,13 +93,14 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getUnusedReceiveAddress() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName())
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
+
         this.apiService.getUnusedReceiveAddress(walletInfo)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
                         this.address = response.json();
-                        this.qrString = "city:" + response.json();
+                        this.qrString = 'city:' + response.json();
                     }
                 },
                 error => {
@@ -119,7 +120,8 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getAddresses() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName())
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
+
         this.apiService.getAllAddresses(walletInfo)
             .subscribe(
                 response => {
@@ -130,7 +132,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
                         this.changeAddresses = [];
                         this.allAddresses = response.json().addresses;
 
-                        for (let address of this.allAddresses) {
+                        for (const address of this.allAddresses) {
                             if (address.isUsed) {
                                 this.usedAddresses.push(address.address);
                             } else if (address.isChange) {

@@ -1,78 +1,78 @@
 {
-  "appId": "org.city-chain.hub",
-  "artifactName": "City.Hub-${version}-${os}-${arch}.${ext}",
-  "productName": "City Hub",
-  "asar": true,
-  "publish": [
-    {
-      "provider": "github",
-      "owner": "CityChainFoundation",
-      "repo": "city-hub"
-    }
-  ],
-  "releaseInfo": {
-    "releaseName": "City Hub ${version} (Preview Release)"
-  },
-  "files": [
-    "dist/**",
-    "main.js"
-  ],
-  "directories": {
-    "output": "build"
-  },
-  "win": {
-    "icon": "dist/assets/icon.ico",
-    "target": [
-      "nsis"
+    "appId": "org.city-chain.hub",
+    "artifactName": "City.Hub-${version}-${os}-${arch}.${ext}",
+    "productName": "City Hub",
+    "asar": true,
+    "publish": [
+        {
+            "provider": "github",
+            "owner": "CityChainFoundation",
+            "repo": "city-hub"
+        }
     ],
-    "artifactName": "City.Hub-${version}-${os}-${env.arch}.${ext}"
-  },
-  "linux": {
-    "icon": "dist/assets/images/",
-    "target": [
-      "AppImage:x64"
+    "releaseInfo": {
+        "releaseName": "City Hub ${version} (Preview Release)"
+    },
+    "files": [
+        "dist/**",
+        "main.js"
     ],
-    "synopsis": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
-    "category": "Utility"
-  },
-  "mac": {
-    "icon": "dist/assets/icon.icns",
-    "target": [
-      "dmg",
-      "zip"
-    ],
-    "category": "public.app-category.productivity"
-  },
-  "dmg": {
-    "contents": [
-      {
-        "x": 110,
-        "y": 150
-      },
-      {
-        "x": 240,
-        "y": 150,
-        "type": "link",
-        "path": "/Applications"
-      }
+    "directories": {
+        "output": "build"
+    },
+    "win": {
+        "icon": "dist/assets/icon.ico",
+        "target": [
+            "nsis"
+        ],
+        "artifactName": "City.Hub-${version}-${os}-${env.arch}.${ext}"
+    },
+    "linux": {
+        "icon": "dist/assets/images/",
+        "target": [
+            "AppImage:x64"
+        ],
+        "synopsis": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
+        "category": "Utility"
+    },
+    "mac": {
+        "icon": "dist/assets/icon.icns",
+        "target": [
+            "dmg",
+            "zip"
+        ],
+        "category": "public.app-category.productivity"
+    },
+    "dmg": {
+        "contents": [
+            {
+                "x": 110,
+                "y": 150
+            },
+            {
+                "x": 240,
+                "y": 150,
+                "type": "link",
+                "path": "/Applications"
+            }
+        ]
+    },
+    "nsis": {
+        "oneClick": false,
+        "perMachine": true,
+        "allowToChangeInstallationDirectory": true,
+        "deleteAppDataOnUninstall": true,
+        "guid": "42ba105c-858b-41cc-94bc-2b8c5ee5c6b4",
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "license": "dist/assets/license.txt"
+    },
+    "msi": {
+        "warningsAsErrors": false
+    },
+    "extraResources": [
+        "daemon/**/*",
+        "dist/assets/icon-tray.ico",
+        "dist/assets/license.txt"
     ]
-  },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": true,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": true,
-    "guid": "42ba105c-858b-41cc-94bc-2b8c5ee5c6b4",
-    "createDesktopShortcut": true,
-    "createStartMenuShortcut": true,
-    "license": "dist/assets/license.txt"
-  },
-  "msi": {
-    "warningsAsErrors": false
-  },
-  "extraResources": [
-    "daemon/**/*",
-    "dist/assets/icon-tray.ico",
-    "dist/assets/license.txt"
-  ]
 }

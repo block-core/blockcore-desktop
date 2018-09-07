@@ -44,13 +44,12 @@ export class WalletComponent implements OnInit {
         private fb: FormBuilder
     ) {
         this.buildStakingForm();
-
         this.appState.pageMode = false;
     }
 
     private buildStakingForm(): void {
         this.stakingForm = this.fb.group({
-            "walletPassword": ["", Validators.required]
+            'walletPassword': ['', Validators.required]
         });
     }
 
@@ -76,7 +75,7 @@ export class WalletComponent implements OnInit {
 
         this.detailsService.show(transaction);
 
-        //const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static", keyboard: false });
-        //modalRef.componentInstance.transaction = transaction;
+        // const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static", keyboard: false });
+        // modalRef.componentInstance.transaction = transaction;
     }
 }

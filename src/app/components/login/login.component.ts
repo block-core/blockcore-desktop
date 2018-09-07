@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private readonly cd: ChangeDetectorRef,
-        private authService: AuthenticationService, 
+        private authService: AuthenticationService,
         private router: Router,
         private globalService: GlobalService,
         private wallet: WalletService,
@@ -57,29 +57,30 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
-                        let responseMessage = response.json();
+                        const responseMessage = response.json();
                         this.wallets = responseMessage.walletsFiles;
                         this.globalService.setWalletPath(responseMessage.walletsPath);
 
                         if (this.wallets.length > 0) {
                             this.hasWallet = true;
-                            var lastUsedWallet = localStorage.getItem('Network:Wallet');
+                            const lastUsedWallet = localStorage.getItem('Network:Wallet');
 
-                            for (let wallet in this.wallets) {
-                                var id = wallet;
-                                var name = this.wallets[wallet].slice(0, -12);
+                            // tslint:disable-next-line:forin
+                            for (const wallet in this.wallets) {
+                                const id = wallet;
+                                const name = this.wallets[wallet].slice(0, -12);
 
-                                let account = { id: id, name: name };
+                                const account = { id: id, name: name };
 
                                 this.accounts.push(account);
-                                
+
                                 if (lastUsedWallet && lastUsedWallet === name) {
                                     this.selectedAccount = account;
                                 }
 
-                                //this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
+                                // this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
                             }
-                            
+
                             // If no wallet has been selected, pick the first one.
                             if (!this.selectedAccount) {
                                 this.selectedAccount = this.accounts[0];
@@ -117,13 +118,13 @@ export class LoginComponent implements OnInit {
     }
 
     private getCurrentNetwork() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
 
         this.apiService.getGeneralInfoOnce(walletInfo)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
-                        let responseMessage = response.json();
+                        const responseMessage = response.json();
 
                         this.globalService.setNetwork(responseMessage.network);
 

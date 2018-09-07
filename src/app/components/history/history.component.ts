@@ -1,10 +1,9 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DetailsService } from '../../services/details.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { Subscription } from 'rxjs';
 import { TransactionInfo } from '../../classes/transaction-info';
-import { WalletInfo } from '../../classes/wallet-info';
 import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { HttpClient } from '@angular/common/http';
@@ -71,45 +70,45 @@ export class HistoryComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-       
+
     }
 
     public onCopiedClick() {
-        let snackBarRef = this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
+        this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }
-    
+
     private getLatestTransactions() {
-        var url = this.apiService.apiUrl + '/transactions?api-version=2.0';
+        const url = this.apiService.apiUrl + '/transactions?api-version=2.0';
 
         this.http
-        .get<any[]>(url)
-        .pipe(map(data => data)).subscribe(
-            items => {
-                // Calculate the in and out, this should in the future be added to the API perhaps to easier API consumption?
-                items.forEach(tx => {
-                    var out = 0;
+            .get<any[]>(url)
+            .pipe(map(data => data)).subscribe(
+                items => {
+                    // Calculate the in and out, this should in the future be added to the API perhaps to easier API consumption?
+                    items.forEach(tx => {
+                        let out = 0;
 
-                    tx.vout.forEach(script => {
+                        tx.vout.forEach(script => {
 
-                        if (script.value) {
-                            out += script.value;
-                        }
+                            if (script.value) {
+                                out += script.value;
+                            }
+
+                        });
+
+                        tx.output = out;
 
                     });
 
-                    tx.output = out;
-
-                });
-
-                this.transactions = items;
-                this.dataSourceTransactions.data = items;
-            }
-        );
+                    this.transactions = items;
+                    this.dataSourceTransactions.data = items;
+                }
+            );
     }
 
     private getLatestBlocks() {
-        var url = this.apiService.apiUrl + '/blocks?api-version=2.0';
+        const url = this.apiService.apiUrl + '/blocks?api-version=2.0';
 
         this.loading = true;
 

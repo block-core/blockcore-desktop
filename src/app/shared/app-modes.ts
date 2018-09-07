@@ -18,21 +18,15 @@ export class AppModes {
         id: 'advanced',
         name: 'Advanced',
         features: ['dashboard', 'wallet', 'history', 'merchants', 'settings', 'logout', 'staking']
-    }
-        //, {
-        //    id: 'pos',
-        //    name: 'Point-of-Sale'
-        //}
-    ];
+    }];
 
     active: AppMode;
 
     enabled(module: string): boolean {
         return (this.active.features.indexOf(module) > -1);
     }
-    
-    activate(modeId: string)
-    {
+
+    activate(modeId: string) {
         this.active = this.available.find(m => m.id === modeId);
     }
 }

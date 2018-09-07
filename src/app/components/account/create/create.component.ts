@@ -1,12 +1,12 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, Inject } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { GlobalService } from '../../../services/global.service';
 import { ApiService } from '../../../services/api.service';
 import { PasswordValidationDirective } from '../../../shared/directives/password-validation.directive';
 import { WalletCreation } from '../../../classes/wallet-creation';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { Logger } from '../../../services/logger.service';
 
@@ -51,7 +51,6 @@ export class CreateAccountComponent {
         private apiService: ApiService) {
 
         this.onGenerate();
-
     }
 
     public onPrint() {
@@ -97,7 +96,7 @@ export class CreateAccountComponent {
                     if (response.status >= 200 && response.status < 400) {
                         this.log.info('Wallet Created!');
 
-                        let snackBarRef = this.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                        this.snackBar.open('Account successfully created!', null, { duration: 3000 });
                         this.router.navigateByUrl('/login');
                     }
                 },

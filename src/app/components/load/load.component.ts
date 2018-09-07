@@ -1,14 +1,12 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, NgZone, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
-import { HubConnectionBuilder } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import { HDNode, Transaction } from 'bitcoinjs-lib';
 import { ApiService } from '../../services/api.service';
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
-import { delay, retryWhen, catchError, retry } from 'rxjs/operators';
+import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 
 export interface ListItem {
@@ -45,17 +43,17 @@ export class LoadComponent implements OnDestroy {
         private appState: ApplicationStateService) {
 
         this.modes = [
-            //{ id: 'simple', name: 'Mobile' }, // Disabled in beta release.
-            //{ id: 'light', name: 'Light' }, // Disabled in beta release.
+            // { id: 'simple', name: 'Mobile' }, // Disabled in beta release.
+            // { id: 'light', name: 'Light' }, // Disabled in beta release.
             { id: 'full', name: 'Full' },
-            //{ id: 'pos', name: 'Point-of-Sale (POS)' },
-            //{ id: 'readonly', name: 'Read-only' }
+            // { id: 'pos', name: 'Point-of-Sale (POS)' },
+            // { id: 'readonly', name: 'Read-only' }
         ];
 
         this.networks = [
-            //{ id: 'main', name: 'Main' }, // Disabled in beta release.
+            // { id: 'main', name: 'Main' }, // Disabled in beta release.
             { id: 'testnet', name: 'Test' },
-            //{ id: 'regtest', name: 'RegTest' } // Disabled in beta release.
+            // { id: 'regtest', name: 'RegTest' } // Disabled in beta release.
         ];
 
         this.selectedMode = this.modes[0];
@@ -64,7 +62,7 @@ export class LoadComponent implements OnDestroy {
 
         const existingMode = localStorage.getItem('Network:Mode');
 
-        //this.log.info(`Mode: ${this.selectedMode}, Network: ${this.selectedNetwork}.`);
+        // this.log.info(`Mode: ${this.selectedMode}, Network: ${this.selectedNetwork}.`);
         this.log.info('Mode:', this.selectedMode);
         this.log.info('Network:', this.selectedNetwork);
 
@@ -87,8 +85,7 @@ export class LoadComponent implements OnDestroy {
         if (this.remember) {
             localStorage.setItem('Network:Mode', this.selectedMode.id);
             localStorage.setItem('Network:Network', this.selectedNetwork.id);
-        }
-        else {
+        } else {
             localStorage.removeItem('Network:Mode');
             localStorage.removeItem('Network:Network');
         }

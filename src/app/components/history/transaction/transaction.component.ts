@@ -1,13 +1,12 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { DetailsService } from '../../../services/details.service';
 import { ApiService } from '../../../services/api.service';
 import { GlobalService } from '../../../services/global.service';
-import { TransactionInfo } from '../../../classes/transaction-info';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -52,12 +51,12 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
     }
 
     public onCopiedClick() {
-        let snackBarRef = this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
+        this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }
 
     private getTransaction(id: string) {
-        var url = this.apiService.apiUrl + '/transactions/' + id + '?api-version=2.0';
+        const url = this.apiService.apiUrl + '/transactions/' + id + '?api-version=2.0';
 
         this.http
             .get<any>(url)
@@ -66,7 +65,7 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
                     this.transaction = item;
                     this.transactionJson = JSON.stringify(item);
 
-                    var out = 0;
+                    let out = 0;
 
                     if (this.transaction.vout != null) {
                         this.transaction.vout.forEach(script => {

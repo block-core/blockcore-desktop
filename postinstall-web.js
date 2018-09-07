@@ -3,18 +3,18 @@ const fs = require('fs');
 const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
 
 fs.readFile(f_angular, 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err);
-  }
-  
-  var result = data.replace(/target: "electron-renderer",/g, '');
-  var result = result.replace(/target: "web",/g, '');
-  var result = result.replace(/return \{/g, 'return {target: "web",');
+    if (err) {
+        return console.log(err);
+    }
 
-  // Fix issue with crypto, allowing crypto-libs for browser to work.
-  var result = result.replace(/node: false/g, 'node: {crypto: true, stream: true}');
+    var result = data.replace(/target: "electron-renderer",/g, '');
+    var result = result.replace(/target: "web",/g, '');
+    var result = result.replace(/return \{/g, 'return {target: "web",');
 
-  fs.writeFile(f_angular, result, 'utf8', function (err) {
-    if (err) return console.log(err);
-  });
+    // Fix issue with crypto, allowing crypto-libs for browser to work.
+    var result = result.replace(/node: false/g, 'node: {crypto: true, stream: true}');
+
+    fs.writeFile(f_angular, result, 'utf8', function (err) {
+        if (err) return console.log(err);
+    });
 });

@@ -15,7 +15,7 @@ export class MerchantsComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit() {
-        
+
     }
 
     ngOnDestroy() {

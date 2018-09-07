@@ -15,7 +15,7 @@ export class PaperWalletComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit() {
-        
+
     }
 
     ngOnDestroy() {

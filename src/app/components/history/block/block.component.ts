@@ -63,7 +63,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     }
 
     openLatest() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
         this.apiService.getGeneralInfoOnceTyped(walletInfo).subscribe(info => {
             this.open(info.lastBlockSyncedHeight);
         });
@@ -99,7 +99,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         }
         // return an observable with a user-facing error message
         return throwError('Something bad happened; please try again later.');
-    };
+    }
 
     ngOnInit() {
         this.getBlock();
@@ -114,7 +114,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     getBlock() {
         this.route.params.subscribe(params => {
 
-            var url = this.apiService.apiUrl + '/blocks/' + params.id + '?api-version=2.0';
+            const url = this.apiService.apiUrl + '/blocks/' + params.id + '?api-version=2.0';
 
             this.http
                 .get<any[]>(url)
@@ -126,12 +126,12 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
 
                         this.log.info('BLOCK', item);
 
-                        var inputs = 0;
-                        var outputs = 0;
+                        let inputs = 0;
+                        let outputs = 0;
 
                         this.block.transactions.forEach(tx => {
 
-                            var out = 0;
+                            let out = 0;
 
                             if (tx.vout != null) {
                                 outputs += tx.vout.length;
@@ -163,7 +163,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     }
 
     public onCopiedClick() {
-        let snackBarRef = this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
+        this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }
 }

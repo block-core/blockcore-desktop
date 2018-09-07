@@ -8,5 +8,5 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 })
 export class PaymentComponent {
     @HostBinding('class.payment') hostClass = true;
-    
+
 }

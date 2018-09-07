@@ -111,14 +111,14 @@ export class WalletService {
     }
 
     private getWalletBalance() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
         this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
             .subscribe(
                 response => {
                     this.log.info('Get wallet balance:', response);
 
                     if (response.status >= 200 && response.status < 400) {
-                        let balanceResponse = response.json();
+                        const balanceResponse = response.json();
                         this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
                         this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
 
@@ -136,7 +136,7 @@ export class WalletService {
     }
 
     private getHistory() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
         let historyResponse;
         this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
             .subscribe(
@@ -159,26 +159,26 @@ export class WalletService {
     private getTransactionInfo(transactions: any) {
         this.transactionArray = [];
 
-        for (let transaction of transactions) {
+        for (const transaction of transactions) {
             let transactionType;
-            if (transaction.type === "send") {
-                transactionType = "sent";
-            } else if (transaction.type === "received") {
-                transactionType = "received";
-            } else if (transaction.type === "staked") {
-                transactionType = "staked";
+            if (transaction.type === 'send') {
+                transactionType = 'sent';
+            } else if (transaction.type === 'received') {
+                transactionType = 'received';
+            } else if (transaction.type === 'staked') {
+                transactionType = 'staked';
             }
-            let transactionId = transaction.id;
-            let transactionAmount = transaction.amount;
+            const transactionId = transaction.id;
+            const transactionAmount = transaction.amount;
             let transactionFee;
             if (transaction.fee) {
                 transactionFee = transaction.fee;
             } else {
                 transactionFee = 0;
             }
-            let transactionConfirmedInBlock = transaction.confirmedInBlock;
-            let transactionTimestamp = transaction.timestamp;
-            let transactionConfirmed;
+
+            const transactionConfirmedInBlock = transaction.confirmedInBlock;
+            const transactionTimestamp = transaction.timestamp;
 
             this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
         }
@@ -260,7 +260,7 @@ export class WalletService {
     }
 
     private getGeneralWalletInfo() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
 
         this.generalWalletInfoSubscription = this.apiService.getGeneralInfoTyped(walletInfo)
             .subscribe(
@@ -287,39 +287,38 @@ export class WalletService {
     }
 
     private secondsToString(seconds: number) {
-        let numDays = Math.floor(seconds / 86400);
-        let numHours = Math.floor((seconds % 86400) / 3600);
-        let numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
-        let numSeconds = ((seconds % 86400) % 3600) % 60;
-        let dateString = "";
+        const numDays = Math.floor(seconds / 86400);
+        const numHours = Math.floor((seconds % 86400) / 3600);
+        const numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
+        const numSeconds = ((seconds % 86400) % 3600) % 60;
+        let dateString = '';
 
         if (numDays > 0) {
             if (numDays > 1) {
-                dateString += numDays + " days ";
+                dateString += numDays + ' days ';
             } else {
-                dateString += numDays + " day ";
+                dateString += numDays + ' day ';
             }
         }
 
         if (numHours > 0) {
             if (numHours > 1) {
-                dateString += numHours + " hours ";
+                dateString += numHours + ' hours ';
             } else {
-                dateString += numHours + " hour ";
+                dateString += numHours + ' hour ';
             }
         }
 
         if (numMinutes > 0) {
             if (numMinutes > 1) {
-                dateString += numMinutes + " minutes ";
+                dateString += numMinutes + ' minutes ';
             } else {
-                dateString += numMinutes + " minute ";
+                dateString += numMinutes + ' minute ';
             }
         }
 
-        if (dateString === "") {
-            // If dateString is empty at this time, we'll append the seconds. Normally we don't 
-            // care to show the seconds.
+        if (dateString === '') {
+            // If dateString is empty at this time, we'll append the seconds. Normally we don't care to show the seconds.
             dateString = numSeconds + ' seconds';
         }
 

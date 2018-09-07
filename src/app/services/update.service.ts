@@ -63,7 +63,7 @@ export class UpdateService {
     }
 
     bytesToSize(bytes: number = 0, precision: number = 1): string {
-        const  units = ['bytes', 'KB', 'MB', 'GB'];
+        const units = ['bytes', 'KB', 'MB', 'GB'];
         if (isNaN(parseFloat(String(bytes))) || !isFinite(bytes)) { return '?'; }
 
         let unit = 0;

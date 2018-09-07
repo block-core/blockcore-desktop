@@ -21,7 +21,7 @@ export class LogoutComponent {
         private apiService: ApiService,
         private appState: ApplicationStateService,
         private router: Router) {
-        
+
     }
 
     logout() {

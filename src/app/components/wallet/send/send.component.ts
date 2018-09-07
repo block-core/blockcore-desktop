@@ -61,6 +61,7 @@ export class SendComponent implements OnInit, OnDestroy {
         this.cancelSubscriptions();
     }
 
+    // tslint:disable-next-line:member-ordering
     formErrors = {
         'address': '',
         'amount': '',
@@ -68,6 +69,7 @@ export class SendComponent implements OnInit, OnDestroy {
         'password': ''
     };
 
+    // tslint:disable-next-line:member-ordering
     validationMessages = {
         'address': {
             'required': 'An address is required.',
@@ -76,7 +78,7 @@ export class SendComponent implements OnInit, OnDestroy {
         'amount': {
             'required': 'An amount is required.',
             'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-            'min': "The amount has to be more or equal to 0.00001 City.",
+            'min': 'The amount has to be more or equal to 0.00001 City.',
             'max': 'The total transaction amount exceeds your available balance.'
         },
         'fee': {
@@ -89,10 +91,10 @@ export class SendComponent implements OnInit, OnDestroy {
 
     private buildSendForm(): void {
         this.sendForm = this.fb.group({
-            "address": ["", Validators.compose([Validators.required, Validators.minLength(26)])],
-            "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])],
-            "fee": ["medium", Validators.required],
-            "password": ["", Validators.required]
+            'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+            'amount': ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])],
+            'fee': ['medium', Validators.required],
+            'password': ['', Validators.required]
         });
 
         this.sendForm.valueChanges.pipe(debounceTime(300))
@@ -107,29 +109,32 @@ export class SendComponent implements OnInit, OnDestroy {
         if (!this.sendForm) { return; }
         const form = this.sendForm;
 
+        // tslint:disable-next-line:forin
         for (const field in this.formErrors) {
             this.formErrors[field] = '';
             const control = form.get(field);
             if (control && control.dirty && !control.valid) {
                 const messages = this.validationMessages[field];
+
+                // tslint:disable-next-line:forin
                 for (const key in control.errors) {
                     this.formErrors[field] += messages[key] + ' ';
                 }
             }
         }
 
-        this.apiError = "";
+        this.apiError = '';
 
-        if (this.sendForm.get("address").valid && this.sendForm.get("amount").valid) {
+        if (this.sendForm.get('address').valid && this.sendForm.get('amount').valid) {
             this.estimateFee();
         }
     }
 
     public getMaxBalance() {
-        let data = {
+        const data = {
             walletName: this.globalService.getWalletName(),
-            feeType: this.sendForm.get("fee").value
-        }
+            feeType: this.sendForm.get('fee').value
+        };
 
         let balanceResponse;
 
@@ -145,7 +150,7 @@ export class SendComponent implements OnInit, OnDestroy {
                     console.log(error);
                     if (error.status === 0) {
                         // this.genericModalService.openModal(null, null);
-                        this.apiError = "Something went wrong while connecting to the API. Please restart the application."
+                        this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
                         this.apiService.handleError(error);
                         if (!error.json().errors[0]) {
@@ -158,16 +163,16 @@ export class SendComponent implements OnInit, OnDestroy {
                     this.sendForm.patchValue({ amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount) });
                     this.estimatedFee = balanceResponse.fee;
                 }
-            )
+            );
     }
 
     public estimateFee() {
-        let transaction = new FeeEstimation(
+        const transaction = new FeeEstimation(
             this.globalService.getWalletName(),
-            "account 0",
-            this.sendForm.get("address").value.trim(),
-            this.sendForm.get("amount").value,
-            this.sendForm.get("fee").value,
+            'account 0',
+            this.sendForm.get('address').value.trim(),
+            this.sendForm.get('amount').value,
+            this.sendForm.get('fee').value,
             true
         );
 
@@ -187,8 +192,7 @@ export class SendComponent implements OnInit, OnDestroy {
                         this.apiService.handleError(error);
 
                         if (!error.json().errors[0]) {
-                        }
-                        else {
+                        } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
                             this.apiError = error.json().errors[0].message;
                         }
@@ -204,11 +208,11 @@ export class SendComponent implements OnInit, OnDestroy {
     public buildTransaction() {
         this.transaction = new TransactionBuilding(
             this.globalService.getWalletName(),
-            "account 0",
-            this.sendForm.get("password").value,
-            this.sendForm.get("address").value.trim(),
-            this.sendForm.get("amount").value,
-            this.sendForm.get("fee").value,
+            'account 0',
+            this.sendForm.get('password').value,
+            this.sendForm.get('address').value.trim(),
+            this.sendForm.get('amount').value,
+            this.sendForm.get('fee').value,
             // TO DO: use coin notation
             this.estimatedFee / 100000000,
             true,
@@ -216,7 +220,6 @@ export class SendComponent implements OnInit, OnDestroy {
             this.wallet.isSingleAddressMode
         );
 
-        let transactionData;
 
         this.apiService
             .buildTransaction(this.transaction)
@@ -237,7 +240,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
                     if (error.status === 0) {
                         // this.genericModalService.openModal(null, null);
-                        this.apiError = "Something went wrong while connecting to the API. Please restart the application."
+                        this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
 
                         this.apiService.handleError(error);
@@ -272,7 +275,7 @@ export class SendComponent implements OnInit, OnDestroy {
     }
 
     private sendTransaction(hex: string) {
-        let transaction = new TransactionSending(hex);
+        const transaction = new TransactionSending(hex);
         this.apiService
             .sendTransaction(transaction)
             .subscribe(
@@ -286,7 +289,7 @@ export class SendComponent implements OnInit, OnDestroy {
                     this.isSending = false;
                     if (error.status === 0) {
                         // this.genericModalService.openModal(null, null);
-                        this.apiError = "Something went wrong while connecting to the API. Please restart the application."
+                        this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
 
                         this.apiService.handleError(error);
@@ -305,12 +308,12 @@ export class SendComponent implements OnInit, OnDestroy {
     }
 
     private getWalletBalance() {
-        let walletInfo = new WalletInfo(this.globalService.getWalletName());
+        const walletInfo = new WalletInfo(this.globalService.getWalletName());
         this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
             .subscribe(
                 response => {
                     if (response.status >= 200 && response.status < 400) {
-                        let balanceResponse = response.json();
+                        const balanceResponse = response.json();
                         // TO DO - add account feature instead of using first entry in array
                         this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
                     }

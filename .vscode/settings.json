@@ -1,3 +1,20 @@
 {
-    "typescript.preferences.quoteStyle": "single"
+    "typescript.preferences.quoteStyle": "single",
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.renderWhitespace": "all",
+    "editor.trimAutoWhitespace": true,
+    "editor.useTabStops": true,
+    "tslint.enable": true,
+    "editor.tabSize": 4,
+    "files.insertFinalNewline": true,
+    "editor.renderIndentGuides": true,
+    "html.format.wrapLineLength": 0,
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    },
+    "[markdown]": {
+        "editor.formatOnSave": true,
+    }
 }

@@ -1,5 +1,4 @@
-export interface StakingInfo
-{
+export interface StakingInfo {
     enabled: boolean;
     staking: boolean;
     errors: any;

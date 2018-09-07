@@ -20,7 +20,6 @@ import { Theming } from './services/theming.service';
 import { ApiService } from './services/api.service';
 import { ElectronService } from 'ngx-electron';
 import { GlobalService } from './services/global.service';
-import { HttpModule } from '@angular/http';
 import { LoadModule } from './components/load/load.module';
 import { NetworkModule } from './components/network/network.module';
 import { DetailsModule } from './components/details/details.module';
@@ -34,49 +33,47 @@ import { Logger } from './services/logger.service';
 import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
 
 @NgModule({
-  declarations: [
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpModule,
-    FormsModule,
-    HttpClientModule,
-    MaterialModule,
-    RootModule,
-    DashboardModule,
-    WalletModule,
-    SettingsModule,
-    LoginModule,
-    LogoutModule,
-    AboutModule,
-    AppSharedModule,
-    LoadModule,
-    NetworkModule,
-    NotFoundModule,
-    UpdateModule,
-    MerchantsModule,
-    DetailsModule,
-    AdvancedModule,
-    PaperWalletModule,
-    HistoryModule,
-    AppRoutingModule,
-  ],
-  exports: [
-    HttpModule
-  ],
-  providers: [
-    ApiService,
-    ChainService,
-    ElectronService,
-    GlobalService,
-    { provide: APP_TITLE, useValue: 'City Hub' },
-  ],
-  bootstrap: [RootComponent]
+    declarations: [
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpClientModule,
+        MaterialModule,
+        RootModule,
+        DashboardModule,
+        WalletModule,
+        SettingsModule,
+        LoginModule,
+        LogoutModule,
+        AboutModule,
+        AppSharedModule,
+        LoadModule,
+        NetworkModule,
+        NotFoundModule,
+        UpdateModule,
+        MerchantsModule,
+        DetailsModule,
+        AdvancedModule,
+        PaperWalletModule,
+        HistoryModule,
+        AppRoutingModule,
+    ],
+    exports: [
+    ],
+    providers: [
+        ApiService,
+        ChainService,
+        ElectronService,
+        GlobalService,
+        { provide: APP_TITLE, useValue: 'City Hub' },
+    ],
+    bootstrap: [RootComponent]
 })
 export class AppModule {
-  constructor(theming: Theming, log: Logger) {
-    log.info('Environment: ' + environment.environment);
-    theming.start();
-  }
+    constructor(theming: Theming, log: Logger) {
+        log.info('Environment: ' + environment.environment);
+        theming.start();
+    }
 }

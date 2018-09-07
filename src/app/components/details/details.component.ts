@@ -1,10 +1,8 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { DetailsService } from '../../services/details.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
-import { Subscription } from 'rxjs';
 import { TransactionInfo } from '../../classes/transaction-info';
-import { WalletInfo } from '../../classes/wallet-info';
 import { MatSnackBar } from '@angular/material';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { WalletService } from '../../services/wallet.service';
@@ -57,7 +55,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
 
     public onCopiedClick() {
-        let snackBarRef = this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
+        this.snackBar.open('The transaction ID has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }
 }

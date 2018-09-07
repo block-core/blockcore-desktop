@@ -25,8 +25,8 @@ interface Chain {
 
 // TODO: Figure out why we can't use this import style for the updater?
 // import { autoUpdater } from 'electron-updater';
-//const autoUpdater = require("electron-updater").autoUpdater;
-//const { autoUpdater } = require('electron-updater');
+// const autoUpdater = require("electron-updater").autoUpdater;
+// const { autoUpdater } = require('electron-updater');
 
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
@@ -73,28 +73,28 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
 
 ipcMain.on('check-for-update', (event, arg: Chain) => {
     autoUpdater.checkForUpdates();
-    //event.returnValue = 'OK';
+    // event.returnValue = 'OK';
 });
 
 ipcMain.on('download-update', (event, arg: Chain) => {
     autoUpdater.downloadUpdate();
-    //event.returnValue = 'OK';
+    // event.returnValue = 'OK';
 });
 
 ipcMain.on('install-update', (event, arg: Chain) => {
     autoUpdater.quitAndInstall();
-    //setImmediate(() => autoUpdater.quitAndInstall());
-    //event.returnValue = 'OK';
+    // setImmediate(() => autoUpdater.quitAndInstall());
+    // event.returnValue = 'OK';
 });
 
 autoUpdater.on('checking-for-update', () => {
     contents.send('checking-for-update');
     writeLog('Checking for update...');
-})
+});
 
 autoUpdater.on('error', (error) => {
     contents.send('update-error', error);
-})
+});
 
 autoUpdater.on('update-available', (info) => {
     contents.send('update-available', info);
@@ -113,7 +113,7 @@ autoUpdater.on('update-available', (info) => {
     //         //updater = null
     //     }
     // })
-})
+});
 
 autoUpdater.on('update-not-available', (info) => {
     contents.send('update-not-available', info);
@@ -123,9 +123,9 @@ autoUpdater.on('update-not-available', (info) => {
     //     message: 'Current version is up-to-date.'
     // })
 
-    //updater.enabled = true
-    //updater = null
-})
+    // updater.enabled = true
+    // updater = null
+});
 
 autoUpdater.on('update-downloaded', (info) => {
     contents.send('update-downloaded', info);
@@ -136,16 +136,16 @@ autoUpdater.on('update-downloaded', (info) => {
     // }, () => {
     //     setImmediate(() => autoUpdater.quitAndInstall())
     // })
-})
+});
 
 autoUpdater.on('download-progress', (progressObj) => {
     contents.send('download-progress', progressObj);
 
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
-})
+});
 
 function createWindow() {
     // Create the browser window.
@@ -210,19 +210,19 @@ app.on('ready', () => {
 
 function registerAutoUpdater() {
     writeLog('REGISTER AUTO UPDATER EVENTS!');
-    //autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdates();
 
     // autoUpdater.on('update-downloaded', (info) => {
     //     console.log('Update downloaded');
 
     //     setTimeout(() => {
     //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
-    //         //autoUpdater.quitAndInstall(); 
+    //         //autoUpdater.quitAndInstall();
     //     }, 10000);
 
     // });
 
-    //autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.checkForUpdatesAndNotify();
 }
 
 // app.on('before-quit', () => {
@@ -282,29 +282,29 @@ function getDaemonPath() {
 }
 
 function launchDaemon(apiPath: string, chain: Chain) {
-    var daemonProcess;
+    let daemonProcess;
     const spawnDaemon = require('child_process').spawn;
 
-    let commandLineArguments = [];
+    const commandLineArguments = [];
 
-    commandLineArguments.push("-port=" + chain.port);
-    commandLineArguments.push("-rpcport=" + chain.rpcPort);
-    commandLineArguments.push("-apiport=" + chain.apiPort);
-    commandLineArguments.push("-wsport=" + chain.wsPort);
+    commandLineArguments.push('-port=' + chain.port);
+    commandLineArguments.push('-rpcport=' + chain.rpcPort);
+    commandLineArguments.push('-apiport=' + chain.apiPort);
+    commandLineArguments.push('-wsport=' + chain.wsPort);
 
     if (chain.mode === 'light') {
-        commandLineArguments.push("-light");
+        commandLineArguments.push('-light');
     }
 
     if (chain.network !== 'main') {
-        commandLineArguments.push("-" + chain.network); // "-testnet" or "-regtest"
+        commandLineArguments.push('-' + chain.network); // "-testnet" or "-regtest"
     }
 
     // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
-    //if (chain.dataDir != null)
-    //commandLineArguments.push("-datadir=" + chain.dataDir);
+    // if (chain.dataDir != null)
+    // commandLineArguments.push("-datadir=" + chain.dataDir);
 
-    writeLog("Starting daemon with parameters: " + commandLineArguments);
+    writeLog('Starting daemon with parameters: ' + commandLineArguments);
 
     daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
         detached: false
@@ -322,7 +322,7 @@ function shutdownDaemon() {
     }
 
     if (process.platform !== 'darwin' && !serve) {
-        var http = require('http');
+        const http = require('http');
         const options = {
             hostname: 'localhost',
             port: chain.apiPort,
@@ -345,7 +345,7 @@ function createTray() {
         trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + coin.identity + '/icon-tray.png'));
     }
 
-    let systemTray = new Tray(trayIcon);
+    const systemTray = new Tray(trayIcon);
 
     const contextMenu = Menu.buildFromTemplate([
         {
@@ -384,7 +384,7 @@ function createTray() {
 
 function writeLog(msg) {
     console.log(msg);
-    //log.info(msg);
+    // log.info(msg);
 }
 
 function isNumber(value: string | number): boolean {

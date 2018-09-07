@@ -57,6 +57,7 @@ export class Logger {
                 console.log(`[City Hub] ${message}`, ...args);
                 break;
             case LogLevel.Info:
+                // tslint:disable-next-line:no-console
                 console.info(`[City Hub] ${message}`, ...args);
                 break;
             case LogLevel.Warn:
