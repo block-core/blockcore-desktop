@@ -44,11 +44,6 @@ export class UpdateService {
 
             this.ipc.on('download-progress', (event, progress) => {
                 console.log('download-progress: ', progress);
-                for (const key in progress) {
-                    if (key !== 'percent') {
-                        progress[key] = this.bytesToSize(progress[key], (key === 'bytesPerSecond') ? 0 : 1);
-                    }
-                }
                 this.progress = progress;
             });
 
@@ -60,20 +55,6 @@ export class UpdateService {
         }
 
         return UpdateService.singletonInstance;
-    }
-
-    bytesToSize(bytes: number = 0, precision: number = 1): string {
-        const units = ['bytes', 'KB', 'MB', 'GB'];
-        if (isNaN(parseFloat(String(bytes))) || !isFinite(bytes)) { return '?'; }
-
-        let unit = 0;
-
-        while (bytes >= 1024) {
-            bytes /= 1024;
-            unit++;
-        }
-
-        return bytes.toFixed(+precision) + ' ' + units[unit];
     }
 
     checkForUpdate() {
