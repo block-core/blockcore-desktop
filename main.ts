@@ -17,17 +17,6 @@ interface Chain {
     mode?: string;
 }
 
-// const log = require('electron-log');
-// autoUpdater.logger = log;
-// log.transports.file.level = 'info';
-// log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
-// log.transports.file.streamConfig = { flags: 'w' };
-
-// TODO: Figure out why we can't use this import style for the updater?
-// import { autoUpdater } from 'electron-updater';
-// const autoUpdater = require("electron-updater").autoUpdater;
-// const { autoUpdater } = require('electron-updater');
-
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 

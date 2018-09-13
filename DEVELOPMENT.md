@@ -53,7 +53,7 @@ to a public released and tested version of the City Chain daemon.
 Continuous integration is handled using Visual Studio Team Services and YAML. CI build scripts are localted in the .vsts-ci.yml file and
 the build.yml. These files are used for multi-platform builds, that runs on different OS agents on VSTS.
 
-Check out the [city-chain](https://citychain.visualstudio.com/city-chain/) project for build pipelines and more.
+Check out the [city-chain](https://dev.azure.com/citychain/city-chain/) project for build pipelines and more.
 
 ## Security
 

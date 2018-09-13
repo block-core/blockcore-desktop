@@ -6,8 +6,8 @@ Your portal into City Chain
 
 [![VSTS build status][1]][2]
 
-[1]: https://citychain.visualstudio.com/city-chain/_apis/build/status/2?branch=master
-[2]: https://citychain.visualstudio.com/city-chain/_build/latest?definitionId=2&branch=master
+[1]: https://dev.azure.com/citychain/city-chain/_apis/build/status/CityChainFoundation.city-hub
+[2]: https://dev.azure.com/citychain/city-chain/_build/latest?definitionId=6
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
