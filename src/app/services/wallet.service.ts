@@ -197,10 +197,7 @@ export class WalletService {
             .subscribe(
                 response => {
                     this.log.info('Start staking:', response);
-
-                    if (response.status >= 200 && response.status < 400) {
-                        this.stakingEnabled = true;
-                    }
+                    this.stakingEnabled = true;
                 },
                 error => {
                     this.isStarting = false;

@@ -92,13 +92,9 @@ export class CreateAccountComponent {
             .subscribe(
                 response => {
                     this.saving = false;
-
-                    if (response.status >= 200 && response.status < 400) {
-                        this.log.info('Wallet Created!');
-
-                        this.snackBar.open('Account successfully created!', null, { duration: 3000 });
-                        this.router.navigateByUrl('/login');
-                    }
+                    this.log.info('Wallet Created!');
+                    this.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                    this.router.navigateByUrl('/login');
                 },
                 error => {
                     this.saving = false;

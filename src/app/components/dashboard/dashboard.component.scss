@@ -9,8 +9,27 @@
         }
     }
 
+    div[fxLayoutAlign] { padding:10px; padding-left: 25px; padding-top:15px;}
+
+    .dashboard-card {
+        //height: 100%;
+        //margin: 20px;
+        //min-height: 300px;
+        //width: 100%;
+    }
+
+    .mat-grid-tile .mat-figure
+    {
+        align-items: flex-start;
+    }
+
     .dashboard-coinmap {
         min-height: 200px;
+    }
+
+    .dashboard-info-icon {
+        float: right;
+        cursor: default;
     }
 
     .transaction-details-button

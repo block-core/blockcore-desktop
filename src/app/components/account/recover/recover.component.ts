@@ -70,11 +70,9 @@ export class RecoverAccountComponent {
             .recoverWallet(recoverWallet)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        this.snackBar.open('Your wallet has been recovered.', null, { duration: 3000 });
-                        localStorage.setItem('Network:Wallet', recoverWallet.name);
-                        this.router.navigateByUrl('/login');
-                    }
+                    this.snackBar.open('Your wallet has been recovered.', null, { duration: 3000 });
+                    localStorage.setItem('Network:Wallet', recoverWallet.name);
+                    this.router.navigateByUrl('/login');
                 },
                 error => {
                     this.saving = false;

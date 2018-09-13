@@ -1,5 +1,29 @@
 <div class="content">
 
+    <mat-card>
+        <mat-icon class="wallet-info-icon" [matTooltip]="walletInfo">info</mat-icon>
+        <mat-card-title>Balance</mat-card-title>
+        <mat-card-subtitle>The balance of your wallet.</mat-card-subtitle>
+        <mat-card-content>
+            <p>
+                <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+            </p>
+            <ul>
+                <li>
+                    <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                    <em> (unconfirmed)</em>
+                </li>
+            </ul>
+
+            <p>
+                <button mat-stroked-button color="primary" routerLink="/wallet/send">Send</button>&nbsp;
+                <button mat-stroked-button color="primary" routerLink="/wallet/receive">Receive</button>&nbsp;
+            </p>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- 
     <mat-card class="wallet-split-card">
         <div class="wallet-split-left">
             <h2 class="mat-h2">Balance</h2>
@@ -25,7 +49,7 @@
             When you send coins, due to the nature of how blockchain technology works, your existing coins can go from confirmed to unconfirmed.<br>
             This is normal and expected. Within a few minutes, your balance should be updated.
         </div>
-    </mat-card>
+    </mat-card> -->
 
     <mat-card *ngIf="wallet.hasBalance && appModes.enabled('staking')" class="wallet-split-card">
 

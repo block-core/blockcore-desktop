@@ -280,9 +280,7 @@ export class SendComponent implements OnInit, OnDestroy {
             .sendTransaction(transaction)
             .subscribe(
                 response => {
-                    if (response.status >= 200 && response.status < 400) {
-                        // this.activeModal.close("Close clicked");
-                    }
+
                 },
                 error => {
                     console.log(error);

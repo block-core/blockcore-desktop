@@ -39,6 +39,11 @@
        align-self: center;
     }
 
+    .wallet-info-icon {
+        float: right;
+        cursor: default;
+    }
+
     @media screen and (max-width: 599px) {
         .wallet-split-card
         {

@@ -29,6 +29,7 @@ export class WalletComponent implements OnInit {
     // public transactionTimestamp: number;
 
     displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp', 'actions'];
+    public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
     dataSource = new MatTableDataSource<TransactionInfo>();
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
