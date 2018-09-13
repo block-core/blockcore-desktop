@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostBinding } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -16,30 +16,21 @@ import { Logger } from '../../../services/logger.service';
     styleUrls: ['./create.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class CreateAccountComponent {
+export class CreateAccountComponent implements OnInit {
     @HostBinding('class.account-create') hostClass = true;
 
-    public form = new FormGroup({
-        seedExtension: new FormControl('', { updateOn: 'blur' }),
-        accountPassword: new FormControl('', { updateOn: 'blur' }),
-        accountPasswordConfirmation: new FormControl('', { updateOn: 'blur' }),
-        accountName: new FormControl('', Validators.compose([
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(24),
-            Validators.pattern(/^[a-zA-Z0-9]*$/)
-        ])),
-    }, PasswordValidationDirective.MatchPassword);
-
-    public icons: string[];
-    public mnemonic: string;
-    public password1 = '';
-    public password2 = '';
-    public seedExtension = '';
-    public accountName = 'main';
-    public currentDate: string;
-    public verification: string;
-    public saving: boolean;
+    accountPasswordForm: FormGroup;
+    accountSeedForm: FormGroup;
+    accountNameForm: FormGroup;
+    icons: string[];
+    mnemonic: string;
+    password1 = '';
+    password2 = '';
+    seedExtension = '';
+    accountName = 'main';
+    currentDate: string;
+    verification: string;
+    saving: boolean;
 
     constructor(private authService: AuthenticationService,
         private router: Router,
@@ -51,6 +42,31 @@ export class CreateAccountComponent {
         private apiService: ApiService) {
 
         this.onGenerate();
+    }
+
+    ngOnInit() {
+        this.accountSeedForm = this.fb.group({
+            seedExtension: ['', { updateOn: 'blur' }]
+        });
+
+        this.accountPasswordForm = this.fb.group({
+            accountPassword: ['', {
+                validators: Validators.compose([
+                    Validators.required,
+                    Validators.minLength(1)
+                ])
+            }],
+            accountPasswordConfirmation: [''],
+        }, { updateOn: 'blur', validator: PasswordValidationDirective.MatchPassword });
+
+        this.accountNameForm = this.fb.group({
+            accountName: new FormControl('', Validators.compose([
+                Validators.required,
+                Validators.minLength(1),
+                Validators.maxLength(24),
+                Validators.pattern(/^[a-zA-Z0-9]*$/)
+            ]))
+        });
     }
 
     public onPrint() {

@@ -9,7 +9,7 @@
                 <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
                 <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
             </p>
-            <ul>
+            <ul *ngIf="wallet.unconfirmedBalance">
                 <li>
                     <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
                     <em> (unconfirmed)</em>

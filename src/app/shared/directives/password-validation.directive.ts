@@ -8,7 +8,6 @@ export class PasswordValidationDirective {
     constructor() { }
 
     static MatchPassword(AC: AbstractControl) {
-
         if (AC == null) {
             return;
         }

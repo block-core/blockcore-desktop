@@ -3,7 +3,7 @@
 
     <form [formGroup]="form">
 
-        <p>If you already have an account, you can restore it here. You need your 12-word mnemonic that was given to your when
+        <p>If you already have an account, you can restore it here. You need your 12-word <strong>recovery phrase</strong> that was given to your when
             you first created your account, and approximately the date you created your account.</p>
         <br>
 
@@ -23,18 +23,18 @@
 
         <mat-card>
 
-            <h2 class="mat-h2">What is your 12-word mnemonic (pass phrase) you saw when you created your account?</h2>
+            <h2 class="mat-h2">What is your 12-word <strong>recovery phrase</strong> you saw when you created your account?</h2>
 
             <p>
                 <mat-form-field class="input-full-width">
-                    <textarea matInput formControlName="accountMnemonic" [(ngModel)]="mnemonic" id="accountMnemonic" placeholder="Fill out 12-word mnemonic"></textarea>
+                    <textarea matInput formControlName="accountMnemonic" [(ngModel)]="mnemonic" id="accountMnemonic" placeholder="Fill out recovery phrase"></textarea>
                 </mat-form-field>
             </p>
         </mat-card>
 
         <mat-card>
 
-            <h2 class="mat-h2">What is your personal extension word, you used when you created your account?</h2>
+            <h2 class="mat-h2">What is your personal extension word, if any, you used when you created your account?</h2>
 
             <p>
                 <mat-form-field class="input-full-width">
@@ -46,17 +46,16 @@
         <mat-card>
             <h2 class="mat-h2">What is the password for your account?</h2>
 
-            <p>You can protect your wallet (pass phrase + extension word) with a password. You can choose your own password, and you can choose something other than what you had before. You will be prompted to enter this passord every time your start City Hub.</p>
+            <p>Provide a password that we can use to protect your wallet when it is saved to the disk. You can choose something other than what you had before.
+                You will be prompted to enter this passord every time your start City Hub.</p>
             <p>
                 <mat-form-field class="input-full-width">
-                    <input matInput type="password" [formGroup]="form" [(ngModel)]="password1" placeholder="Enter your password" name="accountPassword"
-                        formControlName="accountPassword" autocomplete="new-password">
+                    <input matInput type="password" [formGroup]="form" [(ngModel)]="password1" placeholder="Enter your password" name="accountPassword" formControlName="accountPassword" autocomplete="new-password">
                 </mat-form-field>
             </p>
             <p>
                 <mat-form-field class="input-full-width">
-                    <input matInput type="password" [formGroup]="form" [(ngModel)]="password2" placeholder="Enter your password again" name="accountPasswordConfirmation"
-                        formControlName="accountPasswordConfirmation" autocomplete="new-password">
+                    <input matInput type="password" [formGroup]="form" [(ngModel)]="password2" placeholder="Enter your password again" name="accountPasswordConfirmation" formControlName="accountPasswordConfirmation" autocomplete="new-password">
                     <mat-error *ngIf="form.get('accountPasswordConfirmation').hasError('accountPasswordConfirmation')">
                         Passwords must match.
                     </mat-error>
@@ -81,7 +80,9 @@
 
         <button type="button" color="primary" (click)="restoreAccount()" mat-raised-button [disabled]="saving || form.invalid">Restore account</button>
         <button mat-raised-button routerLink="/login" type="button">Cancel</button>
-        <div class="spinner-container" *ngIf="saving"><mat-spinner [diameter]="24"></mat-spinner></div>
+        <div class="spinner-container" *ngIf="saving">
+            <mat-spinner [diameter]="24"></mat-spinner>
+        </div>
 
     </form>
 

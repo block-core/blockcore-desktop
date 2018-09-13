@@ -11,7 +11,7 @@
         }
     ],
     "releaseInfo": {
-        "releaseName": "City Hub ${version} (Preview Release)"
+        "releaseName": "City Hub - Preview Release"
     },
     "files": [
         "dist/**",

@@ -4,14 +4,32 @@ import { RecoverAccountComponent } from './recover/recover.component';
 import { CreateAccountComponent } from './create/create.component';
 
 const routes: Routes = [
-  { path: '', component: CreateAccountComponent },
-  { path: 'create', component: CreateAccountComponent },
-  { path: 'recover', component: RecoverAccountComponent }
+    {
+        path: '',
+        component: CreateAccountComponent,
+        data: {
+            title: 'Create Account'
+        }
+    },
+    {
+        path: 'create',
+        component: CreateAccountComponent,
+        data: {
+            title: 'Create Account'
+        }
+    },
+    {
+        path: 'recover',
+        component: RecoverAccountComponent,
+        data: {
+            title: 'Recover Account'
+        }
+    }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(routes) ],
-  exports: [ RouterModule ]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 
-export class AccountRoutingModule {}
+export class AccountRoutingModule { }
