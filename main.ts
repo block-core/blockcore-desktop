@@ -45,7 +45,7 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     assert(isNumber(arg.rpcPort));
     assert(isNumber(arg.apiPort));
     assert(isNumber(arg.wsPort));
-    assert(arg.network.length < 10);
+    assert(arg.network.length < 20);
 
     this.chain = arg;
 

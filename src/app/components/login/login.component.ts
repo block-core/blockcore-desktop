@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     }
 
     changeMode() {
-        localStorage.removeItem('Mode');
+        localStorage.removeItem('Network:Mode');
         this.router.navigateByUrl('/load');
     }
 

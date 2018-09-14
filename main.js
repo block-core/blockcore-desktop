@@ -6,15 +6,6 @@ var path = require("path");
 var url = require("url");
 var os = require("os");
 var autoUpdater = require('electron-updater').autoUpdater;
-// const log = require('electron-log');
-// autoUpdater.logger = log;
-// log.transports.file.level = 'info';
-// log.transports.file.file = 'C:\\temp\\city-hub-log.txt';
-// log.transports.file.streamConfig = { flags: 'w' };
-// TODO: Figure out why we can't use this import style for the updater?
-// import { autoUpdater } from 'electron-updater';
-// const autoUpdater = require("electron-updater").autoUpdater;
-// const { autoUpdater } = require('electron-updater');
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
@@ -38,7 +29,7 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(isNumber(arg.rpcPort));
     assert(isNumber(arg.apiPort));
     assert(isNumber(arg.wsPort));
-    assert(arg.network.length < 10);
+    assert(arg.network.length < 20);
     _this.chain = arg;
     if (serve) {
         var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';

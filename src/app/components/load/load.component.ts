@@ -52,7 +52,10 @@ export class LoadComponent implements OnDestroy {
 
         this.networks = [
             // { id: 'main', name: 'Main' }, // Disabled in beta release.
-            { id: 'testnet', name: 'Test' },
+            { id: 'citytest', name: 'City Chain (Test)' },
+            { id: 'citymain', name: 'City Chain' },
+            { id: 'stratistest', name: 'Stratis (Test)' },
+            { id: 'stratismain', name: 'Stratis' },
             // { id: 'regtest', name: 'RegTest' } // Disabled in beta release.
         ];
 

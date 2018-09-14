@@ -1,6 +1,6 @@
 <div class="content">
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex  fxLayoutGap="20px grid">
+    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex fxLayoutGap="20px grid">
         <div fxFlex>
             <mat-card class="dashboard-card">
                 <mat-icon class="dashboard-info-icon" [matTooltip]="walletInfo">info</mat-icon>
@@ -42,12 +42,23 @@
                 <mat-card-subtitle>You can buy coins from selected partners, and from exchanges.</mat-card-subtitle>
 
                 <mat-card-content>
-                    <p>
-                        Soon you will be able to buy City Coins directly in City Hub. Until then, please visit our website for a list of partners
-                        and exchanges.
-                    </p>
 
-                    <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
+                    <div *ngIf="appState.chain === 'city'">
+                        <p>
+                            Soon you will be able to buy City Coins directly in City Hub. Until then, please visit our website for a list of partners
+                            and exchanges.
+                        </p>
+
+                        <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
+                    </div>
+
+                    <div *ngIf="appState.chain === 'stratis'">
+                        <p>
+                            To fund your wallet, you need to purchase some STRAT.
+                        </p>
+
+                        <a href="https://www.binance.com/?ref=12007023" target="_blank" mat-stroked-button>Buy STRAT at Binance</a>
+                    </div>
                 </mat-card-content>
 
             </mat-card>
