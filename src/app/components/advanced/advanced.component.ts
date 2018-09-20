@@ -10,6 +10,7 @@ const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
 import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
+import { ElectronService } from 'ngx-electron';
 
 export interface ListItem {
     name: string;
@@ -37,6 +38,7 @@ export class AdvancedComponent {
     apiSubscription: any;
 
     constructor(
+        private electronService: ElectronService,
         private authService: AuthenticationService,
         private router: Router,
         private zone: NgZone,
@@ -44,6 +46,16 @@ export class AdvancedComponent {
         private apiService: ApiService,
         private appState: ApplicationStateService) {
 
+    }
+
+    resetDatabase() {
+        this.log.info('Reset Blockchain Database...');
+        const path = this.electronService.ipcRenderer.sendSync('reset-database', this.appState.network);
+        this.log.info('Reset completed: ' + path);
+    }
+
+    openDataFolder() {
+        const path = this.electronService.ipcRenderer.sendSync('open-data-folder', this.appState.network);
     }
 
     initialize() {

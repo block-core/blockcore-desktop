@@ -6,6 +6,9 @@ var path = require("path");
 var url = require("url");
 var os = require("os");
 var autoUpdater = require('electron-updater').autoUpdater;
+// const electron = require('electron');
+// const path = require('path');
+var fs = require('fs');
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
@@ -54,6 +57,32 @@ electron_1.ipcMain.on('install-update', function (event, arg) {
     autoUpdater.quitAndInstall();
     // setImmediate(() => autoUpdater.quitAndInstall());
     // event.returnValue = 'OK';
+});
+// Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
+electron_1.ipcMain.on('reset-database', function (event, arg) {
+    // Make sure the daemon is shut down first:
+    shutdownDaemon(function () {
+        var userDataPath = electron_1.app.getPath('userData');
+        var appDataFolder = path.dirname(userDataPath);
+        var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+        var folderBlocks = path.join(dataFolder, 'blocks');
+        var folderChain = path.join(dataFolder, 'chain');
+        var folderCoinView = path.join(dataFolder, 'coinview');
+        // After shutdown completes, we'll delete the database.
+        deleteFolderRecursive(folderBlocks);
+        deleteFolderRecursive(folderChain);
+        deleteFolderRecursive(folderCoinView);
+    });
+    // autoUpdater.checkForUpdates();
+    event.returnValue = 'OK';
+});
+electron_1.ipcMain.on('open-data-folder', function (event, arg) {
+    var userDataPath = electron_1.app.getPath('userData');
+    var appDataFolder = path.dirname(userDataPath);
+    var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+    electron_1.shell.openItem(dataFolder);
+    // autoUpdater.checkForUpdates();
+    event.returnValue = 'OK';
 });
 autoUpdater.on('checking-for-update', function () {
     contents.send('checking-for-update');
@@ -104,6 +133,20 @@ autoUpdater.on('download-progress', function (progressObj) {
     log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
 });
+function deleteFolderRecursive(folder) {
+    if (fs.existsSync(folder)) {
+        fs.readdirSync(folder).forEach(function (file, index) {
+            var curPath = folder + '/' + file;
+            if (fs.lstatSync(curPath).isDirectory()) {
+                deleteFolderRecursive(curPath);
+            }
+            else {
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(folder);
+    }
+}
 function createWindow() {
     // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
@@ -171,7 +214,7 @@ function registerAutoUpdater() {
 //     shutdownDaemon();
 // });
 var quit = function () {
-    shutdownDaemon();
+    shutdownDaemon(function () { });
     electron_1.app.quit();
 };
 // Quit when all windows are closed.
@@ -241,8 +284,9 @@ function launchDaemon(apiPath, chain) {
         writeLog("City Hub: " + data);
     });
 }
-function shutdownDaemon() {
+function shutdownDaemon(callback) {
     if (!chain) {
+        callback();
         return;
     }
     if (process.platform !== 'darwin' && !serve) {
@@ -253,7 +297,11 @@ function shutdownDaemon() {
             path: '/api/node/shutdown',
             method: 'POST'
         };
-        var req = http.request(options, function (res) { });
+        var req = http.request(options, function (res) {
+            callback();
+        }).on('error', function (e) {
+            callback();
+        });
         req.write('');
         req.end();
     }

@@ -5,6 +5,10 @@ import * as os from 'os';
 
 const { autoUpdater } = require('electron-updater');
 
+// const electron = require('electron');
+// const path = require('path');
+const fs = require('fs');
+
 interface Chain {
     name: string;
     identity: string;
@@ -76,6 +80,38 @@ ipcMain.on('install-update', (event, arg: Chain) => {
     // event.returnValue = 'OK';
 });
 
+// Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
+ipcMain.on('reset-database', (event, arg: string) => {
+    // Make sure the daemon is shut down first:
+    shutdownDaemon(() => {
+        const userDataPath = app.getPath('userData');
+        const appDataFolder = path.dirname(userDataPath);
+
+        const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+        const folderBlocks = path.join(dataFolder, 'blocks');
+        const folderChain = path.join(dataFolder, 'chain');
+        const folderCoinView = path.join(dataFolder, 'coinview');
+
+        // After shutdown completes, we'll delete the database.
+        deleteFolderRecursive(folderBlocks);
+        deleteFolderRecursive(folderChain);
+        deleteFolderRecursive(folderCoinView);
+    });
+
+    // autoUpdater.checkForUpdates();
+    event.returnValue = 'OK';
+});
+
+ipcMain.on('open-data-folder', (event, arg: string) => {
+    const userDataPath = app.getPath('userData');
+    const appDataFolder = path.dirname(userDataPath);
+    const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+    shell.openItem(dataFolder);
+
+    // autoUpdater.checkForUpdates();
+    event.returnValue = 'OK';
+});
+
 autoUpdater.on('checking-for-update', () => {
     contents.send('checking-for-update');
     writeLog('Checking for update...');
@@ -135,6 +171,20 @@ autoUpdater.on('download-progress', (progressObj) => {
     log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
 });
+
+function deleteFolderRecursive(folder) {
+    if (fs.existsSync(folder)) {
+        fs.readdirSync(folder).forEach(function (file, index) {
+            const curPath = folder + '/' + file;
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(folder);
+    }
+}
 
 function createWindow() {
     // Create the browser window.
@@ -219,7 +269,7 @@ function registerAutoUpdater() {
 // });
 
 const quit = () => {
-    shutdownDaemon();
+    shutdownDaemon(() => { });
     app.quit();
 };
 
@@ -304,9 +354,10 @@ function launchDaemon(apiPath: string, chain: Chain) {
     });
 }
 
-function shutdownDaemon() {
+function shutdownDaemon(callback) {
 
     if (!chain) {
+        callback();
         return;
     }
 
@@ -319,7 +370,11 @@ function shutdownDaemon() {
             method: 'POST'
         };
 
-        const req = http.request(options, (res) => { });
+        const req = http.request(options, (res) => {
+            callback();
+        }).on('error', function (e) {
+            callback();
+        });
         req.write('');
         req.end();
     }

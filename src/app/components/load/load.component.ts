@@ -104,7 +104,7 @@ export class LoadComponent implements OnDestroy {
         this.zone.run(() => {
             setTimeout(() => {
                 this.delayed = true;
-            }, 30000); // Make sure it is fairly high, we don't want users to immediatly perform advanced reset options when they don't need to.
+            }, 30000); // 30000 Make sure it is fairly high, we don't want users to immediatly perform advanced reset options when they don't need to.
         });
 
         this.apiSubscription = this.apiService.getWalletFiles()
