@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "tyriar.sort-lines",
+        "johnpapa.angular2",
+        "christian-kohler.path-intellisense",
+        "angular.ng-template",
+        "eg2.tslint",
+        "github.vscode-pull-request-github",
+        "dbaeumer.vscode-eslint",
+        "msjsdiag.debugger-for-chrome"
+    ]
+}

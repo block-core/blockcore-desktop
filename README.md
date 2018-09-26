@@ -57,13 +57,13 @@ Open a terminal, navigate to the download folder and make the .AppImage an execu
 the following command:
 
 ```
-$ chmod a+x City.Chain*.AppImage
+$ chmod a+x City.*.AppImage
 ```
 
 Then you can simply run the installer:
 
 ```
-$ ./City.Chain*.AppImage
+$ ./City.*.AppImage
 ```
 
 ### Mac

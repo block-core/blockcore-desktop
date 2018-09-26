@@ -3,7 +3,7 @@
     <mat-card>
         <mat-icon class="wallet-info-icon" [matTooltip]="walletInfo">info</mat-icon>
         <mat-card-title>Balance</mat-card-title>
-        <mat-card-subtitle>The balance of your wallet.</mat-card-subtitle>
+        <mat-card-subtitle>The balance of: {{wallet.walletName}}</mat-card-subtitle>
         <mat-card-content>
             <p>
                 <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>

@@ -137,10 +137,10 @@ function deleteFolderRecursive(folder) {
     if (fs.existsSync(folder)) {
         fs.readdirSync(folder).forEach(function (file, index) {
             var curPath = folder + '/' + file;
-            if (fs.lstatSync(curPath).isDirectory()) {
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
             }
-            else {
+            else { // delete file
                 fs.unlinkSync(curPath);
             }
         });
