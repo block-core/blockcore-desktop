@@ -4,7 +4,7 @@ parameters:
   name: ''
   queue: ''
   platform: ''
-  daemon: '0.0.26' # Version of the daemon to download, upgrade when newer is released.
+  daemon: '1.0.1' # Version of the daemon to download, upgrade when newer is released.
   arch: 'x64' # Only overriden by 32-bit Windows
   configuration: 'Release' # Only do Debug if specified
 
