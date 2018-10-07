@@ -10,7 +10,11 @@
 
     <p>
         <button mat-stroked-button (click)="openDataFolder()">Open Wallet Folder</button> &nbsp;
-        <button mat-stroked-button (click)="resetDatabase()">Reset Blockchain Database</button>
+        <button mat-stroked-button (click)="resetDatabase()">Reset Blockchain Database</button> &nbsp;
+        <br><br>
+        <button mat-stroked-button (click)="updateService.checkForUpdate()" [disabled]="updateService.downloading">Check for Update</button> &nbsp;
+        <button mat-stroked-button *ngIf="updateService.available" [disabled]="updateService.downloading" (click)="updateService.downloadUpdate()">Download Update</button> &nbsp;
+        <button mat-stroked-button *ngIf="updateService.downloaded" (click)="updateService.installUpdate()">Install Update</button>
     </p>
 
     <p>

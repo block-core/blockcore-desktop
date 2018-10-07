@@ -11,6 +11,7 @@ const bitcoin = require('bitcoinjs-lib');
 import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { ElectronService } from 'ngx-electron';
+import { UpdateService } from '../../services/update.service';
 
 export interface ListItem {
     name: string;
@@ -44,6 +45,7 @@ export class AdvancedComponent {
         private zone: NgZone,
         private log: Logger,
         private apiService: ApiService,
+        public updateService: UpdateService,
         private appState: ApplicationStateService) {
 
     }
@@ -56,6 +58,10 @@ export class AdvancedComponent {
 
     openDataFolder() {
         const path = this.electronService.ipcRenderer.sendSync('open-data-folder', this.appState.network);
+    }
+
+    checkForUpdate() {
+        this.updateService.checkForUpdate();
     }
 
     initialize() {
