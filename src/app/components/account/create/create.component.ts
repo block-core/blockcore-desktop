@@ -89,7 +89,7 @@ export class CreateAccountComponent implements OnInit {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -114,7 +114,7 @@ export class CreateAccountComponent implements OnInit {
                 },
                 error => {
                     this.saving = false;
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }

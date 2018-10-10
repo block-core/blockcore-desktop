@@ -6,8 +6,10 @@ import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
-import { delay, retryWhen } from 'rxjs/operators';
+import { delay, retryWhen, catchError } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
+import { HttpClient } from '@angular/common/http';
+import { empty } from 'rxjs';
 
 export interface ListItem {
     name: string;
@@ -35,6 +37,7 @@ export class LoadComponent implements OnDestroy {
     apiSubscription: any;
 
     constructor(
+        private http: HttpClient,
         private authService: AuthenticationService,
         private router: Router,
         private log: Logger,

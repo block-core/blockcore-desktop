@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { Observable, interval, throwError } from 'rxjs';
+import { Observable, interval, throwError, empty } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
@@ -93,7 +93,7 @@ export class ApiService {
     getWalletFiles(): Observable<any> {
         return this.http
             .get(this.apiUrl + '/wallet/files')
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -110,7 +110,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/mnemonic', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -120,7 +120,7 @@ export class ApiService {
     createWallet(data: WalletCreation): Observable<any> {
         return this.http
             .post(this.apiUrl + '/wallet/create/', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -130,7 +130,7 @@ export class ApiService {
     recoverWallet(data: WalletRecovery): Observable<any> {
         return this.http
             .post(this.apiUrl + '/wallet/recover/', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -140,7 +140,7 @@ export class ApiService {
     loadWallet(data: WalletLoad): Observable<any> {
         return this.http
             .post(this.apiUrl + '/wallet/load/', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -150,7 +150,7 @@ export class ApiService {
     getWalletStatus(): Observable<any> {
         return this.http
             .get(this.apiUrl + '/wallet/status')
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -166,7 +166,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -182,7 +182,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: GeneralInfo) => <GeneralInfo>(response)));
     }
 
@@ -201,7 +201,7 @@ export class ApiService {
             // .pipe(switchMap)
             // .startWith(0)
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })))
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -218,7 +218,7 @@ export class ApiService {
         return interval(pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })))
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: GeneralInfo) => response));
     }
 
@@ -236,7 +236,7 @@ export class ApiService {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/balance', { headers: this.headers, params: search })))
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -249,13 +249,13 @@ export class ApiService {
                 walletName: data.walletName,
                 accountName: 'account 0',
                 feeType: data.feeType,
-                allowUnconfirmed: 'true'
+                allowUnconfirmed: 'false'
             }
         });
 
         return this.http
             .get(this.apiUrl + '/wallet/maxbalance', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -273,7 +273,7 @@ export class ApiService {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/history', { headers: this.headers, params: search })))
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -290,7 +290,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/unusedaddress', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -307,7 +307,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/firstaddress', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -325,7 +325,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/unusedaddresses', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -342,7 +342,7 @@ export class ApiService {
 
         return this.http
             .get(this.apiUrl + '/wallet/addresses', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -357,13 +357,13 @@ export class ApiService {
                 destinationAddress: data.destinationAddress,
                 amount: data.amount,
                 feeType: data.feeType,
-                allowUnconfirmed: 'true'
+                allowUnconfirmed: 'false'
             }
         });
 
         return this.http
             .get(this.apiUrl + '/wallet/estimate-txfee', { headers: this.headers, params: search })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -373,7 +373,7 @@ export class ApiService {
     buildTransaction(data: TransactionBuilding): Observable<any> {
         return this.http
             .post(this.apiUrl + '/wallet/build-transaction', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -383,7 +383,7 @@ export class ApiService {
     sendTransaction(data: TransactionSending): Observable<any> {
         return this.http
             .post(this.apiUrl + '/wallet/send-transaction', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -393,7 +393,7 @@ export class ApiService {
     startStaking(data: any): Observable<any> {
         return this.http
             .post(this.apiUrl + '/staking/startstaking', JSON.stringify(data), { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -404,7 +404,7 @@ export class ApiService {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/staking/getstakinginfo')))
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -414,7 +414,7 @@ export class ApiService {
     stopStaking(): Observable<any> {
         return this.http
             .post(this.apiUrl + '/staking/stopstaking', { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -424,99 +424,34 @@ export class ApiService {
     shutdownNode(): Observable<any> {
         return this.http
             .post(this.apiUrl + '/node/shutdown', { headers: this.headers })
-            .pipe(catchError(this.handleError))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
-    // private handleError(error: HttpErrorResponse | any) {
-    //   if (error.error instanceof ErrorEvent) {
-    //     // A client-side or network error occurred. Handle it accordingly.
-    //     this.log.error('An error occurred:', error.error.message);
-    //   } else {
-    //     // The backend returned an unsuccessful response code.
-    //     // The response body may contain clues as to what went wrong,
-    //     this.log.error(
-    //       `Backend returned code ${error.status}, ` +
-    //       `body was: ${error.errors}`);
-    //   }
-    //   // return an observable with a user-facing error message
-    //   return throwError('Something bad happened; please try again later.');
-    // };
+    /** Use this to handle error (exceptions) that happens in RXJS pipes. This handler will rethrow the error. */
     handleError(error: HttpErrorResponse | any) {
-        if (this.log == null) {
-            console.error(error);
-            return throwError('Something bad happened; please try again later.');
-        }
+        this.handleException(error);
+        return throwError(error);
+    }
 
+    /** Use this to handle errors (exceptions) that happens outside of an RXJS pipe. See the "handleError" for pipeline error handling. */
+    handleException(error: HttpErrorResponse | any) {
         let errorMessage = '';
 
-        if (error.error instanceof ErrorEvent) {
+        if (error.name === 'HttpErrorResponse') {
+            errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;
+            // if (error.error.target.__zone_symbol__xhrURL.indexOf('api/wallet/files') > -1) {
+            // }
+        } else if (error.error instanceof ErrorEvent) {
             errorMessage = 'An error occurred:' + error.error.message;
             // A client-side or network error occurred. Handle it accordingly.
+        } else if (error.error.errors) {
+            errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
         } else {
-            errorMessage = `Backend returned code ${error.status}, ` +
-                `body was: ${error.errors}`;
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
+            errorMessage = `Error: ${error.message} (${error.status})`;
         }
 
         this.log.error(errorMessage);
-
-        //   if (error.status === 0) {
-        //     // this.cancelSubscriptions();
-        //     // this.genericModalService.openModal(null, null);
-        // } else if (error.status >= 400) {
-        //     if (!error.json().errors[0]) {
-        //         console.log(error);
-        //     } else {
-        //         if (error.json().errors[0].description) {
-        //             // this.genericModalService.openModal(null, error.json().errors[0].message);
-        //         } else {
-        //             // this.cancelSubscriptions();
-        //             // this.startSubscriptions();
-        //         }
-        //     }
-        // }
-
-        this.snackBar.open(errorMessage, null, { duration: 4000 });
-        // this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
-
-        //   if (error.status >= 400) {
-        //     if (!error.json().errors[0]) {
-        //       //console.log(error);
-        //     } else {
-        //       let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
-        //     }
-        //   } else {
-        //     let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
-        //   }
-
-        // return an observable with a user-facing error message
-        return throwError('Something bad happened; please try again later.');
+        this.snackBar.open(errorMessage, null, { duration: 4000, panelClass: 'error-snackbar' });
     }
-
-    // handleError(error: HttpErrorResponse | any) {
-    //   this.log.error('HTTP API failure:', error);
-
-    //   if (error.error instanceof ErrorEvent) {
-    //     // A client-side or network error occurred. Handle it accordingly.
-    //     this.log.error('An error occurred:', error.error.message);
-    //   } else {
-    //     // The backend returned an unsuccessful response code.
-    //     // The response body may contain clues as to what went wrong,
-    //     this.log.error(
-    //       `Backend returned code ${error.status}, ` +
-    //       `body was: ${error.errors}`);
-    //   }
-
-    //   if (error.status >= 400) {
-    //     if (!error.json().errors[0]) {
-    //       //console.log(error);
-    //     } else {
-    //       let snackBarRef = this.snackBar.open('Error: ' + error.json().errors[0].message, null, { duration: 4000 });
-    //     }
-    //   } else {
-    //     let snackBarRef = this.snackBar.open('Unknown error: Network daemon might be unavailable.', null, { duration: 4000 });
-    //   }
-    // }
 }

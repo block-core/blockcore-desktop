@@ -91,11 +91,13 @@ ipcMain.on('reset-database', (event, arg: string) => {
         const folderBlocks = path.join(dataFolder, 'blocks');
         const folderChain = path.join(dataFolder, 'chain');
         const folderCoinView = path.join(dataFolder, 'coinview');
+        const folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
 
         // After shutdown completes, we'll delete the database.
         deleteFolderRecursive(folderBlocks);
         deleteFolderRecursive(folderChain);
         deleteFolderRecursive(folderCoinView);
+        deleteFolderRecursive(folderFinalizedBlock);
     });
 
     // autoUpdater.checkForUpdates();

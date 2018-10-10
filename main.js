@@ -68,10 +68,12 @@ electron_1.ipcMain.on('reset-database', function (event, arg) {
         var folderBlocks = path.join(dataFolder, 'blocks');
         var folderChain = path.join(dataFolder, 'chain');
         var folderCoinView = path.join(dataFolder, 'coinview');
+        var folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
         // After shutdown completes, we'll delete the database.
         deleteFolderRecursive(folderBlocks);
         deleteFolderRecursive(folderChain);
         deleteFolderRecursive(folderCoinView);
+        deleteFolderRecursive(folderFinalizedBlock);
     });
     // autoUpdater.checkForUpdates();
     event.returnValue = 'OK';
@@ -270,9 +272,11 @@ function launchDaemon(apiPath, chain) {
     if (chain.mode === 'light') {
         commandLineArguments.push('-light');
     }
-    if (chain.network !== 'main') {
-        commandLineArguments.push('-' + chain.network); // "-testnet" or "-regtest"
-    }
+    // if (chain.network !== 'main') {
+    //     commandLineArguments.push('-' + chain.network); // "-testnet" or "-regtest"
+    // }
+    // TODO: Force TESTNET until MAINNET launch.
+    commandLineArguments.push('-testnet');
     // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
     // if (chain.dataDir != null)
     // commandLineArguments.push("-datadir=" + chain.dataDir);

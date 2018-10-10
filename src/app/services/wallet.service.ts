@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { GlobalService } from './global.service';
 import { WalletInfo } from '../classes/wallet-info';
 import { TransactionInfo } from '../classes/transaction-info';
@@ -42,6 +42,9 @@ export class WalletService {
 
     public generalInfo: GeneralInfo;
     public stakingInfo: StakingInfo;
+
+    private _history = new Subject();
+    public history$ = this._history.asObservable();
 
     constructor(
         private apiService: ApiService,
@@ -117,7 +120,6 @@ export class WalletService {
                 response => {
                     this.log.info('Get wallet balance:', response);
 
-                    // if (response.status >= 200 && response.status < 400) {
                     const balanceResponse = response;
                     this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
                     this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
@@ -127,10 +129,9 @@ export class WalletService {
                     } else {
                         this.hasBalance = false;
                     }
-                    // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -141,17 +142,13 @@ export class WalletService {
         this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
             .subscribe(
                 response => {
-                    this.log.info('Get history:', response);
-
-                    // if (response.status >= 200 && response.status < 400) {
                     if (!!response.history && response.history[0].transactionsHistory.length > 0) {
                         historyResponse = response.history[0].transactionsHistory;
                         this.getTransactionInfo(historyResponse);
                     }
-                    // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -182,6 +179,8 @@ export class WalletService {
 
             this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
         }
+
+        this._history.next(this.transactionArray);
     }
 
     public startStaking(password: string) {
@@ -202,7 +201,7 @@ export class WalletService {
                 error => {
                     this.isStarting = false;
                     this.stakingEnabled = false;
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -220,7 +219,7 @@ export class WalletService {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -251,7 +250,7 @@ export class WalletService {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }

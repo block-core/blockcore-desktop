@@ -13,6 +13,7 @@ import { TransactionSending } from '../../../classes/transaction-sending';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { Router } from '@angular/router';
 import { WalletService } from '../../../services/wallet.service';
+import { debug } from 'util';
 
 @Component({
     selector: 'app-send',
@@ -152,7 +153,10 @@ export class SendComponent implements OnInit, OnDestroy {
                         // this.genericModalService.openModal(null, null);
                         this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
-                        this.apiService.handleError(error);
+                        this.apiService.handleException(error);
+
+                        // tslint:disable-next-line:no-debugger
+                        debugger;
                         if (!error.json().errors[0]) {
                         } else {
                             this.apiError = error.json().errors[0].message;
@@ -189,7 +193,10 @@ export class SendComponent implements OnInit, OnDestroy {
                         // this.genericModalService.openModal(null, null);
                     } else if (error.status >= 400) {
 
-                        this.apiService.handleError(error);
+                        this.apiService.handleException(error);
+
+                        // tslint:disable-next-line:no-debugger
+                        debugger;
 
                         if (!error.json().errors[0]) {
                         } else {
@@ -243,7 +250,10 @@ export class SendComponent implements OnInit, OnDestroy {
                         this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
 
-                        this.apiService.handleError(error);
+                        this.apiService.handleException(error);
+
+                        // tslint:disable-next-line:no-debugger
+                        debugger;
 
                         if (!error.json().errors[0]) {
 
@@ -290,7 +300,10 @@ export class SendComponent implements OnInit, OnDestroy {
                         this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
                     } else if (error.status >= 400) {
 
-                        this.apiService.handleError(error);
+                        this.apiService.handleException(error);
+
+                        // tslint:disable-next-line:no-debugger
+                        debugger;
 
                         if (!error.json().errors[0]) {
 
@@ -317,13 +330,19 @@ export class SendComponent implements OnInit, OnDestroy {
                     // }
                 },
                 error => {
+                    // tslint:disable-next-line:no-debugger
+                    debugger;
                     console.log(error);
                     if (error.status === 0) {
-                        this.cancelSubscriptions();
+                        // We used to cancelSubscription here, not a good idea if it fails the first time.
+                        // this.cancelSubscriptions();
                         // this.genericModalService.openModal(null, null);
                     } else if (error.status >= 400) {
 
-                        this.apiService.handleError(error);
+                        this.apiService.handleException(error);
+
+                        // tslint:disable-next-line:no-debugger
+                        debugger;
 
                         if (!error.json().errors[0]) {
 

@@ -76,7 +76,7 @@ export class RecoverAccountComponent {
                 },
                 error => {
                     this.saving = false;
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }

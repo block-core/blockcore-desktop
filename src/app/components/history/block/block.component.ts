@@ -82,26 +82,6 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/history/block/' + (this.block.height - 1));
     }
 
-    private handleError(error: any) {
-        if (!this.log) {
-            console.error(error);
-            return throwError('Something bad happened; please try again later.');
-        }
-
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            this.log.error('An error occurred:', error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            this.log.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.errors}`);
-        }
-        // return an observable with a user-facing error message
-        return throwError('Something bad happened; please try again later.');
-    }
-
     ngOnInit() {
         this.getBlock();
         this.coinUnit = this.globalService.getCoinUnit();
@@ -119,7 +99,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
 
             this.http
                 .get<any[]>(url)
-                .pipe(catchError(this.handleError))
+                .pipe(catchError(this.apiService.handleError.bind(this)))
                 .pipe(map(data => data)).subscribe(
                     item => {
                         this.block = item;

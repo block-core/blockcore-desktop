@@ -37,7 +37,7 @@ export class LogoutComponent {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
 

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { WalletService } from '../../services/wallet.service';
 import { ApplicationStateService } from '../../services/application-state.service';
@@ -9,6 +9,7 @@ import { ApiService } from '../../services/api.service';
 import { TransactionInfo } from '../../classes/transaction-info';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { AppModes } from '../../shared/app-modes';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-wallet',
@@ -16,21 +17,14 @@ import { AppModes } from '../../shared/app-modes';
     styleUrls: ['./wallet.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent implements OnInit, OnDestroy {
     @HostBinding('class.wallet') hostClass = true;
 
-    private stakingForm: FormGroup;
-
-    // public transactionType: string;
-    // public transactionId: string;
-    // public transactionAmount: number;
-    // public transactionFee: number;
-    // public transactionConfirmedInBlock?: number;
-    // public transactionTimestamp: number;
-
-    displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp', 'actions'];
+    public stakingForm: FormGroup;
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
-    dataSource = new MatTableDataSource<TransactionInfo>();
+    public displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp', 'actions'];
+    public dataSource = new MatTableDataSource<TransactionInfo>();
+    private walletServiceSubscription: Subscription;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -42,7 +36,8 @@ export class WalletComponent implements OnInit {
         private detailsService: DetailsService,
         public wallet: WalletService,
         public appModes: AppModes,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private ref: ChangeDetectorRef
     ) {
         this.buildStakingForm();
         this.appState.pageMode = false;
@@ -61,6 +56,17 @@ export class WalletComponent implements OnInit {
         if (this.wallet.transactionArray != null) {
             this.dataSource.data = this.wallet.transactionArray;
         }
+
+        this.walletServiceSubscription = this.wallet.history$.subscribe(items => {
+            this.dataSource.data = <any>items;
+            this.ref.detectChanges();
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.walletServiceSubscription) {
+            this.walletServiceSubscription.unsubscribe();
+        }
     }
 
     public stopStaking() {
@@ -73,10 +79,6 @@ export class WalletComponent implements OnInit {
     }
 
     public openTransactionDetails(transaction: TransactionInfo) {
-
         this.detailsService.show(transaction);
-
-        // const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static", keyboard: false });
-        // modalRef.componentInstance.transaction = transaction;
     }
 }

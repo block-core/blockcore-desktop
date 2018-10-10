@@ -7,6 +7,9 @@ import { ApplicationStateService } from '../../services/application-state.servic
 import { WalletInfo } from '../../classes/wallet-info';
 import { WalletLoad } from '../../classes/wallet-load';
 import { WalletService } from '../../services/wallet.service';
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { empty } from 'rxjs';
 
 export interface Account {
     name: string;
@@ -29,6 +32,7 @@ export class LoginComponent implements OnInit {
     password = ''; // Default to empty string, not null/undefined.
 
     constructor(
+        private http: HttpClient,
         private readonly cd: ChangeDetectorRef,
         private authService: AuthenticationService,
         private router: Router,
@@ -92,7 +96,7 @@ export class LoginComponent implements OnInit {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -151,7 +155,7 @@ export class LoginComponent implements OnInit {
                     // }
                 },
                 error => {
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
@@ -175,7 +179,7 @@ export class LoginComponent implements OnInit {
                     this.wallet.stop();
                     this.authService.setAnonymous();
                     this.unlocking = false;
-                    this.apiService.handleError(error);
+                    this.apiService.handleException(error);
                 }
             );
     }
