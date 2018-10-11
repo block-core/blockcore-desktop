@@ -15,9 +15,10 @@ import { ApplicationStateService } from '../../services/application-state.servic
 export class LogoutComponent {
     @HostBinding('class.logout') hostClass = true;
 
-    constructor(private authService: AuthenticationService,
+    constructor(
+        public wallet: WalletService,
+        private authService: AuthenticationService,
         private globalService: GlobalService,
-        private wallet: WalletService,
         private apiService: ApiService,
         private appState: ApplicationStateService,
         private router: Router) {

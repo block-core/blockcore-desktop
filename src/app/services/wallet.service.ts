@@ -168,6 +168,7 @@ export class WalletService {
             const transactionId = transaction.id;
             const transactionAmount = transaction.amount;
             let transactionFee;
+
             if (transaction.fee) {
                 transactionFee = transaction.fee;
             } else {
@@ -213,10 +214,7 @@ export class WalletService {
             .subscribe(
                 response => {
                     this.log.info('Stop staking:', response);
-
-                    // if (response.status >= 200 && response.status < 400) {
                     this.stakingEnabled = false;
-                    // }
                 },
                 error => {
                     this.apiService.handleException(error);
@@ -232,7 +230,6 @@ export class WalletService {
                 response => {
                     this.log.info('Get staking info:', response);
 
-                    // if (response.status >= 200 && response.status < 400) {
                     const stakingResponse = <StakingInfo>response;
                     this.stakingInfo = stakingResponse;
 
@@ -242,12 +239,12 @@ export class WalletService {
                     this.netStakingWeight = stakingResponse.netStakeWeight;
                     this.expectedTime = stakingResponse.expectedTime;
                     this.dateTime = this.secondsToString(this.expectedTime);
+
                     if (this.stakingActive) {
                         this.isStarting = false;
                     } else {
                         this.isStopping = false;
                     }
-                    // }
                 },
                 error => {
                     this.apiService.handleException(error);

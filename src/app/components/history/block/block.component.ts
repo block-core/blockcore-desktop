@@ -92,6 +92,10 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         this.appState.pageMode = false;
     }
 
+    public openTransactionDetails(transaction) {
+        this.router.navigateByUrl('/history/transaction/' + transaction.txid);
+    }
+
     getBlock() {
         this.route.params.subscribe(params => {
 

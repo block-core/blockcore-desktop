@@ -33,20 +33,46 @@
         font-size: 16px;
     }
 
-    a {
-        color: mat-color($primary, 'default');
-        text-decoration: underline;
-        transition: color .2ms ease-out;
+    .link {
 
-        &:hover {
-            color: rgba(mat-color($primary, 'default'), .6);
-            transition: color .2ms ease-in;
-        }
-
-        &:visited {
-            color: mat-color($primary, 'default');
-        }
     }
+
+    .link:hover {
+        text-decoration: underline;
+    }
+
+    .interactive-table {
+        width: 100%;
+
+        .mat-row {
+            cursor: pointer;
+            //background-color: red! important;
+            //background-color: mat-color($primary, 'default');
+            //color: blue !important;
+        }
+
+        .mat-row:hover {
+            background-color: rgba(mat-color($primary, 'default'), .6);
+            //background-color: red! important;
+            //color: blue !important;
+        }
+
+    }
+
+    // a {
+    //     color: mat-color($primary, 'default');
+    //     text-decoration: underline;
+    //     transition: color .2ms ease-out;
+
+    //     &:hover {
+    //         color: rgba(mat-color($primary, 'default'), .6);
+    //         transition: color .2ms ease-in;
+    //     }
+
+    //     &:visited {
+    //         color: mat-color($primary, 'default');
+    //     }
+    // }
 
     //@include app-app-theme($theme);
 }

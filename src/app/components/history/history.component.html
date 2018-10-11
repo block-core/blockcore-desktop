@@ -17,12 +17,13 @@
         <mat-tab label="Blocks">
             <div class="tab-pane">
 
-                <table class="history-table mat-elevation-z8" mat-table [dataSource]="dataSource">
+                <table class="history-table interactive-table mat-elevation-z8" mat-table [dataSource]="dataSource">
 
                     <ng-container matColumnDef="height">
                         <th mat-header-cell *matHeaderCellDef> Number </th>
                         <td mat-cell *matCellDef="let block">
-                            <a routerLink="/block/{{block.hash}}">{{block.height}}</a>
+                                {{block.height}}
+                            <!-- <a routerLink="/block/{{block.hash}}">{{block.height}}</a> -->
                         </td>
                     </ng-container>
 
@@ -47,7 +48,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openBlockDetails(row)"></tr>
                 </table>
 
                 <mat-paginator pageSize="10" showFirstLastButtons></mat-paginator>
@@ -56,12 +57,13 @@
         <mat-tab label="Transactions">
             <div class="tab-pane">
 
-                <table class="transactions-table mat-elevation-z8" mat-table [dataSource]="dataSourceTransactions">
+                <table class="transactions-table interactive-table mat-elevation-z8" mat-table [dataSource]="dataSourceTransactions">
 
                     <ng-container matColumnDef="txid">
                         <th mat-header-cell *matHeaderCellDef> Transaction Id </th>
                         <td mat-cell *matCellDef="let transaction">
-                            <a routerLink="/history/transaction/{{transaction.txid}}">{{transaction.txid}}</a>
+                                {{transaction.txid}}
+                            <!-- <a routerLink="/history/transaction/{{transaction.txid}}">{{transaction.txid}}</a> -->
                         </td>
                     </ng-container>
 
@@ -86,7 +88,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumnsTransactions"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTransactions;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTransactions;" (click)="openTransactionDetails(row)"></tr>
                 </table>
 
                 <em class="info-label">Only last 10 transactions is supported. Paging will be available in a future update.</em>

@@ -78,6 +78,14 @@ export class HistoryComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    public openBlockDetails(block) {
+        this.router.navigateByUrl('/block/' + block.hash);
+    }
+
+    public openTransactionDetails(transaction) {
+        this.router.navigateByUrl('/history/transaction/' + transaction.txid);
+    }
+
     private getLatestTransactions() {
         const url = this.apiService.apiUrl + '/transactions?api-version=2.0';
 

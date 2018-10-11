@@ -30,6 +30,7 @@ export class ApiService {
 
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     private pollingInterval = 3000;
+    private longPollingInterval = 6000;
     private daemon;
 
     public apiUrl: string;
@@ -270,7 +271,7 @@ export class ApiService {
             }
         });
 
-        return interval(this.pollingInterval)
+        return interval(this.longPollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/wallet/history', { headers: this.headers, params: search })))
             .pipe(catchError(this.handleError.bind(this)))
@@ -430,6 +431,8 @@ export class ApiService {
 
     /** Use this to handle error (exceptions) that happens in RXJS pipes. This handler will rethrow the error. */
     handleError(error: HttpErrorResponse | any) {
+        // tslint:disable-next-line:no-debugger
+        debugger;
         this.handleException(error);
         return throwError(error);
     }
@@ -438,20 +441,20 @@ export class ApiService {
     handleException(error: HttpErrorResponse | any) {
         let errorMessage = '';
 
-        if (error.name === 'HttpErrorResponse') {
-            errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;
-            // if (error.error.target.__zone_symbol__xhrURL.indexOf('api/wallet/files') > -1) {
-            // }
-        } else if (error.error instanceof ErrorEvent) {
+        if (error.error instanceof ErrorEvent) {
             errorMessage = 'An error occurred:' + error.error.message;
             // A client-side or network error occurred. Handle it accordingly.
         } else if (error.error.errors) {
             errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
+        } else if (error.name === 'HttpErrorResponse') {
+            errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;
+            // if (error.error.target.__zone_symbol__xhrURL.indexOf('api/wallet/files') > -1) {
+            // }
         } else {
             errorMessage = `Error: ${error.message} (${error.status})`;
         }
 
         this.log.error(errorMessage);
-        this.snackBar.open(errorMessage, null, { duration: 4000, panelClass: 'error-snackbar' });
+        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
     }
 }
