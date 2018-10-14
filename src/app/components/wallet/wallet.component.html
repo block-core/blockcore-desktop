@@ -160,19 +160,19 @@
         <div class="mat-elevation-z8">
             <table class="wallet-transactions-table interactive-table" mat-table matSort [dataSource]="dataSource">
 
-                <!-- <ng-container matColumnDef="transactionType">
+                <ng-container matColumnDef="transactionType">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-                    <td mat-cell *matCellDef="let transaction">
+                    <td mat-cell *matCellDef="let transaction" [ngClass]="{'unconfirmed': !transaction.transactionConfirmedInBlock}">
                         <mat-icon class="wallet-confirmed-icon" matTooltip="Transaction not confirmed in any blocks yet." matTooltipPosition="right" *ngIf="!transaction.transactionConfirmedInBlock">warning</mat-icon>
                         <mat-icon class="wallet-confirmed-icon" matTooltip="Confirmed in block #{{transaction.transactionConfirmedInBlock}}" matTooltipPosition="right" *ngIf="transaction.transactionConfirmedInBlock">check</mat-icon>
                         {{transaction.transactionType}}
                     </td>
-                </ng-container> -->
+                </ng-container>
 
                 <ng-container matColumnDef="transactionAmount">
                     <th mat-header-cell *matHeaderCellDef> Amount </th>
 
-                    <td mat-cell *matCellDef="let transaction">
+                    <td mat-cell *matCellDef="let transaction" [ngClass]="{'unconfirmed': !transaction.transactionConfirmedInBlock}">
 
                         <span *ngIf="transaction.transactionType == 'sent'">
                             <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation
@@ -197,7 +197,7 @@
 
                 <ng-container matColumnDef="transactionTimestamp">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let transaction">
+                    <td mat-cell *matCellDef="let transaction" [ngClass]="{'unconfirmed': !transaction.transactionConfirmedInBlock}">
                         <span *ngIf="!appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'medium'
                             }}</span>
                         <span *ngIf="appState.handset">{{ transaction.transactionTimestamp * 1000 | date:'short'

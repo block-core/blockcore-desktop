@@ -22,7 +22,7 @@ export class WalletComponent implements OnInit, OnDestroy {
 
     public stakingForm: FormGroup;
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
-    public displayedColumns: string[] = ['transactionAmount', 'transactionTimestamp'];
+    public displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp'];
     public dataSource = new MatTableDataSource<TransactionInfo>();
     private walletServiceSubscription: Subscription;
 
