@@ -17,7 +17,7 @@
             </div>
             <div class="block-details">
                 <div class="block-details-label">Transaction count</div>
-                <div class="block-details-value">{{block.transactions.length}}</div>
+                <div class="block-details-value">{{block.tx.length}}</div>
             </div>
             <div class="block-details">
                 <div class="block-details-label">Input count</div>
@@ -66,14 +66,14 @@
             <button (click)="increment()" mat-icon-button>
                 <mat-icon>expand_less</mat-icon>
             </button>
-            <button (click)="decrement()" *ngIf="block.height !== 1" mat-icon-button>
+            <button (click)="decrement()" *ngIf="!isOnGenesisBlock" mat-icon-button>
                 <mat-icon>expand_more</mat-icon>
             </button>
         </mat-card>
     </div>
 
     <mat-tab-group mat-stretch-tabs *ngIf="block" class="history-block-stretched-tabs mat-elevation-z4">
-        <mat-tab label="Transactions ({{block.transactions.length}})">
+        <mat-tab label="Transactions ({{block.tx.length}})">
             <div class="tab-pane">
 
                 <table class="transactions-table interactive-table mat-elevation-z8" mat-table [dataSource]="dataSource">

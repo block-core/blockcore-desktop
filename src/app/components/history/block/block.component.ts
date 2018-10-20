@@ -45,7 +45,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         }
 
         if (event.keyCode === HOME) {
-            this.open(1);
+            this.open(0);
         }
     }
 
@@ -61,6 +61,10 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
         private globalService: GlobalService
     ) {
         this.appState.pageMode = true;
+    }
+
+    get isOnGenesisBlock(): boolean {
+        return this.block.height === 0;
     }
 
     openLatest() {
@@ -79,7 +83,9 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     }
 
     decrement() {
-        this.router.navigateByUrl('/history/block/' + (this.block.height - 1));
+        if (!this.isOnGenesisBlock) {
+            this.router.navigateByUrl('/history/block/' + (this.block.height - 1));
+        }
     }
 
     ngOnInit() {
@@ -114,7 +120,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
                         let inputs = 0;
                         let outputs = 0;
 
-                        this.block.transactions.forEach(tx => {
+                        this.block.tx.forEach(tx => {
 
                             let out = 0;
 
@@ -141,7 +147,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
                         this.block.inputs = inputs;
                         this.block.outputs = outputs;
 
-                        this.dataSource.data = this.block.transactions;
+                        this.dataSource.data = this.block.tx;
                     }
                 );
         });
