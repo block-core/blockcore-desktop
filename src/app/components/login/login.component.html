@@ -5,7 +5,7 @@
             <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon> City Chain
         </div> -->
 
-        <div class="login-header"></div>
+        <!-- <div class="login-header"></div> -->
 
         <div class="login-accounts" *ngIf="hasWallet">
             <mat-form-field>
@@ -49,6 +49,9 @@
             <br>
             <br>
             <h3 class="mat-h3">Log in to access your account</h3>
+        </div>
+        <div class="login-mode-mobile">
+            <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
         </div>
     </div>
 </div>

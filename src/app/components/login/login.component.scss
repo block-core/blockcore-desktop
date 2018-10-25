@@ -20,6 +20,7 @@
         flex-direction: column;
         align-items: stretch;
         min-height: 260px;
+        margin-top: 10%;
     }
 
     .login-unlock-button {
@@ -75,6 +76,10 @@
     {
         margin: 20%;
     }
+
+    .login-mode-mobile {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 599px) {
@@ -91,6 +96,31 @@
         .login-banner {
             width: 100%;
             flex-grow: 1;
+        }
+
+        .login-mode-mobile {
+            display: block;
+            bottom: 10px;
+            position: absolute;
+            min-width: 200px;
+            margin-left: 25%;
+            margin-right: 25%;
+            //display: flex;
+            //justify-content: center;
+            //padding-top: 40px;
+        }
+
+        .login-mode {
+            display: none;
+            // flex-grow: 2;
+            // align-items: flex-end;
+            // justify-content: center;
+            // display: flex;
+            // margin-bottom: 20px;
+            // position: absolute;
+            // display: inline-block;
+            // bottom: 20px;
+            // text-align: center;
         }
     }
 }

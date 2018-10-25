@@ -454,7 +454,13 @@ export class ApiService {
             errorMessage = `Error: ${error.message} (${error.status})`;
         }
 
+        // tslint:disable-next-line:no-debugger
+        debugger;
         this.log.error(errorMessage);
-        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+
+        if (errorMessage.indexOf('Http failure response for') === -1) {
+            this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+        }
+
     }
 }
