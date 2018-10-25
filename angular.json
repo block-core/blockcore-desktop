@@ -48,7 +48,8 @@
             ],
             "styles": [
               "src/styles/styles.scss",
-              "src/styles/print.scss"
+              "src/styles/print.scss",
+              "src/assets/fonts/material-icons/material-icons.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

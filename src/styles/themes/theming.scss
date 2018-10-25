@@ -10,6 +10,14 @@
         background-color: map-get($background, 'dialog');
     }
 
+    ::selection {
+        background: $app-selection-color;
+    }
+      
+    ::-moz-selection {
+        background: $app-selection-color;
+    }
+
     .mat-tab-link,
     .mat-tab-label {
         font-weight: 300;
