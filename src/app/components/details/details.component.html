@@ -56,7 +56,7 @@
         <div class="details-row-value">
             <code [title]="transaction.transactionId">{{ transaction.transactionId.substring(0, 12) }}...</code>
             <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()">
-                <mat-icon>file_copy</mat-icon>
+                <mat-icon>content_copy</mat-icon>
             </button>
         </div>
     </div>

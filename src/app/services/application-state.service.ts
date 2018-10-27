@@ -39,6 +39,9 @@ export class ApplicationStateService {
 
     fullHeight = false;
 
+    /** Indicates if we are connected from City Hub with the City Chain daemon. */
+    connected = false;
+
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
     }

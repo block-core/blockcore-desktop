@@ -73,7 +73,7 @@ export class ApiService {
                 this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
 
                 if (this.daemon !== 'OK') {
-                    this.snackBar.open(this.daemon, null, { duration: 10000 });
+                    this.snackBar.open(this.daemon, null, { duration: 7000 });
                 }
 
                 this.log.info('Daemon result: ', this.daemon);
@@ -94,7 +94,7 @@ export class ApiService {
     getWalletFiles(): Observable<any> {
         return this.http
             .get(this.apiUrl + '/wallet/files')
-            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(catchError(this.handleInitialError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -429,10 +429,19 @@ export class ApiService {
             .pipe(map((response: Response) => response));
     }
 
+    /** Use this to handle error in the initial startup (wallet/files) of City Hub. */
+    handleInitialError(error: HttpErrorResponse | any) {
+        // Only show snackbar errors when we have connected. Initially we will receive some errors due to aggresive
+        // attempts at connecting to the node.
+        if (this.appState.connected) {
+            this.handleException(error);
+        }
+
+        return throwError(error);
+    }
+
     /** Use this to handle error (exceptions) that happens in RXJS pipes. This handler will rethrow the error. */
     handleError(error: HttpErrorResponse | any) {
-        // tslint:disable-next-line:no-debugger
-        debugger;
         this.handleException(error);
         return throwError(error);
     }
@@ -458,9 +467,9 @@ export class ApiService {
         debugger;
         this.log.error(errorMessage);
 
-        if (errorMessage.indexOf('Http failure response for') === -1) {
-            this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
-        }
+        // if (errorMessage.indexOf('Http failure response for') === -1) {
+        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+        // }
 
     }
 }

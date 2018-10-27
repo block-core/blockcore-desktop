@@ -28,10 +28,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
     constructor(
         public readonly appState: ApplicationStateService,
-        private apiService: ApiService,
+        public wallet: WalletService,
         public snackBar: MatSnackBar,
+        private apiService: ApiService,
         private log: Logger,
-        private wallet: WalletService,
         private globalService: GlobalService) {
 
         this.appState.pageMode = true;

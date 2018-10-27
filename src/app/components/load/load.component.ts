@@ -83,6 +83,7 @@ export class LoadComponent implements OnDestroy {
 
         if (this.appState.mode === 'full') {
             this.loading = true;
+            this.appState.connected = false;
             this.fullNodeConnect();
         }
     }
@@ -117,6 +118,7 @@ export class LoadComponent implements OnDestroy {
 
     start() {
         this.loading = false;
+        this.appState.connected = true;
         this.router.navigateByUrl('/login');
     }
 
@@ -133,6 +135,7 @@ export class LoadComponent implements OnDestroy {
     cancel() {
         this.unsubscribe();
 
+        this.appState.connected = false;
         this.loading = false;
         this.delayed = false;
         this.appState.mode = null;

@@ -10,7 +10,7 @@
                 <code class="d-inline-block">{{ address }}</code>
 
                 <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-                    <mat-icon>file_copy</mat-icon>
+                    <mat-icon>content_copy</mat-icon>
                 </button>
             </div>
             <div *ngIf="wallet.isSingleAddressMode">
@@ -20,6 +20,12 @@
                     address above.
                 </p>
                 <br>
+            </div>
+            <div>
+                <p class="mat-caption">
+                    When this address is used, you will receive another address. Addresses can be used multiple times. Make sure you always use a fresh 
+                    address to increase your privacy.
+                </p>
             </div>
         </div>
     </form>
@@ -35,7 +41,7 @@
                     <div *ngFor="let unusedAddress of unusedAddresses" class="tab-pane-line">
                         <code class="d-inline-block">{{ unusedAddress }}</code>
                         <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="unusedAddress" (click)="onCopiedClick()">
-                            <mat-icon>file_copy</mat-icon>
+                            <mat-icon>content_copy</mat-icon>
                         </button>
                     </div>
                 </div>
@@ -46,7 +52,7 @@
                         <code class="d-inline-block">{{ usedAddress }}</code>
 
                         <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="usedAddress" (click)="onCopiedClick()">
-                            <mat-icon>file_copy</mat-icon>
+                            <mat-icon>content_copy</mat-icon>
                         </button>
 
                     </div>
@@ -58,7 +64,7 @@
                         <code class="d-inline-block">{{ changeAddress }}</code>
 
                         <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="changeAddress" (click)="onCopiedClick()">
-                            <mat-icon>file_copy</mat-icon>
+                            <mat-icon>content_copy</mat-icon>
                         </button>
 
                     </div>
