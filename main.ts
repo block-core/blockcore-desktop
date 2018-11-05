@@ -337,12 +337,11 @@ function launchDaemon(apiPath: string, chain: Chain) {
         commandLineArguments.push('-light');
     }
 
-    // if (chain.network !== 'main') {
-    //     commandLineArguments.push('-' + chain.network); // "-testnet" or "-regtest"
-    // }
-
-    // TODO: Force TESTNET until MAINNET launch.
-    commandLineArguments.push('-testnet');
+    if (chain.network.indexOf('regtest') > -1) {
+        commandLineArguments.push('-regtest');
+    } else if (chain.network.indexOf('test') > -1) {
+        commandLineArguments.push('-testnet');
+    }
 
     // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
     // if (chain.dataDir != null)

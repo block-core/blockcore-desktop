@@ -111,7 +111,7 @@
     <h1 class="mat-h1">Sent: {{ transaction.amount }} {{ coinUnit }}</h1>
     <p>Destination: {{transaction.destinationAddress}}</p>
     <p>Fee: {{transaction.feeAmount}} ({{transaction.feeType}})</p>
-    <p>Shuffled: {{transaction.shuffleOutputs}}</p>
+    <!-- <p>Shuffled: {{transaction.shuffleOutputs}}</p> -->
     <button mat-stroked-button (click)="cancel()">Close</button>
   </mat-card>
 

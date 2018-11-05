@@ -48,7 +48,10 @@
             <img src="assets/{{appState.chain}}/logo-full-light.png" class="login-logo">
             <br>
             <br>
-            <h3 class="mat-h3">Log in to access your account</h3>
+            <!-- <h3 class="mat-h3">Log in to access your account</h3> -->
+            <p class="login-banner-text">Version: {{appState.version}}<br>
+            Network: {{appState.network}}<br>
+            Mode: {{appState.mode}}</p>
         </div>
         <div class="login-mode-mobile">
             <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>

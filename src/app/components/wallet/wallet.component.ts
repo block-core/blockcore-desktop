@@ -112,6 +112,10 @@ export class WalletComponent implements OnInit, OnDestroy {
         }
     }
 
+    public resync() {
+        this.wallet.resync();
+    }
+
     public stopStaking() {
         this.wallet.stopStaking();
     }

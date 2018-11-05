@@ -1,13 +1,12 @@
-# City Hub - Continuous Integration Setup for VSTS
+# City Hub - Continuous Integration Setup for Azure Devops
 
-#trigger:
-#  branches:
-#    include:
-#    - master
-#    - feature/*
-#    - bug/*
-#    exclude:
-#    - v* #Exclude verions tags
+trigger:
+ batch: true
+ branches:
+   include:
+   - master
+   exclude:
+   - v* #Exclude verions tags
 
 phases:
 - template: build.yml

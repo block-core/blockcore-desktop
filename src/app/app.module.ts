@@ -31,6 +31,8 @@ import { HistoryModule } from './components/history/history.module';
 import { AdvancedModule } from './components/advanced/advanced.module';
 import { Logger } from './services/logger.service';
 import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
+import { httpInterceptorProviders } from './shared/http-interceptors';
+import { HttpErrorHandler } from './services/http-error-handler.service';
 
 @NgModule({
     declarations: [
@@ -63,6 +65,8 @@ import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
     exports: [
     ],
     providers: [
+        HttpErrorHandler,
+        httpInterceptorProviders,
         ApiService,
         ChainService,
         ElectronService,

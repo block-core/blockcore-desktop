@@ -49,6 +49,11 @@ export class LoginComponent implements OnInit {
 
     changeMode() {
         localStorage.removeItem('Network:Mode');
+
+        // Make sure we shut down the existing node when user choose the change mode action.
+        this.apiService.shutdownNode().subscribe(response => {
+        });
+
         this.router.navigateByUrl('/load');
     }
 

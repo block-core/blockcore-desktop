@@ -38,7 +38,7 @@
 
     <ng-template #spinner>
         <mat-spinner></mat-spinner>
-        <span class="load-text">Connecting... please wait.</span>
+        <span class="load-text">Connecting... please wait.<br><br>Version: {{appState.version}}</span>
         <span *ngIf="delayed">
             <br>
             <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>&nbsp;

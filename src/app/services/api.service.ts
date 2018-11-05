@@ -136,7 +136,7 @@ export class ApiService {
     }
 
     /**
-     * Load a wallet
+     * Load a wallet.
      */
     loadWallet(data: WalletLoad): Observable<any> {
         return this.http
@@ -151,6 +151,14 @@ export class ApiService {
     getWalletStatus(): Observable<any> {
         return this.http
             .get(this.apiUrl + '/wallet/status')
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /** Remove wallet history and perform a new sync. */
+    removeHistory(walletName: string): Observable<any> {
+        return this.http
+            .delete(this.apiUrl + '/wallet/remove-transactions/?all=true&reSync=true&walletName=' + walletName, { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
@@ -448,6 +456,10 @@ export class ApiService {
 
     /** Use this to handle errors (exceptions) that happens outside of an RXJS pipe. See the "handleError" for pipeline error handling. */
     handleException(error: HttpErrorResponse | any) {
+
+        // tslint:disable-next-line:no-debugger
+        debugger;
+
         let errorMessage = '';
 
         if (error.error instanceof ErrorEvent) {
@@ -463,13 +475,10 @@ export class ApiService {
             errorMessage = `Error: ${error.message} (${error.status})`;
         }
 
-        // tslint:disable-next-line:no-debugger
-        debugger;
         this.log.error(errorMessage);
 
         // if (errorMessage.indexOf('Http failure response for') === -1) {
         this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
         // }
-
     }
 }

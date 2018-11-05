@@ -113,6 +113,12 @@ export class WalletService {
         this.getGeneralWalletInfo();
     }
 
+    /** Called to cancel and restart all subscriptions. */
+    private reactivate() {
+        this.cancelSubscriptions();
+        this.startSubscriptions();
+    }
+
     private getWalletBalance() {
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
         this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
@@ -132,6 +138,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
+                    this.reactivate();
                 }
             );
     }
@@ -149,6 +156,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
+                    this.reactivate();
                 }
             );
     }
@@ -222,6 +230,17 @@ export class WalletService {
             );
     }
 
+    public resync() {
+        this.apiService.removeHistory(this.globalService.getWalletName()).subscribe(() => {
+            console.log('history cleared!');
+            // Clear the transaction history so UI updates.
+            this.transactionArray = [];
+            this._history.next(this.transactionArray);
+        }, error => {
+            console.error(error);
+        });
+    }
+
     // "{"enabled":true,"staking":true,"errors":null,"currentBlockSize":151,"currentBlockTx":1,"pooledTx":0,"difficulty":143238.23770936558,"searchInterval":16,"weight":173749360622480,"netStakeWeight":16433501129748,"expectedTime":6}"
 
     private getStakingInfo() {
@@ -248,6 +267,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
+                    this.reactivate();
                 }
             );
     }
@@ -274,7 +294,9 @@ export class WalletService {
 
                         this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
                     }
-
+                }, error => {
+                    this.apiService.handleException(error);
+                    this.reactivate();
                 }
             );
     }
