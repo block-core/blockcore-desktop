@@ -72,6 +72,26 @@
        align-self: center;
     }
 
+    .marketprice
+    {
+        color: green;
+    }
+
+    .marketprice-negative
+    {
+        color: red;
+    }
+
+    .marketprice-larger 
+    {
+        font-size: 1.2rem;
+    }
+
+    .marketprice-table
+    {
+        width: 100%;
+    }
+
     @media screen and (max-width: 599px) {
         .dashboard-split-card
         {

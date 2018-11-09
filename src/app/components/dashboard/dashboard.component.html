@@ -25,19 +25,7 @@
                 </mat-card-content>
             </mat-card>
 
-            <!-- <mat-card class="dashboard-card">
-                <mat-card-title>Make a paper wallet</mat-card-title>
-                <mat-card-content>
-                    <p>
-                        If you need to store coins safely for an extended time, or if you want to give away coins as a gift, you can do so with a paperwallet.
-                    </p>
-
-                    <button mat-stroked-button routerLink="/paperwallet">Create Paper Wallet</button>
-                </mat-card-content>
-            </mat-card> -->
-        </div>
-        <div fxFlex>
-            <mat-card>
+            <mat-card class="dashboard-card">
                 <mat-card-title>Buy coins</mat-card-title>
                 <mat-card-subtitle>You can buy coins from selected partners, and from exchanges.</mat-card-subtitle>
 
@@ -61,6 +49,48 @@
                     </div>
                 </mat-card-content>
 
+            </mat-card>
+
+            <!-- <mat-card class="dashboard-card">
+                <mat-card-title>Make a paper wallet</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        If you need to store coins safely for an extended time, or if you want to give away coins as a gift, you can do so with a paperwallet.
+                    </p>
+
+                    <button mat-stroked-button routerLink="/paperwallet">Create Paper Wallet</button>
+                </mat-card-content>
+            </mat-card> -->
+        </div>
+        <div fxFlex>
+
+            <mat-card class="dashboard-card" *ngIf="coincapAsset">
+                <mat-card-title>{{coincapAsset.name}} ({{coincapAsset.symbol}})</mat-card-title>
+                <mat-card-content>
+                    <span class="marketprice-larger">
+                        ${{coincapAsset.priceUsd | priceUnit}} (<span class="marketprice" [ngClass]="{'marketprice-negative': coincapAsset.changePercent24Hr < 0}">{{coincapAsset.changePercent24Hr | priceUnit}}%</span>)<br>
+                    </span>
+                    <br>
+                    <table class="marketprice-table">
+                        <tr>
+                            <td>Market Cap: {{coincapAsset.marketCapUsd | priceUnit}}</td>
+                            <td>Supply: {{coincapAsset.supply | priceUnit}} {{coincapAsset.symbol}}</td>
+                        </tr>
+                        <tr>
+                            <td>Volume (24Hr): {{coincapAsset.volumeUsd24Hr | priceUnit}}</td>
+                            <td>Rank: {{coincapAsset.rank}}</td>
+                        </tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="dashboard-card" *ngIf="!coincapAsset">
+                <mat-card-title>Loading...</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Please wait...
+                    </p>
+                </mat-card-content>
             </mat-card>
 
             <!-- <mat-card>

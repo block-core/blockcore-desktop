@@ -1,0 +1,62 @@
+import { Injectable } from '@angular/core';
+import { Response } from '@angular/http';
+import { Observable, interval, throwError } from 'rxjs';
+import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+import { ApplicationStateService } from './application-state.service';
+import { Logger } from './logger.service';
+import { HttpErrorResponse, HttpClient } from '@angular/common/http';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class CoincapService {
+
+    private pollingInterval = 60000;
+    private apiUrl = 'https://api.coincap.io/v2/assets/';
+
+    constructor(private http: HttpClient,
+        public appState: ApplicationStateService,
+        private log: Logger,
+        public snackBar: MatSnackBar) {
+
+    }
+
+    getAsset(asset: string): Observable<any> {
+        return interval(this.pollingInterval)
+            .pipe(startWith(0))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + asset)))
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /** Use this to handle error (exceptions) that happens in RXJS pipes. This handler will rethrow the error. */
+    handleError(error: HttpErrorResponse | any) {
+        this.handleException(error);
+        return throwError(error);
+    }
+
+    /** Use this to handle errors (exceptions) that happens outside of an RXJS pipe. See the "handleError" for pipeline error handling. */
+    handleException(error: HttpErrorResponse | any) {
+        let errorMessage = '';
+
+        if (error.error instanceof ErrorEvent) {
+            errorMessage = 'An error occurred:' + error.error.message;
+            // A client-side or network error occurred. Handle it accordingly.
+        } else if (error.error.errors) {
+            errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
+        } else if (error.name === 'HttpErrorResponse') {
+            errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;
+            // if (error.error.target.__zone_symbol__xhrURL.indexOf('api/wallet/files') > -1) {
+            // }
+        } else {
+            errorMessage = `Error: ${error.message} (${error.status})`;
+        }
+
+        this.log.error(errorMessage);
+
+        // if (errorMessage.indexOf('Http failure response for') === -1) {
+        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+        // }
+    }
+}

@@ -1,6 +1,21 @@
 <div class="content">
     <h1 class="mat-h1" *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
 
+    <h3 class="mat-h3">November 9, 2018 (v1.0.10)</h3>
+
+    <ul>
+        <li>Adds a ticker for the current wallet coin (currently showing Bitcoin, until marketdata-service supports City), showing current price, change last 24 hours, market cap and market volume on the dashboard.</li>
+    </ul>
+
+    <h3 class="mat-h3">November 6, 2018 (v1.0.9)</h3>
+
+    <ul>
+        <li>Fixes issue with shutdown not working properly.</li>
+        <li>Improve error handling when communicating with City Chain daemon. Fixes issue with stability.</li>
+        <li>Show version on the load and login screen.</li>
+        <li>Temporarily remove a few features from dashboard that is not implemented fully.</li>
+    </ul>
+
     <h3 class="mat-h3">November 5, 2018 (v1.0.8)</h3>
 
     <ul>
@@ -58,5 +73,8 @@
         <li>Previous release history has been removed. This is the first official release of City Hub.</li>
         <li>It is <strong>only TESTNET</strong> which is supported in this release.</li>
     </ul>
+
+    <br>
+    <em>Preview release change history was purged.</em>
 
 </div>
