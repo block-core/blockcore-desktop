@@ -14,6 +14,7 @@ import { WalletInfo } from '../../../classes/wallet-info';
 import { Router } from '@angular/router';
 import { WalletService } from '../../../services/wallet.service';
 import { debug } from 'util';
+import { TransactionResult } from 'src/app/classes/transaction-result';
 
 @Component({
     selector: 'app-send',
@@ -30,15 +31,17 @@ export class SendComponent implements OnInit, OnDestroy {
     public estimatedFee = 0;
     public totalBalance = 0;
     public apiError: string;
-    private transactionHex: string;
-    private responseMessage: any;
-    private errorMessage: string;
-    private transaction: TransactionBuilding;
-    private walletBalanceSubscription: Subscription;
+    public transactionResult: TransactionResult;
+    public transaction: TransactionBuilding;
 
     public showInputField = true;
     public showSendingField = false;
     public showConfirmationField = false;
+
+    private transactionHex: string;
+    private responseMessage: any;
+    private errorMessage: string;
+    private walletBalanceSubscription: Subscription;
 
     constructor(public readonly appState: ApplicationStateService,
         private apiService: ApiService,
@@ -227,7 +230,6 @@ export class SendComponent implements OnInit, OnDestroy {
             this.wallet.isSingleAddressMode
         );
 
-
         this.apiService
             .buildTransaction(this.transaction)
             .subscribe(
@@ -290,7 +292,7 @@ export class SendComponent implements OnInit, OnDestroy {
             .sendTransaction(transaction)
             .subscribe(
                 response => {
-
+                    this.transactionResult = response;
                 },
                 error => {
                     console.log(error);

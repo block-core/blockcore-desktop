@@ -1,10 +1,10 @@
 {
     "name": "cityhub",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "license": "MIT",
     "author": {
         "name": "City Chain Foundation",
-        "email": "citychainmail@gmail.com",
+        "email": "post@city-chain.org",
         "url": "https://citychain.foundation"
     },
     "description": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
@@ -69,7 +69,7 @@
         "@angular/platform-browser": "6.1.0",
         "@angular/platform-browser-dynamic": "6.1.0",
         "@angular/router": "6.1.0",
-        "@aspnet/signalr": "^1.0.2",
+        "@aspnet/signalr": "1.0.4",
         "@types/bitcoinjs-lib": "^3.4.0",
         "@types/jasmine": "2.8.8",
         "@types/jasminewd2": "2.0.3",

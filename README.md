@@ -9,6 +9,8 @@ Your portal into City Chain
 [1]: https://dev.azure.com/citychain/city-chain/_apis/build/status/CityChainFoundation.city-hub
 [2]: https://dev.azure.com/citychain/city-chain/_build/latest?definitionId=6
 
+[![Known Vulnerabilities](https://snyk.io/test/github/CityChainFoundation/city-hub/badge.svg?targetFile=package.json)](https://snyk.io/test/github/CityChainFoundation/city-hub?targetFile=package.json)
+
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
 It is additionally a full features wallet app that supports multiple cryptocurrencies, 

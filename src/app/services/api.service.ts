@@ -18,6 +18,7 @@ import { ApplicationStateService } from './application-state.service';
 import { ChainService } from './chain.service';
 import { Logger } from './logger.service';
 import { HttpErrorResponse, HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { TransactionResult } from '../classes/transaction-result';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -88,6 +89,35 @@ export class ApiService {
         this.apiUrl = 'http://localhost:' + port + '/api';
     }
 
+    getNodeStatus(): Observable<any> {
+        return this.http
+            .get(this.apiUrl + '/node/status')
+            .pipe(catchError(this.handleInitialError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    // getAddressBookAddresses(): Observable<any> {
+    //     return Observable
+    //         .interval(this.pollingInterval)
+    //         .startWith(0)
+    //         .switchMap(() => this.http.get(this.apiUrl + '/AddressBook'))
+    //         .map((response: Response) => response);
+    // }
+
+    // addAddressBookAddress(data: AddressLabel): Observable<any> {
+    //     return this.http
+    //         .post(this.apiUrl + '/AddressBook/address', JSON.stringify(data), { headers: this.headers })
+    //         .map((response: Response) => response);
+    // }
+
+    // removeAddressBookAddress(label: string): Observable<any> {
+    //     const params: URLSearchParams = new URLSearchParams();
+    //     params.set('label', label);
+    //     return this.http
+    //         .delete(this.apiUrl + '/AddressBook/address', new RequestOptions({ headers: this.headers, params: params }))
+    //         .map((response: Response) => response);
+    // }
+
     /**
      * Gets available wallets at the default path
      */
@@ -95,6 +125,21 @@ export class ApiService {
         return this.http
             .get(this.apiUrl + '/wallet/files')
             .pipe(catchError(this.handleInitialError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /** Gets the extended public key from a certain wallet */
+    getExtPubkey(data: WalletInfo): Observable<any> {
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0',
+            }
+        });
+
+        return this.http
+            .get(this.apiUrl + '/wallet/extpubkey', { headers: this.headers, params: search })
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
@@ -359,16 +404,13 @@ export class ApiService {
      * Estimate the fee of a transaction
      */
     estimateFee(data: FeeEstimation): Observable<any> {
-        const search = new HttpParams({
-            fromObject: {
-                walletName: data.walletName,
-                accountName: data.accountName,
-                destinationAddress: data.destinationAddress,
-                amount: data.amount,
-                feeType: data.feeType,
-                allowUnconfirmed: 'false'
-            }
-        });
+        const search = new HttpParams()
+            .set('walletName', data.walletName)
+            .set('accountName', data.accountName)
+            .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
+            .set('recipients[0].amount', data.recipients[0].amount)
+            .set('feeType', data.feeType)
+            .set('allowUnconfirmed', 'false');
 
         return this.http
             .get(this.apiUrl + '/wallet/estimate-txfee', { headers: this.headers, params: search })
@@ -389,11 +431,11 @@ export class ApiService {
     /**
      * Send transaction
      */
-    sendTransaction(data: TransactionSending): Observable<any> {
+    sendTransaction(data: TransactionSending): Observable<TransactionResult> {
         return this.http
             .post(this.apiUrl + '/wallet/send-transaction', JSON.stringify(data), { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
-            .pipe(map((response: Response) => response));
+            .pipe(map((response: TransactionResult) => response));
     }
 
     /**
@@ -456,10 +498,6 @@ export class ApiService {
 
     /** Use this to handle errors (exceptions) that happens outside of an RXJS pipe. See the "handleError" for pipeline error handling. */
     handleException(error: HttpErrorResponse | any) {
-
-        // tslint:disable-next-line:no-debugger
-        debugger;
-
         let errorMessage = '';
 
         if (error.error instanceof ErrorEvent) {

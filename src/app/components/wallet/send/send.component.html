@@ -108,9 +108,10 @@
 
   <mat-card *ngIf="showConfirmationField">
     <!-- Unable to use coinNotation on this binding, figure out why. The amount is string type. -->
-    <h1 class="mat-h1">Sent: {{ transaction.amount }} {{ coinUnit }}</h1>
-    <p>Destination: {{transaction.destinationAddress}}</p>
-    <p>Fee: {{transaction.feeAmount}} ({{transaction.feeType}})</p>
+    <h1 class="mat-h1">Sent: {{ transaction.recipients[0].amount | number:'1.8-8' }} <small>{{ coinUnit }}</small></h1>
+    <p>Fee: {{transaction.feeAmount | number:'1.8-8'}} <small>{{ coinUnit }}</small></p>
+    <p>Destination: {{transaction.recipients[0].destinationAddress}}</p>
+    <p>Transaction Id: {{transactionResult.transactionId }}</p>
     <!-- <p>Shuffled: {{transaction.shuffleOutputs}}</p> -->
     <button mat-stroked-button (click)="cancel()">Close</button>
   </mat-card>
