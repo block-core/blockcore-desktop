@@ -37,7 +37,6 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     if (serve) {
         var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
-        startDaemon(currentChain);
         event.returnValue = msg;
     }
     else {
@@ -56,7 +55,7 @@ electron_1.ipcMain.on('install-update', function (event, arg) {
     autoUpdater.quitAndInstall();
 });
 process.on('uncaughtException', function (error) {
-    writeLog('uncaughtException:');
+    writeLog('Uncaught exception happened:');
     writeLog(error);
 });
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
@@ -176,7 +175,7 @@ electron_1.app.on('before-quit', function () {
     writeLog('City Hub was exited.');
 });
 var quit = function () {
-    writeLog('Quit of City Hub was initiated.');
+    writeLog('Exit of City Hub was initiated.');
     shutdownDaemon(function (success, error) {
         if (success) {
             writeLog('Shutdown daemon completed. Calling app.quit.');
@@ -202,7 +201,6 @@ var quit = function () {
         writeLog('Shutdown daemon did not complete before timeout. Calling app.quit.');
         electron_1.app.quit();
     }, 2000);
-    writeLog('Quit handler completes. Waiting for the final exit event...');
 };
 electron_1.app.on('window-all-closed', function () {
     quit();
@@ -267,7 +265,7 @@ function launchDaemon(apiPath, chain) {
     // commandLineArguments.push("-datadir=" + chain.dataDir);
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
     daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
-        detached: false
+        detached: true
     });
     daemonProcess.stdout.on('data', function (data) {
         writeLog("City Hub: " + data);

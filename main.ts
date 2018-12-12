@@ -325,7 +325,7 @@ function launchDaemon(apiPath: string, chain: Chain) {
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
 
     daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
-        detached: false
+        detached: true
     });
 
     daemonProcess.stdout.on('data', (data) => {
