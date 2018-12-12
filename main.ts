@@ -4,10 +4,8 @@ import * as url from 'url';
 import * as os from 'os';
 
 const { autoUpdater } = require('electron-updater');
-
-// const electron = require('electron');
-// const path = require('path');
 const fs = require('fs');
+const log = require('electron-log');
 
 interface Chain {
     name: string;
@@ -21,6 +19,9 @@ interface Chain {
     mode?: string;
 }
 
+// Set the log level to info. This is only for logging in this Electron main process.
+log.transports.file.level = 'info';
+
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 
@@ -28,11 +29,11 @@ autoUpdater.autoDownload = false;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
 let contents = null;
+let currentChain: Chain;
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
 const coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
-let chain: Chain;
 
 require('electron-context-menu')({
     showInspectElement: serve
@@ -51,39 +52,40 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     assert(isNumber(arg.wsPort));
     assert(arg.network.length < 20);
 
-    this.chain = arg;
+    currentChain = arg;
 
     if (serve) {
         const msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
     } else {
-        writeLog(this.chain);
-        startDaemon(this.chain);
+        writeLog(currentChain);
+        startDaemon(currentChain);
         event.returnValue = 'OK';
     }
 });
 
 ipcMain.on('check-for-update', (event, arg: Chain) => {
     autoUpdater.checkForUpdates();
-    // event.returnValue = 'OK';
 });
 
 ipcMain.on('download-update', (event, arg: Chain) => {
     autoUpdater.downloadUpdate();
-    // event.returnValue = 'OK';
 });
 
 ipcMain.on('install-update', (event, arg: Chain) => {
     autoUpdater.quitAndInstall();
-    // setImmediate(() => autoUpdater.quitAndInstall());
-    // event.returnValue = 'OK';
+});
+
+process.on('uncaughtException', function (error) {
+    writeLog('Uncaught exception happened:');
+    writeLog(error);
 });
 
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 ipcMain.on('reset-database', (event, arg: string) => {
     // Make sure the daemon is shut down first:
-    shutdownDaemon(() => {
+    shutdownDaemon((success, error) => {
         const userDataPath = app.getPath('userData');
         const appDataFolder = path.dirname(userDataPath);
 
@@ -100,7 +102,6 @@ ipcMain.on('reset-database', (event, arg: string) => {
         deleteFolderRecursive(folderFinalizedBlock);
     });
 
-    // autoUpdater.checkForUpdates();
     event.returnValue = 'OK';
 });
 
@@ -110,7 +111,6 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
     const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
     shell.openItem(dataFolder);
 
-    // autoUpdater.checkForUpdates();
     event.returnValue = 'OK';
 });
 
@@ -125,44 +125,14 @@ autoUpdater.on('error', (error) => {
 
 autoUpdater.on('update-available', (info) => {
     contents.send('update-available', info);
-
-    // dialog.showMessageBox({
-    //     type: 'info',
-    //     title: 'Found Updates',
-    //     message: 'Found updates, do you want update now?',
-    //     buttons: ['Sure', 'No']
-    // }, (buttonIndex) => {
-    //     if (buttonIndex === 0) {
-    //         autoUpdater.downloadUpdate()
-    //     }
-    //     else {
-    //         //updater.enabled = true
-    //         //updater = null
-    //     }
-    // })
 });
 
 autoUpdater.on('update-not-available', (info) => {
     contents.send('update-not-available', info);
-
-    // dialog.showMessageBox({
-    //     title: 'No Updates',
-    //     message: 'Current version is up-to-date.'
-    // })
-
-    // updater.enabled = true
-    // updater = null
 });
 
 autoUpdater.on('update-downloaded', (info) => {
     contents.send('update-downloaded', info);
-
-    // dialog.showMessageBox({
-    //     title: 'Install Updates',
-    //     message: 'Updates downloaded, application will be quit for update...'
-    // }, () => {
-    //     setImmediate(() => autoUpdater.quitAndInstall())
-    // })
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
@@ -236,7 +206,6 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-
 }
 
 // This method will be called when Electron has finished
@@ -245,37 +214,43 @@ function createWindow() {
 app.on('ready', () => {
     createTray();
     createWindow();
-    registerAutoUpdater();
 });
 
-
-function registerAutoUpdater() {
-    writeLog('REGISTER AUTO UPDATER EVENTS!');
-    // autoUpdater.checkForUpdates();
-
-    // autoUpdater.on('update-downloaded', (info) => {
-    //     console.log('Update downloaded');
-
-    //     setTimeout(() => {
-    //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
-    //         //autoUpdater.quitAndInstall();
-    //     }, 10000);
-
-    // });
-
-    // autoUpdater.checkForUpdatesAndNotify();
-}
-
-// app.on('before-quit', () => {
-//     shutdownDaemon();
-// });
+app.on('before-quit', () => {
+    writeLog('City Hub was exited.');
+});
 
 const quit = () => {
-    shutdownDaemon(() => { });
-    app.quit();
+    writeLog('Exit of City Hub was initiated.');
+
+    shutdownDaemon((success, error) => {
+        if (success) {
+            writeLog('Shutdown daemon completed. Calling app.quit.');
+
+            app.quit();
+        } else {
+            writeLog('Shutdown daemon failed. Attempting a single retry.');
+            writeLog(error);
+            // Perform another retry, and quit no matter the result.
+            shutdownDaemon((ok, err) => {
+                if (ok) {
+                    writeLog('Shutdown daemon retry completed successfully. Calling app.quit.');
+                } else {
+                    writeLog('Shutdown daemon retry failed. Calling app.quit.');
+                    writeLog(err);
+                }
+
+                app.quit();
+            });
+        }
+    });
+
+    setTimeout(() => {
+        writeLog('Shutdown daemon did not complete before timeout. Calling app.quit.');
+        app.quit();
+    }, 2000);
 };
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
     quit();
 });
@@ -360,26 +335,42 @@ function launchDaemon(apiPath: string, chain: Chain) {
 
 function shutdownDaemon(callback) {
 
-    if (!chain) {
-        callback();
+    if (!currentChain) {
+        writeLog('Chain not selected, nothing to shutdown.');
+        callback(true, null);
         return;
     }
 
     if (process.platform !== 'darwin' && !serve) {
+        writeLog('Sending POST request to shut down daemon.');
+
         const http = require('http');
         const options = {
             hostname: 'localhost',
-            port: chain.apiPort,
+            port: currentChain.apiPort,
             path: '/api/node/shutdown',
             method: 'POST'
         };
 
-        const req = http.request(options, (res) => {
-            callback();
-        }).on('error', function (e) {
-            callback();
+        const req = http.request(options);
+
+        req.on('response', function (res) {
+            if (res.statusCode === 200) {
+                writeLog('Request to shutdown daemon returned HTTP success code.');
+                callback(true, null);
+            } else {
+                writeLog('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+                callback(false, res);
+            }
         });
-        req.write('');
+
+        req.on('error', function (err) {
+            writeLog('Request to shutdown daemon failed.');
+            callback(false, err);
+        });
+
+        req.setHeader('content-type', 'application/json-patch+json');
+        req.write('true');
         req.end();
     }
 }
@@ -431,8 +422,7 @@ function createTray() {
 }
 
 function writeLog(msg) {
-    console.log(msg);
-    // log.info(msg);
+    log.info(msg);
 }
 
 function isNumber(value: string | number): boolean {

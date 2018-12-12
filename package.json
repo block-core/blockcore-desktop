@@ -1,6 +1,6 @@
 {
     "name": "cityhub",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "license": "MIT",
     "author": {
         "name": "City Chain Foundation",
@@ -49,7 +49,7 @@
     "private": true,
     "dependencies": {
         "electron-context-menu": "^0.10.0",
-        "electron-log": "^2.2.16",
+        "electron-log": "^2.2.17",
         "electron-updater": "^3.0.3"
     },
     "devDependencies": {
@@ -69,7 +69,7 @@
         "@angular/platform-browser": "6.1.0",
         "@angular/platform-browser-dynamic": "6.1.0",
         "@angular/router": "6.1.0",
-        "@aspnet/signalr": "1.0.4",
+        "@aspnet/signalr": "1.1.0",
         "@types/bitcoinjs-lib": "^3.4.0",
         "@types/jasmine": "2.8.8",
         "@types/jasminewd2": "2.0.3",

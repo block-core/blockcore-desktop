@@ -1,24 +1,24 @@
 "use strict";
-var _this = this;
 exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
 var autoUpdater = require('electron-updater').autoUpdater;
-// const electron = require('electron');
-// const path = require('path');
 var fs = require('fs');
+var log = require('electron-log');
+// Set the log level to info. This is only for logging in this Electron main process.
+log.transports.file.level = 'info';
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
 var contents = null;
+var currentChain;
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve' || val === '-serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
-var chain;
 require('electron-context-menu')({
     showInspectElement: serve
 });
@@ -33,35 +33,36 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(isNumber(arg.apiPort));
     assert(isNumber(arg.wsPort));
     assert(arg.network.length < 20);
-    _this.chain = arg;
+    currentChain = arg;
     if (serve) {
         var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
+        startDaemon(currentChain);
         event.returnValue = msg;
     }
     else {
-        writeLog(_this.chain);
-        startDaemon(_this.chain);
+        writeLog(currentChain);
+        startDaemon(currentChain);
         event.returnValue = 'OK';
     }
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
     autoUpdater.checkForUpdates();
-    // event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('download-update', function (event, arg) {
     autoUpdater.downloadUpdate();
-    // event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('install-update', function (event, arg) {
     autoUpdater.quitAndInstall();
-    // setImmediate(() => autoUpdater.quitAndInstall());
-    // event.returnValue = 'OK';
+});
+process.on('uncaughtException', function (error) {
+    writeLog('uncaughtException:');
+    writeLog(error);
 });
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 electron_1.ipcMain.on('reset-database', function (event, arg) {
     // Make sure the daemon is shut down first:
-    shutdownDaemon(function () {
+    shutdownDaemon(function (success, error) {
         var userDataPath = electron_1.app.getPath('userData');
         var appDataFolder = path.dirname(userDataPath);
         var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
@@ -75,7 +76,6 @@ electron_1.ipcMain.on('reset-database', function (event, arg) {
         deleteFolderRecursive(folderCoinView);
         deleteFolderRecursive(folderFinalizedBlock);
     });
-    // autoUpdater.checkForUpdates();
     event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('open-data-folder', function (event, arg) {
@@ -83,7 +83,6 @@ electron_1.ipcMain.on('open-data-folder', function (event, arg) {
     var appDataFolder = path.dirname(userDataPath);
     var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
     electron_1.shell.openItem(dataFolder);
-    // autoUpdater.checkForUpdates();
     event.returnValue = 'OK';
 });
 autoUpdater.on('checking-for-update', function () {
@@ -95,38 +94,12 @@ autoUpdater.on('error', function (error) {
 });
 autoUpdater.on('update-available', function (info) {
     contents.send('update-available', info);
-    // dialog.showMessageBox({
-    //     type: 'info',
-    //     title: 'Found Updates',
-    //     message: 'Found updates, do you want update now?',
-    //     buttons: ['Sure', 'No']
-    // }, (buttonIndex) => {
-    //     if (buttonIndex === 0) {
-    //         autoUpdater.downloadUpdate()
-    //     }
-    //     else {
-    //         //updater.enabled = true
-    //         //updater = null
-    //     }
-    // })
 });
 autoUpdater.on('update-not-available', function (info) {
     contents.send('update-not-available', info);
-    // dialog.showMessageBox({
-    //     title: 'No Updates',
-    //     message: 'Current version is up-to-date.'
-    // })
-    // updater.enabled = true
-    // updater = null
 });
 autoUpdater.on('update-downloaded', function (info) {
     contents.send('update-downloaded', info);
-    // dialog.showMessageBox({
-    //     title: 'Install Updates',
-    //     message: 'Updates downloaded, application will be quit for update...'
-    // }, () => {
-    //     setImmediate(() => autoUpdater.quitAndInstall())
-    // })
 });
 autoUpdater.on('download-progress', function (progressObj) {
     contents.send('download-progress', progressObj);
@@ -198,28 +171,39 @@ function createWindow() {
 electron_1.app.on('ready', function () {
     createTray();
     createWindow();
-    registerAutoUpdater();
 });
-function registerAutoUpdater() {
-    writeLog('REGISTER AUTO UPDATER EVENTS!');
-    // autoUpdater.checkForUpdates();
-    // autoUpdater.on('update-downloaded', (info) => {
-    //     console.log('Update downloaded');
-    //     setTimeout(() => {
-    //         // TODO: Add UI to inform users that update downloaded and give them option to quit and install.
-    //         //autoUpdater.quitAndInstall();
-    //     }, 10000);
-    // });
-    // autoUpdater.checkForUpdatesAndNotify();
-}
-// app.on('before-quit', () => {
-//     shutdownDaemon();
-// });
+electron_1.app.on('before-quit', function () {
+    writeLog('City Hub was exited.');
+});
 var quit = function () {
-    shutdownDaemon(function () { });
-    electron_1.app.quit();
+    writeLog('Quit of City Hub was initiated.');
+    shutdownDaemon(function (success, error) {
+        if (success) {
+            writeLog('Shutdown daemon completed. Calling app.quit.');
+            electron_1.app.quit();
+        }
+        else {
+            writeLog('Shutdown daemon failed. Attempting a single retry.');
+            writeLog(error);
+            // Perform another retry, and quit no matter the result.
+            shutdownDaemon(function (ok, err) {
+                if (ok) {
+                    writeLog('Shutdown daemon retry completed successfully. Calling app.quit.');
+                }
+                else {
+                    writeLog('Shutdown daemon retry failed. Calling app.quit.');
+                    writeLog(err);
+                }
+                electron_1.app.quit();
+            });
+        }
+    });
+    setTimeout(function () {
+        writeLog('Shutdown daemon did not complete before timeout. Calling app.quit.');
+        electron_1.app.quit();
+    }, 2000);
+    writeLog('Quit handler completes. Waiting for the final exit event...');
 };
-// Quit when all windows are closed.
 electron_1.app.on('window-all-closed', function () {
     quit();
 });
@@ -290,24 +274,37 @@ function launchDaemon(apiPath, chain) {
     });
 }
 function shutdownDaemon(callback) {
-    if (!chain) {
-        callback();
+    if (!currentChain) {
+        writeLog('Chain not selected, nothing to shutdown.');
+        callback(true, null);
         return;
     }
     if (process.platform !== 'darwin' && !serve) {
+        writeLog('Sending POST request to shut down daemon.');
         var http = require('http');
         var options = {
             hostname: 'localhost',
-            port: chain.apiPort,
+            port: currentChain.apiPort,
             path: '/api/node/shutdown',
             method: 'POST'
         };
-        var req = http.request(options, function (res) {
-            callback();
-        }).on('error', function (e) {
-            callback();
+        var req = http.request(options);
+        req.on('response', function (res) {
+            if (res.statusCode === 200) {
+                writeLog('Request to shutdown daemon returned HTTP success code.');
+                callback(true, null);
+            }
+            else {
+                writeLog('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+                callback(false, res);
+            }
         });
-        req.write('');
+        req.on('error', function (err) {
+            writeLog('Request to shutdown daemon failed.');
+            callback(false, err);
+        });
+        req.setHeader('content-type', 'application/json-patch+json');
+        req.write('true');
         req.end();
     }
 }
@@ -352,8 +349,7 @@ function createTray() {
     });
 }
 function writeLog(msg) {
-    console.log(msg);
-    // log.info(msg);
+    log.info(msg);
 }
 function isNumber(value) {
     return !isNaN(Number(value.toString()));
