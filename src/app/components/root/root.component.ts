@@ -31,6 +31,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
     private readonly destroyed$ = new Subject<void>();
     private walletObservable;
+    private ipc: Electron.IpcRenderer;
 
     handset = false;
     title = 'app';
@@ -86,6 +87,30 @@ export class RootComponent implements OnInit, OnDestroy {
             this.appState.version = applicationVersion;
             this.log.info('Version: ' + applicationVersion);
         }
+
+        this.ipc = electronService.ipcRenderer;
+
+        this.ipc.on('daemon-exiting', (event, error) => {
+            console.log('daemon is currently being stopped... please wait...');
+            this.appState.shutdownInProgress = true;
+            this.cd.detectChanges();
+
+            // If the exit takes a very long time, we want to allow users to forcefully exit City Hub.
+            setTimeout(() => {
+                this.appState.shutdownDelayed = true;
+                this.cd.detectChanges();
+            }, 4000);
+
+        });
+
+        this.ipc.on('daemon-exited', (event, error) => {
+            console.log('daemon is stopped.');
+            this.appState.shutdownInProgress = false;
+            this.appState.shutdownDelayed = false;
+
+            // Perform a new close event on the window, this time it will close itself.
+            window.close();
+        });
 
         // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
         const isSmallScreen = breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
@@ -176,6 +201,10 @@ export class RootComponent implements OnInit, OnDestroy {
     openMenu() {
         this.menuOpened = true;
         this.cd.detectChanges();
+    }
+
+    forceExit() {
+        window.close();
     }
 
     ngOnInit() {

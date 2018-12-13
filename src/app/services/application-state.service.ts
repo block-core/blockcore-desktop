@@ -39,6 +39,10 @@ export class ApplicationStateService {
 
     fullHeight = false;
 
+    shutdownInProgress = false;
+
+    shutdownDelayed = false;
+
     /** Indicates if we are connected from City Hub with the City Chain daemon. */
     connected = false;
 

@@ -30,6 +30,18 @@ autoUpdater.autoDownload = false;
 let mainWindow = null;
 let contents = null;
 let currentChain: Chain;
+let shutdownInitiated = false;
+
+// currentChain = {
+//     name: 'City Chain',
+//     identity: 'city',
+//     network: 'main',
+//     port: 4333,
+//     rpcPort: 4334,
+//     apiPort: 4335,
+//     wsPort: 4336,
+//     tooltip: ''
+// };
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve' || val === '-serve');
@@ -115,8 +127,10 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
 });
 
 autoUpdater.on('checking-for-update', () => {
-    contents.send('checking-for-update');
-    writeLog('Checking for update...');
+    if (!serve) {
+        contents.send('checking-for-update');
+        writeLog('Checking for update...');
+    }
 });
 
 autoUpdater.on('error', (error) => {
@@ -196,7 +210,21 @@ function createWindow() {
     }
 
     // Emitted when the window is going to close.
-    mainWindow.on('close', () => {
+    mainWindow.on('close', (event) => {
+
+        // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
+        if (!shutdownInitiated) {
+            shutdownInitiated = true;
+
+            event.preventDefault();
+
+            contents.send('daemon-exiting');
+
+            // Call the shutdown while we show progress window.
+            shutdown(() => { });
+
+            return true;
+        }
     });
 
     // Emitted when the window is closed.
@@ -220,35 +248,36 @@ app.on('before-quit', () => {
     writeLog('City Hub was exited.');
 });
 
-const quit = () => {
-    writeLog('Exit of City Hub was initiated.');
+const shutdown = (callback) => {
+    writeLog('Signal a shutdown to the daemon.');
 
     shutdownDaemon((success, error) => {
         if (success) {
-            writeLog('Shutdown daemon completed. Calling app.quit.');
-
-            app.quit();
+            writeLog('Shutdown daemon signaling completed. Waiting for exit signal.');
+            callback();
         } else {
-            writeLog('Shutdown daemon failed. Attempting a single retry.');
+            writeLog('Shutdown daemon signaling failed. Attempting a single retry.');
             writeLog(error);
             // Perform another retry, and quit no matter the result.
             shutdownDaemon((ok, err) => {
                 if (ok) {
-                    writeLog('Shutdown daemon retry completed successfully. Calling app.quit.');
+                    writeLog('Shutdown daemon retry signaling completed successfully.');
                 } else {
-                    writeLog('Shutdown daemon retry failed. Calling app.quit.');
+                    writeLog('Shutdown daemon retry signaling failed.');
                     writeLog(err);
                 }
 
-                app.quit();
+                // Inform that we are unable to shutdown the daemon.
+                contents.send('daemon-exited', { message: 'Unable to communicate with background process.' });
+
+                callback();
             });
         }
     });
+};
 
-    setTimeout(() => {
-        writeLog('Shutdown daemon did not complete before timeout. Calling app.quit.');
-        app.quit();
-    }, 2000);
+const quit = () => {
+    app.quit();
 };
 
 app.on('window-all-closed', () => {
@@ -329,7 +358,16 @@ function launchDaemon(apiPath: string, chain: Chain) {
     });
 
     daemonProcess.stdout.on('data', (data) => {
-        writeLog(`City Hub: ${data}`);
+        writeDebug(`City Chain: ${data}`);
+    });
+
+    daemonProcess.on('exit', function (code, signal) {
+        writeLog(`City Chain daemon process exited with code ${code} and signal ${signal}.`);
+        contents.send('daemon-exited');
+    });
+
+    daemonProcess.on('error ', function (code, signal) {
+        writeLog(`City Chain daemon process failed to start. Code ${code} and signal ${signal}.`);
     });
 }
 
@@ -396,7 +434,7 @@ function createTray() {
         {
             label: 'Exit',
             click: function () {
-                app.quit();
+                mainWindow.close();
             }
         }
     ]);
@@ -419,6 +457,10 @@ function createTray() {
             systemTray.destroy();
         }
     });
+}
+
+function writeDebug(msg) {
+    log.debug(msg);
 }
 
 function writeLog(msg) {

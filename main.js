@@ -16,6 +16,17 @@ autoUpdater.autoDownload = false;
 var mainWindow = null;
 var contents = null;
 var currentChain;
+var shutdownInitiated = false;
+// currentChain = {
+//     name: 'City Chain',
+//     identity: 'city',
+//     network: 'main',
+//     port: 4333,
+//     rpcPort: 4334,
+//     apiPort: 4335,
+//     wsPort: 4336,
+//     tooltip: ''
+// };
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve' || val === '-serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
@@ -85,8 +96,10 @@ electron_1.ipcMain.on('open-data-folder', function (event, arg) {
     event.returnValue = 'OK';
 });
 autoUpdater.on('checking-for-update', function () {
-    contents.send('checking-for-update');
-    writeLog('Checking for update...');
+    if (!serve) {
+        contents.send('checking-for-update');
+        writeLog('Checking for update...');
+    }
 });
 autoUpdater.on('error', function (error) {
     contents.send('update-error', error);
@@ -154,7 +167,16 @@ function createWindow() {
         mainWindow.webContents.openDevTools();
     }
     // Emitted when the window is going to close.
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function (event) {
+        // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
+        if (!shutdownInitiated) {
+            shutdownInitiated = true;
+            event.preventDefault();
+            contents.send('daemon-exiting');
+            // Call the shutdown while we show progress window.
+            shutdown(function () { });
+            return true;
+        }
     });
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -174,33 +196,34 @@ electron_1.app.on('ready', function () {
 electron_1.app.on('before-quit', function () {
     writeLog('City Hub was exited.');
 });
-var quit = function () {
-    writeLog('Exit of City Hub was initiated.');
+var shutdown = function (callback) {
+    writeLog('Signal a shutdown to the daemon.');
     shutdownDaemon(function (success, error) {
         if (success) {
-            writeLog('Shutdown daemon completed. Calling app.quit.');
-            electron_1.app.quit();
+            writeLog('Shutdown daemon signaling completed. Waiting for exit signal.');
+            callback();
         }
         else {
-            writeLog('Shutdown daemon failed. Attempting a single retry.');
+            writeLog('Shutdown daemon signaling failed. Attempting a single retry.');
             writeLog(error);
             // Perform another retry, and quit no matter the result.
             shutdownDaemon(function (ok, err) {
                 if (ok) {
-                    writeLog('Shutdown daemon retry completed successfully. Calling app.quit.');
+                    writeLog('Shutdown daemon retry signaling completed successfully.');
                 }
                 else {
-                    writeLog('Shutdown daemon retry failed. Calling app.quit.');
+                    writeLog('Shutdown daemon retry signaling failed.');
                     writeLog(err);
                 }
-                electron_1.app.quit();
+                // Inform that we are unable to shutdown the daemon.
+                contents.send('daemon-exited', { message: 'Unable to communicate with background process.' });
+                callback();
             });
         }
     });
-    setTimeout(function () {
-        writeLog('Shutdown daemon did not complete before timeout. Calling app.quit.');
-        electron_1.app.quit();
-    }, 2000);
+};
+var quit = function () {
+    electron_1.app.quit();
 };
 electron_1.app.on('window-all-closed', function () {
     quit();
@@ -268,7 +291,14 @@ function launchDaemon(apiPath, chain) {
         detached: true
     });
     daemonProcess.stdout.on('data', function (data) {
-        writeLog("City Hub: " + data);
+        writeDebug("City Chain: " + data);
+    });
+    daemonProcess.on('exit', function (code, signal) {
+        writeLog("City Chain daemon process exited with code " + code + " and signal " + signal + ".");
+        contents.send('daemon-exited');
+    });
+    daemonProcess.on('error ', function (code, signal) {
+        writeLog("City Chain daemon process failed to start. Code " + code + " and signal " + signal + ".");
     });
 }
 function shutdownDaemon(callback) {
@@ -326,7 +356,7 @@ function createTray() {
         {
             label: 'Exit',
             click: function () {
-                electron_1.app.quit();
+                mainWindow.close();
             }
         }
     ]);
@@ -345,6 +375,9 @@ function createTray() {
             systemTray.destroy();
         }
     });
+}
+function writeDebug(msg) {
+    log.debug(msg);
 }
 function writeLog(msg) {
     log.info(msg);

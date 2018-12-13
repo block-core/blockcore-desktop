@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UpdateInfo } from '../components/update/update-info';
+import { ApplicationStateService } from './application-state.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,9 @@ export class UpdateService {
     public available = false;
     public downloading = false;
 
-    constructor(private electronService: ElectronService) {
+    constructor(private electronService: ElectronService,
+        // private readonly cd: ChangeDetectorRef,
+        private appState: ApplicationStateService) {
 
         this.ipc = electronService.ipcRenderer;
 
