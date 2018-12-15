@@ -85,6 +85,11 @@
                     <h4 *ngIf="showFiller" mat-line>About</h4>
                 </mat-list-item>
 
+                <mat-list-item *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/tools">
+                    <mat-icon mat-list-icon>build</mat-icon>
+                    <h4 *ngIf="showFiller" mat-line>Tools</h4>
+                </mat-list-item>
+
                 <mat-list-item *ngIf="appModes.enabled('logout')" routerLinkActive="main-menu-active" routerLink="/logout">
                     <mat-icon mat-list-icon>power_settings_new</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Log out</h4>
@@ -159,6 +164,10 @@
                 <button mat-menu-item routerLink="/about">
                     <mat-icon>info</mat-icon>
                     <span>About</span>
+                </button>
+                <button mat-menu-item routerLink="/tools">
+                    <mat-icon>build</mat-icon>
+                    <span>Tools</span>
                 </button>
                 <button mat-menu-item (click)="checkForUpdates()">
                     <mat-icon>system_update</mat-icon>

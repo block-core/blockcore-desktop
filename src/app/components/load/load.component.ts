@@ -111,6 +111,7 @@ export class LoadComponent implements OnDestroy {
             }, 30000); // 30000 Make sure it is fairly high, we don't want users to immediatly perform advanced reset options when they don't need to.
         });
 
+        // TODO: Change this into an status API call.
         this.apiSubscription = this.apiService.getWalletFiles()
             .pipe(retryWhen(errors => errors.pipe(delay(2000))))
             .subscribe(() => this.start());

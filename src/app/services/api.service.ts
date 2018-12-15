@@ -30,8 +30,8 @@ export class ApiService {
     static singletonInstance: ApiService;
 
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    private pollingInterval = 3000;
-    private longPollingInterval = 6000;
+    private pollingInterval = 4000;
+    private longPollingInterval = 8000;
     private daemon;
 
     public apiUrl: string;
@@ -93,6 +93,14 @@ export class ApiService {
         return this.http
             .get(this.apiUrl + '/node/status')
             .pipe(catchError(this.handleInitialError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    getNodeStatusInterval(): Observable<any> {
+        return interval(this.pollingInterval)
+            .pipe(startWith(0))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/node/status', { headers: this.headers })))
+            .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 

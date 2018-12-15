@@ -33,6 +33,7 @@ import { Logger } from './services/logger.service';
 import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
 import { httpInterceptorProviders } from './shared/http-interceptors';
 import { HttpErrorHandler } from './services/http-error-handler.service';
+import { ToolsModule } from './components/tools/tools.module';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import { HttpErrorHandler } from './services/http-error-handler.service';
         MerchantsModule,
         DetailsModule,
         AdvancedModule,
+        ToolsModule,
         PaperWalletModule,
         HistoryModule,
         AppRoutingModule,

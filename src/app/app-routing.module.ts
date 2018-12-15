@@ -13,6 +13,7 @@ import { UpdateComponent } from './components/update/update.component';
 import { HistoryComponent } from './components/history/history.component';
 import { AdvancedComponent } from './components/advanced/advanced.component';
 import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
+import { ToolsComponent } from './components/tools/tools.component';
 
 const routes: Routes = [
     {
@@ -96,6 +97,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Update City Hub'
+        },
+    },
+    {
+        path: 'tools',
+        component: ToolsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Tools'
         },
     },
     {

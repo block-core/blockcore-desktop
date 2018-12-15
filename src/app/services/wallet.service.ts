@@ -88,6 +88,55 @@ export class WalletService {
         this.cancelSubscriptions();
     }
 
+    public startStaking(password: string) {
+        this.isStarting = true;
+        this.isStopping = false;
+
+        const walletData = {
+            name: this.globalService.getWalletName(),
+            password: password
+        };
+
+        this.apiService.startStaking(walletData)
+            .subscribe(
+                response => {
+                    this.log.info('Start staking:', response);
+                    this.stakingEnabled = true;
+                },
+                error => {
+                    this.isStarting = false;
+                    this.stakingEnabled = false;
+                    this.apiService.handleException(error);
+                }
+            );
+    }
+
+    public stopStaking() {
+        this.isStopping = true;
+        this.isStarting = false;
+        this.apiService.stopStaking()
+            .subscribe(
+                response => {
+                    this.log.info('Stop staking:', response);
+                    this.stakingEnabled = false;
+                },
+                error => {
+                    this.apiService.handleException(error);
+                }
+            );
+    }
+
+    public resync() {
+        this.apiService.removeHistory(this.globalService.getWalletName()).subscribe(() => {
+            console.log('history cleared!');
+            // Clear the transaction history so UI updates.
+            this.transactionArray = [];
+            this._history.next(this.transactionArray);
+        }, error => {
+            console.error(error);
+        });
+    }
+
     private cancelSubscriptions() {
         if (this.walletBalanceSubscription) {
             this.walletBalanceSubscription.unsubscribe();
@@ -190,55 +239,6 @@ export class WalletService {
         }
 
         this._history.next(this.transactionArray);
-    }
-
-    public startStaking(password: string) {
-        this.isStarting = true;
-        this.isStopping = false;
-
-        const walletData = {
-            name: this.globalService.getWalletName(),
-            password: password
-        };
-
-        this.apiService.startStaking(walletData)
-            .subscribe(
-                response => {
-                    this.log.info('Start staking:', response);
-                    this.stakingEnabled = true;
-                },
-                error => {
-                    this.isStarting = false;
-                    this.stakingEnabled = false;
-                    this.apiService.handleException(error);
-                }
-            );
-    }
-
-    public stopStaking() {
-        this.isStopping = true;
-        this.isStarting = false;
-        this.apiService.stopStaking()
-            .subscribe(
-                response => {
-                    this.log.info('Stop staking:', response);
-                    this.stakingEnabled = false;
-                },
-                error => {
-                    this.apiService.handleException(error);
-                }
-            );
-    }
-
-    public resync() {
-        this.apiService.removeHistory(this.globalService.getWalletName()).subscribe(() => {
-            console.log('history cleared!');
-            // Clear the transaction history so UI updates.
-            this.transactionArray = [];
-            this._history.next(this.transactionArray);
-        }, error => {
-            console.error(error);
-        });
     }
 
     // "{"enabled":true,"staking":true,"errors":null,"currentBlockSize":151,"currentBlockTx":1,"pooledTx":0,"difficulty":143238.23770936558,"searchInterval":16,"weight":173749360622480,"netStakeWeight":16433501129748,"expectedTime":6}"
