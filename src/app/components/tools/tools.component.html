@@ -20,21 +20,18 @@
     <mat-tab label="Resync">
         <div class="tab-pane content">
 
-            <mat-card>
-                <mat-card-title>Advanced</mat-card-title>
-                <mat-card-subtitle>If you have issues with your wallet, these actions might help you</mat-card-subtitle>
-                <mat-card-content>
-                    <p>
-                        Sometimes your wallet might be unable to update the correct state on all transactions. If you have performed a payment and it never become confirmed, it might simply be your local blockchain cache that is not up-to-date.
-                    </p>
-                    <p>
-                        <button mat-flat-button color="warn" [disabled]="resyncTriggered" (click)="resync()">Clear transactions history and resync</button>&nbsp;
-                    </p>
-                    <p *ngIf="resyncTriggered">
-                        Transaction history cleared and syncing your wallet from the date of creation. You can see the status by clicking the top right <a routerLink="/network">network status</a> icon.
-                    </p>
-                </mat-card-content>
-            </mat-card>
+            <h1>Resync</h1>
+
+            <p class="mat-caption">If you have issues with your wallet, these actions might help you</p>
+            <p>
+                Sometimes your wallet might be unable to update the correct state on all transactions. If you have performed a payment and it never become confirmed, it might simply be your local blockchain cache that is not up-to-date.
+            </p>
+            <p>
+                <button mat-flat-button color="warn" [disabled]="resyncTriggered" (click)="resync()">Clear transactions history and resync</button>&nbsp;
+            </p>
+            <p *ngIf="resyncTriggered">
+                Transaction history cleared and syncing your wallet from the date of creation. You can see the status by clicking the top right <a routerLink="/network">network status</a> icon.
+            </p>
 
         </div>
     </mat-tab>

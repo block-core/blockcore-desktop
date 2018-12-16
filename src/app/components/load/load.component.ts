@@ -4,12 +4,9 @@ import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
 import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
-const bip39 = require('bip39');
-const bitcoin = require('bitcoinjs-lib');
-import { delay, retryWhen, catchError } from 'rxjs/operators';
+import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
-import { empty } from 'rxjs';
 
 export interface ListItem {
     name: string;

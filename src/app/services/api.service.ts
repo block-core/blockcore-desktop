@@ -311,7 +311,7 @@ export class ApiService {
                 walletName: data.walletName,
                 accountName: 'account 0',
                 feeType: data.feeType,
-                allowUnconfirmed: 'false'
+                allowUnconfirmed: 'true'
             }
         });
 
@@ -418,7 +418,7 @@ export class ApiService {
             .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
             .set('recipients[0].amount', data.recipients[0].amount)
             .set('feeType', data.feeType)
-            .set('allowUnconfirmed', 'false');
+            .set('allowUnconfirmed', 'true');
 
         return this.http
             .get(this.apiUrl + '/wallet/estimate-txfee', { headers: this.headers, params: search })

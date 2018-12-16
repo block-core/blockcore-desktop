@@ -1,14 +1,9 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, NgZone } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, NgZone } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
-import { HubConnectionBuilder } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import { HDNode, Transaction } from 'bitcoinjs-lib';
 import { ApiService } from '../../services/api.service';
-const bip39 = require('bip39');
-const bitcoin = require('bitcoinjs-lib');
-import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { ElectronService } from 'ngx-electron';
 import { UpdateService } from '../../services/update.service';

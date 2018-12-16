@@ -46,6 +46,10 @@ export class ApplicationStateService {
     /** Indicates if we are connected from City Hub with the City Chain daemon. */
     connected = false;
 
+    fullNodeVersion: string;
+
+    protocolVersion: number;
+
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
     }

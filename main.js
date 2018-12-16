@@ -274,6 +274,7 @@ function launchDaemon(apiPath, chain) {
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
     commandLineArguments.push('-wsport=' + chain.wsPort);
+    commandLineArguments.push('-txindex=1'); // Required for History (Block) explorer.
     if (chain.mode === 'light') {
         commandLineArguments.push('-light');
     }

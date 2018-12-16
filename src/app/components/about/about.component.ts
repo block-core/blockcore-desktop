@@ -16,16 +16,13 @@ import { ApiService } from 'src/app/services/api.service';
     styleUrls: ['./about.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class AboutComponent implements OnInit, OnDestroy {
+export class AboutComponent implements OnInit {
     @HostBinding('class.about') hostClass = true;
 
     private nodeStatusSubscription: Subscription;
     public clientName: string;
     public applicationVersion: string;
-    public fullNodeVersion: string;
     public network: string;
-    public protocolVersion: number;
-    public blockHeight: number;
     public dataDirectory: string;
 
     constructor(public appState: ApplicationStateService, private apiService: ApiService) {
@@ -33,33 +30,19 @@ export class AboutComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.startSubscriptions();
-    }
-
-    ngOnDestroy() {
-        this.cancelSubscriptions();
-    }
-
-    private startSubscriptions() {
-        this.nodeStatusSubscription = this.apiService.getNodeStatusInterval()
+        this.nodeStatusSubscription = this.apiService.getNodeStatus()
             .subscribe(
                 response => {
+                    this.appState.fullNodeVersion = response.version;
+                    this.appState.protocolVersion = response.protocolVersion;
+
                     this.clientName = response.agent;
-                    this.fullNodeVersion = response.version;
                     this.network = response.network;
-                    this.protocolVersion = response.protocolVersion;
-                    this.blockHeight = response.blockStoreHeight;
                     this.dataDirectory = response.dataDirectoryPath;
                 },
                 error => {
                     this.apiService.handleException(error);
                 }
             );
-    }
-
-    private cancelSubscriptions() {
-        if (this.nodeStatusSubscription) {
-            this.nodeStatusSubscription.unsubscribe();
-        }
     }
 }
