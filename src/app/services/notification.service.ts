@@ -130,7 +130,7 @@ export class NotificationService {
 
         if (existing) {
             if (!existing.count) {
-                existing.count = 0;
+                existing.count = 1;
             }
 
             existing.count += 1;
@@ -143,10 +143,14 @@ export class NotificationService {
             tile.date = new Date();
         }
 
+        if (!tile.count) {
+            tile.count = 1;
+        }
+
         this.notifications.push(tile);
 
         // We only keep a certain list of notificatoins, so remove the oldest.
-        if (this.notifications.length > 10) {
+        if (this.notifications.length > 20) {
             this.notifications.shift();
         }
 

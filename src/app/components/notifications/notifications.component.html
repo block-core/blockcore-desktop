@@ -7,7 +7,7 @@
 
     </div>
 
-    <mat-card *ngFor="let tile of notification.notifications.slice().reverse()" class="notifications-card" matBadgeDescription="Number of times this notification has happened" [matBadge]="tile.count" [matBadgeColor]="tile.read ? 'primary': 'warn'" matBadgeOverlap="false" [matBadgeHidden]="!tile.count" matBadgePosition="above before">
+    <mat-card *ngFor="let tile of notification.notifications.slice().reverse()" class="notifications-card" matBadgeDescription="Number of times this notification has happened" [matBadge]="tile.count" [matBadgeColor]="tile.read ? 'primary': 'warn'" matBadgeOverlap="false" [matBadgeHidden]="tile.count < 2" matBadgePosition="above before">
         <button mat-icon-button class="notifications-remove" (click)="remove(tile)">
             <mat-icon>close</mat-icon>
         </button>
