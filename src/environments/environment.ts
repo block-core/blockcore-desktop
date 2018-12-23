@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  environment: ''
+    production: false,
+    environment: '',
+    password: ''  // Specify a password to auto-login on the last used wallet. Makes development a bit easier.
 };
 
 /*

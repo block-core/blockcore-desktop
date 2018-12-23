@@ -1,6 +1,6 @@
 <div class="content">
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex fxLayoutGap="20px grid">
+    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex fxLayoutGap="20px grid"  fxLayoutGap.xs="0px grid" fxLayoutGap.sm="0px grid">
         <div fxFlex>
             <mat-card class="dashboard-card">
                 <mat-icon class="dashboard-info-icon" [matTooltip]="walletInfo">info</mat-icon>
@@ -91,6 +91,21 @@
                         Please wait...
                     </p>
                 </mat-card-content>
+            </mat-card>
+
+            <mat-card class="dashboard-card">
+                <mat-card-title>Notifications ({{notifications.count}})</mat-card-title>
+                <mat-card-subtitle>Summary from your Notification Center</mat-card-subtitle>
+
+                <mat-card-content>
+
+                    <p *ngFor="let tile of notifications.notifications.slice().reverse()">
+                            - {{tile.title}}
+                    </p>
+
+                    <button mat-stroked-button routerLink="/notifications">Open Notification Center</button>
+                </mat-card-content>
+
             </mat-card>
 
             <!-- <mat-card>

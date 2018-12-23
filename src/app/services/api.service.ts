@@ -19,6 +19,7 @@ import { ChainService } from './chain.service';
 import { Logger } from './logger.service';
 import { HttpErrorResponse, HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { TransactionResult } from '../classes/transaction-result';
+import { NotificationService } from './notification.service';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -44,6 +45,7 @@ export class ApiService {
         private log: Logger,
         private chains: ChainService,
         private electronService: ElectronService,
+        private notifications: NotificationService,
         public snackBar: MatSnackBar) {
 
         if (!ApiService.singletonInstance) {
@@ -74,7 +76,13 @@ export class ApiService {
                 this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
 
                 if (this.daemon !== 'OK') {
-                    this.snackBar.open(this.daemon, null, { duration: 7000 });
+                    this.notifications.add({
+                        title: 'City Chain background error',
+                        hint: 'Messages from the background process received in City Hub',
+                        message: this.daemon,
+                        icon: (this.daemon.indexOf('City Hub was started in development mode') > -1) ? 'build' : 'warning'
+                    });
+                    // this.snackBar.open(this.daemon, null, { duration: 7000 });
                 }
 
                 this.log.info('Daemon result: ', this.daemon);
@@ -523,8 +531,15 @@ export class ApiService {
 
         this.log.error(errorMessage);
 
+        this.notifications.add({
+            title: 'Communication error',
+            hint: 'These types of errors are not uncommon, happens when there is issues communicating between City Hub and City Chain background process',
+            message: errorMessage,
+            icon: 'warning'
+        });
+
         // if (errorMessage.indexOf('Http failure response for') === -1) {
-        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+        // this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
         // }
     }
 }

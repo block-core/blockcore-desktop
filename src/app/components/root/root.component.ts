@@ -17,6 +17,7 @@ import { UpdateService } from '../../services/update.service';
 import { Logger } from '../../services/logger.service';
 import { WalletService } from '../../services/wallet.service';
 import { AppModes } from '../../shared/app-modes';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
     selector: 'app-root',
@@ -63,11 +64,12 @@ export class RootComponent implements OnInit, OnDestroy {
         private electronService: ElectronService,
         private router: Router,
         private log: Logger,
-        private updateService: UpdateService,
+        public updateService: UpdateService,
         public detailsService: DetailsService,
         private apiService: ApiService,
         private walletService: WalletService,
         private readonly cd: ChangeDetectorRef,
+        public notifications: NotificationService,
         private globalService: GlobalService,
         private readonly breakpointObserver: BreakpointObserver,
     ) {

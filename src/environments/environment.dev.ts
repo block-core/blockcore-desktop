@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  environment: 'BETA'
+    production: false,
+    environment: 'BETA',
+    password: null
 };

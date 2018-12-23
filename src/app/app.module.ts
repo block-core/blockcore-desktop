@@ -34,6 +34,7 @@ import { PaperWalletModule } from './components/paperwallet/paperwallet.module';
 import { httpInterceptorProviders } from './shared/http-interceptors';
 import { HttpErrorHandler } from './services/http-error-handler.service';
 import { ToolsModule } from './components/tools/tools.module';
+import { NotificationsModule } from './components/notifications/notifications.module';
 
 @NgModule({
     declarations: [
@@ -46,6 +47,7 @@ import { ToolsModule } from './components/tools/tools.module';
         MaterialModule,
         RootModule,
         DashboardModule,
+        NotificationsModule,
         WalletModule,
         SettingsModule,
         LoginModule,

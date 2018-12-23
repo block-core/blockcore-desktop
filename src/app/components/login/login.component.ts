@@ -10,6 +10,7 @@ import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface Account {
     name: string;
@@ -83,6 +84,13 @@ export class LoginComponent implements OnInit {
 
                             if (lastUsedWallet && lastUsedWallet === name) {
                                 this.selectedAccount = account;
+
+                                if (environment.password) {
+                                    setTimeout(() => {
+                                        this.password = environment.password;
+                                        this.unlock();
+                                    }, 500);
+                                }
                             }
 
                             // this.wallets[wallet] = this.wallets[wallet].slice(0, -12);

@@ -14,6 +14,7 @@ import { HistoryComponent } from './components/history/history.component';
 import { AdvancedComponent } from './components/advanced/advanced.component';
 import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
 import { ToolsComponent } from './components/tools/tools.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 const routes: Routes = [
     {
@@ -105,6 +106,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Tools'
+        },
+    },
+    {
+        path: 'notifications',
+        component: NotificationsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Notification Center'
         },
     },
     {

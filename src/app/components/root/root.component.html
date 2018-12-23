@@ -136,6 +136,10 @@
         <mat-icon>cloud_off</mat-icon>
       </button> -->
 
+            <button *ngIf="!appState.pageMode && !appState.handset" mat-icon-button matTooltip="Notification Center" routerLink="/notifications">
+                <mat-icon [matBadge]="notifications.countUnread" matBadgeColor="warn" matBadgeOverlap="true" [matBadgeHidden]="!notifications.anyUnread">notifications</mat-icon>
+            </button>
+
             <button mat-icon-button *ngIf="updateService.available" matTooltip="Update available. Click to view details." routerLink="/update">
                 <mat-icon>arrow_downward</mat-icon>
             </button>

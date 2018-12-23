@@ -10,6 +10,7 @@ import { ObservableMedia } from '@angular/flex-layout';
 import { CoincapService } from 'src/app/services/coincap.service';
 import { Subscription } from 'rxjs';
 import { CoincapAsset } from 'src/app/classes/coincap-asset';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private globalService: GlobalService,
         private router: Router,
         public appState: ApplicationStateService,
+        public notifications: NotificationService,
         private detailsService: DetailsService,
         public wallet: WalletService,
         private fb: FormBuilder) {

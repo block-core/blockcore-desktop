@@ -1,0 +1,170 @@
+import { Injectable, ChangeDetectorRef } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
+import { UpdateInfo } from '../components/update/update-info';
+import { ApplicationStateService } from './application-state.service';
+
+export interface NotificationTile {
+    title: string;
+    message: string;
+    hint: string;
+    icon: string;
+    count?: number;
+    data?: object;
+    read?: boolean;
+    date?: Date;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class NotificationService {
+
+    /** List of active notifications. Use the add method to add new, do not push on this array. */
+    public notifications: Array<NotificationTile>;
+
+    // public count = 0;
+
+    // public countUnread = 0;
+
+    get any(): boolean {
+        return (this.notifications.length > 0);
+    }
+
+    get anyUnread(): boolean {
+        return (this.countUnread > 0);
+    }
+
+    get countUnread(): number {
+        return this.notifications.filter(n => n.read !== true).length;
+    }
+
+    get count(): number {
+        return this.notifications.length;
+    }
+
+    constructor() {
+        this.notifications = new Array<NotificationTile>();
+
+        // this.notifications.push(
+        //     {
+        //         title: 'Unable to connect with server',
+        //         icon: 'warning',
+        //         hint: 'This normally means there is communication issues between City Hub, and the City Chain background process.',
+        //         message: 'Exception: STACK OVERFLOW!',
+        //         count: 5
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'Unable to connect with server',
+        //         icon: 'error',
+        //         hint: 'This normally means there is communication issues between City Hub, and the City Chain background process.',
+        //         message: 'Exception: STACK OVERFLOW!',
+        //         count: 1
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'You sent a transaction',
+        //         hint: '1230 coins',
+        //         message: 'Is now fully confirmed (50 confirms).',
+        //         icon: 'done_all',
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'You sent a transaction',
+        //         hint: '2 coins',
+        //         message: 'Unconfirmed',
+        //         icon: 'send',
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'You made a block!',
+        //         hint: 'You received staking rewards of 20 coins',
+        //         message: 'You are currently 0.5% of the total network weight.',
+        //         icon: 'plus_one',
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'You sent a transaction',
+        //         hint: '2 coins',
+        //         message: 'Unconfirmed',
+        //         icon: 'done',
+        //     });
+
+        // this.notifications.push(
+        //     {
+        //         title: 'You add a new contact',
+        //         hint: 'Contacts can be used to quickly send payments to merchants and people.',
+        //         message: '',
+        //         icon: 'bookmark',
+        //     });
+    }
+
+    private find(tile: NotificationTile) {
+        for (let i = 0; i < this.notifications.length; ++i) {
+            if (this.notifications[i].message === tile.message) {
+                return this.notifications[i];
+            }
+        }
+    }
+
+    private sort() {
+        this.notifications = this.notifications.sort((a, b) => {
+            if (a.date > b.date) {
+                return 1;
+            }
+
+            if (a.date < b.date) {
+                return -1;
+            }
+        });
+    }
+
+    add(tile: NotificationTile) {
+
+        const existing = this.find(tile);
+
+        if (existing) {
+            if (!existing.count) {
+                existing.count = 0;
+            }
+
+            existing.count += 1;
+            existing.date = new Date();
+            this.sort();
+            return;
+        }
+
+        if (!tile.date) {
+            tile.date = new Date();
+        }
+
+        this.notifications.push(tile);
+
+        // We only keep a certain list of notificatoins, so remove the oldest.
+        if (this.notifications.length > 10) {
+            this.notifications.shift();
+        }
+
+        this.sort();
+    }
+
+    read() {
+        for (let i = 0; i < this.notifications.length; ++i) {
+            this.notifications[i].read = true;
+        }
+    }
+
+    remove(tile: NotificationTile) {
+        const index = this.notifications.findIndex(n => n === tile);
+        this.notifications.splice(index, 1);
+    }
+
+    clear() {
+        this.notifications = new Array<NotificationTile>();
+    }
+}

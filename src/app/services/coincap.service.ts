@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material';
 import { ApplicationStateService } from './application-state.service';
 import { Logger } from './logger.service';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
+import { NotificationService } from './notification.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class CoincapService {
 
     constructor(private http: HttpClient,
         public appState: ApplicationStateService,
+        private notifications: NotificationService,
         private log: Logger,
         public snackBar: MatSnackBar) {
 
@@ -55,8 +57,15 @@ export class CoincapService {
 
         this.log.error(errorMessage);
 
+        this.notifications.add({
+            title: 'Coincap communication issue',
+            hint: 'Coincap.io is our provider of exchange rates, and this notification indicates issues with this integration',
+            message: errorMessage,
+            icon: 'warning'
+        });
+
         // if (errorMessage.indexOf('Http failure response for') === -1) {
-        this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
+        // this.snackBar.open(errorMessage, null, { duration: 5000, panelClass: 'error-snackbar' });
         // }
     }
 }

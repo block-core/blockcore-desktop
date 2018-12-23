@@ -1,0 +1,26 @@
+<div class="notifications content">
+
+    <div class="notifications-actions">
+
+        <button *ngIf="notification.any" (click)="notification.clear()" mat-raised-button color="primary">Remove All</button>
+        <div *ngIf="!notification.any">There is nothing to see here.</div>
+
+    </div>
+
+    <mat-card *ngFor="let tile of notification.notifications.slice().reverse()" class="notifications-card" matBadgeDescription="Number of times this notification has happened" [matBadge]="tile.count" [matBadgeColor]="tile.read ? 'primary': 'warn'" matBadgeOverlap="false" [matBadgeHidden]="!tile.count" matBadgePosition="above before">
+        <button mat-icon-button class="notifications-remove" (click)="remove(tile)">
+            <mat-icon>close</mat-icon>
+        </button>
+        <mat-card-header matBadgePosition="above after">
+            <mat-icon mat-card-avatar>{{tile.icon}}</mat-icon>
+            <mat-card-title>{{tile.title}}</mat-card-title>
+            <mat-card-subtitle>{{tile.hint}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>
+                {{tile.message}}
+            </p>
+        </mat-card-content>
+    </mat-card>
+
+</div>
