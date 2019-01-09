@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { WalletInfo } from 'src/app/classes/wallet-info';
 import { GlobalService } from 'src/app/services/global.service';
 import { MatSnackBar } from '@angular/material';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
     selector: 'app-tools',
@@ -20,6 +21,7 @@ export class ToolsComponent implements OnInit {
     constructor(
         public snackBar: MatSnackBar,
         public wallet: WalletService,
+        private notifications: NotificationService,
         private globalService: GlobalService,
         private apiService: ApiService) {
 
@@ -44,8 +46,15 @@ export class ToolsComponent implements OnInit {
     }
 
     public resync() {
-        this.wallet.resync();
-        this.resyncTriggered = true;
+        // this.wallet.resync();
+        // this.resyncTriggered = true;
+
+        this.notifications.add({
+            title: 'Wallet Synchronization',
+            hint: 'Your wallet is updating its history',
+            message: 'You triggered the wallet re-sync option from the tools section. This will scan the blockchain for any transactions that are related to your wallet, and store that information in your history.<br><br>Your balance might show incorrect sum during this process.',
+            icon: 'info'
+        });
     }
 
     public onCopiedClick() {

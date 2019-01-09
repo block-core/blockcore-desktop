@@ -37,7 +37,7 @@
                             and exchanges.
                         </p>
 
-                        <a href="https://city-chain.org/" target="_blank" mat-stroked-button>Buy Coins</a>
+                        <a href="https://city-chain.org/#coins" target="_blank" mat-stroked-button>Buy Coins</a>
                     </div>
 
                     <div *ngIf="appState.chain === 'stratis'">
@@ -64,27 +64,29 @@
         </div>
         <div fxFlex>
 
-            <mat-card class="dashboard-card" *ngIf="coincapAsset">
-                <mat-card-title>{{coincapAsset.name}} ({{coincapAsset.symbol}})</mat-card-title>
+            <mat-card class="dashboard-card" *ngIf="selectedCoinTicker">
+                <mat-icon class="dashboard-info-icon clickable" (click)="changeTicker(1)" [matTooltip]="tickerInfo">chevron_right</mat-icon>
+                <mat-icon class="dashboard-info-icon clickable" (click)="changeTicker(-1)" [matTooltip]="tickerInfo">chevron_left</mat-icon>
+                <mat-card-title>{{selectedCoinTicker.name}} ({{selectedCoinTicker.symbol}})</mat-card-title>
+                <mat-card-subtitle>Tickers will auto-update and show recent prices and volume.</mat-card-subtitle>
                 <mat-card-content>
                     <span class="marketprice-larger">
-                        ${{coincapAsset.priceUsd | priceUnit}} (<span class="marketprice" [ngClass]="{'marketprice-negative': coincapAsset.changePercent24Hr < 0}">{{coincapAsset.changePercent24Hr | priceUnit}}%</span>)<br>
+                        {{selectedCoinTicker.price}} {{selectedCoinTicker.pair}} (<span class="marketprice" [ngClass]="{'marketprice-negative': selectedCoinTicker.changePercent24Hr < 0}">{{selectedCoinTicker.changePercent24Hr | priceUnit}}%</span>)<br>
                     </span>
-                    <br>
                     <table class="marketprice-table">
+                        <!-- <tr>
+                            <td>Market Cap: {{selectedCoinTicker.marketCap | priceUnit}}</td>
+                            <td>Supply: {{selectedCoinTicker.supply | priceUnit}} {{selectedCoinTicker.symbol}}</td>
+                        </tr> -->
                         <tr>
-                            <td>Market Cap: {{coincapAsset.marketCapUsd | priceUnit}}</td>
-                            <td>Supply: {{coincapAsset.supply | priceUnit}} {{coincapAsset.symbol}}</td>
-                        </tr>
-                        <tr>
-                            <td>Volume (24Hr): {{coincapAsset.volumeUsd24Hr | priceUnit}}</td>
-                            <td>Rank: {{coincapAsset.rank}}</td>
+                            <td>Volume: {{selectedCoinTicker.volume24Hr | priceUnit}} {{selectedCoinTicker.volumepair}}</td>
+                            <!-- <td>Rank: {{selectedCoinTicker.rank}}</td> -->
                         </tr>
                     </table>
                 </mat-card-content>
             </mat-card>
 
-            <mat-card class="dashboard-card" *ngIf="!coincapAsset">
+            <mat-card class="dashboard-card" *ngIf="!selectedCoinTicker">
                 <mat-card-title>Loading...</mat-card-title>
                 <mat-card-content>
                     <p>

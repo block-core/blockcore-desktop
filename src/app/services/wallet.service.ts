@@ -128,7 +128,6 @@ export class WalletService {
 
     public resync() {
         this.apiService.removeHistory(this.globalService.getWalletName()).subscribe(() => {
-            console.log('history cleared!');
             // Clear the transaction history so UI updates.
             this.transactionArray = [];
             this._history.next(this.transactionArray);

@@ -11,10 +11,10 @@ import { NotificationService } from './notification.service';
 @Injectable({
     providedIn: 'root'
 })
-export class CoincapService {
+export class CoinService {
 
     private pollingInterval = 60000 * 5;
-    private apiUrl = 'https://api.coincap.io/v2/assets/';
+    private apiUrl = 'https://p2pb2b.io/';
 
     constructor(private http: HttpClient,
         public appState: ApplicationStateService,
@@ -24,10 +24,10 @@ export class CoincapService {
 
     }
 
-    getAsset(asset: string): Observable<any> {
+    getTicker(ticker: string): Observable<any> {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + asset)))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + 'api/v1/public/ticker?market=' + ticker)))
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
@@ -58,8 +58,8 @@ export class CoincapService {
         this.log.error(errorMessage);
 
         this.notifications.add({
-            title: 'Coincap communication issue',
-            hint: 'Coincap.io is our provider of exchange rates, and this notification indicates issues with this integration',
+            title: 'Coin ticker communication issue',
+            hint: 'p2pb2b is our provider of exchange rates, and this notification indicates issues with this integration',
             message: errorMessage,
             icon: 'warning'
         });

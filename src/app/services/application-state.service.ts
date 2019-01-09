@@ -27,6 +27,8 @@ export class ApplicationStateService {
 
     version: string;
 
+    release: string;
+
     chain: string;
 
     mode: string;
@@ -57,5 +59,19 @@ export class ApplicationStateService {
     getParam(n) {
         const half = location.search.split(n + '=')[1];
         return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
+    }
+
+    setVersion(version: string) {
+        this.version = version;
+
+        if (this.version) {
+            const v = version.split('.');
+            if (v.length === 3) {
+                this.release = v[2];
+            } else {
+                this.release = version;
+            }
+        }
+
     }
 }

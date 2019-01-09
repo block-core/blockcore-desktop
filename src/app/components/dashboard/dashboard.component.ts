@@ -7,10 +7,13 @@ import { DetailsService } from '../../services/details.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { WalletService } from '../../services/wallet.service';
 import { ObservableMedia } from '@angular/flex-layout';
+import { CoinService } from 'src/app/services/coin.service';
 import { CoincapService } from 'src/app/services/coincap.service';
 import { Subscription } from 'rxjs';
 import { CoincapAsset } from 'src/app/classes/coincap-asset';
+import { CoinAsset } from 'src/app/classes/coin-asset';
 import { NotificationService } from 'src/app/services/notification.service';
+import { P2pb2bAsset } from 'src/app/classes/p2pb2b2-asset';
 
 @Component({
     selector: 'app-dashboard',
@@ -21,11 +24,16 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class DashboardComponent implements OnInit, OnDestroy {
     @HostBinding('class.dashboard') hostClass = true;
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
-    public coincapAsset: CoincapAsset;
-    private coincapSubscription: Subscription;
+    public tickerInfo = 'Change to the next ticker.';
+    public coins: CoinAsset[] = new Array<CoinAsset>();
+    public selectedCoinTicker: CoinAsset;
+
+    private selectedCoinTickerIndex = -1;
+    private subscriptions: Subscription[];
 
     constructor(private apiService: ApiService,
         private coincap: CoincapService,
+        private coin: CoinService,
         private globalService: GlobalService,
         private router: Router,
         public appState: ApplicationStateService,
@@ -42,28 +50,117 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.startSubscriptions();
     }
 
+    changeTicker(change) {
+
+        this.selectedCoinTickerIndex += change;
+
+        if (this.selectedCoinTickerIndex < 0) {
+            this.selectedCoinTickerIndex = (this.coins.length - 1);
+        } else if (this.selectedCoinTickerIndex >= this.coins.length) {
+            this.selectedCoinTickerIndex = 0;
+        }
+
+        this.selectedCoinTicker = this.coins[this.selectedCoinTickerIndex];
+    }
+
     private startSubscriptions() {
+
+        this.subscriptions = [];
+
         let asset = this.appState.chain;
 
         if (asset === 'city') {
             asset = 'bitcoin'; // Until coincap.io supports CITY, we'll revert to Bitcoin.
         }
 
-        this.coincapSubscription = this.coincap.getAsset(asset)
+        this.subscriptions.push(this.coincap.getAsset(asset)
             .subscribe(
                 response => {
-                    this.coincapAsset = response.data as CoincapAsset;
+                    const coincapAsset = response.data as CoincapAsset;
+                    coincapAsset.pair = 'USD';
+                    coincapAsset.volumepair = 'USD';
+                    this.coins[2] = this.mapCoincapToAsset(coincapAsset);
                 },
                 error => {
                     this.coincap.handleException(error);
                     this.reactivate();
                 }
-            );
+            ));
+
+        this.subscriptions.push(this.coin.getTicker('CITY_BTC')
+            .subscribe(
+                response => {
+                    const coinAsset = response.result as P2pb2bAsset;
+                    coinAsset.pair = 'BTC';
+                    coinAsset.volumepair = 'CITY';
+                    this.coins[0] = this.mapP2pb2bToAsset(coinAsset);
+
+                    if (this.selectedCoinTickerIndex === -1) {
+                        this.changeTicker(1);
+                    }
+                },
+                error => {
+                    this.coincap.handleException(error);
+                    this.reactivate();
+                }
+            ));
+
+        this.subscriptions.push(this.coin.getTicker('CITY_USD')
+            .subscribe(
+                response => {
+                    const coinAsset = response.result as P2pb2bAsset;
+                    coinAsset.pair = 'USD';
+                    coinAsset.volumepair = 'CITY';
+                    this.coins[1] = this.mapP2pb2bToAsset(coinAsset);
+                },
+                error => {
+                    this.coincap.handleException(error);
+                    this.reactivate();
+                }
+            ));
+    }
+
+    private mapP2pb2bToAsset(coin: P2pb2bAsset): CoinAsset {
+
+        const asset: CoinAsset = {
+            changePercent24Hr: coin.change,
+            marketCap: '0',
+            maxSupply: '0',
+            price: coin.last,
+            volume24Hr: coin.volume,
+            symbol: 'CITY',
+            name: 'City Coin',
+            pair: coin.pair,
+            volumepair: coin.volumepair
+        };
+
+        return asset;
+    }
+
+    private mapCoincapToAsset(coin: CoincapAsset): CoinAsset {
+
+        const asset: CoinAsset = {
+            changePercent24Hr: coin.changePercent24Hr,
+            marketCap: '0',
+            maxSupply: '0',
+            price: coin.priceUsd,
+            volume24Hr: coin.volumeUsd24Hr,
+            symbol: 'BTC',
+            name: 'Bitcoin',
+            pair: coin.pair,
+            volumepair: coin.volumepair
+        };
+
+        return asset;
     }
 
     private cancelSubscriptions() {
-        if (this.coincapSubscription) {
-            this.coincapSubscription.unsubscribe();
+        if (!this.subscriptions) {
+            return;
+        }
+
+        for (let i = 0; i < this.subscriptions.length; i++) {
+            this.subscriptions[i].unsubscribe();
         }
     }
 

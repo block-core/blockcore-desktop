@@ -17,9 +17,7 @@
             <mat-card-subtitle>{{tile.hint}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <p>
-                {{tile.message}}
-            </p>
+            <p [innerHTML]="tile.message"></p>
         </mat-card-content>
     </mat-card>
 

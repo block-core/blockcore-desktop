@@ -1,14 +1,14 @@
-export interface CoincapAsset {
+export interface CoinAsset {
     changePercent24Hr?: string;
     id?: string;
-    marketCapUsd?: string;
+    marketCap?: string;
     maxSupply?: string;
     name: string;
-    priceUsd?: string;
+    price: string;
     rank?: number;
     supply?: string;
     symbol: string;
-    volumeUsd24Hr?: string;
+    volume24Hr?: string;
     vwap24Hr?: string;
     pair: string;
     volumepair: string;

@@ -143,6 +143,7 @@ function createWindow() {
         minWidth: 260,
         minHeight: 400,
         title: 'City Hub',
+        webPreferences: { webSecurity: false },
         icon: __dirname + '/app.ico'
     });
     contents = mainWindow.webContents;

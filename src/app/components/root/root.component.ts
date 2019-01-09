@@ -86,7 +86,7 @@ export class RootComponent implements OnInit, OnDestroy {
         if (this.electronService.remote) {
             const applicationVersion = this.electronService.remote.app.getVersion();
 
-            this.appState.version = applicationVersion;
+            this.appState.setVersion(applicationVersion);
             this.log.info('Version: ' + applicationVersion);
         }
 

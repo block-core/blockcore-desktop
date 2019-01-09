@@ -33,9 +33,7 @@
         </mat-card-header>
         <mat-card-content>
             <p>You are running the latest version.</p>
-            <p>
-                {{updateService.info.releaseNotes}}
-            </p>
+            <p [innerHTML]="updateService.info.releaseNotes"></p>
         </mat-card-content>
     </mat-card>
 
