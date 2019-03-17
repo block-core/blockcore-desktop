@@ -7,6 +7,7 @@ import { ApiService } from '../../services/api.service';
 import { delay, retryWhen } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
+import * as coininfo from 'city-coininfo';
 
 export interface ListItem {
     name: string;
@@ -43,7 +44,7 @@ export class LoadComponent implements OnDestroy {
         public appState: ApplicationStateService) {
 
         this.modes = [
-            // { id: 'simple', name: 'Mobile' },
+            { id: 'simple', name: 'Mobile' },
             // { id: 'light', name: 'Light' },
             { id: 'full', name: 'Full' },
             // { id: 'pos', name: 'Point-of-Sale (POS)' },
@@ -78,10 +79,23 @@ export class LoadComponent implements OnDestroy {
     initialize() {
         this.apiService.initialize();
 
+        // TODO: Should send the correct network, hard-coded to city main for now.
+        const network = coininfo('city').toBitcoinJS();
+        this.appState.networkDefinition = network;
+
+        this.appState.networkParams = {
+            private: network.wif,
+            public: network.pubKeyHash
+        };
+
         if (this.appState.mode === 'full') {
             this.loading = true;
             this.appState.connected = false;
             this.fullNodeConnect();
+        } else if (this.appState.localMode) {
+            this.loading = false;
+            this.appState.connected = true;
+            this.router.navigateByUrl('/login');
         }
     }
 

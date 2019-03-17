@@ -25,6 +25,10 @@ export class ApplicationStateService {
         return ApplicationStateService.singletonInstance;
     }
 
+    networkDefinition: any;
+
+    networkParams: any;
+
     version: string;
 
     release: string;
@@ -54,6 +58,10 @@ export class ApplicationStateService {
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
+    }
+
+    get localMode(): boolean {
+        return this.mode === 'simple';
     }
 
     getParam(n) {

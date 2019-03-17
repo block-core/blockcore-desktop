@@ -42,6 +42,7 @@ export class WalletService {
 
     public generalInfo: GeneralInfo;
     public stakingInfo: StakingInfo;
+    public activeWallet: any;
 
     private _history = new Subject();
     public history$ = this._history.asObservable();

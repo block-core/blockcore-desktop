@@ -48,6 +48,11 @@
   },
   "private": true,
   "dependencies": {
+    "bip32": "^1.0.2",
+    "city-bip38": "^3.0.1",
+    "city-coininfo": "^5.0.0",
+    "city-lib": "^5.0.0",
+    "dexie": "^2.0.4",
     "electron-context-menu": "0.10.1",
     "electron-log": "2.2.17",
     "electron-updater": "4.0.6"

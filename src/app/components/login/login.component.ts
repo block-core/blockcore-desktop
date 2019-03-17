@@ -11,6 +11,10 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { StorageService } from 'src/app/services/storage.service';
+import * as bip38 from 'city-bip38';
+import { MatSnackBar } from '@angular/material';
+import { Logger } from 'src/app/services/logger.service';
 
 export interface Account {
     name: string;
@@ -31,12 +35,16 @@ export class LoginComponent implements OnInit {
     accounts: Account[] = [];
     unlocking: boolean;
     password = ''; // Default to empty string, not null/undefined.
+    invalidPassword: boolean;
+    unlockPercentage: number;
 
     constructor(
         private http: HttpClient,
         private readonly cd: ChangeDetectorRef,
         private authService: AuthenticationService,
         private router: Router,
+        public snackBar: MatSnackBar,
+        private log: Logger,
         private globalService: GlobalService,
         private wallet: WalletService,
         private apiService: ApiService,
@@ -45,7 +53,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getWalletFiles();
+        this.loadWallets();
     }
 
     changeMode() {
@@ -60,6 +68,29 @@ export class LoginComponent implements OnInit {
 
     cancel() {
         this.selectedAccount = null;
+    }
+
+    private loadWallets() {
+        if (this.appState.localMode) {
+            this.getLocalWalletFiles();
+        } else {
+            this.getWalletFiles();
+        }
+    }
+
+    private async getLocalWalletFiles() {
+        // Read accounts from localStorage.
+        const db = new StorageService('cityhub');
+        const list = await db.wallets.toArray();
+        const wallets = list.map((item) => {
+            return { id: item.name, name: item.name };
+        });
+
+        this.accounts = wallets;
+
+        console.log(list);
+
+        this.hasWallet = list.length > 0;
     }
 
     private getWalletFiles() {
@@ -116,6 +147,7 @@ export class LoginComponent implements OnInit {
 
     unlock() {
         this.unlocking = true;
+        this.invalidPassword = false;
 
         this.globalService.setWalletName(this.selectedAccount.name);
 
@@ -129,7 +161,11 @@ export class LoginComponent implements OnInit {
             this.password
         );
 
-        this.loadWallet(walletLoad);
+        if (this.appState.localMode) {
+            this.loadLocalWallet(walletLoad);
+        } else {
+            this.loadWallet(walletLoad);
+        }
     }
 
     private getCurrentNetwork() {
@@ -171,6 +207,48 @@ export class LoginComponent implements OnInit {
                     this.apiService.handleException(error);
                 }
             );
+    }
+
+    private async loadLocalWallet(walletLoad: WalletLoad) {
+        const db = new StorageService('cityhub');
+        const wallet = await db.wallets.get({ name: walletLoad.name });
+        const self = this;
+
+        console.log('Load Local Wallet...');
+
+        try {
+            const start = new Date().getTime();
+
+            console.log(wallet);
+
+            bip38.decryptAsync(wallet.encryptedSeed, walletLoad.password, (decryptedKey) => {
+                console.log('decrypted!');
+                console.log(decryptedKey);
+
+                const stop = new Date().getTime();
+
+                const diff = stop - start;
+                console.log(diff + 'ms taken to decrypt.');
+                // console.log('decryptedKey:', decryptedKey);
+
+                self.authService.setAuthenticated();
+                self.unlocking = false;
+                localStorage.setItem('Network:Wallet', wallet.name);
+
+                // Make sure the unlocked wallet is available, especially the extpubkey is required to generate addresses.
+                this.wallet.activeWallet = wallet;
+
+                self.router.navigateByUrl('/dashboard');
+
+            }, null, this.appState.networkParams);
+        } catch (err) {
+            if (err.message !== 'AssertionError [ERR_ASSERTION]') {
+                self.log.error('Unknown failure on wallet unlock', err);
+            }
+
+            self.unlocking = false;
+            self.invalidPassword = true;
+        }
     }
 
     private loadWallet(walletLoad: WalletLoad) {

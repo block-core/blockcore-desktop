@@ -31,6 +31,7 @@ let mainWindow = null;
 let contents = null;
 let currentChain: Chain;
 let shutdownInitiated = false;
+let hasDaemon = false;
 
 // currentChain = {
 //     name: 'City Chain',
@@ -293,7 +294,11 @@ app.on('activate', () => {
     }
 });
 
+
+
 function startDaemon(chain: Chain) {
+    hasDaemon = true;
+
     const folderPath = getDaemonPath();
     let daemonName;
 
@@ -374,6 +379,13 @@ function launchDaemon(apiPath: string, chain: Chain) {
 }
 
 function shutdownDaemon(callback) {
+
+    if (!hasDaemon) {
+        writeLog('City Hub is in mobile mode, no daemon to shutdown.');
+        callback(true, null);
+        contents.send('daemon-exited'); // Make the app shutdown.
+        return;
+    }
 
     if (!currentChain) {
         writeLog('Chain not selected, nothing to shutdown.');

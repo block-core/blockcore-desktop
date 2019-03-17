@@ -17,6 +17,7 @@ var mainWindow = null;
 var contents = null;
 var currentChain;
 var shutdownInitiated = false;
+var hasDaemon = false;
 // currentChain = {
 //     name: 'City Chain',
 //     identity: 'city',
@@ -237,6 +238,7 @@ electron_1.app.on('activate', function () {
     }
 });
 function startDaemon(chain) {
+    hasDaemon = true;
     var folderPath = getDaemonPath();
     var daemonName;
     if (chain.identity === 'city') {
@@ -304,6 +306,12 @@ function launchDaemon(apiPath, chain) {
     });
 }
 function shutdownDaemon(callback) {
+    if (!hasDaemon) {
+        writeLog('City Hub is in mobile mode, no daemon to shutdown.');
+        callback(true, null);
+        contents.send('daemon-exited'); // Make the app shutdown.
+        return;
+    }
     if (!currentChain) {
         writeLog('Chain not selected, nothing to shutdown.');
         callback(true, null);
