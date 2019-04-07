@@ -14,7 +14,7 @@ import { NotificationService } from './notification.service';
 export class CoinService {
 
     private pollingInterval = 60000 * 5;
-    private apiUrl = 'https://p2pb2b.io/';
+    private apiUrl = 'https://insight.city-chain.org/';
 
     constructor(private http: HttpClient,
         public appState: ApplicationStateService,
@@ -27,7 +27,7 @@ export class CoinService {
     getTicker(ticker: string): Observable<any> {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + 'api/v1/public/ticker?market=' + ticker)))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + 'api/market/' + ticker)))
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

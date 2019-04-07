@@ -31,8 +31,8 @@ export class ApiService {
     static singletonInstance: ApiService;
 
     private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    private pollingInterval = 4000;
-    private longPollingInterval = 8000;
+    private pollingInterval = 5000;
+    private longPollingInterval = 10000;
     private daemon;
 
     public apiUrl: string;
@@ -420,16 +420,16 @@ export class ApiService {
      * Estimate the fee of a transaction
      */
     estimateFee(data: FeeEstimation): Observable<any> {
-        const search = new HttpParams()
-            .set('walletName', data.walletName)
-            .set('accountName', data.accountName)
-            .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
-            .set('recipients[0].amount', data.recipients[0].amount)
-            .set('feeType', data.feeType)
-            .set('allowUnconfirmed', 'true');
+        // const search = new HttpParams()
+        //     .set('walletName', data.walletName)
+        //     .set('accountName', data.accountName)
+        //     .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
+        //     .set('recipients[0].amount', data.recipients[0].amount)
+        //     .set('feeType', data.feeType)
+        //     .set('allowUnconfirmed', 'true');
 
         return this.http
-            .get(this.apiUrl + '/wallet/estimate-txfee', { headers: this.headers, params: search })
+            .post(this.apiUrl + '/wallet/estimate-txfee', JSON.stringify(data), { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             ));
 
-        this.subscriptions.push(this.coin.getTicker('CITY_BTC')
+        this.subscriptions.push(this.coin.getTicker('btc')
             .subscribe(
                 response => {
                     const coinAsset = response.result as P2pb2bAsset;
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             ));
 
-        this.subscriptions.push(this.coin.getTicker('CITY_USD')
+        this.subscriptions.push(this.coin.getTicker('usd')
             .subscribe(
                 response => {
                     const coinAsset = response.result as P2pb2bAsset;

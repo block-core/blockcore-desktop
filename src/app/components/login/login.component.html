@@ -28,6 +28,12 @@
                 <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
                 <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
             </span>
+
+            <span *ngIf="errorMessage">
+                <br>
+                {{errorMessage}}
+            </span>
+
             <mat-divider *ngIf="selectedAccount == null"></mat-divider>
         </div>
 
@@ -50,8 +56,8 @@
             <br>
             <!-- <h3 class="mat-h3">Log in to access your account</h3> -->
             <p class="login-banner-text">Release {{appState.release}}<br>
-            Network: {{appState.network}}<br>
-            Mode: {{appState.mode}}</p>
+                Network: {{appState.network}}<br>
+                Mode: {{appState.mode}}</p>
         </div>
         <div class="login-mode-mobile">
             <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>

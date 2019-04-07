@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
     accounts: Account[] = [];
     unlocking: boolean;
     password = ''; // Default to empty string, not null/undefined.
+    errorMessage: string;
 
     constructor(
         private http: HttpClient,
@@ -59,7 +60,9 @@ export class LoginComponent implements OnInit {
     }
 
     cancel() {
+        this.errorMessage = '';
         this.selectedAccount = null;
+        this.password = '';
     }
 
     private getWalletFiles() {
@@ -115,6 +118,7 @@ export class LoginComponent implements OnInit {
     }
 
     unlock() {
+        this.errorMessage = '';
         this.unlocking = true;
 
         this.globalService.setWalletName(this.selectedAccount.name);
@@ -173,6 +177,8 @@ export class LoginComponent implements OnInit {
             );
     }
 
+
+
     private loadWallet(walletLoad: WalletLoad) {
         this.apiService.loadWallet(walletLoad)
             .subscribe(
@@ -189,6 +195,11 @@ export class LoginComponent implements OnInit {
                     // }
                 },
                 error => {
+                    if (error.status === 403) { // Invalid password
+                        const msg = error.error.errors[0].message;
+                        this.errorMessage = msg;
+                    }
+
                     this.wallet.stop();
                     this.authService.setAnonymous();
                     this.unlocking = false;

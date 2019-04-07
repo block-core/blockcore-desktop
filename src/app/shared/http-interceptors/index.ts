@@ -16,8 +16,10 @@ export const httpInterceptorProviders = [
 
     // { provide: HTTP_INTERCEPTORS, useClass: EnsureHttpsInterceptor, multi: true },
     // { provide: HTTP_INTERCEPTORS, useClass: TrimNameInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: NodeInterceptor, multi: true },
+
+    // { provide: HTTP_INTERCEPTORS, useClass: NodeInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
+
     // { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
     // { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },
 
