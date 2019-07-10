@@ -41,7 +41,7 @@ export class Theming {
     private readonly currentThemeSubject = new BehaviorSubject<Theme>(this.getCurrentTheme());
 
     private getCurrentTheme(): Theme {
-        return <Theme>localStorage.getItem('Settings:Theme') || Theme.Dark;
+        return localStorage.getItem('Settings:Theme') as Theme || Theme.Dark;
     }
 
     private setCurrentTheme(theme: Theme) {

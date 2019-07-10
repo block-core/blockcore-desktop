@@ -32,7 +32,8 @@ export class CreateAccountComponent implements OnInit {
     verification: string;
     saving: boolean;
 
-    constructor(private authService: AuthenticationService,
+    constructor(
+        private authService: AuthenticationService,
         private router: Router,
         private fb: FormBuilder,
         private log: Logger,

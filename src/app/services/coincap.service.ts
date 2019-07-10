@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable, interval, throwError } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
@@ -16,7 +15,8 @@ export class CoincapService {
     private pollingInterval = 60000 * 5;
     private apiUrl = 'https://api.coincap.io/v2/assets/';
 
-    constructor(private http: HttpClient,
+    constructor(
+        private http: HttpClient,
         public appState: ApplicationStateService,
         private notifications: NotificationService,
         private log: Logger,

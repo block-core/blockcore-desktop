@@ -16,8 +16,8 @@ export class UpdateService {
     public available = false;
     public downloading = false;
 
-    constructor(private electronService: ElectronService,
-        // private readonly cd: ChangeDetectorRef,
+    constructor(
+        private electronService: ElectronService,
         private appState: ApplicationStateService) {
 
         this.ipc = electronService.ipcRenderer;

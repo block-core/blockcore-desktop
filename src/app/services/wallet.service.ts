@@ -43,6 +43,7 @@ export class WalletService {
     public generalInfo: GeneralInfo;
     public stakingInfo: StakingInfo;
 
+    // tslint:disable-next-line: variable-name
     private _history = new Subject();
     public history$ = this._history.asObservable();
 
@@ -94,7 +95,7 @@ export class WalletService {
 
         const walletData = {
             name: this.globalService.getWalletName(),
-            password: password
+            password
         };
 
         this.apiService.startStaking(walletData)
@@ -248,7 +249,7 @@ export class WalletService {
                 response => {
                     this.log.info('Get staking info:', response);
 
-                    const stakingResponse = <StakingInfo>response;
+                    const stakingResponse = response as StakingInfo;
                     this.stakingInfo = stakingResponse;
 
                     this.stakingEnabled = stakingResponse.enabled;

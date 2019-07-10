@@ -43,7 +43,8 @@ export class SendComponent implements OnInit, OnDestroy {
     private errorMessage: string;
     private walletBalanceSubscription: Subscription;
 
-    constructor(public readonly appState: ApplicationStateService,
+    constructor(
+        public readonly appState: ApplicationStateService,
         private apiService: ApiService,
         private location: Location,
         private router: Router,
@@ -67,38 +68,38 @@ export class SendComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:member-ordering
     formErrors = {
-        'address': '',
-        'amount': '',
-        'fee': '',
-        'password': ''
+        address: '',
+        amount: '',
+        fee: '',
+        password: ''
     };
 
     // tslint:disable-next-line:member-ordering
     validationMessages = {
-        'address': {
-            'required': 'An address is required.',
-            'minlength': 'An address is at least 26 characters long.'
+        address: {
+            required: 'An address is required.',
+            minlength: 'An address is at least 26 characters long.'
         },
-        'amount': {
-            'required': 'An amount is required.',
-            'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-            'min': 'The amount has to be more or equal to 0.00001 City.',
-            'max': 'The total transaction amount exceeds your available balance.'
+        amount: {
+            required: 'An amount is required.',
+            pattern: 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
+            min: 'The amount has to be more or equal to 0.00001 City.',
+            max: 'The total transaction amount exceeds your available balance.'
         },
-        'fee': {
-            'required': 'A fee is required.'
+        fee: {
+            required: 'A fee is required.'
         },
-        'password': {
-            'required': 'Your password is required.'
+        password: {
+            required: 'Your password is required.'
         }
     };
 
     private buildSendForm(): void {
         this.sendForm = this.fb.group({
-            'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-            'amount': ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])],
-            'fee': ['medium', Validators.required],
-            'password': ['', Validators.required]
+            address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+            amount: ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])],
+            fee: ['medium', Validators.required],
+            password: ['', Validators.required]
         });
 
         this.sendForm.valueChanges.pipe(debounceTime(300))

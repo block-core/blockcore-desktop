@@ -29,21 +29,25 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     blockJson: string;
     displayedColumns: string[] = ['txid', 'output', 'inputs', 'outputs', 'size'];
     dataSource = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @HostListener('window:keyup', ['$event'])
     keyEvent(event: KeyboardEvent) {
+        // tslint:disable-next-line: deprecation
         if (event.keyCode === PAGE_UP) {
             this.increment();
         }
 
+        // tslint:disable-next-line: deprecation
         if (event.keyCode === PAGE_DOWN) {
             this.decrement();
         }
 
+        // tslint:disable-next-line: deprecation
         if (event.keyCode === END) {
             this.openLatest();
         }
 
+        // tslint:disable-next-line: deprecation
         if (event.keyCode === HOME) {
             this.open(0);
         }

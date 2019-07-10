@@ -1,13 +1,7 @@
 export class GeneralInfo {
 
-    constructor(chainTip: number
-        , connectedNodes: number
-        , creationTime: Date
-        , isChainSynced: boolean
-        , isDecrypted: boolean
-        , lastBlockSyncedHeight: number
-        , network: string
-        , walletFilePath: string) {
+    constructor(
+        chainTip: number, connectedNodes: number, creationTime: Date, isChainSynced: boolean, isDecrypted: boolean, lastBlockSyncedHeight: number, network: string, walletFilePath: string) {
         this.chainTip = chainTip;
         this.connectedNodes = connectedNodes;
         this.creationTime = creationTime;

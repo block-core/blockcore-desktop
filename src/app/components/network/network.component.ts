@@ -6,7 +6,7 @@ import { WalletInfo } from '../../classes/wallet-info';
 import { filter } from 'rxjs/operators';
 import { GeneralInfo } from '../../classes/general-info';
 import { MatGridList } from '@angular/material';
-import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { WalletService } from '../../services/wallet.service';
 
 @Component({
@@ -30,10 +30,11 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
 
     private mediaObservable;
 
-    constructor(private globalService: GlobalService,
+    constructor(
+        private globalService: GlobalService,
         private apiService: ApiService,
         private readonly cd: ChangeDetectorRef,
-        private observableMedia: ObservableMedia,
+        public mediaObserver: MediaObserver,
         public walletService: WalletService) {
 
     }
@@ -44,7 +45,7 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     ngAfterContentInit() {
         // There is a bug with this, does not always trigger when navigating back and forth, and resizing.
         // This means the number of grids sometimes defaults to 4, even though the screen is small.
-        this.mediaObservable = this.observableMedia.asObservable().subscribe((change: MediaChange) => {
+        this.mediaObservable = this.mediaObserver.media$.subscribe((change: MediaChange) => {
             this.columns = this.gridByBreakpoint[change.mqAlias];
         });
     }

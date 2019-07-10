@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
                         for (const wallet in this.wallets) {
                             const id = wallet;
                             const name = this.wallets[wallet].slice(0, -12);
-                            const account = { id: id, name: name };
+                            const account = { id, name };
 
                             this.accounts.push(account);
 
@@ -195,7 +195,7 @@ export class LoginComponent implements OnInit {
                     // }
                 },
                 error => {
-                    if (error.status === 403) { // Invalid password
+                    if (error.status === 403 || error.status === 400) { // Invalid password / empty password
                         const msg = error.error.errors[0].message;
                         this.errorMessage = msg;
                     }

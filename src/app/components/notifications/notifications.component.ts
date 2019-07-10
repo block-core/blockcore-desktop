@@ -11,7 +11,8 @@ import { NotificationService, NotificationTile } from 'src/app/services/notifica
 export class NotificationsComponent implements OnDestroy, OnInit {
     @HostBinding('class.merchant') hostClass = true;
 
-    constructor(private appState: ApplicationStateService,
+    constructor(
+        private appState: ApplicationStateService,
         public notification: NotificationService) {
         this.appState.fullHeight = false;
 

@@ -105,6 +105,7 @@ export class NotificationService {
     }
 
     private find(tile: NotificationTile) {
+        // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < this.notifications.length; ++i) {
             if (this.notifications[i].message === tile.message) {
                 return this.notifications[i];
@@ -158,6 +159,7 @@ export class NotificationService {
     }
 
     read() {
+        // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < this.notifications.length; ++i) {
             this.notifications[i].read = true;
         }

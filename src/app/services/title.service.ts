@@ -44,6 +44,7 @@ export class TitleService {
             }),
             filter(route => route.outlet === 'primary'),
             mergeMap(route => route.data),
+            // tslint:disable-next-line: no-string-literal
             map(data => ({ title: data['title'], prefix: data['prefix'] })),
         ).subscribe(title => {
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable, interval, throwError, empty } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
@@ -13,7 +12,6 @@ import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 import { GeneralInfo } from '../classes/general-info';
 import { MatSnackBar } from '@angular/material';
-import { environment } from '../../environments/environment';
 import { ApplicationStateService } from './application-state.service';
 import { ChainService } from './chain.service';
 import { Logger } from './logger.service';
@@ -39,7 +37,8 @@ export class ApiService {
     public genesisDate: Date;
     public apiPort: number;
 
-    constructor(private http: HttpClient,
+    constructor(
+        private http: HttpClient,
         private globalService: GlobalService,
         private appState: ApplicationStateService,
         private log: Logger,
@@ -241,8 +240,8 @@ export class ApiService {
     }
 
     /**
-    * Get general wallet info from the API once.
-    */
+     * Get general wallet info from the API once.
+     */
     getGeneralInfoOnceTyped(data: WalletInfo): Observable<GeneralInfo> {
         const search = new HttpParams({
             fromObject: {
@@ -253,7 +252,7 @@ export class ApiService {
         return this.http
             .get(this.apiUrl + '/wallet/general-info', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError.bind(this)))
-            .pipe(map((response: GeneralInfo) => <GeneralInfo>(response)));
+            .pipe(map((response: GeneralInfo) => (response) as GeneralInfo));
     }
 
     /**
@@ -276,8 +275,8 @@ export class ApiService {
     }
 
     /**
-   * Get general wallet info from the API.
-   */
+     * Get general wallet info from the API.
+     */
     getGeneralInfoTyped(data: WalletInfo, pollingInterval = this.pollingInterval): Observable<GeneralInfo> {
         const search = new HttpParams({
             fromObject: {
@@ -365,8 +364,8 @@ export class ApiService {
     }
 
     /**
-   * Get an unused receive address for a certain wallet from the API.
-   */
+     * Get an unused receive address for a certain wallet from the API.
+     */
     getFirstReceiveAddress(data: WalletInfo): Observable<any> {
         const search = new HttpParams({
             fromObject: {
@@ -389,7 +388,7 @@ export class ApiService {
             fromObject: {
                 walletName: data.walletName,
                 accountName: 'account 0',
-                count: count
+                count
             }
         });
 
@@ -476,8 +475,8 @@ export class ApiService {
     }
 
     /**
-      * Stop staking
-      */
+     * Stop staking
+     */
     stopStaking(): Observable<any> {
         return this.http
             .post(this.apiUrl + '/staking/stopstaking', { headers: this.headers })

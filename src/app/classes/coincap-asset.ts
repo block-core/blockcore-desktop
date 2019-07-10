@@ -1,5 +1,5 @@
 export interface CoincapAsset {
-    changePercent24Hr?: string;
+    changePercent24Hr?: number;
     id?: string;
     marketCapUsd?: string;
     maxSupply?: string;
@@ -8,7 +8,7 @@ export interface CoincapAsset {
     rank?: number;
     supply?: string;
     symbol: string;
-    volumeUsd24Hr?: string;
+    volumeUsd24Hr?: number;
     vwap24Hr?: string;
     pair: string;
     volumepair: string;

@@ -15,7 +15,8 @@ export class LicensesComponent implements OnDestroy, OnInit {
 
     selectedContent: SafeHtml;
 
-    constructor(public appState: ApplicationStateService,
+    constructor(
+        public appState: ApplicationStateService,
         private readonly cd: ChangeDetectorRef,
         private readonly sanitizer: DomSanitizer,
         private readonly http: HttpClient) {

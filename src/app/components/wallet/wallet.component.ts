@@ -33,8 +33,8 @@ export class WalletComponent implements OnInit, OnDestroy {
     links = [{ title: 'All', filter: '' }, { title: 'Received', filter: 'received' }, { title: 'Sent', filter: 'sent' }];
     activeLink = this.links[0];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
         private apiService: ApiService,
@@ -53,7 +53,7 @@ export class WalletComponent implements OnInit, OnDestroy {
 
     private buildStakingForm(): void {
         this.stakingForm = this.fb.group({
-            'walletPassword': ['', Validators.required]
+            walletPassword: ['', Validators.required]
         });
     }
 
@@ -68,7 +68,7 @@ export class WalletComponent implements OnInit, OnDestroy {
         }
 
         this.walletServiceSubscription = this.wallet.history$.subscribe(items => {
-            this.parseHistory(<TransactionInfo[]>items);
+            this.parseHistory(items as TransactionInfo[]);
             this.ref.detectChanges();
         });
     }

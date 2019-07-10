@@ -42,7 +42,8 @@ export class RecoverAccountComponent {
         ])),
     }, PasswordValidationDirective.MatchPassword);
 
-    constructor(private authService: AuthenticationService,
+    constructor(
+        private authService: AuthenticationService,
         public snackBar: MatSnackBar,
         private router: Router,
         private appState: ApplicationStateService,

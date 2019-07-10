@@ -143,7 +143,7 @@ function createWindow() {
         minWidth: 260,
         minHeight: 400,
         title: 'City Hub',
-        webPreferences: { webSecurity: false },
+        webPreferences: { webSecurity: false, nodeIntegration: true },
         icon: __dirname + '/app.ico'
     });
     contents = mainWindow.webContents;
@@ -154,7 +154,9 @@ function createWindow() {
         electron_1.shell.openExternal(linkUrl);
     });
     if (serve) {
-        require('electron-reload')(__dirname, {});
+        require('electron-reload')(__dirname, {
+            electron: require(__dirname + "/node_modules/electron")
+        });
         mainWindow.loadURL('http://localhost:4200?coin=' + coin.identity);
     }
     else {

@@ -2,11 +2,9 @@ import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ElementRe
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { DetailsService } from '../../services/details.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { WalletService } from '../../services/wallet.service';
-import { ObservableMedia } from '@angular/flex-layout';
 import { CoinService } from 'src/app/services/coin.service';
 import { CoincapService } from 'src/app/services/coincap.service';
 import { Subscription } from 'rxjs';
@@ -31,11 +29,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private selectedCoinTickerIndex = -1;
     private subscriptions: Subscription[];
 
-    constructor(private apiService: ApiService,
+    constructor(
+        private apiService: ApiService,
         private coincap: CoincapService,
         private coin: CoinService,
         private globalService: GlobalService,
-        private router: Router,
         public appState: ApplicationStateService,
         public notifications: NotificationService,
         private detailsService: DetailsService,
@@ -159,6 +157,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             return;
         }
 
+        // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < this.subscriptions.length; i++) {
             this.subscriptions[i].unsubscribe();
         }

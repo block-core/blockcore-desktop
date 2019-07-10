@@ -32,11 +32,11 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
     displayedColumns: string[] = ['height', 'hash', 'time', 'transactions'];
     public dataSource = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
     displayedColumnsTransactions: string[] = ['txid', 'output', 'outputs', 'inputs', 'size'];
     public dataSourceTransactions = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator) paginatorTransactions: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginatorTransactions: MatPaginator;
 
     constructor(
         private http: HttpClient,
