@@ -1,3 +1,9 @@
+## <small>1.0.17 (2019-07-10)</small>
+
+* Upgrade dependencies (Angular 8, Electron 5) ([336fc16](https://github.com/CityChainFoundation/city-hub/commit/336fc16))
+
+
+
 ## <small>1.0.16 (2019-06-19)</small>
 
 * Update to support latest City Chain daemon ([1d3a3bf](https://github.com/CityChainFoundation/city-hub/commit/1d3a3bf))
