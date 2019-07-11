@@ -3,6 +3,10 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+if (os.arch() === 'arm') {
+    app.disableHardwareAcceleration();
+}
+
 const { autoUpdater } = require('electron-updater');
 const fs = require('fs');
 const log = require('electron-log');

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable } from 'rxjs';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +13,7 @@ export class ApplicationStateService {
     static singletonInstance: ApplicationStateService;
 
     constructor(
+        private electron: ElectronService,
         private readonly titleService: TitleService,
     ) {
         if (!ApplicationStateService.singletonInstance) {
@@ -54,6 +56,10 @@ export class ApplicationStateService {
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
+    }
+
+    get isElectron(): boolean {
+        return this.electron.isElectronApp;
     }
 
     getParam(n) {

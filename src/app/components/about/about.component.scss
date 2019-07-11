@@ -6,6 +6,23 @@
         margin-left: auto;
         margin-right: auto;
       }
+
+      a {
+          color: white;
+      }
+
+      a:hover {
+          color: silver;
+      }
+
+      .about-heart {
+        max-width: 600px;
+        margin-bottom: 20px;
+        padding-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
     
     .about-card .mat-card-image:first-child
     {

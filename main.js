@@ -4,6 +4,9 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
+if (os.arch() === 'arm') {
+    electron_1.app.disableHardwareAcceleration();
+}
 var autoUpdater = require('electron-updater').autoUpdater;
 var fs = require('fs');
 var log = require('electron-log');

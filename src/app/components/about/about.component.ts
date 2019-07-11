@@ -1,14 +1,9 @@
-import {
-    Component,
-    HostBinding,
-    ViewEncapsulation,
-    ChangeDetectionStrategy,
-    OnInit,
-    OnDestroy,
-} from '@angular/core';
+import { Component, HostBinding, ViewEncapsulation, OnInit } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { ElectronService } from 'ngx-electron';
+import { NodeStatus } from '@models/node-status';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-about',
@@ -18,31 +13,17 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AboutComponent implements OnInit {
     @HostBinding('class.about') hostClass = true;
+    public nodeStatusSubscription$: Observable<NodeStatus>;
 
-    private nodeStatusSubscription: Subscription;
-    public clientName: string;
-    public applicationVersion: string;
-    public network: string;
-    public dataDirectory: string;
-
-    constructor(public appState: ApplicationStateService, private apiService: ApiService) {
+    constructor(public appState: ApplicationStateService, private apiService: ApiService, private electron: ElectronService) {
         this.appState.pageMode = false;
     }
 
     ngOnInit() {
-        this.nodeStatusSubscription = this.apiService.getNodeStatus()
-            .subscribe(
-                response => {
-                    this.appState.fullNodeVersion = response.version;
-                    this.appState.protocolVersion = response.protocolVersion;
+        this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
+    }
 
-                    this.clientName = response.agent;
-                    this.network = response.network;
-                    this.dataDirectory = response.dataDirectoryPath;
-                },
-                error => {
-                    this.apiService.handleException(error);
-                }
-            );
+    openFolder(directory: string): void {
+        this.electron.shell.showItemInFolder(directory);
     }
 }
