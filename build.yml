@@ -17,7 +17,7 @@ phases:
   - task: NodeTool@0
     displayName: upgrade node
     inputs:
-      versionSpec: '8.x' # Required by Angular 6
+      versionSpec: '10.x' # Required by Angular 6
 
   - task: Npm@1
     displayName: npm install
