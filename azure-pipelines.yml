@@ -23,7 +23,7 @@ phases:
 
 - template: build.yml
   parameters:
-    name: Linux-Snap
+    name: LinuxSnap
     platform: linux-snap
     queue: Hosted Ubuntu 1604
 
