@@ -46,8 +46,8 @@ export class ToolsComponent implements OnInit {
     }
 
     public resync() {
-        // this.wallet.resync();
-        // this.resyncTriggered = true;
+        this.wallet.resync();
+        this.resyncTriggered = true;
 
         this.notifications.add({
             title: 'Wallet Synchronization',

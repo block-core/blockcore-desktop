@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { TitleService } from '../../services/title.service';
@@ -18,6 +18,8 @@ import { Logger } from '../../services/logger.service';
 import { WalletService } from '../../services/wallet.service';
 import { AppModes } from '../../shared/app-modes';
 import { NotificationService } from 'src/app/services/notification.service';
+import { retryWhen, delay, tap } from 'rxjs/operators';
+import { NodeStatus } from '@models/node-status';
 
 @Component({
     selector: 'app-root',
@@ -211,6 +213,8 @@ export class RootComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
+        // this.tryStart();
+
         setTimeout(() => {
             // We'll check for updates in the startup of the app.
             this.checkForUpdates();
@@ -236,5 +240,67 @@ export class RootComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.destroyed$.next();
         this.destroyed$.complete();
+    }
+
+    // tslint:disable-next-line:member-ordering
+    private subscription: Subscription;
+
+    // tslint:disable-next-line:member-ordering
+    private statusIntervalSubscription: Subscription;
+
+    // tslint:disable-next-line:member-ordering
+    private readonly MaxRetryCount = 50;
+
+    // tslint:disable-next-line:member-ordering
+    private readonly TryDelayMilliseconds = 3000;
+
+    // tslint:disable-next-line:member-ordering
+    public apiConnected = false;
+
+    // tslint:disable-next-line:member-ordering
+    loading = true;
+
+    // tslint:disable-next-line:member-ordering
+    loadingFailed = false;
+
+    // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
+    // Not in use.
+    private tryStart() {
+        let retry = 0;
+        const stream$ = this.apiService.getNodeStatus().pipe(
+            retryWhen(errors =>
+                errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
+                    tap(errorStatus => {
+                        if (retry++ === this.MaxRetryCount) {
+                            throw errorStatus;
+                        }
+                        console.log(`Retrying ${retry}...`);
+                    })
+                )
+            )
+        );
+
+        this.subscription = stream$.subscribe(
+            (data: NodeStatus) => {
+                this.apiConnected = true;
+                this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
+                    .subscribe(
+                        response => {
+                            // tslint:disable-next-line: no-debugger
+                            debugger;
+                            const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                                this.loading = false;
+                                this.statusIntervalSubscription.unsubscribe();
+                                // this.router.navigate(['login']);
+                            }
+                        }
+                    );
+            }, (error: any) => {
+                console.log('Failed to start wallet');
+                this.loading = false;
+                this.loadingFailed = true;
+            }
+        );
     }
 }

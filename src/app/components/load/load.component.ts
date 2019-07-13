@@ -115,6 +115,7 @@ export class LoadComponent implements OnDestroy {
     }
 
     start() {
+        // this.simpleWalletConnect();
         this.loading = false;
         this.appState.connected = true;
         this.router.navigateByUrl('/login');
@@ -139,46 +140,35 @@ export class LoadComponent implements OnDestroy {
         this.appState.mode = null;
     }
 
-    // simpleWalletConnect() {
-    //     // Meet the new stack for real-time web communication: ASP.NET Core SignalR
-    //     // Learn more: https://www.youtube.com/watch?v=Lws0zOaseIM
+    simpleWalletConnect() {
+        this.connection = new signalR.HubConnectionBuilder()
+            .withUrl('http://localhost:4337/node')
+            .build();
 
-    //     this.connection = new signalR.HubConnectionBuilder()
-    //         .withUrl('http://localhost:8081/wallet')
-    //         .build();
+        this.connection.on('BlockConnected', (block) => {
+            console.log('BlockConnected:' + block);
+        });
 
-    //     this.connection.on('ReceiveMessage', (user, message) => {
-    //         console.log(user);
-    //         console.log(message);
-    //     });
+        this.connection.on('TransactionReceived', (trx) => {
+            console.log('TransactionReceived:' + trx);
+        });
 
-    //     this.connection.on('txs', (transactions) => {
+        this.connection.on('txs', (transactions) => {
+            console.log(transactions);
+            // TODO: Update a bitcore-lib fork to add support for Stratis/City Chain.
+            // var tx1 = transactions[0];
+            // var tx = bitcoin.Transaction.fromHex(tx1.value.hex);
+        });
 
-    //         console.log(transactions);
-
-    //         // TODO: Update a bitcore-lib fork to add support for Stratis/City Chain.
-    //         // var tx1 = transactions[0];
-    //         // var tx = bitcoin.Transaction.fromHex(tx1.value.hex);
-    //     });
-
-    //     const self = this;
-
-    //     // Transport fallback functionality is now built into start.
-    //     this.connection.start()
-    //         .then(function () {
-    //             console.log('connection started');
-    //             self.connection.invoke('CreateWallet', 'cityhub-mobile-0.0.1', '2018-01-01', ['SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ']).catch(err => console.error(err.toString()));
-    //         })
-    //         .catch(error => {
-    //             console.error(error.message);
-    //         });
-    // }
-
-    // simpleWalletWatch() {
-    //     this.connection.invoke('Watch', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
-    // }
-
-    // simpleWalletBalance() {
-    //     this.connection.invoke('Balance', 'SMsZGWkF9zR5mjxWTYsDq9pU5ZHdUQw1jJ').catch(err => console.error(err.toString()));
-    // }
+        const self = this;
+        // Transport fallback functionality is now built into start.
+        this.connection.start()
+            .then(() => {
+                console.log('connection started');
+                self.connection.send('Subscribe', { events: ['TransactionReceived', 'BlockConnected'] });
+            })
+            .catch(error => {
+                console.error(error.message);
+            });
+    }
 }

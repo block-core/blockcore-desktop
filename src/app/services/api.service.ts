@@ -92,21 +92,29 @@ export class ApiService {
 
     /** Set the API port to connect with full node API. This will differ depending on coin and network. */
     setApiPort(port: number) {
+        // tslint:disable-next-line: no-debugger
+        debugger;
         this.apiPort = port;
         this.apiUrl = 'http://localhost:' + port + '/api';
     }
 
     getNodeStatus(): Observable<any> {
+
+        const self = this;
+
         return this.http
-            .get(this.apiUrl + '/node/status')
+            .get(self.apiUrl + '/node/status')
             .pipe(catchError(this.handleInitialError.bind(this)))
             .pipe(map((response: Response) => response));
     }
 
     getNodeStatusInterval(): Observable<any> {
+
+        const self = this;
+
         return interval(this.pollingInterval)
             .pipe(startWith(0))
-            .pipe(switchMap(() => this.http.get(this.apiUrl + '/node/status', { headers: this.headers })))
+            .pipe(switchMap(() => this.http.get(self.apiUrl + '/node/status', { headers: self.headers })))
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

@@ -34,6 +34,7 @@
     "electron:local": "npm run build:testnet && electron .",
     "builder": "npm run build:prod && npx electron-builder build",
     "build:linux": "npm run builder -- --linux",
+    "build:linux:snap": "npm run builder -- --linux snap",
     "build:win:x86": "export arch=x86|| set arch=x86&& npm run builder -- --windows --ia32",
     "build:win:x64": "export arch=x64|| set arch=x64&& npm run builder -- --windows --x64",
     "build:mac": "npm run builder -- --mac",
