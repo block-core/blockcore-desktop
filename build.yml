@@ -76,7 +76,7 @@ phases:
       ${{ if eq(parameters.platform, 'win') }}:
         customCommand: ${{ format('run build:{0}:{1}', parameters.platform, parameters.arch) }} 
       ${{ if ne(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run build:{0}', parameters.platform) }} 
+        customCommand: ${{ format('run build:{0}{1}', parameters.platform, parameters.extra) }} 
     env:
       GH_TOKEN: $(GH_TOKEN)
 
@@ -89,6 +89,6 @@ phases:
       ${{ if eq(parameters.platform, 'win') }}:
         customCommand: ${{ format('run publish:{0}:{1}', parameters.platform, parameters.arch) }} 
       ${{ if ne(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run publish:{0}', parameters.platform) }} 
+        customCommand: ${{ format('run publish:{0}{1}', parameters.platform, parameters.extra) }} 
     env:
       GH_TOKEN: $(GH_TOKEN)
