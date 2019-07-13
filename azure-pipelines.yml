@@ -21,6 +21,12 @@ phases:
     platform: linux
     queue: Hosted Ubuntu 1604
 
+- template: build.yml
+  parameters:
+    name: Linux
+    platform: linux-snap
+    queue: Hosted Ubuntu 1604
+
 # - template: build.yml
 #   parameters:
 #     name: Windows_x86

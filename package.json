@@ -34,7 +34,7 @@
     "electron:local": "npm run build:testnet && electron .",
     "builder": "npm run build:prod && npx electron-builder build",
     "build:linux": "npm run builder -- --linux",
-    "build:linux:snap": "npm run builder -- --linux snap",
+    "build:linux-snap": "npm run builder -- --linux snap",
     "build:win:x86": "export arch=x86|| set arch=x86&& npm run builder -- --windows --ia32",
     "build:win:x64": "export arch=x64|| set arch=x64&& npm run builder -- --windows --x64",
     "build:mac": "npm run builder -- --mac",
@@ -44,6 +44,7 @@
     "publish:win:x86": "export arch=x86|| set arch=x86&& npm run builder --  -w --ia32 -p always",
     "publish:win:x64": "export arch=x64|| set arch=x64&& npm run builder --  -w  --x64 -p always",
     "publish:linux": "npm run builder --  -l -p always",
+    "publish:linux-snap": "npm run builder --  -l snap -p always",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
