@@ -380,12 +380,16 @@ function launchDaemon(apiPath, chain) {
     // if (chain.dataDir != null)
     // commandLineArguments.push("-datadir=" + chain.dataDir);
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
-    daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
-        detached: true
-    });
-    // daemonProcess = spawnDaemon('dotnet \"' + apiPath + '\"', commandLineArguments, {
-    //     detached: false
-    // });
+    if (serve) {
+        daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
+            detached: true
+        });
+    }
+    else {
+        daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
+            detached: true
+        });
+    }
     daemonProcess.stdout.on('data', function (data) {
         writeDebug("City Chain: " + data);
     });

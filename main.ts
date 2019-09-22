@@ -99,7 +99,7 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     } else if (serve && arg.path) {
         writeLog(currentChain);
         startDaemon(currentChain);
-        event.returnValue = 'OK';    
+        event.returnValue = 'OK';
     } else {
         writeLog(currentChain);
         startDaemon(currentChain);
@@ -306,8 +306,7 @@ function createWindow() {
         // exit on the error dialog.
 
         // If daemon stopping has not been triggered, it means it likely never started and user clicked Exit on the error dialog. Exit immediately.
-        if (!daemonStopping)
-        {
+        if (!daemonStopping) {
             return true;
         } else {
             // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
@@ -407,8 +406,7 @@ function startDaemon(chain: Chain) {
     if (!chain.path && os.platform() === 'win32') {
         daemonName += '.exe';
     }
-    else if (chain.path)
-    {
+    else if (chain.path) {
         daemonName += ".dll"
     }
 
@@ -467,13 +465,15 @@ function launchDaemon(apiPath: string, chain: Chain) {
 
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
 
-    daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
-        detached: true
-    });
-
-    // daemonProcess = spawnDaemon('dotnet \"' + apiPath + '\"', commandLineArguments, {
-    //     detached: false
-    // });
+    if (serve) {
+        daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
+            detached: true
+        });
+    } else {
+        daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
+            detached: true
+        });
+    }
 
     daemonProcess.stdout.on('data', (data) => {
         writeDebug(`City Chain: ${data}`);
@@ -482,13 +482,13 @@ function launchDaemon(apiPath: string, chain: Chain) {
     /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
         writeLog(`City Chain daemon process exited with code ${code} and signal ${signal}.`);
-        
+
         // There are many reasons why the daemon process can exit, we'll show details
         // in those cases we get an unexpected shutdown code and signal.
 
         writeLog(daemonStarting + '--' + daemonStarted + '--' + daemonStopping);
 
-        if (daemonChanging){
+        if (daemonChanging) {
             writeLog('Daemon exit was expected, the user is changing the network mode.');
         } else if (daemonStarting) {
             contents.send('daemon-error', `CRITICAL: City Chain daemon process exited during startup with code ${code} and signal ${signal}.`);
@@ -501,9 +501,9 @@ function launchDaemon(apiPath: string, chain: Chain) {
             } else {
                 // Check is stopping of daemon has been requested. If so, we'll notify the UI that it has completed the exit.
                 contents.send('daemon-exited');
-                }
             }
         }
+    }
     );
 
     daemonProcess.on('error', function (code, signal) {
