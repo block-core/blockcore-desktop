@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Ban node</h1>
+<div mat-dialog-content>
+  <p>Fill out total seconds you want to ban the node: {{data.ip}}</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.seconds">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ban</button>
+</div>

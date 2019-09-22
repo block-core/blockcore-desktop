@@ -31,12 +31,27 @@ var shutdownInitiated = false;
 //     tooltip: ''
 // };
 var args = process.argv.slice(1);
-var serve = args.some(function (val) { return val === '--serve' || val === '-serve'; });
+var serve = args.some(function (val) { return val === '--serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
+var launchPath = args.find(function (element) {
+    return element.startsWith('--path');
+});
+if (launchPath) {
+    launchPath = launchPath.substring(7);
+}
 require('electron-context-menu')({
     showInspectElement: serve
 });
+var daemonStarting = false;
+var daemonStopping = false;
+var daemonStarted = false;
+var daemonChanging = false;
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
+    daemonStarting = true;
+    console.log(arg);
+    if (launchPath) {
+        arg.path = launchPath;
+    }
     // The "chain" object is supplied over the IPC channel and we should consider
     // it potentially "hostile", if anyone can inject anything in the app and perform
     // a call to the node backend here. Since we are launching a process here,
@@ -48,10 +63,15 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(isNumber(arg.wsPort));
     assert(arg.network.length < 20);
     currentChain = arg;
-    if (serve) {
+    if (serve && !arg.path) {
         var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
+    }
+    else if (serve && arg.path) {
+        writeLog(currentChain);
+        startDaemon(currentChain);
+        event.returnValue = 'OK';
     }
     else {
         writeLog(currentChain);
@@ -71,6 +91,15 @@ electron_1.ipcMain.on('install-update', function (event, arg) {
 process.on('uncaughtException', function (error) {
     writeLog('Uncaught exception happened:');
     writeLog(error);
+});
+electron_1.ipcMain.on('daemon-started', function (event, arg) {
+    writeLog('DAEMON STARTED WAS CALLED!!!');
+    daemonStarting = false;
+    daemonStarted = true;
+    daemonStopping = false;
+});
+electron_1.ipcMain.on('daemon-change', function (event, arg) {
+    daemonChanging = true;
 });
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 electron_1.ipcMain.on('reset-database', function (event, arg) {
@@ -123,6 +152,43 @@ autoUpdater.on('download-progress', function (progressObj) {
     log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
 });
+var readline = require('readline');
+var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+rl.on('SIGINT', function () {
+    rl.question('Are you sure you want to exit? ', function (answer) {
+        if (answer.match(/^y(es)?$/i))
+            rl.pause();
+    });
+});
+// process.on('SIGINT', function () {
+//     console.log("\ngracefully shutting down from  SIGINT (Crtl-C)")
+//     // wish this worked on Windows
+//     process.exit()
+// })
+// process.on('SIGINT', () => {
+//     process.question('Are you sure you want to exit? ', (answer) => {
+//         if (answer.match(/^y(es)?$/i)) process.pause();
+//     });
+// });
+// if (process.platform === 'win32') {
+//     var rl = require('readline').createInterface({
+//         input: process.stdin,
+//         output: process.stdout
+//     });
+//     rl.on('SIGINT', function () {
+//         console.log('WHUT?!?!');
+//         process.emit('SIGINT');
+//     });
+// }
+process.on('SIGINT', function () {
+    //console.log('YES!!!');
+    //writeLog("Terminating by CTRL-C, we must manually force the daemon to shutdown...");
+    shutdown(function () { console.log('SHUTDOWN!'); });
+    process.exit(0);
+});
 function deleteFolderRecursive(folder) {
     if (fs.existsSync(folder)) {
         fs.readdirSync(folder).forEach(function (file, index) {
@@ -174,14 +240,23 @@ function createWindow() {
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function (event) {
-        // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
-        if (!shutdownInitiated) {
-            shutdownInitiated = true;
-            event.preventDefault();
-            contents.send('daemon-exiting');
-            // Call the shutdown while we show progress window.
-            shutdown(function () { });
+        shutdown(function () { });
+        // If the daemon has not been triggered to shutdown, and has not been running, simply exit as the user have clicked
+        // exit on the error dialog.
+        // If daemon stopping has not been triggered, it means it likely never started and user clicked Exit on the error dialog. Exit immediately.
+        if (!daemonStopping) {
             return true;
+        }
+        else {
+            // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
+            if (!shutdownInitiated) {
+                shutdownInitiated = true;
+                event.preventDefault();
+                contents.send('daemon-exiting');
+                // Call the shutdown while we show progress window.
+                shutdown(function () { });
+                return true;
+            }
         }
     });
     // Emitted when the window is closed.
@@ -210,16 +285,16 @@ var shutdown = function (callback) {
             callback();
         }
         else {
-            writeLog('Shutdown daemon signaling failed. Attempting a single retry.');
-            writeLog(error);
+            writeError('Shutdown daemon signaling failed. Attempting a single retry.');
+            writeError(error);
             // Perform another retry, and quit no matter the result.
             shutdownDaemon(function (ok, err) {
                 if (ok) {
                     writeLog('Shutdown daemon retry signaling completed successfully.');
                 }
                 else {
-                    writeLog('Shutdown daemon retry signaling failed.');
-                    writeLog(err);
+                    writeError('Shutdown daemon retry signaling failed.');
+                    writeError(err);
                 }
                 // Inform that we are unable to shutdown the daemon.
                 contents.send('daemon-exited', { message: 'Unable to communicate with background process.' });
@@ -242,7 +317,7 @@ electron_1.app.on('activate', function () {
     }
 });
 function startDaemon(chain) {
-    var folderPath = getDaemonPath();
+    var folderPath = chain.path || getDaemonPath();
     var daemonName;
     if (chain.identity === 'city') {
         daemonName = 'City.Chain';
@@ -253,8 +328,12 @@ function startDaemon(chain) {
     else if (chain.identity === 'bitcoin') {
         daemonName = 'Stratis.StratisD';
     }
-    if (os.platform() === 'win32') {
+    // If path is not specified and Win32, we'll append .exe
+    if (!chain.path && os.platform() === 'win32') {
         daemonName += '.exe';
+    }
+    else if (chain.path) {
+        daemonName += ".dll";
     }
     var daemonPath = path.resolve(folderPath, daemonName);
     launchDaemon(daemonPath, chain);
@@ -276,6 +355,11 @@ function launchDaemon(apiPath, chain) {
     var daemonProcess;
     var spawnDaemon = require('child_process').spawn;
     var commandLineArguments = [];
+    if (serve) { // Only append the apiPath as argument if we run in serve-mode.,
+        commandLineArguments.push(apiPath);
+        //commandLineArguments.push('0');
+        commandLineArguments.push('-datadir=citynode4');
+    }
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
@@ -290,22 +374,50 @@ function launchDaemon(apiPath, chain) {
     else if (chain.network.indexOf('test') > -1) {
         commandLineArguments.push('-testnet');
     }
+    writeLog('LAUNCH: ' + apiPath);
+    writeLog('ARGS: ' + JSON.stringify(commandLineArguments));
     // TODO: Consider adding an advanced option in the setup dialog, to allow a custom datadir folder.
     // if (chain.dataDir != null)
     // commandLineArguments.push("-datadir=" + chain.dataDir);
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
-    daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
+    daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
         detached: true
     });
+    // daemonProcess = spawnDaemon('dotnet \"' + apiPath + '\"', commandLineArguments, {
+    //     detached: false
+    // });
     daemonProcess.stdout.on('data', function (data) {
         writeDebug("City Chain: " + data);
     });
+    /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
         writeLog("City Chain daemon process exited with code " + code + " and signal " + signal + ".");
-        contents.send('daemon-exited');
+        // There are many reasons why the daemon process can exit, we'll show details
+        // in those cases we get an unexpected shutdown code and signal.
+        writeLog(daemonStarting + '--' + daemonStarted + '--' + daemonStopping);
+        if (daemonChanging) {
+            writeLog('Daemon exit was expected, the user is changing the network mode.');
+        }
+        else if (daemonStarting) {
+            contents.send('daemon-error', "CRITICAL: City Chain daemon process exited during startup with code " + code + " and signal " + signal + ".");
+        }
+        else if (!daemonStopping) {
+            contents.send('daemon-error', "City Chain daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
+        }
+        else {
+            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
+            if (code !== 0) {
+                contents.send('daemon-error', "City Chain daemon shutdown completed, but resulted in exit code " + code + " and signal " + signal + ".");
+            }
+            else {
+                // Check is stopping of daemon has been requested. If so, we'll notify the UI that it has completed the exit.
+                contents.send('daemon-exited');
+            }
+        }
     });
-    daemonProcess.on('error ', function (code, signal) {
-        writeLog("City Chain daemon process failed to start. Code " + code + " and signal " + signal + ".");
+    daemonProcess.on('error', function (code, signal) {
+        writeError('ERROR!!! :');
+        writeError("City Chain daemon process failed to start. Code " + code + " and signal " + signal + ".");
     });
 }
 function shutdownDaemon(callback) {
@@ -330,12 +442,12 @@ function shutdownDaemon(callback) {
                 callback(true, null);
             }
             else {
-                writeLog('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+                writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
                 callback(false, res);
             }
         });
         req.on('error', function (err) {
-            writeLog('Request to shutdown daemon failed.');
+            writeError('Request to shutdown daemon failed.');
             callback(false, err);
         });
         req.setHeader('content-type', 'application/json-patch+json');
@@ -385,9 +497,15 @@ function createTray() {
 }
 function writeDebug(msg) {
     log.debug(msg);
+    contents.send('log-debug', msg);
 }
 function writeLog(msg) {
     log.info(msg);
+    contents.send('log-info', msg);
+}
+function writeError(msg) {
+    log.error(msg);
+    contents.send('log-error', msg);
 }
 function isNumber(value) {
     return !isNaN(Number(value.toString()));

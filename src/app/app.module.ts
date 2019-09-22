@@ -35,6 +35,7 @@ import { httpInterceptorProviders } from './shared/http-interceptors';
 import { HttpErrorHandler } from './services/http-error-handler.service';
 import { ToolsModule } from './components/tools/tools.module';
 import { NotificationsModule } from './components/notifications/notifications.module';
+import { ReportModule } from './components/report/report.module';
 
 @NgModule({
     declarations: [
@@ -57,6 +58,7 @@ import { NotificationsModule } from './components/notifications/notifications.mo
         LoadModule,
         NetworkModule,
         NotFoundModule,
+        ReportModule,
         UpdateModule,
         MerchantsModule,
         DetailsModule,

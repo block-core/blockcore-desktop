@@ -5,7 +5,9 @@ So if anyone want to try doing some development on City Hub, this is the absolut
 
 1. Download, install and run City Hub. By running the official release of City Hub, you also get the City Chain daemon running locally. This will host the APIs that are used by City Hub.
 
-2. Clone the City Hub source code, navigate to the root, run "npm install" and then "npm start". This should launch the City Hub UI and it will connect to the already running daemon. This will launch the City Hub UI automatically, with the debug console activated.
+2. Clone the City Hub source code, navigate to the root, run "npm install" and then "npm start". This will launch a web server with the angular app.
+
+3. Hit F5 in Visual Studio Code to debug, select the "Electron: All" to debug both renderer and main processes.
 
 This should be fairly simple to do, and it requires no knowledge of .NET Core or C# to get started.
 
@@ -62,3 +64,16 @@ means more exposure to potential security issues.
 
 It is important that all contributors are well aware of security principles, and especially regarding Electron, 
 more details here: [Electron Security](https://electronjs.org/docs/tutorial/security)
+
+## VS Code Debugging
+
+There are existing launch and tasks that handles debugging of the main.ts and launch that completes all Angular compilation from Visual Studio Code.
+
+There are issues with CTRL-C signaling on Windows, so it is advised to avoid using "npm start" to launch the app.
+
+## Requirements
+
+Part of the post debug tasks, is a call to shut down the background daemon. This relies on curl, so make sure you have it installed and registered in 
+the path environment variable so it can be called from VS Code tasks.
+
+https://curl.haxx.se/download.html

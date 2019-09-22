@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content class="mat-typography">
+    <p class="report-header">
+        <mat-icon class="report-icon">error</mat-icon>
+        <span class="report-description">City Hub will attempt to start the City Chain background daemon (process) at startup. This dialog appears due to failure to load City Chain daemon. You can copy the errors and report
+            them to the development team for support.</span>
+    </p>
+
+    <h3>Last {{data.lines.length}} log messages:</h3>
+
+    <div id="error-lines">
+        <p class="log-line" *ngFor="let line of data.lines">
+            {{line.timestamp | date:'HH:mm'}}: {{line.message}}
+
+            <span *ngFor="let arg of line.args">
+                {{arg | json}}
+            </span>
+        </p>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button ngbTooltip="Copy to clipboard" (click)="onCopiedClick()">Copy</button>
+    <button mat-button color="primary" [mat-dialog-close]="true" (click)="shutdown()" cdkFocusInitial>Exit</button>
+</mat-dialog-actions>

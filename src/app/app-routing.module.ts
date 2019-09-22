@@ -15,6 +15,7 @@ import { AdvancedComponent } from './components/advanced/advanced.component';
 import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
 import { ToolsComponent } from './components/tools/tools.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { NetworkDetailsComponent } from './components/network/network-details.component';
 
 const routes: Routes = [
     {
@@ -90,6 +91,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Network Status'
+        },
+    },
+    {
+        path: 'network-details',
+        component: NetworkDetailsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Network Details'
         },
     },
     {

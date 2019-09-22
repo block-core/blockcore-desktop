@@ -1,0 +1,27 @@
+.log-line {
+    border-bottom: 1px solid rgba($color: silver, $alpha: 0.25);
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 0;
+}
+
+.report-icon
+{
+    font-size: 3em;
+    max-width: 60px;
+}
+
+.report-description {
+
+}
+
+.report-header
+{
+  display: flex;  
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+.report-header > * {
+    flex: 1 1 200px;
+  }

@@ -8,6 +8,7 @@ import { GeneralInfo } from '../../classes/general-info';
 import { MatGridList } from '@angular/material';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { WalletService } from '../../services/wallet.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-network',
@@ -35,6 +36,7 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
         private apiService: ApiService,
         private readonly cd: ChangeDetectorRef,
         public mediaObserver: MediaObserver,
+        public router: Router,
         public walletService: WalletService) {
 
     }
@@ -52,5 +54,9 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
 
     ngOnDestroy() {
         this.mediaObservable.unsubscribe();
+    }
+
+    details() {
+        this.router.navigateByUrl('/network-details');
     }
 }

@@ -57,7 +57,11 @@
             <!-- <h3 class="mat-h3">Log in to access your account</h3> -->
             <p class="login-banner-text">Release {{appState.release}}<br>
                 Network: {{appState.network}}<br>
-                Mode: {{appState.mode}}</p>
+                Mode: {{appState.mode}}<br>
+                <span *ngIf="status">
+                    Connections: {{status?.inboundPeers.length + status?.outboundPeers.length}}
+                </span>
+            </p>
         </div>
         <div class="login-mode-mobile">
             <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>

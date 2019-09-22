@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "shutdown-daemon",
+            "type": "shell",
+            "command": [
+                "curl -X POST \"http://localhost:4335/api/Node/shutdown?api-version=1.0\" -H \"accept: application/json\" -H \"Content-Type: application/json-patch+json\" -d \"true\""
+            ]
+        },
+        {
+            "label": "ng-serve-web",
+            "type": "npm",
+            "script": "start:debug",
+            "isBackground": true,
+            "group": "build",
+            "problemMatcher": {
+               "owner": "typescript",
+               "source": "ts",
+               "applyTo": "closedDocuments",
+               "fileLocation": ["relative", "${cwd}"],
+               "pattern": "$tsc",
+               "background": {
+                  "activeOnStart": true,
+                  "beginsPattern": "^.*Angular Live Development Server.*",
+                  "endsPattern": "^.*Compiled successfully.*"
+               }
+            }
+         }
+    ]
+}

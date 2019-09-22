@@ -92,14 +92,11 @@ export class ApiService {
 
     /** Set the API port to connect with full node API. This will differ depending on coin and network. */
     setApiPort(port: number) {
-        // tslint:disable-next-line: no-debugger
-        debugger;
         this.apiPort = port;
         this.apiUrl = 'http://localhost:' + port + '/api';
     }
 
     getNodeStatus(): Observable<any> {
-
         const self = this;
 
         return this.http
@@ -115,6 +112,28 @@ export class ApiService {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(self.apiUrl + '/node/status', { headers: self.headers })))
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    getNodeStatusCustomInterval(milliseconds: number): Observable<any> {
+
+        const self = this;
+
+        return interval(milliseconds)
+            .pipe(startWith(0))
+            .pipe(switchMap(() => this.http.get(self.apiUrl + '/node/status', { headers: self.headers })))
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    getBannedNodesCustomInterval(milliseconds: number): Observable<any> {
+
+        const self = this;
+
+        return interval(milliseconds)
+            .pipe(startWith(0))
+            .pipe(switchMap(() => this.http.get(self.apiUrl + '/Network/getbans', { headers: self.headers })))
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
@@ -498,6 +517,87 @@ export class ApiService {
     shutdownNode(): Observable<any> {
         return this.http
             .post(this.apiUrl + '/node/shutdown', { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Add node
+     */
+    addNode(ip: string): Observable<any> {
+        const params = new HttpParams({
+            fromObject: {
+                command: 'add',
+                endpoint: ip,
+            }
+        });
+
+        console.log(params);
+
+        return this.http
+            .get(this.apiUrl + '/ConnectionManager/addnode', { headers: this.headers, params })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Remove node
+     */
+    removeNode(ip: string): Observable<any> {
+        const params = new HttpParams({
+            fromObject: {
+                command: 'remove',
+                endpoint: ip,
+            }
+        });
+
+        return this.http
+            .get(this.apiUrl + '/ConnectionManager/addnode', { headers: this.headers, params })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Ban node
+     */
+    banNode(ip: string, banDurationSeconds: number): Observable<any> {
+        const cmd = {
+            banCommand: 'add',
+            banDurationSeconds,
+            peerAddress: ip
+        };
+
+        return this.http
+            .post(this.apiUrl + '/Network/setban/', JSON.stringify(cmd), { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Unban node
+     */
+    unbanNode(ip: string): Observable<any> {
+        const cmd = {
+            banCommand: 'remove',
+            peerAddress: ip
+        };
+
+        return this.http
+            .post(this.apiUrl + '/Network/setban/', JSON.stringify(cmd), { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Remove all bans
+     */
+    removeBans(): Observable<any> {
+        const cmd = {
+            true: 'true'
+        };
+
+        return this.http
+            .post(this.apiUrl + '/Network/clearbanned/', JSON.stringify(cmd), { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

@@ -1,0 +1,166 @@
+<div class="details-content">
+
+    <button mat-mini-fab class="add-node" (click)="addNode()">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-list *ngIf="status">
+        <h3 mat-subheader>Outbound nodes</h3>
+
+        <mat-list-item *ngFor="let peer of status.outboundPeers">
+
+            <mat-icon mat-list-icon>computer</mat-icon>
+            <h4 mat-line>{{peer.remoteSocketEndpoint}}</h4>
+            <p mat-line> {{peer.version}} -- Height: {{peer.tipHeight}} </p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Disconnect node</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Ban Node</span>
+                    </button>
+                </mat-menu>
+            </p>
+
+        </mat-list-item>
+        <mat-card class="card" *ngIf="status.outboundPeers == 0">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Zero outbound nodes</mat-card-title>
+                <mat-card-subtitle>You have zero connected nodes.</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <h3 class="mat-h3">Please wait...</h3>
+                <p>If everything is working normally, you should automatically connected to nodes soon, please wait.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Inbound nodes</h3>
+        <mat-list-item *ngFor="let peer of status.inboundPeers">
+
+            <mat-icon mat-list-icon>computer</mat-icon>
+            <h4 mat-line>{{peer.remoteSocketEndpoint}}</h4>
+            <p mat-line> Version: {{peer.version}} -- Height: {{peer.tipHeight}} </p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Disconnect node</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Ban Node</span>
+                    </button>
+                </mat-menu>
+            </p>
+
+        </mat-list-item>
+        <mat-card class="card" *ngIf="status.inboundPeers == 0">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Zero inbound nodes</mat-card-title>
+                <mat-card-subtitle>You have zero nodes incoming to your computer, likely because your firewall blocks traffic.
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <h3 class="mat-h3">TCP port: {{chain.port}}</h3>
+                <p>If you want to contribute to the network by becoming a public node, please open the above TCP port and forward it to your local computer IP address.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Banned nodes</h3>
+        <mat-list-item *ngFor="let peer of bans">
+
+            <mat-icon mat-list-icon>computer</mat-icon>
+            <h4 mat-line>{{peer.endPoint}}</h4>
+            <p mat-line> Ban until: {{peer.banUntil | date:'dd-MM-yyyy HH:mm'}} -- {{peer.banReason}} </p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeBan(peer.endPoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Remove ban</span>
+                    </button>
+                </mat-menu>
+            </p>
+
+        </mat-list-item>
+
+        <div class="network-details-footer" *ngIf="bans != 0">
+            <button (click)="removeBans()" mat-raised-button>Remove all bans</button>
+        </div>
+
+    </mat-list>
+
+
+    <mat-list *ngIf="status">
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Details</h3>
+        <mat-list-item>
+            <mat-icon mat-list-icon>share</mat-icon>
+            <h4 mat-line>{{walletService.generalInfo?.chainTip}}</h4>
+            <p mat-line>Network Height (Chain Tip)</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>share</mat-icon>
+            <h4 mat-line>{{status.consensusHeight}}</h4>
+            <p mat-line>Consensus Height</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>share</mat-icon>
+            <h4 mat-line>{{status.blockStoreHeight}}</h4>
+            <p mat-line>Blockstore Height</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>share</mat-icon>
+            <h4 mat-line>{{walletService.generalInfo?.lastBlockSyncedHeight}}</h4>
+            <p mat-line>Wallet Height</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>schedule</mat-icon>
+            <h4 mat-line>{{status.runningTime}}</h4>
+            <p mat-line>Uptime</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>public</mat-icon>
+            <h4 mat-line>{{status.externalAddress}}</h4>
+            <p mat-line>External Address</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>cloud</mat-icon>
+            <h4 mat-line>{{walletService.generalInfo?.network}}</h4>
+            <p mat-line>Network</p>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>attach_money</mat-icon>
+            <p mat-line>{{status.relayFee}}</p>
+            <h4 mat-line>Relay fee</h4>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>code</mat-icon>
+            <p mat-line>{{status.protocolVersion}}</p>
+            <h4 mat-line>Protocol Version</h4>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon mat-list-icon>today</mat-icon>
+            <h4 mat-line>{{walletService.generalInfo?.creationTime.toDateString()}}</h4>
+            <p mat-line>Wallet Creation Date</p>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+    </mat-list>
+</div>
+
+<div class="network-details-footer">
+    <button (click)="back()" mat-raised-button>Go back</button>
+</div>

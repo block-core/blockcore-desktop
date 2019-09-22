@@ -11,7 +11,7 @@
     "editor.renderIndentGuides": true,
     "html.format.wrapLineLength": 0,
     "[typescript]": {
-        "editor.formatOnSave": true,
+        "editor.formatOnSave": false,
         "editor.formatOnPaste": true
     },
     "[markdown]": {

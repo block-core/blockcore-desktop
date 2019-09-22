@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry, MatDialog } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ import { AppModes } from '../../shared/app-modes';
 import { NotificationService } from 'src/app/services/notification.service';
 import { retryWhen, delay, tap } from 'rxjs/operators';
 import { NodeStatus } from '@models/node-status';
+import { ReportComponent } from '../report/report.component';
 
 @Component({
     selector: 'app-root',
@@ -71,6 +72,7 @@ export class RootComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private walletService: WalletService,
         private readonly cd: ChangeDetectorRef,
+        public dialog: MatDialog,
         public notifications: NotificationService,
         private globalService: GlobalService,
         private readonly breakpointObserver: BreakpointObserver,
@@ -95,7 +97,7 @@ export class RootComponent implements OnInit, OnDestroy {
         this.ipc = electronService.ipcRenderer;
 
         this.ipc.on('daemon-exiting', (event, error) => {
-            console.log('daemon is currently being stopped... please wait...');
+            this.log.info('daemon is currently being stopped... please wait...');
             this.appState.shutdownInProgress = true;
             this.cd.detectChanges();
 
@@ -108,12 +110,40 @@ export class RootComponent implements OnInit, OnDestroy {
         });
 
         this.ipc.on('daemon-exited', (event, error) => {
-            console.log('daemon is stopped.');
+            this.log.info('daemon is stopped.');
             this.appState.shutdownInProgress = false;
             this.appState.shutdownDelayed = false;
 
             // Perform a new close event on the window, this time it will close itself.
             window.close();
+        });
+
+        this.ipc.on('daemon-error', (event, error) => {
+
+            this.log.error(error);
+
+            const dialogRef = this.dialog.open(ReportComponent, {
+                data: {
+                    title: 'Failed to start City Chain background daemon',
+                    error,
+                    lines: this.log.lastEntries()
+             } });
+
+            dialogRef.afterClosed().subscribe(result => {
+                this.log.info(`Dialog result: ${result}`);
+            });
+        });
+
+        this.ipc.on('log-debug', (event, msg: any) => {
+            this.log.verbose(msg);
+        });
+
+        this.ipc.on('log-info', (event, msg: any) => {
+            this.log.info(msg);
+        });
+
+        this.ipc.on('log-error', (event, msg: any) => {
+            this.log.error(msg);
         });
 
         // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
@@ -158,7 +188,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
     get networkStatusTooltip(): string {
         if (this.walletService.generalInfo) {
-            return 'Connections: ' + this.walletService.generalInfo.connectedNodes + '\nBlock Height: ' + this.walletService.generalInfo.chainTip + '\nSynced: ' + this.walletService.percentSynced;
+            return `Connections: ${this.walletService.generalInfo.connectedNodes}\nBlock Height: ${this.walletService.generalInfo.chainTip}\nSynced: ${this.walletService.percentSynced}`;
         }
     }
 
@@ -262,45 +292,4 @@ export class RootComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:member-ordering
     loadingFailed = false;
-
-    // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-    // Not in use.
-    private tryStart() {
-        let retry = 0;
-        const stream$ = this.apiService.getNodeStatus().pipe(
-            retryWhen(errors =>
-                errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
-                    tap(errorStatus => {
-                        if (retry++ === this.MaxRetryCount) {
-                            throw errorStatus;
-                        }
-                        console.log(`Retrying ${retry}...`);
-                    })
-                )
-            )
-        );
-
-        this.subscription = stream$.subscribe(
-            (data: NodeStatus) => {
-                this.apiConnected = true;
-                this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
-                    .subscribe(
-                        response => {
-                            // tslint:disable-next-line: no-debugger
-                            debugger;
-                            const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
-                                this.loading = false;
-                                this.statusIntervalSubscription.unsubscribe();
-                                // this.router.navigate(['login']);
-                            }
-                        }
-                    );
-            }, (error: any) => {
-                console.log('Failed to start wallet');
-                this.loading = false;
-                this.loadingFailed = true;
-            }
-        );
-    }
 }

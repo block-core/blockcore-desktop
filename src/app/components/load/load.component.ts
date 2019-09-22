@@ -4,9 +4,12 @@ import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
 import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
-import { delay, retryWhen } from 'rxjs/operators';
+import { delay, retryWhen, tap } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { NodeStatus } from '@models/node-status';
+import { ElectronService } from 'ngx-electron';
 
 export interface ListItem {
     name: string;
@@ -33,9 +36,17 @@ export class LoadComponent implements OnDestroy {
     delayed = false;
     apiSubscription: any;
 
+    private subscription: Subscription;
+    private statusIntervalSubscription: Subscription;
+    private readonly TryDelayMilliseconds = 3000;
+    private readonly MaxRetryCount = 50;
+    loadingFailed = false;
+    public apiConnected = false;
+
     constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
+        private electronService: ElectronService,
         private router: Router,
         private log: Logger,
         private zone: NgZone,
@@ -108,14 +119,52 @@ export class LoadComponent implements OnDestroy {
             }, 30000); // 30000 Make sure it is fairly high, we don't want users to immediatly perform advanced reset options when they don't need to.
         });
 
-        // TODO: Change this into an status API call.
-        this.apiSubscription = this.apiService.getWalletFiles()
-            .pipe(retryWhen(errors => errors.pipe(delay(2000))))
-            .subscribe(() => this.start());
+        this.tryStart();
+    }
+
+    // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
+    private tryStart() {
+        let retry = 0;
+        const stream$ = this.apiService.getNodeStatus().pipe(
+            retryWhen(errors =>
+                errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
+                    tap(errorStatus => {
+                        if (retry++ === this.MaxRetryCount) {
+                            throw errorStatus;
+                        }
+                        this.log.info(`Retrying ${retry}...`);
+                    })
+                )
+            )
+        );
+
+        this.subscription = stream$.subscribe(
+            (data: NodeStatus) => {
+                this.apiConnected = true;
+                this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
+                    .subscribe(
+                        response => {
+                            const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                                this.statusIntervalSubscription.unsubscribe();
+                                this.start();
+                            }
+                        }
+                    );
+            }, (error: any) => {
+                this.log.info('Failed to start wallet');
+                this.loading = false;
+                this.loadingFailed = true;
+            }
+        );
     }
 
     start() {
         // this.simpleWalletConnect();
+
+        // We have successful connection with daemon, make sure we inform the main process of |.
+        this.electronService.ipcRenderer.send('daemon-started');
+
         this.loading = false;
         this.appState.connected = true;
         this.router.navigateByUrl('/login');

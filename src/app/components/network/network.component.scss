@@ -1,6 +1,20 @@
 .network {
     mat-grid-tile {
-        //background: lightcoral;
+    }
+
+    .add-node {
+        float: right;
+        margin-right: 18px;
+        margin-top: 4px;
+    }
+
+    .card {
+        margin: 0px 20px 20px 20px;
+    }
+
+    .details-content
+    {
+        margin-top: 14px;
     }
 
     .network-grid
@@ -8,9 +22,14 @@
         border-bottom: 1px solid silver;
     }
 
+    .network-details-footer {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
     .network-label {
         font-color: gray;
-        //padding-right: 10px;
         padding-bottom: 10px;
     }
 
@@ -37,15 +56,3 @@
         font-size: 1.6em !important;
     }
 }
-
-//  .network-grid .mat-progress-bar {
-//      width: 80% !important;
-//  }
- 
-//  .network-progress-container {
-//      padding-left: 30px !important;
-//      padding-right: 30px !important;
-//      margin-left: 30px !important;
-//      margin-right: 30px !important;
-//      width: 100%;
-//  }

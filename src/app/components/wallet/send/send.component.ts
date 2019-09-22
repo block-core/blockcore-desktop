@@ -13,7 +13,6 @@ import { TransactionSending } from '../../../classes/transaction-sending';
 import { WalletInfo } from '../../../classes/wallet-info';
 import { Router } from '@angular/router';
 import { WalletService } from '../../../services/wallet.service';
-import { debug } from 'util';
 import { TransactionResult } from 'src/app/classes/transaction-result';
 
 @Component({
@@ -159,8 +158,6 @@ export class SendComponent implements OnInit, OnDestroy {
                     } else if (error.status >= 400) {
                         this.apiService.handleException(error);
 
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
                         if (!error.json().errors[0]) {
                         } else {
                             this.apiError = error.json().errors[0].message;
@@ -198,9 +195,6 @@ export class SendComponent implements OnInit, OnDestroy {
                     } else if (error.status >= 400) {
 
                         this.apiService.handleException(error);
-
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
 
                         if (!error.json().errors[0]) {
                         } else {
@@ -255,9 +249,6 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
-
                         if (!error.json().errors[0]) {
 
                         } else {
@@ -305,9 +296,6 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
-
                         if (!error.json().errors[0]) {
 
                         } else {
@@ -333,8 +321,6 @@ export class SendComponent implements OnInit, OnDestroy {
                     // }
                 },
                 error => {
-                    // tslint:disable-next-line:no-debugger
-                    debugger;
                     console.log(error);
                     if (error.status === 0) {
                         // We used to cancelSubscription here, not a good idea if it fails the first time.
@@ -343,9 +329,6 @@ export class SendComponent implements OnInit, OnDestroy {
                     } else if (error.status >= 400) {
 
                         this.apiService.handleException(error);
-
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
 
                         if (!error.json().errors[0]) {
 

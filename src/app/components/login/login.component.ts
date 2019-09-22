@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ElectronService } from 'ngx-electron';
 
 export interface Account {
     name: string;
@@ -22,7 +23,7 @@ export interface Account {
     styleUrls: ['./login.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     @HostBinding('class.login') hostClass = true;
 
     private wallets: [string];
@@ -32,6 +33,8 @@ export class LoginComponent implements OnInit {
     unlocking: boolean;
     password = ''; // Default to empty string, not null/undefined.
     errorMessage: string;
+    private subscription: any;
+    public status: any;
 
     constructor(
         private http: HttpClient,
@@ -40,17 +43,32 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private globalService: GlobalService,
         private wallet: WalletService,
+        private electronService: ElectronService,
         private apiService: ApiService,
         public appState: ApplicationStateService) {
 
     }
 
     ngOnInit() {
+        this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
+            this.status = response;
+            console.log(this.status);
+        });
+
         this.getWalletFiles();
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     changeMode() {
         localStorage.removeItem('Network:Mode');
+
+        this.appState.changingMode = true;
+        this.electronService.ipcRenderer.send('daemon-change');
 
         // Make sure we shut down the existing node when user choose the change mode action.
         this.apiService.shutdownNode().subscribe(response => {
@@ -176,8 +194,6 @@ export class LoginComponent implements OnInit {
                 }
             );
     }
-
-
 
     private loadWallet(walletLoad: WalletLoad) {
         this.apiService.loadWallet(walletLoad)

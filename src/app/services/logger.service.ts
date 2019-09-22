@@ -14,9 +14,9 @@ export enum LogLevel {
 export class Logger {
 
     private logLevel = LogLevel.Info;
+    private messages: any[] = [];
 
     constructor() {
-
     }
 
     setLogLevel(logLevel: LogLevel) {
@@ -47,7 +47,18 @@ export class Logger {
         return this.logLevel <= logLevel;
     }
 
+    lastEntries() {
+        return this.messages;
+    }
+
     private log(logLevel: LogLevel, message: string, ...args: any[]) {
+
+        if (this.messages.length > 29) {
+            this.messages.shift();
+        }
+
+        this.messages.push({ timestamp: new Date(), level: logLevel, message, args });
+
         if (!this.shouldLog(logLevel)) {
             return;
         }

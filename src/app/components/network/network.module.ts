@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NetworkDetailsComponent } from './network-details.component';
+import { NetworkAddNodeComponent } from './network-add-node.component';
+import { FormsModule } from '@angular/forms';
+import { NetworkBanNodeComponent } from './network-ban-node.component';
 
 @NgModule({
     imports: [
@@ -11,12 +15,21 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         RouterModule,
         FlexLayoutModule,
         MaterialModule,
+        FormsModule,
     ],
     declarations: [
         NetworkComponent,
+        NetworkDetailsComponent,
+        NetworkAddNodeComponent,
+        NetworkBanNodeComponent,
+    ],
+    entryComponents: [
+        NetworkAddNodeComponent,
+        NetworkBanNodeComponent
     ],
     exports: [
         NetworkComponent,
+        NetworkDetailsComponent,
     ],
 })
 export class NetworkModule {
