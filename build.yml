@@ -24,6 +24,13 @@ phases:
     inputs:
       verbose: false
 
+  - task: Bash@3
+    displayName: install snapcraft
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo snap install --classic snapcraft
+
   - powershell: |
       [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
       $url = "https://github.com/CityChainFoundation/city-chain/releases/download/v{0}/City.Chain-{0}-{1}-{2}.{3}" -f $env:daemon, $env:platform, $env:arch, $env:extension
