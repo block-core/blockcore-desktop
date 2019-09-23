@@ -12,6 +12,7 @@ import { catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ElectronService } from 'ngx-electron';
+import { Logger } from 'src/app/services/logger.service';
 
 export interface Account {
     name: string;
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private globalService: GlobalService,
         private wallet: WalletService,
         private electronService: ElectronService,
+        private log: Logger,
         private apiService: ApiService,
         public appState: ApplicationStateService) {
 
@@ -52,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
             this.status = response;
-            console.log(this.status);
+            this.log.info('Status update result: ', this.status);
         });
 
         this.getWalletFiles();

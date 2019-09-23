@@ -12,6 +12,8 @@ export interface Chain {
     network: string;
     mode?: string;
     genesisDate?: Date;
+    path?: string;
+    datafolder?: string;
 }
 
 @Injectable({

@@ -10,6 +10,16 @@ if (os.arch() === 'arm') {
 var autoUpdater = require('electron-updater').autoUpdater;
 var fs = require('fs');
 var log = require('electron-log');
+var DaemonState;
+(function (DaemonState) {
+    DaemonState[DaemonState["Unknown"] = 0] = "Unknown";
+    DaemonState[DaemonState["Starting"] = 1] = "Starting";
+    DaemonState[DaemonState["Started"] = 2] = "Started";
+    DaemonState[DaemonState["Changing"] = 3] = "Changing";
+    DaemonState[DaemonState["Stopping"] = 4] = "Stopping";
+    DaemonState[DaemonState["Stopped"] = 5] = "Stopped";
+    DaemonState[DaemonState["Failed"] = 6] = "Failed";
+})(DaemonState || (DaemonState = {}));
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
 // We don't want to support auto download.
@@ -17,41 +27,23 @@ autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
+var daemonState;
 var contents = null;
 var currentChain;
-var shutdownInitiated = false;
-// currentChain = {
-//     name: 'City Chain',
-//     identity: 'city',
-//     network: 'main',
-//     port: 4333,
-//     rpcPort: 4334,
-//     apiPort: 4335,
-//     wsPort: 4336,
-//     tooltip: ''
-// };
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
-var launchPath = args.find(function (element) {
-    return element.startsWith('--path');
-});
-if (launchPath) {
-    launchPath = launchPath.substring(7);
-}
 require('electron-context-menu')({
     showInspectElement: serve
 });
-var daemonStarting = false;
-var daemonStopping = false;
-var daemonStarted = false;
-var daemonChanging = false;
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
-    daemonStarting = true;
-    console.log(arg);
-    if (launchPath) {
-        arg.path = launchPath;
+    if (daemonState === DaemonState.Started) {
+        writeLog('Main process was instructed to start daemon, but is is already running. Ignoring request.');
+        event.returnValue = 'OK';
+        return;
     }
+    daemonState = DaemonState.Starting;
+    console.log(arg);
     // The "chain" object is supplied over the IPC channel and we should consider
     // it potentially "hostile", if anyone can inject anything in the app and perform
     // a call to the node backend here. Since we are launching a process here,
@@ -63,18 +55,14 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(isNumber(arg.wsPort));
     assert(arg.network.length < 20);
     currentChain = arg;
-    if (serve && !arg.path) {
+    writeLog(currentChain);
+    if (arg.mode === 'manual') {
+        daemonState = DaemonState.Started;
         var msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
     }
-    else if (serve && arg.path) {
-        writeLog(currentChain);
-        startDaemon(currentChain);
-        event.returnValue = 'OK';
-    }
     else {
-        writeLog(currentChain);
         startDaemon(currentChain);
         event.returnValue = 'OK';
     }
@@ -93,13 +81,10 @@ process.on('uncaughtException', function (error) {
     writeLog(error);
 });
 electron_1.ipcMain.on('daemon-started', function (event, arg) {
-    writeLog('DAEMON STARTED WAS CALLED!!!');
-    daemonStarting = false;
-    daemonStarted = true;
-    daemonStopping = false;
+    daemonState = DaemonState.Started;
 });
 electron_1.ipcMain.on('daemon-change', function (event, arg) {
-    daemonChanging = true;
+    daemonState = DaemonState.Changing;
 });
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 electron_1.ipcMain.on('reset-database', function (event, arg) {
@@ -152,43 +137,6 @@ autoUpdater.on('download-progress', function (progressObj) {
     log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     writeLog(log_message);
 });
-var readline = require('readline');
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-rl.on('SIGINT', function () {
-    rl.question('Are you sure you want to exit? ', function (answer) {
-        if (answer.match(/^y(es)?$/i))
-            rl.pause();
-    });
-});
-// process.on('SIGINT', function () {
-//     console.log("\ngracefully shutting down from  SIGINT (Crtl-C)")
-//     // wish this worked on Windows
-//     process.exit()
-// })
-// process.on('SIGINT', () => {
-//     process.question('Are you sure you want to exit? ', (answer) => {
-//         if (answer.match(/^y(es)?$/i)) process.pause();
-//     });
-// });
-// if (process.platform === 'win32') {
-//     var rl = require('readline').createInterface({
-//         input: process.stdin,
-//         output: process.stdout
-//     });
-//     rl.on('SIGINT', function () {
-//         console.log('WHUT?!?!');
-//         process.emit('SIGINT');
-//     });
-// }
-process.on('SIGINT', function () {
-    //console.log('YES!!!');
-    //writeLog("Terminating by CTRL-C, we must manually force the daemon to shutdown...");
-    shutdown(function () { console.log('SHUTDOWN!'); });
-    process.exit(0);
-});
 function deleteFolderRecursive(folder) {
     if (fs.existsSync(folder)) {
         fs.readdirSync(folder).forEach(function (file, index) {
@@ -240,22 +188,25 @@ function createWindow() {
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function (event) {
-        shutdown(function () { });
-        // If the daemon has not been triggered to shutdown, and has not been running, simply exit as the user have clicked
-        // exit on the error dialog.
+        writeLog("close event on mainWindow was triggered. Calling shutdown method. Daemon state is: " + daemonState + ".");
         // If daemon stopping has not been triggered, it means it likely never started and user clicked Exit on the error dialog. Exit immediately.
-        if (!daemonStopping) {
+        if (daemonState === DaemonState.Stopping) {
+            writeLog('Daemon was in stopping mode, so exiting immediately without showing status any longer.');
             return true;
         }
         else {
-            // If shutdown not initated yet, perform it. Else, allow window to be closed. This allows users to click X twice to immediately close the window.
-            if (!shutdownInitiated) {
-                shutdownInitiated = true;
+            // If shutdown not initated yet, perform it.
+            if (daemonState === DaemonState.Started) {
+                writeLog('Daemon shutdown initiated... preventing window close, and informing UI that shutdown is in progress.');
+                daemonState = DaemonState.Stopping;
                 event.preventDefault();
                 contents.send('daemon-exiting');
                 // Call the shutdown while we show progress window.
                 shutdown(function () { });
                 return true;
+            }
+            else { // Else, allow window to be closed. This allows users to click X twice to immediately close the window.
+                writeLog('ELSE in the CLOSE event. Should only happen on double-click on exit button.');
             }
         }
     });
@@ -353,12 +304,21 @@ function getDaemonPath() {
 }
 function launchDaemon(apiPath, chain) {
     var daemonProcess;
+    // TODO: Consider a future improvement that would ensure we don't loose a reference to an existing spawned process.
+    // If launch is called twice, it might spawn two processes and loose the reference to the first one, and the new process will die due to TCP port lock.
     var spawnDaemon = require('child_process').spawn;
     var commandLineArguments = [];
-    if (serve) { // Only append the apiPath as argument if we run in serve-mode.,
+    if (chain.mode === 'local') {
+        if (!apiPath || apiPath.length < 3 || !chain.datafolder || chain.datafolder.length < 3) {
+            contents.send('daemon-error', "CRITICAL: Cannot launch daemon, missing either daemon path or data folder path.");
+            daemonState = DaemonState.Failed;
+            return;
+        }
+        // Only append the apiPath as argument if we are in local mode.
         commandLineArguments.push(apiPath);
-        //commandLineArguments.push('0');
-        commandLineArguments.push('-datadir=citynode4');
+    }
+    if (chain.datafolder) {
+        commandLineArguments.push('-datadir=' + chain.datafolder);
     }
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
@@ -380,7 +340,7 @@ function launchDaemon(apiPath, chain) {
     // if (chain.dataDir != null)
     // commandLineArguments.push("-datadir=" + chain.dataDir);
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
-    if (serve) {
+    if (chain.mode === 'local') {
         daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
             detached: true
         });
@@ -395,17 +355,16 @@ function launchDaemon(apiPath, chain) {
     });
     /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
-        writeLog("City Chain daemon process exited with code " + code + " and signal " + signal + ".");
+        writeLog("City Chain daemon process exited with code " + code + " and signal " + signal + " when the state was " + daemonState + ".");
         // There are many reasons why the daemon process can exit, we'll show details
         // in those cases we get an unexpected shutdown code and signal.
-        writeLog(daemonStarting + '--' + daemonStarted + '--' + daemonStopping);
-        if (daemonChanging) {
+        if (daemonState === DaemonState.Changing) {
             writeLog('Daemon exit was expected, the user is changing the network mode.');
         }
-        else if (daemonStarting) {
+        else if (daemonState === DaemonState.Starting) {
             contents.send('daemon-error', "CRITICAL: City Chain daemon process exited during startup with code " + code + " and signal " + signal + ".");
         }
-        else if (!daemonStopping) {
+        else if (daemonState === DaemonState.Started) {
             contents.send('daemon-error', "City Chain daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
         }
         else {
@@ -418,19 +377,20 @@ function launchDaemon(apiPath, chain) {
                 contents.send('daemon-exited');
             }
         }
+        daemonState = DaemonState.Stopped;
     });
     daemonProcess.on('error', function (code, signal) {
-        writeError('ERROR!!! :');
         writeError("City Chain daemon process failed to start. Code " + code + " and signal " + signal + ".");
     });
 }
 function shutdownDaemon(callback) {
+    daemonState = DaemonState.Stopping;
     if (!currentChain) {
         writeLog('Chain not selected, nothing to shutdown.');
         callback(true, null);
         return;
     }
-    if (process.platform !== 'darwin' && !serve) {
+    if (process.platform !== 'darwin') {
         writeLog('Sending POST request to shut down daemon.');
         var http = require('http');
         var options = {

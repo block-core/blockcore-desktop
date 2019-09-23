@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'ngx-clipboard';
+import { ApplicationStateService } from 'src/app/services/application-state.service';
 
 
 export interface ReportDialogData {
@@ -21,14 +22,17 @@ export class ReportComponent {
     constructor(
         public snackBar: MatSnackBar,
         private clipboardService: ClipboardService,
+        private appState: ApplicationStateService,
         public dialogRef: MatDialogRef<ReportComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ReportDialogData) {
-            console.log(data);
-        }
+    }
 
-        public shutdown() {
-            window.close();
-        }
+    public shutdown() {
+        // When we exit from this error report dialog, we'll reset the daemon selection options to start fresh.
+        this.appState.resetNetworkSelection();
+
+        window.close();
+    }
 
     public onCopiedClick() {
         this.clipboardService.copyFromContent(document.getElementById('error-lines').innerText);

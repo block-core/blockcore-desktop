@@ -3,6 +3,16 @@ import { TitleService } from './title.service';
 import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 
+export interface DaemonConfiguration {
+    mode: string;
+
+    network: string;
+
+    path: string;
+
+    datafolder: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -17,9 +27,20 @@ export class ApplicationStateService {
         private readonly titleService: TitleService,
     ) {
         if (!ApplicationStateService.singletonInstance) {
+
             this.chain = this.getParam('chain') || 'city';
+
+            // TODO: These properties are deprecated, refactor!
             this.mode = localStorage.getItem('Network:Mode') || 'full';
             this.network = localStorage.getItem('Network:Network') || 'citymain';
+            this.path = localStorage.getItem('Network:Path') || '';
+
+            this.daemon = {
+                mode: localStorage.getItem('Network:Mode') || 'full',
+                network: localStorage.getItem('Network:Network') || 'citymain',
+                path: localStorage.getItem('Network:Path') || '',
+                datafolder: localStorage.getItem('Network:DataFolder') || ''
+            };
 
             ApplicationStateService.singletonInstance = this;
         }
@@ -33,9 +54,13 @@ export class ApplicationStateService {
 
     chain: string;
 
+    daemon: DaemonConfiguration;
+
     mode: string;
 
     network: string;
+
+    path: string;
 
     pageMode = false;
 
@@ -80,6 +105,32 @@ export class ApplicationStateService {
                 this.release = version;
             }
         }
+    }
 
+    resetNetworkSelection() {
+        localStorage.removeItem('Network:Mode');
+        localStorage.removeItem('Network:Network');
+        localStorage.removeItem('Network:Path');
+        localStorage.removeItem('Network:DataFolder');
+    }
+
+    updateNetworkSelection(persist: boolean, mode: string, network: string, path: string, datafolder: string) {
+        this.daemon.mode = mode;
+        this.daemon.network = network;
+        this.daemon.path = path;
+        this.daemon.datafolder = datafolder;
+
+        // TODO: Remove and depricate these properties.
+        this.mode = mode;
+        this.network = network;
+
+        if (persist) {
+            localStorage.setItem('Network:Mode', mode);
+            localStorage.setItem('Network:Network', network);
+            localStorage.setItem('Network:Path', path);
+            localStorage.setItem('Network:DataFolder', datafolder);
+        } else {
+            this.resetNetworkSelection();
+        }
     }
 }

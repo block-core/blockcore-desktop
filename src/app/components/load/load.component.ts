@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { NodeStatus } from '@models/node-status';
 import { ElectronService } from 'ngx-electron';
+import { environment } from 'src/environments/environment';
 
 export interface ListItem {
     name: string;
@@ -54,12 +55,18 @@ export class LoadComponent implements OnDestroy {
         public appState: ApplicationStateService) {
 
         this.modes = [
-            // { id: 'simple', name: 'Mobile' },
-            // { id: 'light', name: 'Light' },
             { id: 'full', name: 'Full' },
-            // { id: 'pos', name: 'Point-of-Sale (POS)' },
-            // { id: 'readonly', name: 'Read-only' }
         ];
+
+        if (!environment.production) {
+            this.modes.push({ id: 'demo', name: 'Demo' },
+                { id: 'local', name: 'Local' },
+                { id: 'manual', name: 'Manual' },
+                { id: 'simple', name: 'Mobile' },
+                { id: 'light', name: 'Light' },
+                { id: 'pos', name: 'Point-of-Sale (POS)' },
+                { id: 'readonly', name: 'Read-only' });
+        }
 
         this.networks = [
             // { id: 'main', name: 'Main' },
@@ -70,15 +77,16 @@ export class LoadComponent implements OnDestroy {
             // { id: 'regtest', name: 'RegTest' }
         ];
 
+
         this.selectedMode = this.modes.find(mode => mode.id === this.appState.mode);
         this.selectedNetwork = this.networks.find(network => network.id === this.appState.network);
         this.remember = true;
 
-        const existingMode = localStorage.getItem('Network:Mode');
-
-        // this.log.info(`Mode: ${this.selectedMode}, Network: ${this.selectedNetwork}.`);
         this.log.info('Mode:', this.selectedMode);
         this.log.info('Network:', this.selectedNetwork);
+        this.log.info('Daemon App State:', JSON.stringify(this.appState.daemon));
+
+        const existingMode = localStorage.getItem('Network:Mode');
 
         // If user has choosen to remember mode, we'll redirect directly to login, when connected.
         if (existingMode != null) {
@@ -89,24 +97,44 @@ export class LoadComponent implements OnDestroy {
     initialize() {
         this.apiService.initialize();
 
-        if (this.appState.mode === 'full') {
+        if (this.appState.mode === 'full' || this.appState.mode === 'local' || this.appState.mode === 'light') {
             this.loading = true;
             this.appState.connected = false;
             this.fullNodeConnect();
+        } else if (this.appState.mode === 'manual') {
+            this.loading = false;
+            this.appState.connected = true;
+        }
+    }
+
+    onDaemonFolderChange(event) {
+        this.log.info('Daemon folder changed:', event);
+
+        if (event.target.files.length > 0) {
+            this.appState.daemon.path = event.target.files[0].path;
+        } else {
+            this.appState.daemon.path = '';
+        }
+    }
+
+    onDataFolderChange(event) {
+        this.log.info('Data folder changed:', event);
+
+        if (event.target.files.length > 0) {
+            this.appState.daemon.datafolder = event.target.files[0].path;
+        } else {
+            this.appState.daemon.datafolder = '';
         }
     }
 
     launch() {
-        if (this.remember) {
-            localStorage.setItem('Network:Mode', this.selectedMode.id);
-            localStorage.setItem('Network:Network', this.selectedNetwork.id);
-        } else {
-            localStorage.removeItem('Network:Mode');
-            localStorage.removeItem('Network:Network');
-        }
+        this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.selectedNetwork.id, this.appState.daemon.path, this.appState.daemon.datafolder);
 
-        this.appState.mode = this.selectedMode.id;
-        this.appState.network = this.selectedNetwork.id;
+        // If the selected mode is not 'local', we'll reset the path and data folder.
+        if (this.appState.mode !== 'local') {
+            localStorage.removeItem('Network:Path');
+            localStorage.removeItem('Network:DataFolder');
+        }
 
         this.initialize();
     }

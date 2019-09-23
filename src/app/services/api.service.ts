@@ -62,7 +62,11 @@ export class ApiService {
         // Get the correct name of the chain that was found.
         this.appState.chain = chain.identity;
 
-        chain.mode = this.appState.mode;
+        // Make sure we copy some of the state information to the chain instance supplied to launch the daemon by the main process.
+        chain.mode = this.appState.daemon.mode;
+        chain.path = this.appState.daemon.path;
+        chain.datafolder = this.appState.daemon.datafolder;
+
         this.genesisDate = chain.genesisDate;
 
         this.log.info('Api Service, Chain: ', chain);

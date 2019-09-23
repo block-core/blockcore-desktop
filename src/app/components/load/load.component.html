@@ -12,6 +12,23 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+
+        <div *ngIf="selectedMode?.id == 'local'">
+            <br>
+            Daemon folder:<br>
+            <input class="custom-file-mode" type="file" (change)="onDaemonFolderChange($event)" webkitdirectory="true" />
+            <br><br>
+            Data folder:<br>
+            <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" webkitdirectory="true" />
+            <br><br>
+        </div>
+        <!-- <mat-form-field>
+            <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
+                <mat-option *ngFor="let mode of modes" [value]="mode">
+                    {{mode.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field> -->
         <br>
         <mat-form-field>
             <mat-select placeholder="Select network" [(ngModel)]="selectedNetwork">

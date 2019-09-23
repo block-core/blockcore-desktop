@@ -10,8 +10,7 @@
             "runtimeArgs": [
                 "--remote-debugging-port=9222",
                 ".",
-                "--serve",
-                "--path=C:\\src\\github\\citychain\\city-chain\\src\\City.Chain\\bin\\Debug\\netcoreapp2.1\\"
+                "--serve"
             ],
             "windows": {
                 "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
@@ -41,8 +40,7 @@
             "runtimeArgs": [
                 "${workspaceRoot}/main.js",
                 "--remote-debugging-port=9222",
-                "--serve",
-                "--path=C:\\src\\github\\citychain\\city-chain\\src\\City.Chain\\bin\\Debug\\netcoreapp2.1\\"
+                "--serve"
             ],
             "webRoot": "${workspaceRoot}",
             "preLaunchTask": "ng-serve-web",
