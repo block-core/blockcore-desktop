@@ -26,9 +26,12 @@ phases:
 
   - task: Bash@3
     displayName: install snapcraft
+    condition: and(succeeded(), eq('${{ parameters.extra }}', 'snap'))
     inputs:
       targetType: 'inline'
       script: |
+        sudo apt update
+        sudo apt install snapd
         sudo snap install --classic snapcraft
 
   - powershell: |
