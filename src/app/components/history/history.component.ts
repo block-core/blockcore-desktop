@@ -87,7 +87,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     }
 
     private getLatestTransactions() {
-        const url = this.apiService.apiUrl + '/transactions?api-version=2.0';
+        const url = this.apiService.apiUrl + '/' + this.apiService.apiVersion + '/transactions';
 
         this.http
             .get<any[]>(url)
@@ -116,7 +116,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     }
 
     private getLatestBlocks() {
-        const url = this.apiService.apiUrl + '/blocks?api-version=2.0';
+        const url = this.apiService.apiUrl + '/' + this.apiService.apiVersion + '/blocks';
 
         this.loading = true;
 

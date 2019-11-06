@@ -34,6 +34,7 @@ export class ApiService {
     private daemon;
 
     public apiUrl: string;
+    public apiVersion = 'v2.0-dev'; // This will change into "v1.0-city" in a future update to the City Chain daemon.
     public genesisDate: Date;
     public apiPort: number;
 
