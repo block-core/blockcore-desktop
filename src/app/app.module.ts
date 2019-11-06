@@ -36,6 +36,7 @@ import { HttpErrorHandler } from './services/http-error-handler.service';
 import { ToolsModule } from './components/tools/tools.module';
 import { NotificationsModule } from './components/notifications/notifications.module';
 import { ReportModule } from './components/report/report.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
@@ -67,6 +68,7 @@ import { ReportModule } from './components/report/report.module';
         PaperWalletModule,
         HistoryModule,
         AppRoutingModule,
+        FlexLayoutModule,
     ],
     exports: [
     ],

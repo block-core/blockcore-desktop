@@ -4,101 +4,101 @@ parameters:
   name: ''
   queue: ''
   platform: ''
-  daemon: '1.0.17' # Version of the daemon to download, upgrade when newer is released.
+  daemon: '1.0.21' # Version of the daemon to download, upgrade when newer is released.
   arch: 'x64' # Only overriden by 32-bit Windows
   configuration: 'Release' # Only do Debug if specified
 
-phases:
-- phase: ${{ parameters.name }}
-  displayName: ${{ format('City Hub ({0}-{1})', parameters.platform, parameters.arch) }}
-  queue: ${{ parameters.queue }}
-  steps:
+#phases:
+# - phase: ${{ parameters.name }}
+#   displayName: ${{ format('City Hub ({0}-{1})', parameters.platform, parameters.arch) }}
+#   queue: ${{ parameters.queue }}
+steps:
 
-  - task: NodeTool@0
-    displayName: upgrade node
-    inputs:
-      versionSpec: '10.x' # Required by Angular 6
+- task: NodeTool@0
+  displayName: upgrade node
+  inputs:
+    versionSpec: '10.x' # Required by Angular 6
 
-  - task: Npm@1
-    displayName: npm install
-    inputs:
-      verbose: false
+- task: Npm@1
+  displayName: npm install
+  inputs:
+    verbose: false
 
-  - task: Bash@3
-    displayName: install snapcraft
-    condition: and(succeeded(), eq('${{ parameters.extra }}', 'snap'))
-    inputs:
-      targetType: 'inline'
-      script: |
-        sudo apt update
-        sudo apt install snapd
-        sudo snap install --classic snapcraft
+- task: Bash@3
+  displayName: install snapcraft
+  condition: and(succeeded(), eq('${{ parameters.extra }}', 'snap'))
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo apt update
+      sudo apt install snapd
+      sudo snap install --classic snapcraft
 
-  - powershell: |
-      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-      $url = "https://github.com/CityChainFoundation/city-chain/releases/download/v{0}/City.Chain-{0}-{1}-{2}.{3}" -f $env:daemon, $env:platform, $env:arch, $env:extension
-      $output = Join-Path -Path "$Env:BUILD_SOURCESDIRECTORY" -ChildPath "daemon.$env:extension"
-      Write-Output "Url: $url"
-      Write-Output "Path: $output"
-      $start_time = Get-Date
-      (New-Object System.Net.WebClient).DownloadFile($url, $output)
-      Write-Host "AGENT_WORKFOLDER contents:"
-      gci $Env:AGENT_WORKFOLDER
-      Write-Host "AGENT_BUILDDIRECTORY contents:"
-      gci $Env:AGENT_BUILDDIRECTORY
-      Write-Host "BUILD_SOURCESDIRECTORY contents:"
-      gci $Env:BUILD_SOURCESDIRECTORY
-      Write-Output "Saved: $output"
-      Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)" 
-    displayName: Download daemon
-    workingDirectory: $(build.SourcesDirectory)
-    env:
-      daemon: ${{ parameters.daemon }}
-      arch: ${{ parameters.arch }}
+- powershell: |
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $url = "https://github.com/CityChainFoundation/city-chain/releases/download/v{0}/City.Chain-{0}-{1}-{2}.{3}" -f $env:daemon, $env:platform, $env:arch, $env:extension
+    $output = Join-Path -Path "$Env:BUILD_SOURCESDIRECTORY" -ChildPath "daemon.$env:extension"
+    Write-Output "Url: $url"
+    Write-Output "Path: $output"
+    $start_time = Get-Date
+    (New-Object System.Net.WebClient).DownloadFile($url, $output)
+    Write-Host "AGENT_WORKFOLDER contents:"
+    gci $Env:AGENT_WORKFOLDER
+    Write-Host "AGENT_BUILDDIRECTORY contents:"
+    gci $Env:AGENT_BUILDDIRECTORY
+    Write-Host "BUILD_SOURCESDIRECTORY contents:"
+    gci $Env:BUILD_SOURCESDIRECTORY
+    Write-Output "Saved: $output"
+    Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)" 
+  displayName: Download daemon
+  workingDirectory: $(build.SourcesDirectory)
+  env:
+    daemon: ${{ parameters.daemon }}
+    arch: ${{ parameters.arch }}
 
-      ${{ if eq(parameters.platform, 'linux') }}:
-        extension: "tar.gz"
-      ${{ if ne(parameters.platform, 'linux') }}:
-        extension: "zip"
+    ${{ if eq(parameters.platform, 'linux') }}:
+      extension: "tar.gz"
+    ${{ if ne(parameters.platform, 'linux') }}:
+      extension: "zip"
 
-      ${{ if eq(parameters.platform, 'mac') }}:
-        platform: "osx"
-      ${{ if ne(parameters.platform, 'mac') }}:
-        platform: ${{ parameters.platform }}
+    ${{ if eq(parameters.platform, 'mac') }}:
+      platform: "osx"
+    ${{ if ne(parameters.platform, 'mac') }}:
+      platform: ${{ parameters.platform }}
 
-  - task: ExtractFiles@1
-    displayName: Extract files 
-    inputs:
+- task: ExtractFiles@1
+  displayName: Extract files 
+  inputs:
 
-      ${{ if eq(parameters.platform, 'linux') }}:
-        archiveFilePatterns: 'daemon.tar.gz'
-      ${{ if ne(parameters.platform, 'linux') }}:
-        archiveFilePatterns: 'daemon.zip'
+    ${{ if eq(parameters.platform, 'linux') }}:
+      archiveFilePatterns: 'daemon.tar.gz'
+    ${{ if ne(parameters.platform, 'linux') }}:
+      archiveFilePatterns: 'daemon.zip'
 
-      destinationFolder: daemon
+    destinationFolder: daemon
 
-  - task: Npm@1
-    displayName: npm run build
-    condition: and(succeeded(), ne(variables['build.sourcebranch'], 'refs/heads/master')) # Only run BUILD, not PUBLISH for PRs.
-    inputs:
-      command: custom
-      verbose: false
-      ${{ if eq(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run build:{0}:{1}', parameters.platform, parameters.arch) }} 
-      ${{ if ne(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run build:{0}{1}', parameters.platform, parameters.extra) }} 
-    env:
-      GH_TOKEN: $(GH_TOKEN)
+- task: Npm@1
+  displayName: npm run build
+  condition: and(succeeded(), ne(variables['build.sourcebranch'], 'refs/heads/master')) # Only run BUILD, not PUBLISH for PRs.
+  inputs:
+    command: custom
+    verbose: false
+    ${{ if eq(parameters.platform, 'win') }}:
+      customCommand: ${{ format('run build:{0}:{1}', parameters.platform, parameters.arch) }} 
+    ${{ if ne(parameters.platform, 'win') }}:
+      customCommand: ${{ format('run build:{0}{1}', parameters.platform, parameters.extra) }} 
+  env:
+    GH_TOKEN: $(GH_TOKEN)
 
-  - task: Npm@1
-    displayName: npm run publish
-    condition: and(succeeded(), eq(variables['build.sourcebranch'], 'refs/heads/master'))
-    inputs:
-      command: custom
-      verbose: false
-      ${{ if eq(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run publish:{0}:{1}', parameters.platform, parameters.arch) }} 
-      ${{ if ne(parameters.platform, 'win') }}:
-        customCommand: ${{ format('run publish:{0}{1}', parameters.platform, parameters.extra) }} 
-    env:
-      GH_TOKEN: $(GH_TOKEN)
+- task: Npm@1
+  displayName: npm run publish
+  condition: and(succeeded(), eq(variables['build.sourcebranch'], 'refs/heads/master'))
+  inputs:
+    command: custom
+    verbose: false
+    ${{ if eq(parameters.platform, 'win') }}:
+      customCommand: ${{ format('run publish:{0}:{1}', parameters.platform, parameters.arch) }} 
+    ${{ if ne(parameters.platform, 'win') }}:
+      customCommand: ${{ format('run publish:{0}{1}', parameters.platform, parameters.extra) }} 
+  env:
+    GH_TOKEN: $(GH_TOKEN)

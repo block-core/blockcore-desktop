@@ -103,6 +103,7 @@ export class WalletService {
                 response => {
                     this.log.info('Start staking:', response);
                     this.stakingEnabled = true;
+                    this.isStarting = false;
                 },
                 error => {
                     this.isStarting = false;

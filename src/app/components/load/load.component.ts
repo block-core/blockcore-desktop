@@ -104,6 +104,7 @@ export class LoadComponent implements OnDestroy {
         } else if (this.appState.mode === 'manual') {
             this.loading = false;
             this.appState.connected = true;
+            this.fullNodeConnect();
         }
     }
 
