@@ -8,6 +8,16 @@
             <p>
                 <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
                 <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+
+                <span *ngIf="walletStatistics">
+                    <span class="vertical-spacer">|</span>
+                    <strong>{{walletStatistics.totalUtxoCount}}</strong>
+                    <small class="text-uppercase"> UTXOs</small>
+                    <span class="vertical-spacer">|</span>
+                    <strong>{{walletStatistics.uniqueTransactionCount}}</strong>
+                    <small class="text-uppercase"> TRXs</small>
+                </span>
+
             </p>
             <ul *ngIf="wallet.unconfirmedBalance">
                 <li>
@@ -23,6 +33,23 @@
         </mat-card-content>
     </mat-card>
 
+    <!-- <mat-card *ngIf="walletStatistics">
+        <mat-card-title>Manage Wallet</mat-card-title>
+        <mat-card-subtitle>Advanced management of your wallet</mat-card-subtitle>
+        <mat-card-content>
+            <p>
+                <strong>{{walletStatistics.totalUtxoCount}}</strong>
+                <small class="text-uppercase"> UTXOs</small>
+                |
+                <strong>{{walletStatistics.uniqueTransactionCount}}</strong>
+                <small class="text-uppercase"> TRXs</small>
+            </p>
+            <p>
+                <button mat-stroked-button color="primary" (click)="openDialog()">Set UTXO count</button>
+            </p>
+        </mat-card-content>
+    </mat-card> -->
+    
     <!-- <mat-card>
         <mat-card-title>Details</mat-card-title>
         <mat-card-content>
@@ -134,7 +161,7 @@
 
     </mat-card>
 
-    <h2 class="mat-h2">Transactions (last 200)</h2>
+    <h2 class="mat-h2">Transactions</h2>
 
     <div *ngIf="wallet.isSingleAddressMode">
         <p class="mat-caption">
@@ -220,7 +247,7 @@
     </div>
 
     <br>
-    <p>Your wallet was created {{wallet?.generalInfo?.creationTime | date:'short'}}.</p>
+    <p>Your wallet was created {{wallet?.generalInfo?.creationTime | date:'short'}}. Maximum 1000 transactions is shown in this history.</p>
 
     <p>Does the history look wrong? Are you missing some transactions? Go to <a routerLink="/tools">Tools</a> and run Resync to refresh the transaction history.</p>
 

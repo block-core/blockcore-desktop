@@ -7,9 +7,12 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
 import { TransactionInfo } from '../../classes/transaction-info';
-import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { AppModes } from '../../shared/app-modes';
 import { Subscription } from 'rxjs';
+import { WalletInfo } from '@models/wallet-info';
+import { WalletUtxoCountDialogComponent } from './wallet-utxo-count-dialog';
+import { WalletSplit } from '@models/wallet-split';
 
 @Component({
     selector: 'app-wallet',
@@ -29,12 +32,13 @@ export class WalletComponent implements OnInit, OnDestroy {
     public firstTransactionDate: Date;
     public countReceived: number;
     public countSent: number;
+    public walletStatistics: any;
 
     links = [{ title: 'All', filter: '' }, { title: 'Received', filter: 'received' }, { title: 'Sent', filter: 'sent' }];
     activeLink = this.links[0];
 
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
         private apiService: ApiService,
@@ -44,6 +48,7 @@ export class WalletComponent implements OnInit, OnDestroy {
         private detailsService: DetailsService,
         public wallet: WalletService,
         public appModes: AppModes,
+        public dialog: MatDialog,
         private fb: FormBuilder,
         private ref: ChangeDetectorRef
     ) {
@@ -67,9 +72,26 @@ export class WalletComponent implements OnInit, OnDestroy {
             // this.dataSource.data = this.wallet.transactionArray;
         }
 
+        // We will only retrieve UTXOs statistics if user has enable advanced mode.
+        if (this.appModes.enabled('staking')) {
+            const walletInfo = new WalletInfo(this.globalService.getWalletName());
+            this.apiService.getWalletStatistics(walletInfo).subscribe(data => {
+                console.log(data);
+                this.walletStatistics = data;
+                this.ref.detectChanges();
+            });
+        }
+
         this.walletServiceSubscription = this.wallet.history$.subscribe(items => {
+
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+
             this.parseHistory(items as TransactionInfo[]);
             this.ref.detectChanges();
+
+            // this.dataSource.paginator = this.paginator;
+            // this.dataSource.sort = this.sort;
         });
     }
 
@@ -77,6 +99,27 @@ export class WalletComponent implements OnInit, OnDestroy {
         if (this.walletServiceSubscription) {
             this.walletServiceSubscription.unsubscribe();
         }
+    }
+
+    openDialog(): void {
+        const amountFormatted = this.globalService.transform(this.wallet.confirmedBalance);
+
+        const dialogRef = this.dialog.open(WalletUtxoCountDialogComponent, {
+            width: '350px',
+            data: { count: 10, amount: amountFormatted, utxos: this.walletStatistics.totalUtxoCount }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('Change UTXO count to:', result);
+
+            const wallet = new WalletSplit(this.globalService.getWalletName(), 'account 0', result.password, result.amount, result.count);
+            this.apiService.splitCoins(wallet).subscribe(data => {
+                console.log(data);
+                this.ref.detectChanges();
+            });
+
+            // this.animal = result;
+        });
     }
 
     selectRow(row) {

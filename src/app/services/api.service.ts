@@ -18,6 +18,7 @@ import { Logger } from './logger.service';
 import { HttpErrorResponse, HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { TransactionResult } from '../classes/transaction-result';
 import { NotificationService } from './notification.service';
+import { WalletSplit } from '@models/wallet-split';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
@@ -238,11 +239,38 @@ export class ApiService {
     }
 
     /**
+     * Get wallet statistics info from the API.
+     */
+    getWalletStatistics(data: WalletInfo): Observable<any> {
+        const search = new HttpParams({
+            fromObject: {
+                walletName: data.walletName,
+                accountName: 'account 0',
+            }
+        });
+
+        return this.http
+            .get(this.apiUrl + '/wallet/wallet-stats', { headers: this.headers, params: search })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
      * Get wallet status info from the API.
      */
     getWalletStatus(): Observable<any> {
         return this.http
             .get(this.apiUrl + '/wallet/status')
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Split UTXOs in the wallet.
+     */
+    splitCoins(data: WalletSplit): Observable<any> {
+        return this.http
+            .post(this.apiUrl + '/wallet/splitcoins/', JSON.stringify(data), { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

@@ -9,6 +9,8 @@ import { WalletRoutingModule } from './wallet-routing.module';
 import { PaymentModule } from './payment/payment.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppSharedModule } from '../../shared/app-shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { WalletUtxoCountDialogComponent } from './wallet-utxo-count-dialog';
 
 @NgModule({
     imports: [
@@ -17,6 +19,7 @@ import { AppSharedModule } from '../../shared/app-shared.module';
         ReceiveModule,
         SendModule,
         ReactiveFormsModule,
+        FlexLayoutModule,
         FormsModule,
         AppSharedModule,
         PaymentModule,
@@ -25,6 +28,10 @@ import { AppSharedModule } from '../../shared/app-shared.module';
     ],
     declarations: [
         WalletComponent,
+        WalletUtxoCountDialogComponent
+    ],
+    entryComponents: [
+        WalletUtxoCountDialogComponent
     ],
     exports: [
         WalletComponent,

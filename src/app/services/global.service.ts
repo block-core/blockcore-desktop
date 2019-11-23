@@ -1,74 +1,139 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class GlobalService {
 
-  static singletonInstance: GlobalService;
+    static singletonInstance: GlobalService;
 
-  constructor() {
+    constructor() {
 
-    if (!GlobalService.singletonInstance) {
-      GlobalService.singletonInstance = this;
+        if (!GlobalService.singletonInstance) {
+            GlobalService.singletonInstance = this;
+        }
+
+        return GlobalService.singletonInstance;
+
     }
 
-    return GlobalService.singletonInstance;
+    private walletPath: string;
+    private currentWalletName: string;
+    private coinType: number;
+    private coinName: string;
+    private coinUnit: string;
+    private network: string;
+    private decimalLimit = 8;
 
-  }
+    getWalletPath() {
+        return this.walletPath;
+    }
 
-  private walletPath: string;
-  private currentWalletName: string;
-  private coinType: number;
-  private coinName: string;
-  private coinUnit: string;
-  private network: string;
+    setWalletPath(walletPath: string) {
+        this.walletPath = walletPath;
+    }
 
-  getWalletPath() {
-    return this.walletPath;
-  }
+    getNetwork() {
+        return this.network;
+    }
 
-  setWalletPath(walletPath: string) {
-    this.walletPath = walletPath;
-  }
+    setNetwork(network: string) {
+        this.network = network;
+    }
 
-  getNetwork() {
-    return this.network;
-  }
+    getWalletName() {
+        return this.currentWalletName;
+    }
 
-  setNetwork(network: string) {
-    this.network = network;
-  }
+    setWalletName(currentWalletName: string) {
+        this.currentWalletName = currentWalletName;
+    }
 
-  getWalletName() {
-    return this.currentWalletName;
-  }
+    getCoinType() {
+        return this.coinType;
+    }
 
-  setWalletName(currentWalletName: string) {
-    this.currentWalletName = currentWalletName;
-  }
+    setCoinType(coinType: number) {
+        this.coinType = coinType;
+    }
 
-  getCoinType() {
-    return this.coinType;
-  }
+    getCoinName() {
+        return this.coinName;
+    }
 
-  setCoinType(coinType: number) {
-    this.coinType = coinType;
-  }
+    setCoinName(coinName: string) {
+        this.coinName = coinName;
+    }
 
-  getCoinName() {
-    return this.coinName;
-  }
+    getCoinUnit() {
+        return this.coinUnit;
+    }
 
-  setCoinName(coinName: string) {
-    this.coinName = coinName;
-  }
+    setCoinUnit(coinUnit: string) {
+        this.coinUnit = coinUnit;
+    }
 
-  getCoinUnit() {
-    return this.coinUnit;
-  }
+    transform(value: number) {
+        let temp;
+        if (typeof value === 'number') {
+            switch (this.getCoinUnit()) {
+                case 'BTC':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'mBTC':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'uBTC':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TBTC':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TmBTC':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TuBTC':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
 
-  setCoinUnit(coinUnit: string) {
-    this.coinUnit = coinUnit;
-  }
+                case 'CITY':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'mCITY':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'uCITY':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TCITY':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TmCITY':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TuCITY':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
+
+                case 'STRAT':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'mSTRAT':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'uSTRAT':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TSTRAT':
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TmSTRAT':
+                    temp = value / 100000;
+                    return temp.toFixed(this.decimalLimit);
+                case 'TuSTRAT':
+                    temp = value / 100;
+                    return temp.toFixed(this.decimalLimit);
+            }
+        }
+    }
 }
