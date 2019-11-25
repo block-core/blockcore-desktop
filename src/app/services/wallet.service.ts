@@ -42,6 +42,7 @@ export class WalletService {
 
     public generalInfo: GeneralInfo;
     public stakingInfo: StakingInfo;
+    public activeWallet: any;
 
     // tslint:disable-next-line: variable-name
     private _history = new Subject();

@@ -10,6 +10,17 @@ import { MatDialog } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { Logger } from '../../../services/logger.service';
 
+import { ApplicationStateService } from 'src/app/services/application-state.service';
+import * as bip39 from 'bip39';
+import * as bip32 from 'bip32';
+import * as bip38 from 'city-bip38';
+import * as city from 'city-lib';
+import { HDNode } from 'city-lib';
+import * as wif from 'wif';
+import Dexie from 'dexie';
+import { StorageService } from 'src/app/services/storage.service';
+// import { StorageService } from '../../../services/storage.service';
+
 @Component({
     selector: 'app-account-create',
     templateUrl: './create.component.html',
@@ -34,6 +45,7 @@ export class CreateAccountComponent implements OnInit {
 
     constructor(
         private authService: AuthenticationService,
+        private appState: ApplicationStateService,
         private router: Router,
         private fb: FormBuilder,
         private log: Logger,
@@ -75,8 +87,19 @@ export class CreateAccountComponent implements OnInit {
     }
 
     public onGenerate() {
-        this.getNewMnemonic();
+        if (this.appState.isSimpleMode) {
+            this.getNewMnemonicLocal();
+        } else {
+            this.getNewMnemonic();
+        }
+
         this.currentDate = new Date().toDateString();
+    }
+
+    private getNewMnemonicLocal() {
+        this.mnemonic = bip39.generateMnemonic();
+        this.mnemonic = 'mystery problem faith negative member bottom concert bundle asthma female process twelve';
+        this.verification = this.mnemonic.split(' ')[2];
     }
 
     private getNewMnemonic() {
@@ -101,22 +124,72 @@ export class CreateAccountComponent implements OnInit {
         this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1, this.seedExtension));
     }
 
+    private getAddress(node, network) {
+        return city.payments.p2pkh({ pubkey: node.publicKey, network }).address;
+    }
+
     private createWallet(wallet: WalletCreation) {
         this.log.info('Creating wallet with: ', wallet);
 
-        this.apiService
-            .createWallet(wallet)
-            .subscribe(
-                response => {
-                    this.saving = false;
-                    this.log.info('Wallet Created!');
-                    this.snackBar.open('Account successfully created!', null, { duration: 3000 });
-                    this.router.navigateByUrl('/login');
-                },
-                error => {
-                    this.saving = false;
-                    this.apiService.handleException(error);
-                }
-            );
+        if (this.appState.isSimpleMode) {
+            // C#: HdOperations.GetExtendedKey(recoveryPhrase, string.Empty);
+            bip39.mnemonicToSeed(this.mnemonic, wallet.passPhrase).then(masterSeed => {
+                const self = this;
+                const masterNode = bip32.fromSeed(masterSeed, this.appState.networkDefinition);
+
+                // tslint:disable-next-line
+                const accountNode = masterNode.derivePath("m/44'/1926'/0'"); // TODO: Get the coin type from network definition.
+                const xpub = accountNode.neutered().toBase58();
+
+                bip38.encryptAsync(masterNode.privateKey, true, wallet.password, (out) => {
+
+                    // tslint:disable-next-line
+                    // debugger;
+
+                    // Instantiate it
+                    const db = new StorageService('cityhub');
+
+                    // Open it
+                    db.open().catch(err => {
+                        console.error(`Open failed: ${err.stack}`);
+                    });
+
+                    db.wallets.add({
+                        name: wallet.name,
+                        isExtPubKeyWallet: false,
+                        extPubKey: xpub,
+                        encryptedSeed: out,
+                        chainCode: masterNode.chainCode,
+                        network: 'CityMain',
+                        creationTime: Date.now() / 1000,
+                        coinType: 1926,
+                        lastBlockSyncedHeight: 0,
+                        lastBlockSyncedHash: ''
+                    });
+
+                    self.saving = false;
+                    self.log.info('Wallet Created!');
+                    self.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                    self.router.navigateByUrl('/login');
+
+                }, null, this.appState.networkParams);
+
+            });
+        } else {
+            this.apiService
+                .createWallet(wallet)
+                .subscribe(
+                    response => {
+                        this.saving = false;
+                        this.log.info('Wallet Created!');
+                        this.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                        this.router.navigateByUrl('/login');
+                    },
+                    error => {
+                        this.saving = false;
+                        this.apiService.handleException(error);
+                    }
+                );
+        }
     }
 }

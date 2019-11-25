@@ -4,6 +4,7 @@
 /build
 /daemon
 .vs
+/citynode*
 
 # compiled output
 /dist

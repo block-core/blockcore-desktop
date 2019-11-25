@@ -41,7 +41,7 @@ export class AdvancedComponent {
         private log: Logger,
         private apiService: ApiService,
         public updateService: UpdateService,
-        private appState: ApplicationStateService) {
+        public appState: ApplicationStateService) {
 
     }
 

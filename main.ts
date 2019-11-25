@@ -47,6 +47,7 @@ let mainWindow = null;
 let daemonState: DaemonState;
 let contents = null;
 let currentChain: Chain;
+var hasDaemon = false;
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
@@ -240,7 +241,8 @@ function createWindow() {
         writeLog(`close event on mainWindow was triggered. Calling shutdown method. Daemon state is: ${daemonState}.`);
 
         // If daemon stopping has not been triggered, it means it likely never started and user clicked Exit on the error dialog. Exit immediately.
-        if (daemonState === DaemonState.Stopping) {
+        // Additionally if it was never started, it is already stopped.
+        if (daemonState === DaemonState.Stopping || daemonState === DaemonState.Stopped) {
             writeLog('Daemon was in stopping mode, so exiting immediately without showing status any longer.');
             return true;
         } else {
@@ -330,6 +332,7 @@ app.on('activate', () => {
 });
 
 function startDaemon(chain: Chain) {
+    hasDaemon = true;
     const folderPath = chain.path || getDaemonPath();
     let daemonName;
 
@@ -463,6 +466,13 @@ function launchDaemon(apiPath: string, chain: Chain) {
 
 function shutdownDaemon(callback) {
 
+    if (!hasDaemon) {
+        writeLog('City Hub is in mobile mode, no daemon to shutdown.');
+        callback(true, null);
+        contents.send('daemon-exited'); // Make the app shutdown.
+        return;
+    }
+    
     daemonState = DaemonState.Stopping;
 
     if (!currentChain) {

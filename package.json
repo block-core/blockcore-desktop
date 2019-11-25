@@ -52,10 +52,10 @@
   },
   "private": true,
   "dependencies": {
+    "conventional-changelog-cli": "2.0.23",
     "electron-context-menu": "0.15.0",
     "electron-log": "3.0.9",
-    "electron-updater": "4.1.2",
-    "conventional-changelog-cli": "2.0.23"
+    "electron-updater": "4.1.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.803.19",
@@ -78,6 +78,10 @@
     "@types/jasminewd2": "2.0.6",
     "@types/node": "12.7.4",
     "bip39": "3.0.2",
+    "city-bip38": "3.0.1",
+    "city-coininfo": "5.0.0",
+    "city-lib": "5.0.0",
+    "dexie": "2.0.4",
     "codelyzer": "5.1.0",
     "core-js": "3.2.1",
     "electron": "6.0.7",

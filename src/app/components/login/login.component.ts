@@ -12,6 +12,9 @@ import { catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ElectronService } from 'ngx-electron';
+import { StorageService } from 'src/app/services/storage.service';
+import * as bip38 from 'city-bip38';
+import { MatSnackBar } from '@angular/material';
 import { Logger } from 'src/app/services/logger.service';
 
 export interface Account {
@@ -33,6 +36,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     accounts: Account[] = [];
     unlocking: boolean;
     password = ''; // Default to empty string, not null/undefined.
+    invalidPassword: boolean;
+    unlockPercentage: number;
     errorMessage: string;
     private subscription: any;
     public status: any;
@@ -52,17 +57,44 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
-            this.status = response;
-            this.log.info('Status update result: ', this.status);
-        });
-
-        this.getWalletFiles();
+        this.loadWallets();
     }
 
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription.unsubscribe();
+        }
+    }
+
+    private loadWallets() {
+        if (this.appState.isSimpleMode) {
+            this.getLocalWalletFiles();
+        } else {
+            this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
+                this.status = response;
+                this.log.info('Status update result: ', this.status);
+            });
+
+            this.getWalletFiles();
+        }
+    }
+
+    private async getLocalWalletFiles() {
+        try {
+            // Read accounts from localStorage.
+            const db = new StorageService('cityhub');
+            const list = await db.wallets.toArray();
+            const wallets = list.map((item) => {
+                return { id: item.name, name: item.name };
+            });
+
+            this.accounts = wallets;
+
+            console.log(list);
+
+            this.hasWallet = list.length > 0;
+        } catch (error) {
+            this.log.error(error);
         }
     }
 
@@ -140,6 +172,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     unlock() {
         this.errorMessage = '';
         this.unlocking = true;
+        this.invalidPassword = false;
 
         this.globalService.setWalletName(this.selectedAccount.name);
 
@@ -153,7 +186,53 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.password
         );
 
-        this.loadWallet(walletLoad);
+        if (this.appState.isSimpleMode) {
+            this.loadLocalWallet(walletLoad);
+        } else {
+            this.loadWallet(walletLoad);
+        }
+    }
+
+    private async loadLocalWallet(walletLoad: WalletLoad) {
+        const db = new StorageService('cityhub');
+        const wallet = await db.wallets.get({ name: walletLoad.name });
+        const self = this;
+
+        console.log('Load Local Wallet...');
+
+        try {
+            const start = new Date().getTime();
+
+            console.log(wallet);
+
+            bip38.decryptAsync(wallet.encryptedSeed, walletLoad.password, (decryptedKey) => {
+                console.log('decrypted!');
+                console.log(decryptedKey);
+
+                const stop = new Date().getTime();
+
+                const diff = stop - start;
+                console.log(diff + 'ms taken to decrypt.');
+                // console.log('decryptedKey:', decryptedKey);
+
+                self.authService.setAuthenticated();
+                self.unlocking = false;
+                localStorage.setItem('Network:Wallet', wallet.name);
+
+                // Make sure the unlocked wallet is available, especially the extpubkey is required to generate addresses.
+                this.wallet.activeWallet = wallet;
+
+                self.router.navigateByUrl('/dashboard');
+
+            }, null, this.appState.networkParams);
+        } catch (err) {
+            if (err.message !== 'AssertionError [ERR_ASSERTION]') {
+                self.log.error('Unknown failure on wallet unlock', err);
+            }
+
+            self.unlocking = false;
+            self.invalidPassword = true;
+        }
     }
 
     private getCurrentNetwork() {

@@ -48,6 +48,10 @@ export class ApplicationStateService {
         return ApplicationStateService.singletonInstance;
     }
 
+    networkDefinition: any;
+
+    networkParams: any;
+
     version: string;
 
     release: string;
@@ -87,6 +91,10 @@ export class ApplicationStateService {
 
     get isElectron(): boolean {
         return this.electron.isElectronApp;
+    }
+
+    get isSimpleMode(): boolean {
+        return this.mode === 'simple';
     }
 
     getParam(n) {

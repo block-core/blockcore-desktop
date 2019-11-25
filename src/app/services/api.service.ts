@@ -74,7 +74,7 @@ export class ApiService {
         this.log.info('Api Service, Chain: ', chain);
 
         // For mobile mode, we won't launch any daemons.
-        if (chain.mode === 'mobile') {
+        if (chain.mode === 'simple') {
 
         } else {
             if (this.electronService.ipcRenderer) {
@@ -112,7 +112,6 @@ export class ApiService {
     }
 
     getNodeStatusInterval(): Observable<any> {
-
         const self = this;
 
         return interval(this.pollingInterval)
@@ -123,7 +122,6 @@ export class ApiService {
     }
 
     getNodeStatusCustomInterval(milliseconds: number): Observable<any> {
-
         const self = this;
 
         return interval(milliseconds)

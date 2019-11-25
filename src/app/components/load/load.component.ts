@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { NodeStatus } from '@models/node-status';
 import { ElectronService } from 'ngx-electron';
 import { environment } from 'src/environments/environment';
+import * as coininfo from 'city-coininfo';
 
 export interface ListItem {
     name: string;
@@ -59,11 +60,11 @@ export class LoadComponent implements OnDestroy {
         ];
 
         if (!environment.production) {
-            this.modes.push({ id: 'demo', name: 'Demo' },
-                { id: 'local', name: 'Local' },
-                { id: 'manual', name: 'Manual' },
-                { id: 'simple', name: 'Mobile' },
-                { id: 'light', name: 'Light' },
+            this.modes.push({ id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
+                { id: 'local', name: 'Local' }, // Launches the daemon by specifying path to .dll file.
+                { id: 'manual', name: 'Manual' }, // Manual startup of daemon, does not send shutdown messages.
+                { id: 'simple', name: 'Mobile' }, // API Wallet mode.
+                { id: 'light', name: 'Light' }, // Full Node in Purge mode and other features disabled.
                 { id: 'pos', name: 'Point-of-Sale (POS)' },
                 { id: 'readonly', name: 'Read-only' });
         }
@@ -105,6 +106,19 @@ export class LoadComponent implements OnDestroy {
             this.loading = false;
             this.appState.connected = true;
             this.fullNodeConnect();
+        } else if (this.appState.mode === 'simple') {
+            // TODO: Should send the correct network, hard-coded to city main for now.
+            const network = coininfo('city').toBitcoinJS();
+            this.appState.networkDefinition = network;
+
+            this.appState.networkParams = {
+                private: network.wif,
+                public: network.pubKeyHash
+            };
+
+            this.loading = false;
+            this.appState.connected = true;
+            this.router.navigateByUrl('/login');
         }
     }
 

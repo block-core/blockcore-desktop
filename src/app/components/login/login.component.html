@@ -27,6 +27,11 @@
                 <br>
                 <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
                 <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
+                <br>
+                <!-- <mat-progress-bar *ngIf="unlocking && appState.isSimpleMode" mode="determinate" [value]="unlockPercentage"></mat-progress-bar>
+                <mat-spinner *ngIf="unlocking && appState.isSimpleMode"></mat-spinner> -->
+                <br>
+                <div *ngIf="invalidPassword">The password is not correct.</div>
             </span>
 
             <span *ngIf="errorMessage">
