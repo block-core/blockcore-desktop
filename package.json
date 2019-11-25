@@ -48,7 +48,9 @@
     "publish:linuxsnap": "npm run builder --  -l snap -p always",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e",
-    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "private": true,
   "dependencies": {
@@ -109,6 +111,8 @@
     "tslint": "5.20.1",
     "typescript": "3.5.3",
     "wait-on": "3.3.0",
-    "zone.js": "0.10.2"
-  }
+    "zone.js": "0.10.2",
+    "snyk": "^1.192.6"
+  },
+  "snyk": true
 }
