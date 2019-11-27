@@ -3,14 +3,20 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover"> -->
+
     <title>City Hub</title>
     <base href="./">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
 <body class="mat-app-background mat-typography">
     <app-root></app-root>
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="startup.js"></script>
 </body>
 

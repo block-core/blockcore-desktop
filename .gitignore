@@ -8,6 +8,7 @@
 
 # compiled output
 /dist
+/www
 /tmp
 /out-tsc
 # Only exists if Bazel was run

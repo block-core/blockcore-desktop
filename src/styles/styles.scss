@@ -6,6 +6,7 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 @import "./themes/font";
 @import "./typography";
 @import './material';
+@import './mobile';
 
 //@import './themes/palettes/green.palette';
 @import "./themes/palettes/orange.palette";

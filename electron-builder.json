@@ -14,21 +14,21 @@
         "releaseName": "City Hub"
     },
     "files": [
-        "dist/**",
+        "www/**",
         "main.js"
     ],
     "directories": {
         "output": "build"
     },
     "win": {
-        "icon": "dist/assets/icon.ico",
+        "icon": "www/assets/icon.ico",
         "target": [
             "nsis"
         ],
         "artifactName": "City.Hub-${version}-${os}-${env.arch}.${ext}"
     },
     "linux": {
-        "icon": "dist/assets/images/",
+        "icon": "www/assets/images/",
         "target": [
             "AppImage:x64"
         ],
@@ -36,7 +36,7 @@
         "category": "Utility"
     },
     "mac": {
-        "icon": "dist/assets/icon.icns",
+        "icon": "www/assets/icon.icns",
         "target": [
             "dmg",
             "zip"
@@ -65,14 +65,14 @@
         "guid": "42ba105c-858b-41cc-94bc-2b8c5ee5c6b4",
         "createDesktopShortcut": true,
         "createStartMenuShortcut": true,
-        "license": "dist/assets/license.txt"
+        "license": "www/assets/license.txt"
     },
     "msi": {
         "warningsAsErrors": false
     },
     "extraResources": [
         "daemon/**/*",
-        "dist/assets/icon-tray.ico",
-        "dist/assets/license.txt"
+        "www/assets/icon-tray.ico",
+        "www/assets/license.txt"
     ]
 }
