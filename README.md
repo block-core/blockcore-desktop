@@ -4,12 +4,12 @@ City Hub
 Your portal into City Chain
 ----------------------------
 
-[![VSTS build status][1]][2]
+[1]: https://github.com/CityChainFoundation/city-hub/workflows/Build/badge.svg
+[2]: https://github.com/CityChainFoundation/city-hub/actions
+[3]: https://snyk.io/test/github/CityChainFoundation/city-hub/badge.svg?targetFile=package.json
+[4]: https://snyk.io/test/github/CityChainFoundation/city-hub?targetFile=package.json
 
-[1]: https://dev.azure.com/citychain/city-chain/_apis/build/status/CityChainFoundation.city-hub
-[2]: https://dev.azure.com/citychain/city-chain/_build/latest?definitionId=6
-
-[![Known Vulnerabilities](https://snyk.io/test/github/CityChainFoundation/city-hub/badge.svg?targetFile=package.json)](https://snyk.io/test/github/CityChainFoundation/city-hub?targetFile=package.json)
+[![Build Status][1]][2] [![Known Vulnerabilities][3]][4]
 
 The City Hub is the one-stop-app that citizens, merchants and others can get an overview of 
 everything related to their data on the City Chain and the Smart City Platform.
