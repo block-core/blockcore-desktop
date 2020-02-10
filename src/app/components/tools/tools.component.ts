@@ -3,7 +3,7 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { ApiService } from 'src/app/services/api.service';
 import { WalletInfo } from 'src/app/classes/wallet-info';
 import { GlobalService } from 'src/app/services/global.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({

@@ -8,13 +8,10 @@ import { WalletInfo } from '../../classes/wallet-info';
 import { WalletLoad } from '../../classes/wallet-load';
 import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { empty } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { StorageService } from 'src/app/services/storage.service';
 import * as bip38 from 'city-bip38';
-import { MatSnackBar } from '@angular/material';
 import { Logger } from 'src/app/services/logger.service';
 
 export interface Account {

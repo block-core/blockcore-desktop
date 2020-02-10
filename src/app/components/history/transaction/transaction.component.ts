@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { DetailsService } from '../../../services/details.service';

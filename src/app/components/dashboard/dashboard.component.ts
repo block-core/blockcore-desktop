@@ -49,7 +49,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     changeTicker(change) {
-
         this.selectedCoinTickerIndex += change;
 
         if (this.selectedCoinTickerIndex < 0) {
@@ -77,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     const coincapAsset = response.data as CoincapAsset;
                     coincapAsset.pair = 'USD';
                     coincapAsset.volumepair = 'USD';
-                    this.coins[2] = this.mapCoincapToAsset(coincapAsset);
+                    this.coins[1] = this.mapCoincapToAsset(coincapAsset);
                 },
                 error => {
                     this.coincap.handleException(error);
@@ -103,19 +102,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             ));
 
-        this.subscriptions.push(this.coin.getTicker('usd')
-            .subscribe(
-                response => {
-                    const coinAsset = response.result as P2pb2bAsset;
-                    coinAsset.pair = 'USD';
-                    coinAsset.volumepair = 'CITY';
-                    this.coins[1] = this.mapP2pb2bToAsset(coinAsset);
-                },
-                error => {
-                    this.coincap.handleException(error);
-                    this.reactivate();
-                }
-            ));
+        // this.subscriptions.push(this.coin.getTicker('usd')
+        //     .subscribe(
+        //         response => {
+        //             const coinAsset = response.result as P2pb2bAsset;
+        //             coinAsset.pair = 'USD';
+        //             coinAsset.volumepair = 'CITY';
+        //             this.coins[1] = this.mapP2pb2bToAsset(coinAsset);
+        //         },
+        //         error => {
+        //             this.coincap.handleException(error);
+        //             this.reactivate();
+        //         }
+        //     ));
     }
 
     private mapP2pb2bToAsset(coin: P2pb2bAsset): CoinAsset {

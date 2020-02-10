@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, interval, throwError } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationStateService } from './application-state.service';
 import { Logger } from './logger.service';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';

@@ -1,6 +1,8 @@
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { throwError } from 'rxjs';
-import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 // import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { ApplicationStateService } from '../../../services/application-state.service';
@@ -29,7 +31,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     blockJson: string;
     displayedColumns: string[] = ['txid', 'output', 'inputs', 'outputs', 'size'];
     dataSource = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     @HostListener('window:keyup', ['$event'])
     keyEvent(event: KeyboardEvent) {
         // tslint:disable-next-line: deprecation

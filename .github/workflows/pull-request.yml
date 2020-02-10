@@ -1,0 +1,95 @@
+name: Pull Request
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  
+  buildAndTest:
+
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        include:
+          - os: windows-latest
+            extension: ".zip"
+            runtime: "win-x64"
+            platform: "win"
+          - os: ubuntu-latest
+            extension: ".tar.gz"
+            runtime: "linux-x64"
+            platform: "linux"
+          - os: macos-latest
+            runtime: "osx-x64"
+            extension: ".zip"
+            platform: "osx"
+        node_version: [10.x]
+        dotnet_version: ['2.1.607']
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    
+    env:
+      PROJECT_NAME: 'City.Chain'
+      SOLUTION_PATH: 'src/City.Chain.sln'
+      PROJECT_PATH: 'src/City.Chain/City.Chain.csproj'
+      BUILD_CONFIGURATION: 'Release'
+      DAEMON: '1.0.21'
+      ARCH: 'x64'
+
+    steps:
+
+    - uses: actions/checkout@v1
+      name: Checkout
+
+    - name: Setup Node.js (${{ matrix.node_version }})
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node_version }}
+
+    - name: Variables
+      run: |
+        echo "::set-env name=VERSION::$(npm run version --silent)"
+        echo "::set-env name=RELEASE_CONFIGURATION::${{ matrix.runtime }}"
+
+    - name: Tooling
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt update
+        sudo apt install snapd
+        sudo snap install --classic snapcraft
+
+    - name: Download City Chain
+      shell: pwsh
+      run: |
+        echo ${env:PATH}
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $url = "https://github.com/CityChainFoundation/city-chain/releases/download/v${{ env.DAEMON }}/City.Chain-${{ env.DAEMON }}-${{ matrix.platform }}-${{ env.ARCH }}${{ matrix.extension }}"
+        $output = Join-Path -Path "./" -ChildPath "daemon${{ matrix.extension }}"
+        Write-Output "Url: $url"
+        Write-Output "Path: $output"
+        $start_time = Get-Date
+        (New-Object System.Net.WebClient).DownloadFile($url, $output)
+        Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)" 
+
+    - name: Unpack (Windows)
+      if: matrix.os == 'windows-latest'
+      run: 7z x daemon${{ matrix.extension }} -odaemon
+
+    - name: Unpack (Mac)
+      if: matrix.os == 'macos-latest'
+      run: unzip -a daemon${{ matrix.extension }} -d daemon
+
+    - name: Unpack (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        mkdir daemon
+        tar -xvzf daemon${{ matrix.extension }} -C daemon
+
+    - name: Install (npm)
+      run: npm install
+
+    - name: Build (npm)
+      run: npm run build:${{ matrix.platform }}

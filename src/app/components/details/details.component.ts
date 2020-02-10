@@ -3,7 +3,7 @@ import { DetailsService } from '../../services/details.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { TransactionInfo } from '../../classes/transaction-info';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { WalletService } from '../../services/wallet.service';
 

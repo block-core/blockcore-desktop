@@ -11,7 +11,7 @@ import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 import { GeneralInfo } from '../classes/general-info';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationStateService } from './application-state.service';
 import { ChainService } from './chain.service';
 import { Logger } from './logger.service';

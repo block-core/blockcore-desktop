@@ -4,7 +4,9 @@ import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { Subscription } from 'rxjs';
 import { TransactionInfo } from '../../classes/transaction-info';
-import { MatSnackBar, MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -32,11 +34,11 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
     displayedColumns: string[] = ['height', 'hash', 'time', 'transactions'];
     public dataSource = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     displayedColumnsTransactions: string[] = ['txid', 'output', 'outputs', 'inputs', 'size'];
     public dataSourceTransactions = new MatTableDataSource<any>();
-    @ViewChild(MatPaginator, { static: false }) paginatorTransactions: MatPaginator;
+    @ViewChild(MatPaginator) paginatorTransactions: MatPaginator;
 
     constructor(
         private http: HttpClient,

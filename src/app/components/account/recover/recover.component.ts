@@ -5,7 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PasswordValidationDirective } from '../../../shared/directives/password-validation.directive';
 import { WalletRecovery } from '../../../classes/wallet-recovery';
 import { ApiService } from '../../../services/api.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationStateService } from '../../../services/application-state.service';
 
 @Component({

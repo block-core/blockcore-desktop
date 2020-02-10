@@ -3,7 +3,7 @@ import { ApplicationStateService } from '../../../services/application-state.ser
 import { ApiService } from '../../../services/api.service';
 import { GlobalService } from '../../../services/global.service';
 import { WalletInfo } from '../../../classes/wallet-info';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { WalletService } from '../../../services/wallet.service';
 import { Logger } from '../../../services/logger.service';
 import * as bip32 from 'bip32';

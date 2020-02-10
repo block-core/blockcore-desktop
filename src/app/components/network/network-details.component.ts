@@ -1,12 +1,7 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
-import { WalletComponent } from '../wallet/wallet.component';
-import { WalletInfo } from '../../classes/wallet-info';
-import { filter } from 'rxjs/operators';
-import { GeneralInfo } from '../../classes/general-info';
-import { MatGridList, MatDialog } from '@angular/material';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { MatDialog } from '@angular/material/dialog';
 import { WalletService } from '../../services/wallet.service';
 import { Router } from '@angular/router';
 import { ChainService, Chain } from 'src/app/services/chain.service';

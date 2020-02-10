@@ -127,19 +127,19 @@ const routes: Routes = [
     },
     {
         path: 'about',
-        loadChildren: './components/about/about.module#AboutModule'
+        loadChildren: () => import('./components/about/about.module').then(m => m.AboutModule)
     },
     {
         path: 'wallet',
-        loadChildren: './components/wallet/wallet.module#WalletModule'
+        loadChildren: () => import('./components/wallet/wallet.module').then(m => m.WalletModule)
     },
     {
         path: 'account',
-        loadChildren: './components/account/account.module#AccountModule'
+        loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule)
     },
     {
         path: 'history',
-        loadChildren: './components/history/history.module#HistoryModule'
+        loadChildren: () => import('./components/history/history.module').then(m => m.HistoryModule)
     },
     {
         path: '**',

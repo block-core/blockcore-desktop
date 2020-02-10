@@ -11,10 +11,7 @@ import { GlobalService } from '../../../services/global.service';
 import { ApiService } from '../../../services/api.service';
 import { PasswordValidationDirective } from '../../../shared/directives/password-validation.directive';
 import { WalletCreation } from '../../../classes/wallet-creation';
-import { MatDialog } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
 import { Logger } from '../../../services/logger.service';
-
 import { ApplicationStateService } from 'src/app/services/application-state.service';
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';

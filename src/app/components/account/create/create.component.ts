@@ -6,8 +6,8 @@ import { GlobalService } from '../../../services/global.service';
 import { ApiService } from '../../../services/api.service';
 import { PasswordValidationDirective } from '../../../shared/directives/password-validation.directive';
 import { WalletCreation } from '../../../classes/wallet-creation';
-import { MatDialog } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Logger } from '../../../services/logger.service';
 
 import { ApplicationStateService } from 'src/app/services/application-state.service';
