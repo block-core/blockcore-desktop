@@ -2,6 +2,7 @@ import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UpdateInfo } from '../components/update/update-info';
 import { ApplicationStateService } from './application-state.service';
+const path = require('path');
 
 export interface NotificationTile {
     title: string;
@@ -12,6 +13,11 @@ export interface NotificationTile {
     data?: object;
     read?: boolean;
     date?: Date;
+}
+
+export interface NotificationMessage {
+    title: string;
+    body: string;
 }
 
 @Injectable({
@@ -123,6 +129,20 @@ export class NotificationService {
                 return -1;
             }
         });
+    }
+
+    show(tile: NotificationMessage) {
+        const notification = {
+            title: tile.title,
+            body: tile.body,
+            icon: path.join(__dirname, '../../../assets/city/logo.png')
+        };
+
+        const nativeNotification = new window.Notification(notification.title, notification);
+
+        nativeNotification.onclick = () => {
+            console.log('Notification clicked');
+        };
     }
 
     add(tile: NotificationTile) {

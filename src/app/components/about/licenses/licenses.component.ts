@@ -35,7 +35,7 @@ export class LicensesComponent implements OnDestroy, OnInit {
     private showContent(contentUrl: string, dataFormatter: (data: string) => string = data => data) {
         this.http
             .get(contentUrl, { responseType: 'text' }).pipe(
-                retry(3),
+                retry(2),
                 tap(
                     data => {
                         const formattedData = dataFormatter(data);

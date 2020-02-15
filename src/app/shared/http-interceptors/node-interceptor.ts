@@ -9,6 +9,6 @@ export class NodeInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         return next.handle(req)
-            .pipe(retry(3)); // Make sure we at minimum always attempt 3 times, to avoid transient errors.
+            .pipe(retry(2)); // Make sure we at minimum always attempt 3 times, to avoid transient errors.
     }
 }

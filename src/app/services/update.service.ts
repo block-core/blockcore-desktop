@@ -2,6 +2,7 @@ import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UpdateInfo } from '../components/update/update-info';
 import { ApplicationStateService } from './application-state.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class UpdateService {
 
     constructor(
         private electronService: ElectronService,
+        private notificationService: NotificationService,
         private appState: ApplicationStateService) {
 
         this.ipc = electronService.ipcRenderer;
@@ -25,16 +27,19 @@ export class UpdateService {
         if (!UpdateService.singletonInstance) {
 
             this.ipc.on('check-for-update', (event, info: UpdateInfo) => {
+                // notificationService.show({ title: 'Checking for update...', body: JSON.stringify(info) });
                 console.log('check-for-update: ', info);
             });
 
             this.ipc.on('update-available', (event, info: UpdateInfo) => {
+                // notificationService.show({ title: 'Update available!', body: JSON.stringify(info)});
                 console.log('update-available: ', info);
                 this.info = info;
                 this.available = true;
             });
 
             this.ipc.on('update-not-available', (event, info: UpdateInfo) => {
+                // notificationService.show({ title: 'Update not available', body: JSON.stringify(info) });
                 console.log('update-not-available: ', info);
                 this.info = info;
                 this.available = false;
@@ -51,6 +56,7 @@ export class UpdateService {
             });
 
             this.ipc.on('update-error', (event, error) => {
+                // notificationService.show({ title: 'Update error', body: error.message });
                 console.log('update-error: ', error);
             });
 

@@ -106,7 +106,7 @@ export class RootComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.appState.shutdownDelayed = true;
                 this.cd.detectChanges();
-            }, 4000);
+            }, 60000);
 
         });
 
