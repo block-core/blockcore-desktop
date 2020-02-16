@@ -1,14 +1,22 @@
 <div class="content">
     <h1 class="mat-h1" *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
 
-    <h3 class="mat-h3">February, 2019 (v1.0.22)</h3>
+    <h3 class="mat-h3">February 18th, 2019 (v1.0.23)</h3>
+
+    <ul>
+        <li>Options to change the action when minimizing City Hub. It can either show in task bar, or hide to the tray. The default will continue to be visible, but can be changed in options.</li>
+        <li>Automatic startup on computer log in can now be turned on in the settings. This will automatically start City Hub when your computer restarts and you log in.</li>
+        <li>Single instance - When starting another instance of City Hub, the existing instance will appear and activate.</li>
+    </ul>
+
+    <h3 class="mat-h3">February 17th, 2019 (v1.0.22)</h3>
 
     <ul>
         <li>Adds Content-Security-Policy, which improves the security of loading content into City Hub.</li>
         <li>Update the timeout when "Exit now" appears on shutdown, from 4 seconds to 10 seconds (<a href="https://github.com/CityChainFoundation/city-hub/issues/125" target="_blank">#125</a>).</li>
     </ul>
 
-    <h3 class="mat-h3">February, 2019 (v1.0.21)</h3>
+    <h3 class="mat-h3">February 16th, 2019 (v1.0.21)</h3>
 
     <ul>
         <li>Updated the ticker, will now show CITY/BTC and BTC/USD.</li>

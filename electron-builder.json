@@ -72,7 +72,7 @@
     },
     "extraResources": [
         "daemon/**/*",
-        "dist/assets/icon-tray.ico",
+        "dist/assets/city/icon-tray.ico",
         "dist/assets/license.txt"
     ]
 }

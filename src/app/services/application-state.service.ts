@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
+import { SettingsService } from './settings.service';
 
 export interface DaemonConfiguration {
     mode: string;
@@ -24,6 +25,7 @@ export class ApplicationStateService {
 
     constructor(
         private electron: ElectronService,
+        private settings: SettingsService,
         private readonly titleService: TitleService,
     ) {
         if (!ApplicationStateService.singletonInstance) {
@@ -41,6 +43,9 @@ export class ApplicationStateService {
                 path: localStorage.getItem('Network:Path') || '',
                 datafolder: localStorage.getItem('Network:DataFolder') || ''
             };
+
+            // On startup, we'll send the initial hiding settings to main thread.
+            electron.ipcRenderer.send('settings', { openAtLogin: settings.openOnLogin, showInTaskbar: settings.showInTaskbar });
 
             ApplicationStateService.singletonInstance = this;
         }

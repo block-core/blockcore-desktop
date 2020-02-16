@@ -3,6 +3,30 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+    app.quit();
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWindow) {
+            // If not visible, ensure we show it.
+            if (!mainWindow.isVisible()) {
+                mainWindow.show();
+            }
+
+            // If minimized, ensure we restore it.
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
+            }
+
+            // Eventually put focus on the window.
+            mainWindow.focus();
+        }
+    });
+}
+
 if (os.arch() === 'arm') {
     app.disableHardwareAcceleration();
 }
@@ -35,6 +59,11 @@ interface Chain {
     datafolder: string;
 }
 
+interface Settings {
+    openAtLogin: boolean;
+    showInTaskbar: boolean;
+}
+
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
 
@@ -47,7 +76,8 @@ let mainWindow = null;
 let daemonState: DaemonState;
 let contents = null;
 let currentChain: Chain;
-var hasDaemon = false;
+let settings: Settings;
+let hasDaemon = false;
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
@@ -55,6 +85,11 @@ const coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third par
 
 require('electron-context-menu')({
     showInspectElement: serve
+});
+
+process.on('uncaughtException', (error) => {
+    writeLog('Uncaught exception happened:');
+    writeLog(error);
 });
 
 ipcMain.on('start-daemon', (event, arg: Chain) => {
@@ -93,6 +128,15 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     }
 });
 
+ipcMain.on('settings', (event, arg: Settings) => {
+    // Update the global settings for the Main thread.
+    settings = arg;
+
+    app.setLoginItemSettings({
+        openAtLogin: arg.openAtLogin
+    });
+});
+
 ipcMain.on('check-for-update', (event, arg: Chain) => {
     autoUpdater.checkForUpdates();
 });
@@ -103,11 +147,6 @@ ipcMain.on('download-update', (event, arg: Chain) => {
 
 ipcMain.on('install-update', (event, arg: Chain) => {
     autoUpdater.quitAndInstall();
-});
-
-process.on('uncaughtException', function (error) {
-    writeLog('Uncaught exception happened:');
-    writeLog(error);
 });
 
 ipcMain.on('daemon-started', (event, arg: Chain) => {
@@ -263,6 +302,13 @@ function createWindow() {
             } else { // Else, allow window to be closed. This allows users to click X twice to immediately close the window.
                 writeLog('ELSE in the CLOSE event. Should only happen on double-click on exit button.');
             }
+        }
+    });
+
+    mainWindow.on('minimize', (event) => {
+        if (!settings.showInTaskbar) {
+            event.preventDefault();
+            mainWindow.hide();
         }
     });
 
@@ -459,7 +505,7 @@ function launchDaemon(apiPath: string, chain: Chain) {
     }
     );
 
-    daemonProcess.on('error', function (code, signal) {
+    daemonProcess.on('error', (code, signal) => {
         writeError(`City Chain daemon process failed to start. Code ${code} and signal ${signal}.`);
     });
 }
@@ -472,7 +518,7 @@ function shutdownDaemon(callback) {
         contents.send('daemon-exited'); // Make the app shutdown.
         return;
     }
-    
+
     daemonState = DaemonState.Stopping;
 
     if (!currentChain) {
@@ -494,7 +540,7 @@ function shutdownDaemon(callback) {
 
         const req = http.request(options);
 
-        req.on('response', function (res) {
+        req.on('response', (res) => {
             if (res.statusCode === 200) {
                 writeLog('Request to shutdown daemon returned HTTP success code.');
                 callback(true, null);
@@ -504,7 +550,7 @@ function shutdownDaemon(callback) {
             }
         });
 
-        req.on('error', function (err) {
+        req.on('error', (err) => {
             writeError('Request to shutdown daemon failed.');
             callback(false, err);
         });
@@ -519,9 +565,9 @@ function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-        trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.png');
+        trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
     } else {
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + coin.identity + '/icon-tray.png'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
     }
 
     const systemTray = new Tray(trayIcon);
@@ -529,13 +575,13 @@ function createTray() {
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Hide/Show',
-            click: function () {
+            click: () => {
                 mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
             }
         },
         {
             label: 'Exit',
-            click: function () {
+            click: () => {
                 mainWindow.close();
             }
         }
@@ -544,7 +590,7 @@ function createTray() {
     systemTray.setToolTip(coin.tooltip);
     systemTray.setContextMenu(contextMenu);
 
-    systemTray.on('click', function () {
+    systemTray.on('click', () => {
         if (!mainWindow.isVisible()) {
             mainWindow.show();
         }
@@ -554,7 +600,7 @@ function createTray() {
         }
     });
 
-    app.on('window-all-closed', function () {
+    app.on('window-all-closed', () => {
         if (systemTray) {
             systemTray.destroy();
         }

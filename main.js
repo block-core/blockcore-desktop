@@ -4,6 +4,27 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
+var gotTheLock = electron_1.app.requestSingleInstanceLock();
+if (!gotTheLock) {
+    electron_1.app.quit();
+}
+else {
+    electron_1.app.on('second-instance', function (event, commandLine, workingDirectory) {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWindow) {
+            // If not visible, ensure we show it.
+            if (!mainWindow.isVisible()) {
+                mainWindow.show();
+            }
+            // If minimized, ensure we restore it.
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
+            }
+            // Eventually put focus on the window.
+            mainWindow.focus();
+        }
+    });
+}
 if (os.arch() === 'arm') {
     electron_1.app.disableHardwareAcceleration();
 }
@@ -30,12 +51,17 @@ var mainWindow = null;
 var daemonState;
 var contents = null;
 var currentChain;
+var settings;
 var hasDaemon = false;
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
 require('electron-context-menu')({
     showInspectElement: serve
+});
+process.on('uncaughtException', function (error) {
+    writeLog('Uncaught exception happened:');
+    writeLog(error);
 });
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
     if (daemonState === DaemonState.Started) {
@@ -68,6 +94,13 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
         event.returnValue = 'OK';
     }
 });
+electron_1.ipcMain.on('settings', function (event, arg) {
+    // Update the global settings for the Main thread.
+    settings = arg;
+    electron_1.app.setLoginItemSettings({
+        openAtLogin: arg.openAtLogin
+    });
+});
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
     autoUpdater.checkForUpdates();
 });
@@ -76,10 +109,6 @@ electron_1.ipcMain.on('download-update', function (event, arg) {
 });
 electron_1.ipcMain.on('install-update', function (event, arg) {
     autoUpdater.quitAndInstall();
-});
-process.on('uncaughtException', function (error) {
-    writeLog('Uncaught exception happened:');
-    writeLog(error);
 });
 electron_1.ipcMain.on('daemon-started', function (event, arg) {
     daemonState = DaemonState.Started;
@@ -210,6 +239,12 @@ function createWindow() {
             else { // Else, allow window to be closed. This allows users to click X twice to immediately close the window.
                 writeLog('ELSE in the CLOSE event. Should only happen on double-click on exit button.');
             }
+        }
+    });
+    mainWindow.on('minimize', function (event) {
+        if (!settings.showInTaskbar) {
+            event.preventDefault();
+            mainWindow.hide();
         }
     });
     // Emitted when the window is closed.
@@ -432,10 +467,10 @@ function createTray() {
     // Put the app in system tray
     var trayIcon;
     if (serve) {
-        trayIcon = electron_1.nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.png');
+        trayIcon = electron_1.nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
     }
     else {
-        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/' + coin.identity + '/icon-tray.png'));
+        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
     }
     var systemTray = new electron_1.Tray(trayIcon);
     var contextMenu = electron_1.Menu.buildFromTemplate([

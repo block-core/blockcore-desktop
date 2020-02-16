@@ -1,6 +1,9 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { Theming } from '../../services/theming.service';
 import { AppModes } from '../../shared/app-modes';
+import { ElectronService } from 'ngx-electron';
+import { Debugger } from 'electron';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
     selector: 'app-settings',
@@ -11,37 +14,33 @@ import { AppModes } from '../../shared/app-modes';
 export class SettingsComponent {
     @HostBinding('class.settings') hostClass = true;
 
-    autoLock = true;
-    clearOnExit = false;
+    selectedAutoLock: boolean;
+    selectedClearOnExit: boolean;
     selectedTheme: string;
     selectedLanguage: string;
     selectedCurrency: string;
     selectedWalletMode: string;
+    selectedShowInTaskbar: boolean;
+    selectedOpenOnLogin: boolean;
     selectedMode: string;
 
-    constructor(public readonly theme: Theming, public appModes: AppModes) {
+    constructor(
+        public readonly theme: Theming,
+        public electron: ElectronService,
+        public settings: SettingsService,
+        public appModes: AppModes) {
+
         this.selectedTheme = theme.currentTheme;
+        this.selectedAutoLock = settings.autoLock;
+        this.selectedClearOnExit = settings.clearOnExit;
+        this.selectedWalletMode = settings.walletMode;
+        this.selectedMode = settings.mode;
+        this.selectedShowInTaskbar = settings.showInTaskbar;
+        this.selectedOpenOnLogin = settings.openOnLogin;
 
-        if (localStorage.getItem('Settings:AutoLock') === 'false') {
-            this.autoLock = false;
-        }
+        console.log('settings.openOnLogin:', settings.openOnLogin);
+        console.log('this.selectedOpenOnLogin:', this.selectedOpenOnLogin);
 
-        if (localStorage.getItem('Settings:ClearOnExit') === 'true') {
-            this.clearOnExit = true;
-        }
-
-        this.selectedWalletMode = localStorage.getItem('Settings:WalletMode') || 'multi';
-        this.selectedMode = localStorage.getItem('Settings:Mode') || 'basic';
-    }
-
-    onAutoLockChanged(event) {
-        console.log(event);
-        console.log(this.autoLock);
-    }
-
-    onClearOnExitChanged(event) {
-        console.log(event);
-        console.log(this.clearOnExit);
     }
 
     onThemeChange(event) {
@@ -49,14 +48,19 @@ export class SettingsComponent {
     }
 
     onChanged(event) {
-
         this.appModes.activate(this.selectedMode);
 
-        localStorage.setItem('Settings:Mode', this.selectedMode);
-        localStorage.setItem('Settings:WalletMode', this.selectedWalletMode);
-        localStorage.setItem('Settings:Language', this.selectedLanguage);
-        localStorage.setItem('Settings:Currency', this.selectedCurrency);
-        localStorage.setItem('Settings:AutoLock', this.autoLock ? 'true' : 'false');
-        localStorage.setItem('Settings:ClearOnExit', this.clearOnExit ? 'true' : 'false');
+        this.settings.mode = this.selectedMode;
+        this.settings.walletMode = this.selectedWalletMode;
+        this.settings.language = this.selectedLanguage;
+        this.settings.currency = this.selectedCurrency;
+        this.settings.showInTaskbar = this.selectedShowInTaskbar;
+        this.settings.openOnLogin = this.selectedOpenOnLogin;
+        this.settings.autoLock = this.selectedAutoLock;
+        this.settings.clearOnExit = this.selectedClearOnExit;
+
+        console.log('selectedOpenOnLogin:', this.selectedOpenOnLogin);
+
+        this.electron.ipcRenderer.send('settings', { openAtLogin: this.settings.openOnLogin, showInTaskbar: this.settings.showInTaskbar });
     }
 }
