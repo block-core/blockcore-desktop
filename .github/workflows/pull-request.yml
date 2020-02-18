@@ -36,7 +36,7 @@ jobs:
       SOLUTION_PATH: 'src/City.Chain.sln'
       PROJECT_PATH: 'src/City.Chain/City.Chain.csproj'
       BUILD_CONFIGURATION: 'Release'
-      DAEMON: '1.0.21'
+      DAEMON: '1.0.22'
       ARCH: 'x64'
 
     steps:
