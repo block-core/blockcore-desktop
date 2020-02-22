@@ -1,7 +1,5 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconRegistry } from '@angular/material/icon';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -64,7 +62,6 @@ export class RootComponent implements OnInit, OnDestroy {
         private readonly authService: AuthenticationService,
         public appState: ApplicationStateService,
         public appModes: AppModes,
-        private iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
         private electronService: ElectronService,
         private router: Router,
         private log: Logger,
@@ -78,10 +75,6 @@ export class RootComponent implements OnInit, OnDestroy {
         private globalService: GlobalService,
         private readonly breakpointObserver: BreakpointObserver,
     ) {
-        iconRegistry.addSvgIcon('stratis-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/stratis/logo.svg'));
-        iconRegistry.addSvgIcon('city-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/city/logo.svg'));
-        iconRegistry.addSvgIcon('bitcoin-logo', sanitizer.bypassSecurityTrustResourceUrl('assets/bitcoin/logo.svg'));
-
         this.log.info('Expanded:', localStorage.getItem('Menu:Expanded'));
 
         this.loadFiller();
@@ -266,6 +259,8 @@ export class RootComponent implements OnInit, OnDestroy {
 
         this.coinIcon = coinUnit + '-logo';
         this.coinName = this.globalService.getCoinName();
+
+        console.log(this.coinIcon);
     }
 
     ngOnDestroy() {
