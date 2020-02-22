@@ -1,12 +1,6 @@
 <div class="login-container not-selectable">
     <div class="login-content">
 
-        <!-- <div>
-            <mat-icon svgIcon="city-logo" mat-list-icon></mat-icon> City Chain
-        </div> -->
-
-        <!-- <div class="login-header"></div> -->
-
         <div class="login-accounts" *ngIf="hasWallet">
             <mat-form-field>
                 <mat-select placeholder="Select account" [(ngModel)]="selectedAccount">
@@ -59,7 +53,6 @@
             <img src="assets/{{appState.chain}}/logo-full-light.png" class="login-logo">
             <br>
             <br>
-            <!-- <h3 class="mat-h3">Log in to access your account</h3> -->
             <p class="login-banner-text">Release {{appState.release}}<br>
                 Network: {{appState.network}}<br>
                 Mode: {{appState.mode}}<br>

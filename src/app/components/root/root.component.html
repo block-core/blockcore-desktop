@@ -27,41 +27,20 @@
     <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [(mode)]="menuMode">
         <app-view-area>
             <mat-list class="main-menu">
-                <!-- <h3 mat-subheader>Folders</h3> -->
 
-                <!-- <mat-list-item class="main-menu-first" [matMenuTriggerFor]="coinMenu"></mat-list-item> -->
-                <mat-list-item class="main-menu-first">
-                    <mat-icon [svgIcon]="coinIcon" mat-list-icon></mat-icon>
-                    <h4 *ngIf="showFiller" mat-line>{{coinName}}</h4>
-                </mat-list-item>
-
-                <!-- Menu hidden until support for multiple blockchains is released. -->
-                <!-- <mat-menu #coinMenu="matMenu" [overlapTrigger]="false">
-          <button mat-menu-item disabled>
-            <mat-icon svgIcon="city-logo"></mat-icon>
-            <span>City Chain</span>
-          </button>
-          <button mat-menu-item disabled>
-            <mat-icon svgIcon="stratis-logo"></mat-icon>
-            <span>Stratis (Coming soon)</span>
-          </button>
-          <button mat-menu-item disabled>
-            <mat-icon svgIcon="bitcoin-logo"></mat-icon>
-            <span>Bitcoin (Coming soon)</span>
-          </button>
-        </mat-menu> -->
+                <div class="menu-top">
+                    <img src="assets/{{appState.chain}}/logo.png" class="menu-top-logo">
+                    <span *ngIf="showFiller" class="menu-top-text" mat-line>{{coinName}}</span>
+                </div>
 
                 <mat-list-item *ngIf="appModes.enabled('dashboard')" routerLinkActive="main-menu-active" routerLink="/dashboard">
                     <mat-icon mat-list-icon>dashboard</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Dashboard</h4>
-                    <!-- <p *ngIf="showFiller" mat-line> Yesterday </p> -->
                 </mat-list-item>
-                <!-- <mat-divider></mat-divider>
-      <h3 mat-subheader>Notes</h3> -->
+
                 <mat-list-item *ngIf="appModes.enabled('wallet')" routerLinkActive="main-menu-active" routerLink="/wallet">
                     <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Wallet</h4>
-                    <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
                 </mat-list-item>
 
                 <mat-list-item *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
@@ -77,7 +56,6 @@
                 <mat-list-item *ngIf="appModes.enabled('settings')" routerLinkActive="main-menu-active" routerLink="/settings">
                     <mat-icon mat-list-icon>settings</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Settings</h4>
-                    <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
                 </mat-list-item>
 
                 <mat-list-item *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/about">
@@ -93,7 +71,6 @@
                 <mat-list-item *ngIf="appModes.enabled('logout')" routerLinkActive="main-menu-active" routerLink="/logout">
                     <mat-icon mat-list-icon>power_settings_new</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Log out</h4>
-                    <!-- <p *ngIf="showFiller" mat-line> Latest </p> -->
                 </mat-list-item>
 
                 <div class="fill-remaining-vertical"></div>
