@@ -1,0 +1,30 @@
+<div class="content">
+
+    <mat-card class="example-card" *ngIf="identityService.identity$">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image-profile3"></div>
+            <mat-card-title>{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></mat-card-title>
+            <mat-card-subtitle>{{identity.title}}<br>Thumbprint: {{identity.id}}</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <img mat-card-image src="assets/profile1.jpg"> -->
+        <mat-card-content>
+            <p>
+                Files: 10<br>
+                Contacts: 67<br>
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" [routerLink]="['/identity', identity.id, 'edit']">EDIT</button>
+            <!-- <button *ngIf="!identity.published" mat-stroked-button color="primary">PUBLISH</button>
+            <button *ngIf="identity.published" mat-stroked-button color="primary">UNPUBLISH</button> -->
+            <!-- <button mat-raised-button color="warn">DELETE</button> -->
+        </mat-card-actions>
+    </mat-card>
+
+    <br>
+
+    <div class="network-details-footer">
+        <button routerLink="/identity" mat-raised-button>Go back</button>
+    </div>
+
+</div>

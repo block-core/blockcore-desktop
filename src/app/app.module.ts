@@ -37,6 +37,8 @@ import { ToolsModule } from './components/tools/tools.module';
 import { NotificationsModule } from './components/notifications/notifications.module';
 import { ReportModule } from './components/report/report.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HubService } from './services/hub.service';
+import { IdentityService } from './services/identity.service';
 
 @NgModule({
     declarations: [
@@ -76,6 +78,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         HttpErrorHandler,
         httpInterceptorProviders,
         ApiService,
+        HubService,
+        IdentityService,
         ChainService,
         ElectronService,
         GlobalService,

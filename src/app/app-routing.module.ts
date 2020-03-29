@@ -16,6 +16,10 @@ import { PaperWalletComponent } from './components/paperwallet/paperwallet.compo
 import { ToolsComponent } from './components/tools/tools.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { NetworkDetailsComponent } from './components/network/network-details.component';
+import { IdentityComponent } from './components/identity/identity.component';
+import { IdentityDetailsComponent } from './components/identity/identity-details.component';
+import { HubDetailsComponent } from './components/settings/hub-details.component';
+import { IdentityEditComponent } from './components/identity/identity-edit.component';
 
 const routes: Routes = [
     {
@@ -62,6 +66,32 @@ const routes: Routes = [
         }
     },
     {
+        path: 'identity',
+        component: IdentityComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity'
+        },
+    },
+    {
+        path: 'identity/:id',
+        component: IdentityDetailsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Details'
+        },
+    },
+    {
+        path: 'identity/:id/edit',
+        component: IdentityEditComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Edit'
+        },
+    },
+    {
         path: 'merchants',
         component: MerchantsComponent,
         canActivate: [AuthenticatedUserGuard],
@@ -75,6 +105,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Settings'
+        },
+    },
+    {
+        path: 'hubs',
+        component: HubDetailsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Manage Hubs'
         },
     },
     {

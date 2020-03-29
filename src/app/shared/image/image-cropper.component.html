@@ -1,0 +1,45 @@
+
+<mat-form-field appearance="outline" [formGroup]="formDoc">
+    <mat-label>Click to choose new profile image</mat-label>
+    <ngx-mat-file-input formControlName="basicfile" placeholder="Basic outline placeholder" ></ngx-mat-file-input>
+    <mat-icon matSuffix>image</mat-icon>
+  </mat-form-field>
+
+<input type="file" (change)="fileChangeEvent($event)" />
+<br /><br>
+<!-- <br />
+<input [(ngModel)]="imageURL" placeholder="URL to load image" type="text" />
+<br />
+<br /> -->
+
+<button mat-icon-button (click)="rotateLeft()">
+    <mat-icon>rotate_left</mat-icon>
+</button>
+<button mat-icon-button (click)="rotateRight()">
+    <mat-icon>rotate_right</mat-icon>
+</button><br><br>
+
+<button mat-icon-button (click)="flipHorizontal()">
+    <mat-icon>flip</mat-icon> (Horizontal)
+</button>
+<button mat-icon-button (click)="flipVertical()">
+    <mat-icon>flip</mat-icon> (Vertical)
+</button><br><br>
+
+<!-- <button (click)="rotateLeft()">Rotate left</button>
+<button (click)="rotateRight()">Rotate right</button> -->
+<button (click)="flipHorizontal()">Flip horizontal</button>
+<button (click)="flipVertical()">Flip vertical</button>
+<br />
+<br />
+<button (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio?'Fill Aspect Ratio':'Contain Within Aspect Ratio'}}</button>
+<button (click)="resetImage()">Reset image</button>
+<!-- <br />
+<br />
+<input [(ngModel)]="rotation" placeholder="Rotation" type="number" (keyup)="updateRotation()" /> <button (click)="zoomOut()">Zoom -</button> <button (click)="zoomIn()">Zoom +</button>
+<br /> -->
+
+<div>
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [imageURL]="imageURL" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [resizeToWidth]="160" [cropperMinWidth]="160" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
+</div>
+<img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />

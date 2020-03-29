@@ -28,6 +28,38 @@ export class SettingsService {
         localStorage.setItem('Settings:WalletMode', value);
     }
 
+    get hubs(): any {
+        return JSON.parse(localStorage.getItem('Settings:Hubs'));
+    }
+
+    set hubs(value: any) {
+        localStorage.setItem('Settings:Hubs', JSON.stringify(value));
+    }
+
+    get hub(): string {
+        return localStorage.getItem('Settings:Hub');
+    }
+
+    set hub(value: string) {
+        localStorage.setItem('Settings:Hub', value);
+    }
+
+    get identities(): any {
+        return JSON.parse(localStorage.getItem('Settings:Identities'));
+    }
+
+    set identities(value: any) {
+        localStorage.setItem('Settings:Identities', JSON.stringify(value));
+    }
+
+    get identity(): string {
+        return localStorage.getItem('Settings:Identity');
+    }
+
+    set identity(value: string) {
+        localStorage.setItem('Settings:Identity', value);
+    }
+
     get language(): string {
         return localStorage.getItem('Settings:Language');
     }
