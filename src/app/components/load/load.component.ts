@@ -98,6 +98,16 @@ export class LoadComponent implements OnDestroy {
     initialize() {
         this.apiService.initialize();
 
+        // TODO: Should send the correct network, hard-coded to city main for now.
+        // Do this always now, we need this information in the UI for identity handling.
+        const network = coininfo('city').toBitcoinJS();
+        this.appState.networkDefinition = network;
+
+        this.appState.networkParams = {
+            private: network.wif,
+            public: network.pubKeyHash
+        };
+
         if (this.appState.mode === 'full' || this.appState.mode === 'local' || this.appState.mode === 'light') {
             this.loading = true;
             this.appState.connected = false;
@@ -108,13 +118,13 @@ export class LoadComponent implements OnDestroy {
             this.fullNodeConnect();
         } else if (this.appState.mode === 'simple') {
             // TODO: Should send the correct network, hard-coded to city main for now.
-            const network = coininfo('city').toBitcoinJS();
-            this.appState.networkDefinition = network;
+            // const network = coininfo('city').toBitcoinJS();
+            // this.appState.networkDefinition = network;
 
-            this.appState.networkParams = {
-                private: network.wif,
-                public: network.pubKeyHash
-            };
+            // this.appState.networkParams = {
+            //     private: network.wif,
+            //     public: network.pubKeyHash
+            // };
 
             this.loading = false;
             this.appState.connected = true;
