@@ -23,6 +23,9 @@ import { HubDetailsComponent } from './hub-details.component';
         SettingsComponent,
         HubDetailsComponent
     ],
+    entryComponents: [
+        HubAddComponent
+    ],
 })
 export class SettingsModule {
 }

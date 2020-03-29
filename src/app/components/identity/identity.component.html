@@ -5,14 +5,21 @@
     </button>
 
     <mat-list>
-        <h3 mat-subheader>Identities</h3>
+        <h3 mat-subheader>Your identities</h3>
 
         <mat-list-item *ngFor="let identity of identityService.identities$ | async">
-            <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
+            <!-- <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
+            <div class="mat-list-item"><img mat-card-avatar class="" [src]="profileImageService.getImage(identity.id)" /></div> -->
+
+            <img mat-list-avatar [src]="profileImageService.getImage(identity.id)">
+
             <h4 mat-line><a [routerLink]="['/identity', identity.id]">{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></a></h4>
             <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
             <p mat-line class="mat-card-subtitle">
                 <span *ngIf="!identity.locked">{{identity.id}} | {{identity.title}}</span><span *ngIf="identity.locked">Locked</span>
+            </p>
+            <p mat-line class="mat-card-subtitle">
+               Updated: 2020-01-01 10:00
             </p>
 
             <p><button mat-icon-button [matMenuTriggerFor]="menu">
@@ -189,7 +196,7 @@
                 <p>Unpublish will make your identity unavailable for future searches and lookup, but your previously published information can be saved and cached by third parties.</p>
             </mat-card-content>
         </mat-card>
-        
+
         <!-- <mat-divider></mat-divider>
         <h3 mat-subheader>Inbound nodes</h3>
         <mat-list-item *ngFor="let peer of status.inboundPeers">

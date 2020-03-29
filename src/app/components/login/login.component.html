@@ -19,8 +19,8 @@
                     <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
                 </mat-form-field>
                 <br>
+                <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>&nbsp;
                 <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
-                <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>
                 <br>
                 <!-- <mat-progress-bar *ngIf="unlocking && appState.isSimpleMode" mode="determinate" [value]="unlockPercentage"></mat-progress-bar>
                 <mat-spinner *ngIf="unlocking && appState.isSimpleMode"></mat-spinner> -->

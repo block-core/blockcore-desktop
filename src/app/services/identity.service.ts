@@ -120,46 +120,58 @@ export class IdentityService {
     private initialize(): Identity[] {
         return [{
             name: 'Sondre Bjellås',
+            shortname: 'Sondre Bjellås',
             alias: 'sondreb',
             title: 'Public',
             id: '32076c9f',
             published: true,
-            locked: false
+            locked: false,
+            time: new Date()
         }, {
             name: 'SondreB',
+            shortname: 'SondreB',
             alias: 'sondre',
             title: 'Personal, Gaming',
             id: '4a076c9f',
             published: true,
-            locked: false
+            locked: false,
+            time: new Date()
         }, {
             name: 'Sondre Bjellås',
+            shortname: 'Sondre Bjellås',
             alias: 'citychainfoundation',
             title: 'CTO, City Chain Foundation',
             id: '22076c9f',
             published: true,
-            locked: false
+            locked: false,
+            time: new Date()
         }, {
             name: 'New Identity',
+            shortname: 'New Identity',
             alias: null,
             title: 'Random',
             id: '76076c9f',
             published: false,
-            locked: false
+            locked: false,
+            time: new Date()
         }, {
             name: 'Locked',
+            shortname: 'Locked',
             alias: null,
             title: '?',
             id: '86076c9f',
             published: true,
-            locked: true
+            locked: true,
+            time: new Date()
         }, {
             name: 'Locked',
+            shortname: 'Locked',
             alias: null,
             title: '?',
             id: '96076c9f',
             published: false,
-            locked: true
+            locked: true,
+            time: new Date()
         }];
     }
 }

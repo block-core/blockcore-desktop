@@ -3,6 +3,7 @@ import { ApplicationStateService } from '../../services/application-state.servic
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Identity } from '@models/identity';
 import { IdentityService } from 'src/app/services/identity.service';
+import { ProfileImageService } from 'src/app/services/profile-image.service';
 
 @Component({
     selector: 'app-identity-details',
@@ -13,13 +14,15 @@ import { IdentityService } from 'src/app/services/identity.service';
 export class IdentityDetailsComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity') hostClass = true;
 
-    public identity: Identity;
+    identity: Identity;
+    image: any;
 
     private subscription: any;
 
     constructor(
         private appState: ApplicationStateService,
         public identityService: IdentityService,
+        private profileImageService: ProfileImageService,
         private route: ActivatedRoute,
         public router: Router) {
         this.appState.pageMode = false;
@@ -31,6 +34,8 @@ export class IdentityDetailsComponent implements OnDestroy, OnInit {
 
         console.log('ID:', id);
         this.identity = this.identityService.get(id);
+
+        this.image = this.profileImageService.getImage(this.identity.id);
 
         // this.subscription = this.identityService.identity$.subscribe(identity => this.identity = identity);
 

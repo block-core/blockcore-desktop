@@ -7,6 +7,10 @@ import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { Link } from '@models/link';
+import { LinkAddComponent } from './link-add.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ProfileImageService } from 'src/app/services/profile-image.service';
 
 @Component({
     selector: 'app-identity-edit',
@@ -17,25 +21,47 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 export class IdentityEditComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity') hostClass = true;
 
-    public identity: Identity;
-    public sendForm: FormGroup;
-    public apiError: string;
+    identity: Identity;
+    originalIdentity: Identity;
+    form: FormGroup;
+    apiError: string;
+    image: any;
+    publishWarning = false;
+
     private subscription: any;
-    public image: any;
 
     // tslint:disable-next-line:member-ordering
     formErrors = {
+        name: '',
+        shortname: '',
+        alias: '',
+        title: '',
+        email: '',
         address: '',
         amount: '',
         fee: '',
-        password: ''
+        password: '',
+        restorekey: ''
     };
 
     // tslint:disable-next-line:member-ordering
     validationMessages = {
+        name: {
+            required: 'A name is required.',
+            minlength: 'A name is at least 1 characters long.',
+            maxlength: 'A name is at maximum 250 characters long.'
+        },
+        shortname: {
+            required: 'A short name is required.',
+            minlength: 'A short name is at least 1 characters long.',
+            maxlength: 'A short name is at maximum 30 characters long.'
+        },
         address: {
             required: 'An address is required.',
             minlength: 'An address is at least 26 characters long.'
+        },
+        email: {
+            email: 'Invalid e-mail address.'
         },
         amount: {
             required: 'An amount is required.',
@@ -48,34 +74,132 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         },
         password: {
             required: 'Your password is required.'
+        },
+        restorekey: {
+            pattern: 'The restore key must be valid public key.'
         }
     };
 
     constructor(
         private appState: ApplicationStateService,
         private identityService: IdentityService,
+        private profileImageService: ProfileImageService,
         private route: ActivatedRoute,
         private location: Location,
         private fb: FormBuilder,
+        public dialog: MatDialog,
         public router: Router) {
         this.appState.pageMode = false;
 
+    }
+
+    ngOnInit() {
+        const id = this.route.snapshot.paramMap.get('id');
+
+        console.log('ID:', id);
+
+        // Make sure we only edit a copy of the identity.
+        this.originalIdentity = this.identityService.get(id);
+
+        this.identity = this.jsonCopy(this.originalIdentity);
+
+        if (!this.identity.links) {
+            this.identity.links = [];
+        }
+
+        this.image = this.profileImageService.getImage(this.identity.id);
+
         this.buildSendForm();
 
+        // this.subscription = this.identityService.identity$.subscribe(identity => this.identity = identity);
+
+        // Change to this if user can navigate to different identity without going back to list!
+        // this.hero$ = this.route.paramMap.pipe(
+        //     switchMap((params: ParamMap) =>
+        //         this.service.getHero(params.get('id')))
+        // );
     }
 
     private buildSendForm(): void {
-        this.sendForm = this.fb.group({
-            name: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.minLength(250)])],
-            shortname: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.minLength(30)])],
-            address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-            amount: ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((2 - 3) / 100000000)(control)])],
-            fee: ['medium', Validators.required],
-            password: ['', Validators.required]
+        this.form = this.fb.group({
+            name: [this.identity.name, Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(250)])],
+            shortname: [this.identity.shortname, Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(30)])],
+            alias: [this.identity.alias],
+            title: [this.identity.title],
+            published: [this.identity.published],
+            email: [this.identity.email, Validators.compose([Validators.email])],
+            // amount: ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((2 - 3) / 100000000)(control)])],
+            restorekey: [this.identity.restorekey]
         });
 
-        this.sendForm.valueChanges.pipe(debounceTime(300))
+        this.form.valueChanges.pipe(debounceTime(300))
             .subscribe(data => this.onValueChanged(data));
+    }
+
+    get formName(): any { return this.form.get('name').value; }
+    get formShortName(): any { return this.form.get('shortname').value; }
+    get formAlias(): any { return this.form.get('alias').value; }
+    get formTitle(): any { return this.form.get('title').value; }
+    get formPublished(): any { return this.form.get('published').value; }
+
+    async addLink() {
+        const dialogRef = this.dialog.open(LinkAddComponent, {
+            width: '440px',
+            data: { url: '', type: '' }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed', result);
+
+            if (result) {
+                console.log('RESULT:', result);
+                this.identity.links.push(result);
+                // this.hubService.add(result).then(data => {
+                //     // Update the local list of hubs with the one persisted in settings.
+                //     this.hubs = this.settings.hubs;
+                //     this.cd.markForCheck();
+                // });
+            }
+        });
+    }
+
+    onChanged(event) {
+        if (this.originalIdentity.published && !this.formPublished) {
+            this.publishWarning = true;
+        } else {
+            this.publishWarning = false;
+
+        }
+    }
+
+    save() {
+        // Save the image.
+        // TODO: Make sure we check if image is actually changed, if not, then don't save it.
+        this.profileImageService.setImage(this.identity.id, this.image);
+
+        // tslint:disable-next-line:forin
+        for (const field in this.form.controls) {
+            // Copy all input fields onto our identity.
+            this.identity[field] = this.form.get(field).value;
+        }
+
+        console.log(this.identity);
+
+        this.identityService.add(this.identity);
+        this.router.navigateByUrl('/identity');
+    }
+
+    jsonCopy(src) {
+        return JSON.parse(JSON.stringify(src));
+    }
+
+    removeLink(link: Link) {
+        const index = this.identity.links.findIndex(l => l === link);
+        this.identity.links.splice(index, 1);
+        // console.log('Trying to remove:' + id);
+        // this.hubService.remove(id);
+        // this.hubs = this.settings.hubs;
+        // this.cd.markForCheck();
     }
 
     imageUpdated(event: ImageCroppedEvent) {
@@ -84,13 +208,12 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     }
 
     onValueChanged(data?: any) {
-        if (!this.sendForm) { return; }
-        const form = this.sendForm;
+        if (!this.form) { return; }
 
         // tslint:disable-next-line:forin
         for (const field in this.formErrors) {
             this.formErrors[field] = '';
-            const control = form.get(field);
+            const control = this.form.get(field);
             if (control && control.dirty && !control.valid) {
                 const messages = this.validationMessages[field];
 
@@ -108,7 +231,7 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         // }
     }
 
-    public send() {
+    send() {
         // this.isSending = true;
 
         // this.showInputField = false;
@@ -116,21 +239,6 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         // this.showSendingField = true;
 
         // this.buildTransaction();
-    }
-
-    ngOnInit() {
-        const id = this.route.snapshot.paramMap.get('id');
-
-        console.log('ID:', id);
-        this.identity = this.identityService.get(id);
-
-        // this.subscription = this.identityService.identity$.subscribe(identity => this.identity = identity);
-
-        // Change to this if user can navigate to different identity without going back to list!
-        // this.hero$ = this.route.paramMap.pipe(
-        //     switchMap((params: ParamMap) =>
-        //         this.service.getHero(params.get('id')))
-        // );
     }
 
     ngOnDestroy() {

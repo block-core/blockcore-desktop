@@ -17,8 +17,12 @@
 .example-header-image-profile3 {
   background-image: url("/assets/profile3.jpg");
   background-size: cover;
-
 }
+
+.example-header-image-profile4 {
+    background-image: url("/assets/identity-profile.png");
+    background-size: cover;
+  }
 
 .example-header-image-profile {
   //   background-image: url("/assets/profile.jpg");
@@ -50,6 +54,13 @@
       height: 80px !important;
   }
 
+  .mat-list-avatar {
+    min-width: 80px !important;
+    min-height: 80px !important;
+    width: 80px !important;
+    height: 80px !important;
+  }
+
   mat-card {
     margin-bottom: 20px;
   }
@@ -77,9 +88,11 @@
     //max-width: 400px;
   }
 
-
-
-
+  .add-link {
+    float: right;
+    margin-right: 0px;
+    margin-top: 0px;
+}
 
   .example-headers-align .mat-expansion-panel-header-title,
   .example-headers-align .mat-expansion-panel-header-description {

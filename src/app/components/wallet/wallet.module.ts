@@ -33,6 +33,9 @@ import { WalletUtxoCountDialogComponent } from './wallet-utxo-count-dialog';
     exports: [
         WalletComponent,
     ],
+    entryComponents: [
+        WalletUtxoCountDialogComponent
+    ],
 })
 export class WalletModule {
 }

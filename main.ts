@@ -34,6 +34,7 @@ if (os.arch() === 'arm') {
 const { autoUpdater } = require('electron-updater');
 const fs = require('fs');
 const log = require('electron-log');
+const readChunk = require('read-chunk');
 
 enum DaemonState {
     Unknown = 0,
@@ -168,12 +169,16 @@ ipcMain.on('reset-database', (event, arg: string) => {
         const folderBlocks = path.join(dataFolder, 'blocks');
         const folderChain = path.join(dataFolder, 'chain');
         const folderCoinView = path.join(dataFolder, 'coinview');
+        const folderCommon = path.join(dataFolder, 'common');
+        const folderProvenHeaders = path.join(dataFolder, 'provenheaders');
         const folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
 
         // After shutdown completes, we'll delete the database.
         deleteFolderRecursive(folderBlocks);
         deleteFolderRecursive(folderChain);
         deleteFolderRecursive(folderCoinView);
+        deleteFolderRecursive(folderCommon);
+        deleteFolderRecursive(folderProvenHeaders);
         deleteFolderRecursive(folderFinalizedBlock);
     });
 
@@ -187,6 +192,20 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
     shell.openItem(dataFolder);
 
     event.returnValue = 'OK';
+});
+
+ipcMain.on('get-wallet-seed', (event, arg: string) => {
+    // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
+    // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
+    // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
+    const dataBuffer = readChunk.sync(arg, 1, 300);
+    const data = dataBuffer.toString('utf8');
+    const startIndex = data.indexOf('"encryptedSeed"');
+    const endIndex = data.indexOf('",', startIndex);
+    const keyLength = '"encryptedSeed":"'.length;
+    const seed = data.substring(startIndex + keyLength, endIndex);
+
+    event.returnValue = seed;
 });
 
 autoUpdater.on('checking-for-update', () => {
@@ -393,9 +412,8 @@ function startDaemon(chain: Chain) {
     // If path is not specified and Win32, we'll append .exe
     if (!chain.path && os.platform() === 'win32') {
         daemonName += '.exe';
-    }
-    else if (chain.path) {
-        daemonName += ".dll"
+    } else if (chain.path) {
+        daemonName += '.dll';
     }
 
     const daemonPath = path.resolve(folderPath, daemonName);

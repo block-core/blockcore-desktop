@@ -3,49 +3,37 @@
     <ngx-mat-file-input (change)="fileChangeEvent($event)" formControlName="basicfile" placeholder="Profile image"></ngx-mat-file-input>
     <mat-icon matSuffix>image</mat-icon>
 </mat-form-field>
-
 <!-- <input type="file" (change)="fileChangeEvent($event)" />
 <br /><br> -->
 <!-- <br />
 <input [(ngModel)]="imageURL" placeholder="URL to load image" type="text" />
 <br />
 <br /> -->
+<span *ngIf="imageChangedEvent">
 
-<button mat-icon-button (click)="rotateLeft()">
-    <mat-icon>rotate_left</mat-icon>
-</button>
-<button mat-icon-button (click)="rotateRight()">
-    <mat-icon>rotate_right</mat-icon>
-</button>
-<button mat-icon-button (click)="flipHorizontal()">
-    <mat-icon>flip</mat-icon>
-</button>
-<button mat-icon-button (click)="flipVertical()">
-    <mat-icon class="rotate-90">flip</mat-icon>
-</button>
-<button mat-icon-button (click)="resetImage()">
-    <mat-icon>undo</mat-icon>
-</button><br>
+    <button mat-icon-button (click)="rotateLeft()">
+        <mat-icon>rotate_left</mat-icon>
+    </button>
+    <button mat-icon-button (click)="rotateRight()">
+        <mat-icon>rotate_right</mat-icon>
+    </button>
+    <button mat-icon-button (click)="flipHorizontal()">
+        <mat-icon>flip</mat-icon>
+    </button>
+    <button mat-icon-button (click)="flipVertical()">
+        <mat-icon class="rotate-90">flip</mat-icon>
+    </button>
+    <button mat-icon-button (click)="resetImage()">
+        <mat-icon>undo</mat-icon>
+    </button><br>
 
-<!-- <button (click)="rotateLeft()">Rotate left</button>
-<button (click)="rotateRight()">Rotate right</button> -->
-<!-- <button (click)="flipHorizontal()">Flip horizontal</button>
-<button (click)="flipVertical()">Flip vertical</button> -->
-<!-- <br />
-<br />
-<button (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio?'Fill Aspect Ratio':'Contain Within Aspect Ratio'}}</button>
-<button (click)="resetImage()">Reset image</button> -->
-<!-- <br />
-<br />
-<input [(ngModel)]="rotation" placeholder="Rotation" type="number" (keyup)="updateRotation()" /> <button (click)="zoomOut()">Zoom -</button> <button (click)="zoomIn()">Zoom +</button>
-<br /> -->
+    <div>
+        <image-cropper backgroundColor="black" [imageChangedEvent]="imageChangedEvent" [imageURL]="imageURL" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [resizeToWidth]="160" [cropperMinWidth]="160" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    </div>
 
-<div>
-    <image-cropper backgroundColor="black" [imageChangedEvent]="imageChangedEvent" [imageURL]="imageURL" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [resizeToWidth]="160" [cropperMinWidth]="160" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
-</div>
-
-<span *ngIf="showPreview">
-    <br>
-    Preview:<br>
-    <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+    <span *ngIf="showPreview">
+        <br>
+        Preview:<br>
+        <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+    </span>
 </span>

@@ -27,6 +27,10 @@ import { NetworkBanNodeComponent } from './network-ban-node.component';
         NetworkComponent,
         NetworkDetailsComponent,
     ],
+    entryComponents: [
+        NetworkAddNodeComponent,
+        NetworkBanNodeComponent
+    ],
 })
 export class NetworkModule {
 }

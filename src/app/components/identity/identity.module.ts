@@ -7,6 +7,7 @@ import { IdentityDetailsComponent } from './identity-details.component';
 import { IdentityEditComponent } from './identity-edit.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ImageModule } from 'src/app/shared/image/image.module';
+import { LinkAddComponent } from './link-add.component';
 
 @NgModule({
     imports: [
@@ -21,12 +22,16 @@ import { ImageModule } from 'src/app/shared/image/image.module';
         IdentityComponent,
         IdentityDetailsComponent,
         IdentityEditComponent,
+        LinkAddComponent
     ],
     exports: [
         IdentityComponent,
         IdentityDetailsComponent,
         IdentityEditComponent
     ],
+    entryComponents: [
+        LinkAddComponent
+    ]
 })
 export class IdentityModule {
 }

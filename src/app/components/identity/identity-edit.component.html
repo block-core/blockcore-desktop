@@ -1,37 +1,48 @@
 <div class="content">
 
     <mat-card class="example-card" *ngIf="identityService.identity$">
-        <form [formGroup]="sendForm">
+        <form [formGroup]="form">
             <mat-card-header>
                 <!-- <div mat-card-avatar class="example-header-image-profile3"></div> -->
-                <img mat-card-avatar class="example-header-image-profile3" [src]="image">
-                <mat-card-title>{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></mat-card-title>
-                <mat-card-subtitle>{{identity.title}}<br>Thumbprint: {{identity.id}}<br>Updated: 2020-01-01 10:00</mat-card-subtitle>
+                <img mat-card-avatar class="example-header-image-profile5" [src]="image">
+                <mat-card-title>{{formName}} <span *ngIf="formAlias">(@{{formAlias}})</span></mat-card-title>
+                <mat-card-subtitle>{{formTitle}}<br>Thumbprint: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
             </mat-card-header>
             <!-- <img mat-card-image src="assets/profile1.jpg"> -->
             <mat-card-content>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Name</mat-label>
-                    <input matInput id="nameField" formControlName="name" name="name" placeholder="Name of your identity.">
+                    <input matInput id="nameInput" formControlName="name" name="name" placeholder="Name of your identity.">
                     <mat-icon matSuffix>face</mat-icon>
                     <mat-error *ngIf="formErrors.name">
                         {{ formErrors.name }}
+                    </mat-error>
+                </mat-form-field>
+
+                <br>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Short Name</mat-label>
+                    <input matInput id="shortnameInput" maxlength="30" formControlName="shortname" name="shortname" placeholder="Short version of your full name">
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error *ngIf="formErrors.shortname">
+                        {{ formErrors.shortname }}
                     </mat-error>
                 </mat-form-field>
                 
                 <br>
 
                 <app-image-cropper (imageUpdated)="imageUpdated($event)" [showPreview]="false"></app-image-cropper>
-
+        
                 <br>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Alias (nickname)</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Alias of your identity">
+                    <input matInput id="aliasInput" formControlName="alias" name="alias" placeholder="Alias of your identity">
                     <mat-icon matSuffix>font_download</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
+                    <mat-error *ngIf="formErrors.alias">
+                        {{ formErrors.alias }}
                     </mat-error>
                 </mat-form-field>
 
@@ -39,10 +50,10 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Title</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Title of your identity.">
+                    <input matInput id="titleInput" formControlName="title" name="title" placeholder="Title of your identity.">
                     <mat-icon matSuffix>book</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
+                    <mat-error *ngIf="formErrors.title">
+                        {{ formErrors.title }}
                     </mat-error>
                 </mat-form-field>
 
@@ -50,61 +61,65 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>E-mail</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Your public e-mail address.">
+                    <input matInput id="emailInput" formControlName="email" name="email" placeholder="Your public e-mail address.">
                     <mat-icon matSuffix>mail</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
+                    <mat-error *ngIf="formErrors.email">
+                        {{ formErrors.email }}
                     </mat-error>
                 </mat-form-field>
 
                 <br>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>URL</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Your public URL.">
-                    <mat-icon matSuffix>link</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
-                    </mat-error>
-                </mat-form-field>
+                <button mat-mini-fab class="add-link" (click)="addLink()">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <br>
+
+                <mat-list>
+                    <h3 mat-subheader>Links</h3>
+            
+                    <mat-list-item *ngFor="let link of identity.links">
+                        <mat-icon mat-list-icon>link</mat-icon>
+                        <h4 mat-line>{{link.url}}</h4>
+                        <p mat-line>Type: {{link.type}}</p>
+                        <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="removeLink(link)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Remove link</span>
+                                </button>
+                            </mat-menu>
+                        </p>
+                    </mat-list-item>
+                </mat-list>
 
                 <br>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Image</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Your identity image.">
-                    <mat-icon matSuffix>wallpaper</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
-                    </mat-error>
-                </mat-form-field>
-
-                <br>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Account Restore Public Key</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Your identity image.">
+                    <mat-label>Identity Recovery Public Key</mat-label>
+                    <input matInput id="restoreKeyInput" formControlName="restorekey" name="restorekey" placeholder="Your identity restore public key.">
                     <mat-icon matSuffix>security</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
+                    <mat-error *ngIf="formErrors.restorekey">
+                        {{ formErrors.restorekey }}
                     </mat-error>
                 </mat-form-field>
 
                 <br>
 
-
-
-                <br>
+                <mat-checkbox (change)="onChanged($event)" formControlName="published" name="published">Publish Profile</mat-checkbox>
+                <br> <br>
+                <mat-card class="mat-elevation-z8" *ngIf="publishWarning">This profile was previously published. When you save it, it will be unpublished and only locally available.</mat-card>
 
             </mat-card-content>
             <mat-card-actions>
-                <button mat-raised-button color="primary" routerLink="/identity">SAVE</button>
+                <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="save()">SAVE</button>
                 <button mat-stroked-button (click)="back()">CANCEL</button>
                 <button mat-raised-button color="warn">DELETE</button>
 
-
                 <!-- <button mat-stroked-button [disabled]="isSending" (click)="cancel()">Cancel</button>&nbsp;
-                <button mat-raised-button color="primary" [disabled]="!sendForm.valid || isSending || !estimatedFee" (click)="send()">Send</button>
+                <button mat-raised-button color="primary" [disabled]="!form.valid || isSending || !estimatedFee" (click)="send()">Send</button>
              -->
 
 
