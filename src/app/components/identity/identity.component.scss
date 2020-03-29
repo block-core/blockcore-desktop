@@ -17,6 +17,7 @@
 .example-header-image-profile3 {
   background-image: url("/assets/profile3.jpg");
   background-size: cover;
+
 }
 
 .example-header-image-profile {
@@ -40,6 +41,13 @@
 
   .mat-card {
     margin-bottom: 20px;
+  }
+
+  .mat-card-avatar {
+      min-width: 80px !important;
+      min-height: 80px !important;
+      width: 80px !important;
+      height: 80px !important;
   }
 
   mat-card {

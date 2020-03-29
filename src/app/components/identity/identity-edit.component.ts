@@ -6,6 +6,7 @@ import { IdentityService } from 'src/app/services/identity.service';
 import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
     selector: 'app-identity-edit',
@@ -20,6 +21,7 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     public sendForm: FormGroup;
     public apiError: string;
     private subscription: any;
+    public image: any;
 
     // tslint:disable-next-line:member-ordering
     formErrors = {
@@ -57,7 +59,9 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         private fb: FormBuilder,
         public router: Router) {
         this.appState.pageMode = false;
+
         this.buildSendForm();
+
     }
 
     private buildSendForm(): void {
@@ -72,6 +76,11 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
 
         this.sendForm.valueChanges.pipe(debounceTime(300))
             .subscribe(data => this.onValueChanged(data));
+    }
+
+    imageUpdated(event: ImageCroppedEvent) {
+        this.image = event.base64;
+        console.log(event);
     }
 
     onValueChanged(data?: any) {

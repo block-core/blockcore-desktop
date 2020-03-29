@@ -15,9 +15,6 @@ import { ClipboardModule } from 'ngx-clipboard';
     declarations: [
         ReportComponent,
     ],
-    // entryComponents: [
-    //     ReportComponent
-    // ],
     exports: [
         ReportComponent,
     ],

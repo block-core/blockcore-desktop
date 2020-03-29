@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Dimensions, ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -19,6 +19,9 @@ export class ImageCropperComponent {
     imageURL: string;
     formDoc: FormGroup;
 
+    @Input() showPreview = true;
+    @Output() imageUpdated = new EventEmitter<ImageCroppedEvent>();
+
     constructor(private fb: FormBuilder) {
         this.formDoc = this.fb.group({
             basicfile: []
@@ -27,11 +30,14 @@ export class ImageCropperComponent {
 
     fileChangeEvent(event: any): void {
         this.imageChangedEvent = event;
+        console.log(event);
     }
 
     imageCropped(event: ImageCroppedEvent) {
         this.croppedImage = event.base64;
         console.log(event);
+
+        this.imageUpdated.emit(event);
     }
 
     imageLoaded() {

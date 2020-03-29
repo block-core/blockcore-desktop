@@ -19,9 +19,6 @@ import { HubDetailsComponent } from './hub-details.component';
         HubDetailsComponent,
         HubAddComponent
     ],
-    // entryComponents: [
-    //     HubAddComponent
-    // ],
     exports: [
         SettingsComponent,
         HubDetailsComponent

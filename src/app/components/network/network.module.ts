@@ -23,10 +23,6 @@ import { NetworkBanNodeComponent } from './network-ban-node.component';
         NetworkAddNodeComponent,
         NetworkBanNodeComponent,
     ],
-    // entryComponents: [
-    //     NetworkAddNodeComponent,
-    //     NetworkBanNodeComponent
-    // ],
     exports: [
         NetworkComponent,
         NetworkDetailsComponent,

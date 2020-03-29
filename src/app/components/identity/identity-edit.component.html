@@ -3,21 +3,26 @@
     <mat-card class="example-card" *ngIf="identityService.identity$">
         <form [formGroup]="sendForm">
             <mat-card-header>
-                <div mat-card-avatar class="example-header-image-profile3"></div>
+                <!-- <div mat-card-avatar class="example-header-image-profile3"></div> -->
+                <img mat-card-avatar class="example-header-image-profile3" [src]="image">
                 <mat-card-title>{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></mat-card-title>
-                <mat-card-subtitle>{{identity.title}}<br>Thumbprint: {{identity.id}}</mat-card-subtitle>
+                <mat-card-subtitle>{{identity.title}}<br>Thumbprint: {{identity.id}}<br>Updated: 2020-01-01 10:00</mat-card-subtitle>
             </mat-card-header>
             <!-- <img mat-card-image src="assets/profile1.jpg"> -->
             <mat-card-content>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Name</mat-label>
-                    <input matInput id="destinationAddress" formControlName="address" name="address" placeholder="Name of your identity.">
+                    <input matInput id="nameField" formControlName="name" name="name" placeholder="Name of your identity.">
                     <mat-icon matSuffix>face</mat-icon>
-                    <mat-error *ngIf="formErrors.address">
-                        {{ formErrors.address }}
+                    <mat-error *ngIf="formErrors.name">
+                        {{ formErrors.name }}
                     </mat-error>
                 </mat-form-field>
+                
+                <br>
+
+                <app-image-cropper (imageUpdated)="imageUpdated($event)" [showPreview]="false"></app-image-cropper>
 
                 <br>
 
@@ -29,29 +34,6 @@
                         {{ formErrors.address }}
                     </mat-error>
                 </mat-form-field>
-
-                <br>
-
-                <app-image-cropper></app-image-cropper>
-
-                <!-- <mat-accordion class="example-headers-align">
-
-                    <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                IMAGE
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Click to change your identity profile image
-                                <mat-icon>map</mat-icon>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <div>
-                            <app-image-cropper></app-image-cropper>
-                        </div>
-                    </mat-expansion-panel>
-
-                </mat-accordion> -->
 
                 <br>
 
