@@ -13,6 +13,7 @@ import { ElectronService } from 'ngx-electron';
 import { StorageService } from 'src/app/services/storage.service';
 import * as bip38 from 'city-bip38';
 import { Logger } from 'src/app/services/logger.service';
+import { IdentityService } from 'src/app/services/identity.service';
 
 export interface Account {
     name: string;
@@ -43,8 +44,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private readonly cd: ChangeDetectorRef,
         private authService: AuthenticationService,
+        private walletService: WalletService,
         private router: Router,
         private globalService: GlobalService,
+        private identityService: IdentityService,
         private wallet: WalletService,
         private electronService: ElectronService,
         private log: Logger,
@@ -284,6 +287,12 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.wallet.start();
 
                     localStorage.setItem('Network:Wallet', this.wallet.walletName);
+
+                    // Get the physical path to the wallet file.
+                    const fullPath = this.globalService.getWalletFullPath();
+
+                    // Unlock the encrypted seed found in the wallet file, needed for identity service.
+                    this.identityService.unlock(fullPath, walletLoad.password);
 
                     this.router.navigateByUrl('/dashboard');
                     // }

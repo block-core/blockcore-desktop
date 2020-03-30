@@ -198,14 +198,21 @@ ipcMain.on('get-wallet-seed', (event, arg: string) => {
     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
     // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
     // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
-    const dataBuffer = readChunk.sync(arg, 1, 300);
+    const dataBuffer = readChunk.sync(arg, 1, 500);
     const data = dataBuffer.toString('utf8');
-    const startIndex = data.indexOf('"encryptedSeed"');
-    const endIndex = data.indexOf('",', startIndex);
-    const keyLength = '"encryptedSeed":"'.length;
-    const seed = data.substring(startIndex + keyLength, endIndex);
 
-    event.returnValue = seed;
+    const key = '"encryptedSeed":"';
+    const startIndex = data.indexOf(key);
+    const endIndex = data.indexOf('",', startIndex);
+    const seed = data.substring(startIndex + key.length, endIndex);
+
+    const keyChainCode = '"chainCode":"';
+    const startIndexChainCode = data.indexOf(keyChainCode);
+    const endIndexChainCode = data.indexOf('",', startIndexChainCode);
+    const chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
+
+    // chainCodeDecoded: Buffer.from(chainCode, 'base64')
+    event.returnValue = { encryptedSeed: seed, chainCode };
 });
 
 autoUpdater.on('checking-for-update', () => {

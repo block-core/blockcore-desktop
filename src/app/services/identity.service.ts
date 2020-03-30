@@ -3,6 +3,16 @@ import { SettingsService } from './settings.service';
 import { Identity } from '@models/identity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ElectronService } from 'ngx-electron';
+import { ApplicationStateService } from './application-state.service';
+
+import * as bip39 from 'bip39';
+import * as bip32 from 'bip32';
+import * as bip38 from 'city-bip38';
+import * as city from 'city-lib';
+import { HDNode } from 'city-lib';
+import * as wif from 'wif';
+import * as coininfo from 'city-coininfo';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +22,18 @@ export class IdentityService {
     private readonly identitiesSubject = new BehaviorSubject<Identity[]>(this.loadIdentities());
     private readonly identitySubject = new BehaviorSubject<Identity>(this.loadIdentity());
 
-    constructor(public settings: SettingsService) {
+    private identityRoot: HDNode;
+    private identityExtPubKey: HDNode;
+    private identityNetwork = {
+        pubKeyHash: 55,
+        scriptHash: 117
+    };
+
+    constructor(
+        private appState: ApplicationStateService,
+        public settings: SettingsService,
+        private electronService: ElectronService,
+    ) {
         console.log('IdentityService CONSTRUCTOR! CALLED ONLY ONCE?!');
     }
 
@@ -30,6 +51,56 @@ export class IdentityService {
 
     set identities(val: Identity[]) {
         this.identitiesSubject.next(val);
+    }
+
+    // getAddress(node: any, network?: any): string {
+    //     return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network }).address!;
+    // }
+
+    toBuffer(ab) {
+        const buf = Buffer.alloc(ab.byteLength);
+        const view = new Uint8Array(ab);
+        for (let i = 0; i < buf.length; ++i) {
+            buf[i] = view[i];
+        }
+        return buf;
+    }
+
+    unlock(path: string, password: string) {
+
+        // Read the seed from the file on disk.
+        const seed: { encryptedSeed: string, chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
+
+        // Descrypt the seed with the password provided on unlock (login).
+        bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
+            // tslint:disable-next-line: no-debugger
+            // debugger;
+
+            const chainCode = Buffer.from(seed.chainCode, 'base64');
+
+            // Dispose of this object, we don't want to keep the root extkey after initial login.
+            const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
+
+            // tslint:disable-next-line: quotemark
+            const identityRoot: HDNode = masterNode.derivePath("m/302'");
+
+            // Persist the identity node that we need to generate identities and keys for them.
+            this.identityRoot = identityRoot;
+
+            this.identityExtPubKey = identityRoot.neutered();
+
+        }, null, this.appState.networkParams);
+    }
+
+    getIdentity(index: number) {
+        // tslint:disable-next-line: quotemark
+        return this.identityRoot.deriveHardened(index); // .derivePath("/" + index + "'");
+    }
+
+    getKey(index: number) {
+        // tslint:disable-next-line: quotemark
+        return this.identityRoot.deriveHardened(index);
+        // return this.identityRoot.derivePath("/" + index + "'");
     }
 
     add(identity: Identity) {
@@ -117,13 +188,24 @@ export class IdentityService {
             });
     }
 
+    getAddress(node: any, network?: any): string {
+        return city.payments.p2pkh({ pubkey: node.publicKey, network }).address;
+    }
+
+    getId(index: number) {
+        const identity = this.getIdentity(index);
+        const address = this.getAddress(identity, this.identityNetwork);
+        return address;
+    }
+
     private initialize(): Identity[] {
         return [{
             name: 'Sondre Bjellås',
             shortname: 'Sondre Bjellås',
             alias: 'sondreb',
             title: 'Public',
-            id: '32076c9f',
+            index: 0,
+            id: 'PJZZYTPq2Uf6LJRkdgTVZ4xgRBi3vZmpdf',
             published: true,
             locked: false,
             time: new Date()
@@ -132,7 +214,8 @@ export class IdentityService {
             shortname: 'SondreB',
             alias: 'sondre',
             title: 'Personal, Gaming',
-            id: '4a076c9f',
+            index: 1,
+            id: 'PHnT3Fx1EN5uMBbYBivjDdkke3n2pb5svd',
             published: true,
             locked: false,
             time: new Date()
@@ -141,7 +224,8 @@ export class IdentityService {
             shortname: 'Sondre Bjellås',
             alias: 'citychainfoundation',
             title: 'CTO, City Chain Foundation',
-            id: '22076c9f',
+            index: 2,
+            id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
             published: true,
             locked: false,
             time: new Date()
@@ -150,7 +234,8 @@ export class IdentityService {
             shortname: 'New Identity',
             alias: null,
             title: 'Random',
-            id: '76076c9f',
+            index: 3,
+            id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
             published: false,
             locked: false,
             time: new Date()
@@ -159,7 +244,8 @@ export class IdentityService {
             shortname: 'Locked',
             alias: null,
             title: '?',
-            id: '86076c9f',
+            index: 4,
+            id: 'PMzHABeaLVHP7kLDYFeHkE1CZaeS8wXvxv',
             published: true,
             locked: true,
             time: new Date()
@@ -168,7 +254,8 @@ export class IdentityService {
             shortname: 'Locked',
             alias: null,
             title: '?',
-            id: '96076c9f',
+            index: 5,
+            id: 'PFfMFoJWHmHuQWfxoAmjgq7cqVxC9xTXfr',
             published: false,
             locked: true,
             time: new Date()
