@@ -94,21 +94,26 @@ export class IdentityService {
 
     getIdentity(index: number) {
         // tslint:disable-next-line: quotemark
-        return this.identityRoot.deriveHardened(index); // .derivePath("/" + index + "'");
+        return this.identityRoot.deriveHardened(index);
     }
 
     getKey(index: number) {
         // tslint:disable-next-line: quotemark
         return this.identityRoot.deriveHardened(index);
-        // return this.identityRoot.derivePath("/" + index + "'");
     }
 
     add(identity: Identity) {
-        // Ensure we create a new array and don't modify existing.
-        this.identities = [
-            ...this.identities,
-            identity
-        ];
+        const index = this.identities.findIndex(t => t.id === identity.id);
+
+        if (index === -1) {
+            // Ensure we create a new array and don't modify existing.
+            this.identities = [
+                ...this.identities,
+                identity
+            ];
+        } else {
+            this.identities[index] = identity;
+        }
 
         // try {
         //     const todo = await this.todosService
@@ -126,6 +131,8 @@ export class IdentityService {
         //     console.error(e);
         //     this.removeTodo(tmpId, false);
         // }
+
+        this.saveIdentities();
     }
 
     remove(id: string) {
@@ -141,6 +148,7 @@ export class IdentityService {
             this.identities = [...this.identities, identity];
         }
 
+        this.saveIdentities();
     }
 
     get(id: string) {
@@ -151,7 +159,7 @@ export class IdentityService {
     /** Get identities from localStorage. Only called during object creation. */
     private loadIdentities(): Identity[] {
         // If there are no identities, populate with mock data.
-        if (this.settings.identities == null) {
+        if (this.settings.identities == null || this.settings.identities.length === 0) {
             this.settings.identities = this.initialize();
         }
         // Return JSON serialized identities from localStorage.
@@ -162,6 +170,11 @@ export class IdentityService {
     private loadIdentity(id?: string): Identity {
         const identityId = id || this.settings.identity;
         return this.identitiesSubject.getValue().find(i => i.id === identityId);
+    }
+
+    private saveIdentities() {
+        // Save the latest value from the subject into local storage.
+        this.settings.identities = this.identities;
     }
 
     // setIdentity(id: string) {
@@ -235,7 +248,7 @@ export class IdentityService {
             alias: null,
             title: 'Random',
             index: 3,
-            id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
+            id: 'PH99VjuZKX36CoKkXE4Z87BPKt2c4FyTwZ',
             published: false,
             locked: false,
             time: new Date()

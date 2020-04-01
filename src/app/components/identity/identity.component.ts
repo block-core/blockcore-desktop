@@ -110,6 +110,10 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     }
 
+    addIdentity() {
+
+    }
+
     delete(id: string) {
         this.identityService.remove(id);
         // this.identities = this.settings.identities;

@@ -9,6 +9,7 @@ import { ApplicationStateService } from 'src/app/services/application-state.serv
 import { HubAddComponent } from './hub-add.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { HubService } from 'src/app/services/hub.service';
+import { Hub } from '@models/hub';
 
 @Component({
     selector: 'app-hub-details',
@@ -68,7 +69,20 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // this.subscription.unsubscribe();
-        // this.subscription2.unsubscribe();
+    }
+
+    getImage(image) {
+        if (!image) {
+            image = 'data:image/png;base64,iVBORw0KGg'
+                + 'oAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAU'
+                + 'AAarVyFEAAAAASUVORK5CYII=';
+        }
+
+        return image;
+    }
+
+    hubStatus(hub: Hub) {
+        return 'Valid';
     }
 
     async addHub() {

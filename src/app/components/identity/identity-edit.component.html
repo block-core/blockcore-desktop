@@ -3,9 +3,8 @@
     <mat-card class="example-card" *ngIf="identityService.identity$">
         <form [formGroup]="form">
             <mat-card-header>
-                <!-- <div mat-card-avatar class="example-header-image-profile3"></div> -->
-                <img mat-card-avatar class="example-header-image-profile5" [src]="image">
-                <mat-card-title>{{formName}} <span *ngIf="formAlias">(@{{formAlias}})</span></mat-card-title>
+                <img mat-card-avatar class="mat-list-avatar-large" [src]="image">
+                <mat-card-title>{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
                 <mat-card-subtitle>{{formTitle}}<br>ID: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
             </mat-card-header>
             <!-- <img mat-card-image src="assets/profile1.jpg"> -->

@@ -4,6 +4,7 @@ export interface Hub {
     wellKnownUrl?: string;
     name: string;
     icon?: string;
+    added?: Date;
     time?: Date;
     signature?: string;
 }

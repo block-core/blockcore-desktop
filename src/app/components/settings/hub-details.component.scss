@@ -2,6 +2,13 @@
     mat-grid-tile {
     }
 
+    .mat-list-avatar {
+        min-width: 80px !important;
+        min-height: 80px !important;
+        width: 80px !important;
+        height: 80px !important;
+      }
+
     .add-node {
         float: right;
         margin-right: 18px;

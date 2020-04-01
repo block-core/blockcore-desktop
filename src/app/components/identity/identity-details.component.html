@@ -2,18 +2,19 @@
 
     <mat-card class="example-card" *ngIf="identityService.identity$">
         <mat-card-header>
-            <!-- <div mat-card-avatar class="example-header-image-profile3"></div> -->
-            <img mat-card-avatar [src]="image">
-            <mat-card-title>{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></mat-card-title>
+            <img mat-card-avatar class="mat-list-avatar-large" [src]="image">
+            <mat-card-title>{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
             <mat-card-subtitle>{{identity.title}}<br>ID: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
         </mat-card-header>
-        <!-- <img mat-card-image src="assets/profile1.jpg"> -->
+        <!-- <img mat-card-image src="assets/profile1.jpg" [src]="image"> -->
         <mat-card-content>
             <p>
                 Short name: {{identity.shortname}}<br>
                 E-mail: {{identity.email}}<br>
                 Published: {{identity.published}}<br>
             </p>
+
+            <h3 mat-subheader>Links</h3>
 
             <ul *ngFor="let link of identity.links">
                 <li>{{link.type}}: {{link.url}}</li>

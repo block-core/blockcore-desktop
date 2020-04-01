@@ -8,9 +8,12 @@
         <h3 mat-subheader>Hubs</h3>
 
         <mat-list-item *ngFor="let hub of hubs">
-            <mat-icon mat-list-icon>computer</mat-icon>
+            <img mat-list-avatar [src]="getImage(hub.icon)">
+
             <h4 mat-line>{{hub.name}} ({{hub.url}})</h4>
             <p mat-line>ID: {{hub.id}}</p>
+            <p mat-line class="mat-card-subtitle">Added: {{hub.added}}</p>
+            <p mat-line class="mat-card-subtitle">Status: {{hubStatus(hub)}}</p>
             <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
@@ -22,18 +25,6 @@
                 </mat-menu>
             </p>
         </mat-list-item>
-
-        <!-- <mat-card class="card" *ngIf="status.outboundPeers == 0">
-            <mat-card-header>
-                <mat-icon mat-card-avatar>info</mat-icon>
-                <mat-card-title>Zero outbound nodes</mat-card-title>
-                <mat-card-subtitle>You have zero connected nodes.</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <h3 class="mat-h3">Please wait...</h3>
-                <p>If everything is working normally, you should automatically connected to nodes soon, please wait.</p>
-            </mat-card-content>
-        </mat-card> -->
 
         <mat-divider></mat-divider>
         <br>
