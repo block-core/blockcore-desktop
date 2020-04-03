@@ -8,17 +8,64 @@
         </mat-card-header>
         <!-- <img mat-card-image src="assets/profile1.jpg" [src]="image"> -->
         <mat-card-content>
-            <p>
-                Short name: {{identity.shortname}}<br>
-                E-mail: {{identity.email}}<br>
-                Published: {{identity.published}}<br>
-            </p>
 
-            <h3 mat-subheader>Links</h3>
+            <mat-list>
+                <div mat-subheader>Details</div>
 
-            <ul *ngFor="let link of identity.links">
-                <li>{{link.type}}: {{link.url}}</li>
-            </ul>
+                <mat-list-item>
+                    <mat-icon mat-list-icon>face</mat-icon>
+                    <div mat-line>{{identity.name}}</div>
+                    <div mat-line class="mat-card-subtitle">Name</div>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <mat-icon mat-list-icon>face</mat-icon>
+                    <div mat-line>{{identity.shortname}}</div>
+                    <div mat-line class="mat-card-subtitle">Short name</div>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <mat-icon mat-list-icon>font_download</mat-icon>
+                    <div mat-line>{{identity.alias}}</div>
+                    <div mat-line class="mat-card-subtitle">Alias</div>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <mat-icon mat-list-icon>book</mat-icon>
+                    <div mat-line>{{identity.title}}</div>
+                    <div mat-line class="mat-card-subtitle">Title</div>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <mat-icon mat-list-icon>mail</mat-icon>
+                    <div mat-line>{{identity.email}}</div>
+                    <div mat-line class="mat-card-subtitle">E-mail</div>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <mat-icon mat-list-icon>cloud_queue</mat-icon>
+                    <div mat-line>{{identity.published}}</div>
+                    <div mat-line class="mat-card-subtitle">Published</div>
+                </mat-list-item>
+
+                <mat-divider></mat-divider>
+                <div mat-subheader>Links</div>
+                <mat-list-item *ngFor="let link of identity.links">
+                    <mat-icon mat-list-icon>link</mat-icon>
+                    <div mat-line>{{link.url}}</div>
+                    <div mat-line class="mat-card-subtitle">{{link.type}}</div>
+                </mat-list-item>
+            </mat-list>
+
+            <!-- <mat-list>
+                <h3 mat-subheader>Links</h3>
+
+                <mat-list-item *ngFor="let link of identity.links">
+                    <mat-icon mat-list-icon>link</mat-icon>
+                    <h4 mat-line>{{link.url}}</h4>
+                    <p mat-line>Type: {{link.type}}</p>
+                </mat-list-item>
+            </mat-list> -->
 
         </mat-card-content>
         <mat-card-actions>

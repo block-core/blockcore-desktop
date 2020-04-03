@@ -13,6 +13,9 @@ import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
 import * as wif from 'wif';
 import * as coininfo from 'city-coininfo';
+import { HubService } from './hub.service';
+import { encode, decode } from '@msgpack/msgpack';
+import * as bitcoinMessage from 'bitcoinjs-message';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +35,7 @@ export class IdentityService {
     constructor(
         private appState: ApplicationStateService,
         public settings: SettingsService,
+        public hubService: HubService,
         private electronService: ElectronService,
     ) {
         console.log('IdentityService CONSTRUCTOR! CALLED ONLY ONCE?!');
@@ -102,6 +106,19 @@ export class IdentityService {
         return this.identityRoot.deriveHardened(index);
     }
 
+    sign(document: any): Buffer {
+        const encoded: Uint8Array = encode(document, { sortKeys: true });
+        console.log(encoded);
+
+        const encodedText = new TextDecoder('utf-8').decode(encoded);
+        const identity = this.getIdentity(0);
+
+        const signature = bitcoinMessage.sign(encodedText, identity.privateKey, true);
+        console.log(signature);
+
+        return signature;
+    }
+
     add(identity: Identity) {
         const index = this.identities.findIndex(t => t.id === identity.id);
 
@@ -113,6 +130,29 @@ export class IdentityService {
             ];
         } else {
             this.identities[index] = identity;
+        }
+
+        // If publish is turned on, ensure we send our updated identity to one of the platform hubs.
+        if (identity.published) {
+            // Get the signature for the entity.
+            const signatureBuffer = this.sign(identity);
+            const signature = signatureBuffer.toString('base64');
+
+            const payload = {
+                id: identity.id,
+                container: 'identity',
+                type: 'identity',
+                signature,
+                item: identity
+            };
+
+            // tslint:disable-next-line: no-debugger
+            debugger;
+
+            const json = JSON.stringify(payload);
+            console.log(json);
+
+            this.hubService.post(payload);
         }
 
         // try {

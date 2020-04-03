@@ -55,6 +55,7 @@
   },
   "private": true,
   "dependencies": {
+    "@msgpack/msgpack": "^1.12.0",
     "bitcoinjs-message": "^2.1.0",
     "bs58": "^4.0.1",
     "conventional-changelog-cli": "2.0.31",
