@@ -5,8 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
     selector: 'app-image-cropper',
     templateUrl: './image-cropper.component.html',
-    styleUrls: ['./image-cropper.component.scss'],
-    encapsulation: ViewEncapsulation.ShadowDom
+    styleUrls: ['./image-cropper.component.scss']
 })
 export class ImageCropperComponent {
     @HostBinding('class.identity-edit') hostClass = true;
