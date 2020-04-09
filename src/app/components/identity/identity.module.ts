@@ -9,6 +9,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ImageModule } from 'src/app/shared/image/image.module';
 import { LinkAddComponent } from './link-add.component';
 import { IdentityLookupComponent } from './identity-lookup.component';
+import { IdentityLookupWidgetComponent } from './identity-lookup-widget.component';
 
 @NgModule({
     imports: [
@@ -24,13 +25,15 @@ import { IdentityLookupComponent } from './identity-lookup.component';
         IdentityViewComponent,
         IdentityEditComponent,
         LinkAddComponent,
-        IdentityLookupComponent
+        IdentityLookupComponent,
+        IdentityLookupWidgetComponent
     ],
     exports: [
         IdentityComponent,
         IdentityViewComponent,
         IdentityEditComponent,
-        IdentityLookupComponent
+        IdentityLookupComponent,
+        IdentityLookupWidgetComponent
     ],
     entryComponents: [
         LinkAddComponent

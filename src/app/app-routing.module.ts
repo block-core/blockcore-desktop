@@ -20,6 +20,7 @@ import { IdentityComponent } from './components/identity/identity.component';
 import { IdentityViewComponent } from './components/identity/identity-view.component';
 import { HubDetailsComponent } from './components/settings/hub-details.component';
 import { IdentityEditComponent } from './components/identity/identity-edit.component';
+import { IdentityLookupComponent } from './components/identity/identity-lookup.component';
 
 const routes: Routes = [
     {
@@ -89,6 +90,15 @@ const routes: Routes = [
         data: {
             title: 'Identity',
             prefix: 'Edit'
+        },
+    },
+    {
+        path: 'identity/:id/search',
+        component: IdentityLookupComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Lookup'
         },
     },
     {

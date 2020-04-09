@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface HubDialogData {
@@ -8,6 +8,7 @@ export interface HubDialogData {
 @Component({
     selector: 'app-hub-add',
     templateUrl: 'hub-add.component.html',
+    encapsulation: ViewEncapsulation.None
 })
 export class HubAddComponent {
 

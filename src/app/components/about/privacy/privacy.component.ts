@@ -4,7 +4,8 @@ import { ApplicationStateService } from '../../../services/application-state.ser
 @Component({
     selector: 'app-privacy',
     templateUrl: './privacy.component.html',
-    styleUrls: ['./privacy.component.scss']
+    styleUrls: ['./privacy.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PrivacyComponent implements OnDestroy {
     @HostBinding('class.privacy') hostClass = true;

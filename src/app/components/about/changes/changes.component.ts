@@ -4,7 +4,8 @@ import { ApplicationStateService } from '../../../services/application-state.ser
 @Component({
     selector: 'app-changes',
     templateUrl: './changes.component.html',
-    styleUrls: ['./changes.component.scss']
+    styleUrls: ['./changes.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ChangesComponent implements OnDestroy {
     @HostBinding('class.changes') hostClass = true;

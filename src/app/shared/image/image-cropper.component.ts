@@ -5,10 +5,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
     selector: 'app-image-cropper',
     templateUrl: './image-cropper.component.html',
-    styleUrls: ['./image-cropper.component.scss']
+    styleUrls: ['./image-cropper.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ImageCropperComponent {
-    @HostBinding('class.identity-edit') hostClass = true;
+    @HostBinding('class.image-cropper') hostClass = true;
 
     imageChangedEvent: any = '';
     croppedImage: any = '';

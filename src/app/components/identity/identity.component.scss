@@ -1,244 +1,244 @@
-// @import "~@angular/material/theming";
+@import "~@angular/material/theming";
 
-// .identity {
+.identity {
 
-//     .identities-list {
-//         clear: both;
-//     }
-
-
-//     .add-node {
-//         float: right;
-//         margin-right: 18px;
-//         margin-top: 4px;
-//     }
-
-//     .card {
-//         margin: 0px 20px 20px 20px;
-//     }
-
-//     .details-content {
-//         margin-top: 14px;
-//     }
-
-//     .network-grid {
-//         border-bottom: 1px solid silver;
-//     }
-
-//     .network-details-footer {
-//         text-align: center;
-//         padding-top: 20px;
-//         padding-bottom: 20px;
-//     }
-
-//     .network-label {
-//         font-color: gray;
-//         padding-bottom: 10px;
-//     }
-
-//     .network-value {
-//         font-size: 1.6em;
-//     }
-
-//     .mat-grid-tile .mat-figure {
-//         flex-direction: column !important;
-//     }
-
-//     .mat-grid-tile {
-//         border-right: 1px solid silver !important;
-//         border-bottom: 1px solid silver !important;
-//     }
-
-//     .network-grid > .mat-grid-title {
-//         border-right: 1px solid silver !important;
-//         border-bottom: 1px solid silver !important;
-//     }
-
-//     .network-grid .mat-icon {
-//         font-size: 1.6em !important;
-//     }
+    .identities-list {
+        clear: both;
+    }
 
 
-//     div[fxLayoutAlign] {
-//         padding: 10px;
-//         padding-left: 25px;
-//         padding-top: 15px;
-//     }
+    .add-node {
+        float: right;
+        margin-right: 18px;
+        margin-top: 4px;
+    }
 
-//     .dashboard-card {
-//         //height: 100%;
-//         //margin: 20px;
-//         min-height: 150px;
-//         //width: 100%;
-//     }
+    .card {
+        margin: 0px 20px 20px 20px;
+    }
 
-//     .progress-widget {
-//         display: flex;
-//         flex-direction: row;
-//         align-items: center;
-//     }
+    .details-content {
+        margin-top: 14px;
+    }
 
-//     .mat-progress-spinner {
-//         display: inline-block;
-//     }
+    .network-grid {
+        border-bottom: 1px solid silver;
+    }
 
-//     .progress-widget-spinner {
-//         margin-left: 6px;
-//     }
+    .network-details-footer {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 
-//     .progress-widget-text {
-//         margin-left: 6px;
-//     }
+    .network-label {
+        font-color: gray;
+        padding-bottom: 10px;
+    }
 
-//     .mat-card {
-//         margin-bottom: 20px;
-//     }
+    .network-value {
+        font-size: 1.6em;
+    }
 
-//     .mat-list-avatar-large {
-//         min-width: 80px !important;
-//         min-height: 80px !important;
-//         width: 80px !important;
-//         height: 80px !important;
-//     }
+    .mat-grid-tile .mat-figure {
+        flex-direction: column !important;
+    }
 
-//     mat-card {
-//         margin-bottom: 20px;
-//     }
+    .mat-grid-tile {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
 
-//     .dashboard-split-card {
-//         display: flex;
-//         flex-direction: row;
-//     }
+    .network-grid > .mat-grid-title {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
 
-//     .dashboard-split-left {
-//         flex-grow: 2;
-//         min-width: 230px;
-//         width: 65%;
-//     }
+    .network-grid .mat-icon {
+        font-size: 1.6em !important;
+    }
 
-//     .dashboard-split-right {
-//         padding-left: 20px;
-//         flex-grow: 1;
-//         width: 35%;
-//         align-self: center;
-//     }
 
-//     .add-link {
-//         float: right;
-//         margin-right: 0px;
-//         margin-top: 0px;
-//     }
+    div[fxLayoutAlign] {
+        padding: 10px;
+        padding-left: 25px;
+        padding-top: 15px;
+    }
 
-//     .example-headers-align .mat-expansion-panel-header-title,
-//     .example-headers-align .mat-expansion-panel-header-description {
-//         flex-basis: 0;
-//     }
+    .dashboard-card {
+        //height: 100%;
+        //margin: 20px;
+        min-height: 150px;
+        //width: 100%;
+    }
 
-//     .example-headers-align .mat-expansion-panel-header-description {
-//         justify-content: space-between;
-//         align-items: center;
-//     }
+    .progress-widget {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 
-//     .example-headers-align .mat-form-field + .mat-form-field {
-//         margin-left: 8px;
-//     }
+    .mat-progress-spinner {
+        display: inline-block;
+    }
 
-//     @media screen and (max-width: 599px) {
-//         .dashboard-split-card {
-//             flex-direction: column;
-//         }
+    .progress-widget-spinner {
+        margin-left: 6px;
+    }
 
-//         .dashboard-split-left {
-//             flex-grow: 2;
-//             width: 100%;
-//         }
+    .progress-widget-text {
+        margin-left: 6px;
+    }
 
-//         .dashboard-split-right {
-//             flex-grow: 1;
-//             width: 100%;
-//             align-self: center;
-//         }
-//     }
+    .mat-card {
+        margin-bottom: 20px;
+    }
 
-//     .break-everything {
-//         clear: both;
-//     }
+    .mat-list-avatar-large {
+        min-width: 80px !important;
+        min-height: 80px !important;
+        width: 80px !important;
+        height: 80px !important;
+    }
 
-//     .link {
-//         cursor: pointer;
-//     }
+    mat-card {
+        margin-bottom: 20px;
+    }
 
-//     .wallet-no-transactions {
-//         text-align: center;
-//         margin-top: 20px;
-//     }
+    .dashboard-split-card {
+        display: flex;
+        flex-direction: row;
+    }
 
-//     .wallet-transactions-table {
-//         width: 100%;
+    .dashboard-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
 
-//         .unconfirmed {
-//             font-style: italic;
-//             color: rgba($color: silver, $alpha: 0.75);
-//         }
+    .dashboard-split-right {
+        padding-left: 20px;
+        flex-grow: 1;
+        width: 35%;
+        align-self: center;
+    }
 
-//         // .mat-row {
-//         //     background-color: red! important;
-//         //     //color: blue !important;
-//         // }
+    .add-link {
+        float: right;
+        margin-right: 0px;
+        margin-top: 0px;
+    }
 
-//         // .mat-row:hover {
-//         //     background-color: rgba(mat-color($primary, 'default'), .6);
-//         //     //background-color: red! important;
-//         //     //color: blue !important;
-//         // }
-//     }
+    .example-headers-align .mat-expansion-panel-header-title,
+    .example-headers-align .mat-expansion-panel-header-description {
+        flex-basis: 0;
+    }
 
-//     // .wallet-transactions-table .mat-row {
-//     //     background-color: red! important;
-//     //     color: blue !important;
-//     // }
+    .example-headers-align .mat-expansion-panel-header-description {
+        justify-content: space-between;
+        align-items: center;
+    }
 
-//     .wallet-confirmed-icon {
-//         font-size: 14px;
-//     }
+    .example-headers-align .mat-form-field + .mat-form-field {
+        margin-left: 8px;
+    }
 
-//     .wallet-split-card {
-//         display: flex;
-//         flex-direction: row;
-//     }
+    @media screen and (max-width: 599px) {
+        .dashboard-split-card {
+            flex-direction: column;
+        }
 
-//     .wallet-split-left {
-//         flex-grow: 2;
-//         min-width: 230px;
-//         width: 65%;
-//     }
+        .dashboard-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
 
-//     .wallet-split-right {
-//         padding-left: 20px;
-//         flex-grow: 1;
-//         width: 35%;
-//         align-self: center;
-//     }
+        .dashboard-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+        }
+    }
 
-//     .wallet-info-icon {
-//         float: right;
-//         cursor: default;
-//     }
+    .break-everything {
+        clear: both;
+    }
 
-//     @media screen and (max-width: 599px) {
-//         .wallet-split-card {
-//             flex-direction: column;
-//         }
+    .link {
+        cursor: pointer;
+    }
 
-//         .wallet-split-left {
-//             flex-grow: 2;
-//             width: 100%;
-//         }
+    .wallet-no-transactions {
+        text-align: center;
+        margin-top: 20px;
+    }
 
-//         .wallet-split-right {
-//             flex-grow: 1;
-//             width: 100%;
-//             align-self: center;
-//         }
-//     }
-// }
+    .wallet-transactions-table {
+        width: 100%;
+
+        .unconfirmed {
+            font-style: italic;
+            color: rgba($color: silver, $alpha: 0.75);
+        }
+
+        // .mat-row {
+        //     background-color: red! important;
+        //     //color: blue !important;
+        // }
+
+        // .mat-row:hover {
+        //     background-color: rgba(mat-color($primary, 'default'), .6);
+        //     //background-color: red! important;
+        //     //color: blue !important;
+        // }
+    }
+
+    // .wallet-transactions-table .mat-row {
+    //     background-color: red! important;
+    //     color: blue !important;
+    // }
+
+    .wallet-confirmed-icon {
+        font-size: 14px;
+    }
+
+    .wallet-split-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .wallet-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
+
+    .wallet-split-right {
+        padding-left: 20px;
+        flex-grow: 1;
+        width: 35%;
+        align-self: center;
+    }
+
+    .wallet-info-icon {
+        float: right;
+        cursor: default;
+    }
+
+    @media screen and (max-width: 599px) {
+        .wallet-split-card {
+            flex-direction: column;
+        }
+
+        .wallet-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
+
+        .wallet-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+        }
+    }
+}

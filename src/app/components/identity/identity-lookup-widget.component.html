@@ -1,10 +1,18 @@
-<div class="content">
-    <app-identity-lookup-widget></app-identity-lookup-widget>
+<mat-card class="card">
+    <mat-card-title>Identity Lookup</mat-card-title>
+    <mat-card-subtitle>You can lookup any public profile here</mat-card-subtitle>
+    <mat-card-content>
+        <mat-form-field class="form-field">
+            <input matInput type="text" placeholder="Enter identity id and press lookup." (keyup.enter)="lookup()" [(ngModel)]="searchInput">
+            <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button class="button" (click)="lookup()" [disabled]="searchInput.length == 0" mat-stroked-button>Lookup</button>
+        <!-- <button class="button" (click)="refresh()" [disabled]="loading" mat-stroked-button>Refresh</button> -->
+    </mat-card-content>
+</mat-card>
 
-    <br><br>
-    <h2>Not implemented yet.</h2>
-    <br>
-</div>
 <!-- <mat-card class="dashboard-card">
     <mat-card-title>Identity Lookup</mat-card-title>
     <mat-card-subtitle>You can lookup any public profile here</mat-card-subtitle>

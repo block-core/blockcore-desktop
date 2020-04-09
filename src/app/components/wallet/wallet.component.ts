@@ -20,7 +20,8 @@ import { WalletSplit } from '@models/wallet-split';
 @Component({
     selector: 'app-wallet',
     templateUrl: './wallet.component.html',
-    styleUrls: ['./wallet.component.scss']
+    styleUrls: ['./wallet.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class WalletComponent implements OnInit, OnDestroy {
     @HostBinding('class.wallet') hostClass = true;

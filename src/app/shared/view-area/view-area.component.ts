@@ -3,7 +3,8 @@ import { Component, Input, HostBinding, ChangeDetectionStrategy, ViewEncapsulati
 @Component({
     selector: 'app-view-area',
     templateUrl: './view-area.component.html',
-    styleUrls: ['./view-area.component.scss']
+    styleUrls: ['./view-area.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class ViewAreaComponent {
     @HostBinding('class.app-view-area') hostClass = true;

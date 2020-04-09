@@ -11,7 +11,8 @@ import { ApplicationStateService } from '../../../services/application-state.ser
 @Component({
     selector: 'app-account-recover',
     templateUrl: './recover.component.html',
-    styleUrls: ['./recover.component.scss']
+    styleUrls: ['./recover.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class RecoverAccountComponent {
     @HostBinding('class.account-recover') hostClass = true;

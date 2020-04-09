@@ -16,7 +16,8 @@ import { P2pb2bAsset } from 'src/app/classes/p2pb2b2-asset';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+    styleUrls: ['./dashboard.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     @HostBinding('class.dashboard') hostClass = true;

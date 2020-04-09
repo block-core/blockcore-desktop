@@ -11,7 +11,8 @@ import { BootController } from '../../../boot';
 @Component({
     selector: 'app-logout',
     templateUrl: './logout.component.html',
-    styleUrls: ['./logout.component.scss']
+    styleUrls: ['./logout.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class LogoutComponent {
     @HostBinding('class.logout') hostClass = true;

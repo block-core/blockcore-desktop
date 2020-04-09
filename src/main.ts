@@ -12,7 +12,8 @@ if (environment.production) {
 const init = () => {
     platformBrowserDynamic().bootstrapModule(AppModule, [
         {
-            defaultEncapsulation: ViewEncapsulation.None
+            // Disable global encapsulation, as it breaks many third party angular components.
+            // defaultEncapsulation: ViewEncapsulation.None
         }
     ])
         .then(() => (window as any).appBootstrap && (window as any).appBootstrap())

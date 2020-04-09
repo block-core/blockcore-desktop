@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface UtxoCountDialogData {
@@ -11,6 +11,7 @@ export interface UtxoCountDialogData {
 @Component({
     selector: 'app-wallet-utxo-count-dialog',
     templateUrl: 'wallet-utxo-count-dialog.html',
+    encapsulation: ViewEncapsulation.None
 })
 export class WalletUtxoCountDialogComponent {
 

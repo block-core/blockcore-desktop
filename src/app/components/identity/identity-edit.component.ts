@@ -15,7 +15,8 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
 @Component({
     selector: 'app-identity-edit',
     templateUrl: './identity-edit.component.html',
-    styleUrls: ['./identity-edit.component.scss']
+    styleUrls: ['./identity-edit.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class IdentityEditComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity-edit') hostClass = true;

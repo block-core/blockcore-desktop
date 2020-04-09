@@ -8,7 +8,8 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
 @Component({
     selector: 'app-identity-view',
     templateUrl: './identity-view.component.html',
-    styleUrls: ['./identity-view.component.scss']
+    styleUrls: ['./identity-view.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class IdentityViewComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity-view') hostClass = true;

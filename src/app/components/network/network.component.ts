@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-network',
     templateUrl: './network.component.html',
-    styleUrls: ['./network.component.scss']
+    styleUrls: ['./network.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     @HostBinding('class.network') hostClass = true;

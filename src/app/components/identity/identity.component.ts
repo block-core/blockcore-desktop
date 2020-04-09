@@ -15,7 +15,8 @@ import * as bitcoinMessage from 'bitcoinjs-message';
 @Component({
     selector: 'app-identity',
     templateUrl: './identity.component.html',
-    styleUrls: ['./identity.component.scss']
+    styleUrls: ['./identity.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class IdentityComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity') hostClass = true;

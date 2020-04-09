@@ -4,7 +4,8 @@ import { ApplicationStateService } from '../../services/application-state.servic
 @Component({
     selector: 'app-paperwallet',
     templateUrl: './paperwallet.component.html',
-    styleUrls: ['./paperwallet.component.scss']
+    styleUrls: ['./paperwallet.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PaperWalletComponent implements OnDestroy, OnInit {
     @HostBinding('class.paperwallet') hostClass = true;

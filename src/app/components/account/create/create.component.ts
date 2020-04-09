@@ -23,7 +23,8 @@ import { DatabaseStorageService } from 'src/app/services/storage.service';
 @Component({
     selector: 'app-account-create',
     templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss']
+    styleUrls: ['./create.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class CreateAccountComponent implements OnInit {
     @HostBinding('class.account-create') hostClass = true;

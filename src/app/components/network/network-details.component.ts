@@ -12,7 +12,8 @@ import { NetworkBanNodeComponent } from './network-ban-node.component';
 @Component({
     selector: 'app-network-details',
     templateUrl: './network-details.component.html',
-    styleUrls: ['./network.component.scss']
+    styleUrls: ['./network.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class NetworkDetailsComponent implements OnInit, OnDestroy {
     @HostBinding('class.network') hostClass = true;

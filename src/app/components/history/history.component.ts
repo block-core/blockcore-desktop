@@ -15,7 +15,8 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-history',
     templateUrl: './history.component.html',
-    styleUrls: ['./history.component.scss']
+    styleUrls: ['./history.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class HistoryComponent implements OnInit, OnDestroy {
     @HostBinding('class.history') hostClass = true;

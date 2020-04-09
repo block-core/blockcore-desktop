@@ -3,7 +3,8 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 @Component({
     selector: 'app-payment',
     templateUrl: './payment.component.html',
-    styleUrls: ['./payment.component.scss']
+    styleUrls: ['./payment.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PaymentComponent {
     @HostBinding('class.payment') hostClass = true;

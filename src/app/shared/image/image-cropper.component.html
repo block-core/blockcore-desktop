@@ -1,9 +1,11 @@
+<!-- THIS IS TEMPORARILY DISABLED DUE TO BUG: https://github.com/merlosy/ngx-material-file-input/issues/56 -->
 <mat-form-field appearance="outline" [formGroup]="formDoc">
     <mat-label>Change profile image</mat-label>
     <ngx-mat-file-input (change)="fileChangeEvent($event)" formControlName="basicfile" placeholder="Profile image"></ngx-mat-file-input>
-    <!-- <input matInput (change)="fileChangeEvent($event)"  formControlName="basicfile" name="basicfile" placeholder="Profile image"> -->
     <mat-icon matSuffix>image</mat-icon>
 </mat-form-field>
+
+<!-- <input type="file" (change)="fileChangeEvent($event)" /> -->
 
 <span *ngIf="imageChangedEvent">
 

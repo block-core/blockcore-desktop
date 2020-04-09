@@ -4,7 +4,8 @@ import { ApplicationStateService } from '../../services/application-state.servic
 @Component({
     selector: 'app-merchants',
     templateUrl: './merchants.component.html',
-    styleUrls: ['./merchants.component.scss']
+    styleUrls: ['./merchants.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class MerchantsComponent implements OnDestroy, OnInit {
     @HostBinding('class.merchant') hostClass = true;

@@ -7,13 +7,13 @@ import { IdentityService } from 'src/app/services/identity.service';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
 
 @Component({
-    selector: 'app-identity-lookup',
-    templateUrl: './identity-lookup.component.html',
-    styleUrls: ['./identity-lookup.component.scss'],
+    selector: 'app-identity-lookup-widget',
+    templateUrl: './identity-lookup-widget.component.html',
+    styleUrls: ['./identity-lookup-widget.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class IdentityLookupComponent implements OnDestroy, OnInit {
-    @HostBinding('class.identity-lookup') hostClass = true;
+export class IdentityLookupWidgetComponent implements OnDestroy, OnInit {
+    @HostBinding('class.identity-lookup-widget') hostClass = true;
     searchInput = '';
 
     constructor(
@@ -31,6 +31,10 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
+    }
+
+    lookup() {
+        this.router.navigateByUrl('identity/1/search');
     }
 }
 
