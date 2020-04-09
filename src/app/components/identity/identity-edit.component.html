@@ -1,13 +1,15 @@
 <div class="content">
 
-    <mat-card class="example-card" *ngIf="identityService.identity$">
+    <mat-card *ngIf="identityService.identity$">
         <form [formGroup]="form">
             <mat-card-header>
                 <img mat-card-avatar class="mat-list-avatar-large" [src]="image">
-                <mat-card-title>{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+
+                <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+                <mat-card-title *ngIf="!formName">{{identity.id}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+
                 <mat-card-subtitle>{{formTitle}}<br>ID: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
             </mat-card-header>
-            <!-- <img mat-card-image src="assets/profile1.jpg"> -->
             <mat-card-content>
 
                 <mat-form-field appearance="outline">
@@ -29,11 +31,11 @@
                         {{ formErrors.shortname }}
                     </mat-error>
                 </mat-form-field>
-                
+
                 <br>
 
                 <app-image-cropper (imageUpdated)="imageUpdated($event)" [showPreview]="false"></app-image-cropper>
-        
+
                 <br>
 
                 <mat-form-field appearance="outline">
@@ -76,7 +78,7 @@
 
                 <mat-list>
                     <h3 mat-subheader>Links</h3>
-            
+
                     <mat-list-item *ngFor="let link of identity.links">
                         <mat-icon mat-list-icon>link</mat-icon>
                         <h4 mat-line>{{link.url}}</h4>
@@ -111,16 +113,12 @@
                 <br> <br>
                 <mat-card class="mat-elevation-z8" *ngIf="publishWarning">This profile was previously published. When you save it, it will be unpublished and only locally available.</mat-card>
 
+
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="save()">SAVE</button>
                 <button mat-stroked-button (click)="back()">CANCEL</button>
                 <button mat-raised-button color="warn">DELETE</button>
-
-                <!-- <button mat-stroked-button [disabled]="isSending" (click)="cancel()">Cancel</button>&nbsp;
-                <button mat-raised-button color="primary" [disabled]="!form.valid || isSending || !estimatedFee" (click)="send()">Send</button>
-             -->
-
 
             </mat-card-actions>
         </form>
@@ -128,7 +126,7 @@
 
     <br>
 
-    <div class="network-details-footer">
+    <div class="footer">
         <button routerLink="/identity" mat-raised-button>Go back</button>
     </div>
 

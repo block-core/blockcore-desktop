@@ -3,8 +3,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 @Component({
     selector: 'app-not-found',
     templateUrl: './not-found.component.html',
-    styleUrls: ['./not-found.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./not-found.component.scss']
 })
 export class NotFoundComponent {
     @HostBinding('class.app-not-found') hostClass = true;

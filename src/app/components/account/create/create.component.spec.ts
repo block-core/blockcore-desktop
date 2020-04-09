@@ -21,7 +21,6 @@ import * as coininfo from 'city-coininfo';
 import { HDNode } from 'city-lib';
 import * as wif from 'wif';
 import Dexie from 'dexie';
-import { StorageService } from 'src/app/services/storage.service';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
 

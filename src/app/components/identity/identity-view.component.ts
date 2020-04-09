@@ -6,18 +6,15 @@ import { IdentityService } from 'src/app/services/identity.service';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
 
 @Component({
-    selector: 'app-identity-details',
-    templateUrl: './identity-details.component.html',
-    styleUrls: ['./identity.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    selector: 'app-identity-view',
+    templateUrl: './identity-view.component.html',
+    styleUrls: ['./identity-view.component.scss']
 })
-export class IdentityDetailsComponent implements OnDestroy, OnInit {
-    @HostBinding('class.identity') hostClass = true;
+export class IdentityViewComponent implements OnDestroy, OnInit {
+    @HostBinding('class.identity-view') hostClass = true;
 
     identity: Identity;
     image: any;
-
-    private subscription: any;
 
     constructor(
         private appState: ApplicationStateService,
@@ -31,22 +28,11 @@ export class IdentityDetailsComponent implements OnDestroy, OnInit {
 
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
-
         console.log('ID:', id);
         this.identity = this.identityService.get(id);
-
         this.image = this.profileImageService.getImage(this.identity.id);
-
-        // this.subscription = this.identityService.identity$.subscribe(identity => this.identity = identity);
-
-        // Change to this if user can navigate to different identity without going back to list!
-        // this.hero$ = this.route.paramMap.pipe(
-        //     switchMap((params: ParamMap) =>
-        //         this.service.getHero(params.get('id')))
-        // );
     }
 
     ngOnDestroy() {
-        // this.subscription.unsubscribe();
     }
 }

@@ -21,8 +21,7 @@ export interface ListItem {
 @Component({
     selector: 'app-load',
     templateUrl: './load.component.html',
-    styleUrls: ['./load.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+    styleUrls: ['./load.component.scss']
 })
 export class LoadComponent implements OnDestroy {
     @HostBinding('class.load') hostClass = true;

@@ -13,8 +13,7 @@ import * as coininfo from 'city-coininfo';
 @Component({
     selector: 'app-receive',
     templateUrl: './receive.component.html',
-    styleUrls: ['./receive.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./receive.component.scss']
 })
 export class ReceiveComponent implements OnInit, OnDestroy {
     @HostBinding('class.receive') hostClass = true;

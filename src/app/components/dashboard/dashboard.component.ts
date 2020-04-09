@@ -16,8 +16,7 @@ import { P2pb2bAsset } from 'src/app/classes/p2pb2b2-asset';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     @HostBinding('class.dashboard') hostClass = true;
@@ -28,6 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private selectedCoinTickerIndex = -1;
     private subscriptions: Subscription[];
+    public searchInput = '';
 
     constructor(
         private apiService: ApiService,
@@ -58,6 +58,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
 
         this.selectedCoinTicker = this.coins[this.selectedCoinTickerIndex];
+    }
+
+    lookup() {
+
     }
 
     private startSubscriptions() {

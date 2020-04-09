@@ -16,8 +16,7 @@ export interface ListItem {
 @Component({
     selector: 'app-advanced',
     templateUrl: './advanced.component.html',
-    styleUrls: ['./advanced.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+    styleUrls: ['./advanced.component.scss']
 })
 export class AdvancedComponent {
     @HostBinding('class.load') hostClass = true;

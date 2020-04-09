@@ -15,12 +15,14 @@ import * as bitcoinMessage from 'bitcoinjs-message';
 @Component({
     selector: 'app-identity',
     templateUrl: './identity.component.html',
-    styleUrls: ['./identity.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./identity.component.scss']
 })
 export class IdentityComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity') hostClass = true;
 
+    scanning = false;
+    scanningStatus: string;
+    searchInput = '';
     // public identities: Identity[];
 
     constructor(
@@ -110,8 +112,29 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     }
 
-    addIdentity() {
+    scan() {
 
+        this.identityService.scan(100);
+
+        this.scanning = true;
+
+        this.scanningStatus = 'Scanning 10 of 100...';
+
+        setTimeout(() => {
+            this.scanningStatus = 'Scanning 20 of 100...';
+        }, 1000);
+
+        setTimeout(() => {
+            this.scanningStatus = 'Scanning 30 of 100...';
+        }, 2000);
+
+        setTimeout(() => {
+            this.scanningStatus = 'Scanning 40 of 100...';
+        }, 4000);
+
+        setTimeout(() => {
+            this.scanning = false;
+        }, 5000);
     }
 
     delete(id: string) {

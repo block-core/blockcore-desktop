@@ -17,7 +17,7 @@ import { ToolsComponent } from './components/tools/tools.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { NetworkDetailsComponent } from './components/network/network-details.component';
 import { IdentityComponent } from './components/identity/identity.component';
-import { IdentityDetailsComponent } from './components/identity/identity-details.component';
+import { IdentityViewComponent } from './components/identity/identity-view.component';
 import { HubDetailsComponent } from './components/settings/hub-details.component';
 import { IdentityEditComponent } from './components/identity/identity-edit.component';
 
@@ -75,11 +75,11 @@ const routes: Routes = [
     },
     {
         path: 'identity/:id',
-        component: IdentityDetailsComponent,
+        component: IdentityViewComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Identity',
-            prefix: 'Details'
+            prefix: 'View'
         },
     },
     {

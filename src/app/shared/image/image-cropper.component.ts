@@ -1,13 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding, ViewEncapsulation } from '@angular/core';
 import { Dimensions, ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-image-cropper',
     templateUrl: './image-cropper.component.html',
-    styleUrls: ['./image-cropper.component.scss']
+    styleUrls: ['./image-cropper.component.scss'],
+    encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ImageCropperComponent {
+    @HostBinding('class.identity-edit') hostClass = true;
+
     imageChangedEvent: any = '';
     croppedImage: any = '';
     canvasRotation = 0;

@@ -12,8 +12,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-history-transaction',
     templateUrl: './transaction.component.html',
-    styleUrls: ['./transaction.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./transaction.component.scss']
 })
 export class TransactionHistoryComponent implements OnInit, OnDestroy {
     @HostBinding('class.transaction') hostClass = true;

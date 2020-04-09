@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { IdentityComponent } from './identity.component';
-import { IdentityDetailsComponent } from './identity-details.component';
+import { IdentityViewComponent } from './identity-view.component';
 import { IdentityEditComponent } from './identity-edit.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ImageModule } from 'src/app/shared/image/image.module';
 import { LinkAddComponent } from './link-add.component';
+import { IdentityLookupComponent } from './identity-lookup.component';
 
 @NgModule({
     imports: [
@@ -20,14 +21,16 @@ import { LinkAddComponent } from './link-add.component';
     ],
     declarations: [
         IdentityComponent,
-        IdentityDetailsComponent,
+        IdentityViewComponent,
         IdentityEditComponent,
-        LinkAddComponent
+        LinkAddComponent,
+        IdentityLookupComponent
     ],
     exports: [
         IdentityComponent,
-        IdentityDetailsComponent,
-        IdentityEditComponent
+        IdentityViewComponent,
+        IdentityEditComponent,
+        IdentityLookupComponent
     ],
     entryComponents: [
         LinkAddComponent

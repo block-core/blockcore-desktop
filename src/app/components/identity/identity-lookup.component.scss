@@ -1,0 +1,18 @@
+@import "~@angular/material/theming";
+
+.form-field {
+    width: calc(100% - 220px);
+}
+
+.identity-lookup {
+    margin-bottom: 10px;
+
+    .form-field {
+        width: calc(100% - 220px);
+    }
+
+    .button {
+        width: 90px;
+        margin-left: 20px;
+    }
+}

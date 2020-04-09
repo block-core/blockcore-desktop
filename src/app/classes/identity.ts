@@ -14,5 +14,4 @@ export interface Identity {
     time?: Date;
     signature?: string;
     restorekey?: string;
-    index?: number;
 }

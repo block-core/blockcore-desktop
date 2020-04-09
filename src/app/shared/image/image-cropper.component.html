@@ -1,14 +1,10 @@
 <mat-form-field appearance="outline" [formGroup]="formDoc">
     <mat-label>Change profile image</mat-label>
     <ngx-mat-file-input (change)="fileChangeEvent($event)" formControlName="basicfile" placeholder="Profile image"></ngx-mat-file-input>
+    <!-- <input matInput (change)="fileChangeEvent($event)"  formControlName="basicfile" name="basicfile" placeholder="Profile image"> -->
     <mat-icon matSuffix>image</mat-icon>
 </mat-form-field>
-<!-- <input type="file" (change)="fileChangeEvent($event)" />
-<br /><br> -->
-<!-- <br />
-<input [(ngModel)]="imageURL" placeholder="URL to load image" type="text" />
-<br />
-<br /> -->
+
 <span *ngIf="imageChangedEvent">
 
     <button mat-icon-button (click)="rotateLeft()">

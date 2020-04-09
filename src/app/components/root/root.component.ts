@@ -27,7 +27,6 @@ import { IdentityService } from 'src/app/services/identity.service';
     selector: 'app-root',
     templateUrl: './root.component.html',
     styleUrls: ['./root.component.scss'],
-    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class RootComponent implements OnInit, OnDestroy {

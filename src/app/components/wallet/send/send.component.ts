@@ -18,8 +18,7 @@ import { TransactionResult } from 'src/app/classes/transaction-result';
 @Component({
     selector: 'app-send',
     templateUrl: './send.component.html',
-    styleUrls: ['./send.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./send.component.scss']
 })
 export class SendComponent implements OnInit, OnDestroy {
     @HostBinding('class.send') hostClass = true;

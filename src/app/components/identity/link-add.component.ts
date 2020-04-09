@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, HostBinding } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Link } from '@models/link';
 
@@ -8,6 +8,7 @@ import { Link } from '@models/link';
     styleUrls: ['./link-add.component.scss'],
 })
 export class LinkAddComponent {
+    @HostBinding('class.link-add') hostClass = true;
 
     constructor(
         public dialogRef: MatDialogRef<LinkAddComponent>,

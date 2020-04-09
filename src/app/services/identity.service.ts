@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Identity } from '@models/identity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { ApplicationStateService } from './application-state.service';
-
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import * as bip38 from 'city-bip38';
@@ -16,17 +15,22 @@ import * as coininfo from 'city-coininfo';
 import { HubService } from './hub.service';
 import { encode, decode } from '@msgpack/msgpack';
 import * as bitcoinMessage from 'bitcoinjs-message';
+import { StorageService } from './storage.service';
+import { AuthenticationService } from './authentication.service';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
 })
-export class IdentityService {
+export class IdentityService implements OnDestroy {
     // Initialize the BehaviorSubject with data from the localStorage. The subject holds the internal state of the identities.
-    private readonly identitiesSubject = new BehaviorSubject<Identity[]>(this.loadIdentities());
-    private readonly identitySubject = new BehaviorSubject<Identity>(this.loadIdentity());
+    private readonly identitiesSubject = new BehaviorSubject<Identity[]>([]);
+    private readonly identitySubject = new BehaviorSubject<Identity>(null);
 
+    private identityIndex = -1;
     private identityRoot: HDNode;
     private identityExtPubKey: HDNode;
+
     private identityNetwork = {
         pubKeyHash: 55,
         scriptHash: 117
@@ -34,11 +38,13 @@ export class IdentityService {
 
     constructor(
         private appState: ApplicationStateService,
-        public settings: SettingsService,
         public hubService: HubService,
+        private authentication: AuthenticationService,
         private electronService: ElectronService,
+        public storage: StorageService,
     ) {
-        console.log('IdentityService CONSTRUCTOR! CALLED ONLY ONCE?!');
+        console.log('IdentityService created.');
+
     }
 
     readonly identity$ = this.identitySubject.asObservable();
@@ -57,9 +63,35 @@ export class IdentityService {
         this.identitiesSubject.next(val);
     }
 
+    load() {
+        this.identities = this.loadIdentities();
+        this.identitySubject.next(this.loadIdentity());
+
+        // Make sure we set the current identity index, and simply use the current length if value is missing from before.
+        this.identityIndex = this.storage.getNumber('Identity:Index', this.identities.length, true);
+    }
+
+    // get identities(): any {
+    //     return this.storage.getJSON('Settings:Identities');
+    // }
+
+    // set identities(value: any) {
+    //     this.storage.setJSON('Settings:Identities', value);
+    // }
+
+    // get identity(): string {
+    //     return this.storage.getValue('Settings:Identity');
+    // }
+
+    // set identity(value: string) {
+    //     this.storage.setValue('Settings:Identity', value);
+    // }
+
     // getAddress(node: any, network?: any): string {
     //     return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network }).address!;
     // }
+
+    ngOnDestroy() { console.log('IdentityService instance destroyed.'); }
 
     toBuffer(ab) {
         const buf = Buffer.alloc(ab.byteLength);
@@ -93,10 +125,13 @@ export class IdentityService {
 
             this.identityExtPubKey = identityRoot.neutered();
 
+            // Load identities after unlocking.
+            this.load();
+
         }, null, this.appState.networkParams);
     }
 
-    getIdentity(index: number) {
+    getIdentityNode(index: number) {
         // tslint:disable-next-line: quotemark
         return this.identityRoot.deriveHardened(index);
     }
@@ -111,12 +146,27 @@ export class IdentityService {
         console.log(encoded);
 
         const encodedText = new TextDecoder('utf-8').decode(encoded);
-        const identity = this.getIdentity(0);
+        const identity = this.getIdentityNode(0);
 
         const signature = bitcoinMessage.sign(encodedText, identity.privateKey, true);
         console.log(signature);
 
         return signature;
+    }
+
+    create() {
+        // Get the next identity in line, based on what we have queries so far;
+        const identityNode = this.getIdentityNode(this.identityIndex + 1);
+        const identityId = this.getAddress(identityNode, this.identityNetwork);
+
+        const identity: Identity = {
+            id: identityId,
+            name: '',
+            shortname: '',
+            published: false
+        };
+
+        return identity;
     }
 
     add(identity: Identity) {
@@ -128,6 +178,10 @@ export class IdentityService {
                 ...this.identities,
                 identity
             ];
+
+            // Increase the spent identity index.
+            this.identityIndex++;
+
         } else {
             this.identities[index] = identity;
         }
@@ -199,22 +253,25 @@ export class IdentityService {
     /** Get identities from localStorage. Only called during object creation. */
     private loadIdentities(): Identity[] {
         // If there are no identities, populate with mock data.
-        if (this.settings.identities == null || this.settings.identities.length === 0) {
-            this.settings.identities = this.initialize();
+        let identities = this.storage.getJSON('Identities', '[]', true);
+
+        if (identities.length === 0) {
+            identities = this.initialize();
         }
+
         // Return JSON serialized identities from localStorage.
-        return this.settings.identities;
+        return identities;
     }
 
     /** Get identity from localStorage. Only called during object creation. */
     private loadIdentity(id?: string): Identity {
-        const identityId = id || this.settings.identity;
+        const identityId = id || this.storage.getIsolatedValue('Identity');
         return this.identitiesSubject.getValue().find(i => i.id === identityId);
     }
 
     private saveIdentities() {
         // Save the latest value from the subject into local storage.
-        this.settings.identities = this.identities;
+        this.storage.setJSON('Identities', this.identities, true);
     }
 
     // setIdentity(id: string) {
@@ -246,9 +303,20 @@ export class IdentityService {
     }
 
     getId(index: number) {
-        const identity = this.getIdentity(index);
+        const identity = this.getIdentityNode(index);
         const address = this.getAddress(identity, this.identityNetwork);
         return address;
+    }
+
+    scan(height: number) {
+        // Reset the scan index height.
+        this.identityIndex = -1;
+
+        // TODO: Query for identities.
+
+        // Update the identity index based on last found identity.
+        // Right now we'll just use the length, but this must be changed when we are doing the actual scan on the Hubs.
+        this.identityIndex = this.identities.length;
     }
 
     private initialize(): Identity[] {
@@ -257,7 +325,6 @@ export class IdentityService {
             shortname: 'Sondre Bjellås',
             alias: 'sondreb',
             title: 'Public',
-            index: 0,
             id: 'PJZZYTPq2Uf6LJRkdgTVZ4xgRBi3vZmpdf',
             published: true,
             locked: false,
@@ -267,7 +334,6 @@ export class IdentityService {
             shortname: 'SondreB',
             alias: 'sondre',
             title: 'Personal, Gaming',
-            index: 1,
             id: 'PHnT3Fx1EN5uMBbYBivjDdkke3n2pb5svd',
             published: true,
             locked: false,
@@ -277,7 +343,6 @@ export class IdentityService {
             shortname: 'Sondre Bjellås',
             alias: 'citychainfoundation',
             title: 'CTO, City Chain Foundation',
-            index: 2,
             id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
             published: true,
             locked: false,
@@ -287,7 +352,6 @@ export class IdentityService {
             shortname: 'New Identity',
             alias: null,
             title: 'Random',
-            index: 3,
             id: 'PH99VjuZKX36CoKkXE4Z87BPKt2c4FyTwZ',
             published: false,
             locked: false,
@@ -297,7 +361,6 @@ export class IdentityService {
             shortname: 'Locked',
             alias: null,
             title: '?',
-            index: 4,
             id: 'PMzHABeaLVHP7kLDYFeHkE1CZaeS8wXvxv',
             published: true,
             locked: true,
@@ -307,7 +370,6 @@ export class IdentityService {
             shortname: 'Locked',
             alias: null,
             title: '?',
-            index: 5,
             id: 'PFfMFoJWHmHuQWfxoAmjgq7cqVxC9xTXfr',
             published: false,
             locked: true,

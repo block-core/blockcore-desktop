@@ -15,11 +15,10 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
 @Component({
     selector: 'app-identity-edit',
     templateUrl: './identity-edit.component.html',
-    styleUrls: ['./identity.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./identity-edit.component.scss']
 })
 export class IdentityEditComponent implements OnDestroy, OnInit {
-    @HostBinding('class.identity') hostClass = true;
+    @HostBinding('class.identity-edit') hostClass = true;
 
     identity: Identity;
     originalIdentity: Identity;
@@ -98,32 +97,29 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
 
         console.log('ID:', id);
 
-        // Make sure we only edit a copy of the identity.
-        this.originalIdentity = this.identityService.get(id);
+        if (id === 'create') {
+            this.identity = this.identityService.create();
+            this.originalIdentity = this.identity;
+            this.image = this.profileImageService.getImage(this.identity.id);
+        } else {
+            // Make sure we only edit a copy of the identity.
+            this.originalIdentity = this.identityService.get(id);
+            this.identity = this.jsonCopy(this.originalIdentity);
 
-        this.identity = this.jsonCopy(this.originalIdentity);
+            if (!this.identity.links) {
+                this.identity.links = [];
+            }
 
-        if (!this.identity.links) {
-            this.identity.links = [];
+            this.image = this.profileImageService.getImage(this.identity.id);
         }
 
-        this.image = this.profileImageService.getImage(this.identity.id);
-
         this.buildSendForm();
-
-        // this.subscription = this.identityService.identity$.subscribe(identity => this.identity = identity);
-
-        // Change to this if user can navigate to different identity without going back to list!
-        // this.hero$ = this.route.paramMap.pipe(
-        //     switchMap((params: ParamMap) =>
-        //         this.service.getHero(params.get('id')))
-        // );
     }
 
     private buildSendForm(): void {
         this.form = this.fb.group({
-            name: [this.identity.name, Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(250)])],
-            shortname: [this.identity.shortname, Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(30)])],
+            name: [this.identity.name, Validators.compose([Validators.maxLength(250)])],
+            shortname: [this.identity.shortname, Validators.compose([Validators.maxLength(30)])],
             alias: [this.identity.alias],
             title: [this.identity.title],
             published: [this.identity.published],

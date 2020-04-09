@@ -1,10 +1,12 @@
 <div class="content">
 
-    <button mat-mini-fab class="add-node" (click)="addIdentity()">
+    <app-identity-lookup></app-identity-lookup>
+
+    <button mat-mini-fab class="add-node" routerLink="/identity/create/edit">
         <mat-icon>add</mat-icon>
     </button>
 
-    <mat-list>
+    <mat-list class="identities-list">
         <h3 mat-subheader>Your identities</h3>
 
         <mat-list-item *ngFor="let identity of identityService.identities$ | async">
@@ -13,7 +15,9 @@
 
             <img mat-list-avatar class="mat-list-avatar-large" [src]="profileImageService.getImage(identity.id)">
 
-            <h4 mat-line><a [routerLink]="['/identity', identity.id]">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+            <h4 mat-line *ngIf="identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+            <h4 mat-line *ngIf="!identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.id}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+
             <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
             <p mat-line class="mat-card-subtitle">
                 <span *ngIf="!identity.locked">ID: {{identity.id}}</span><span *ngIf="identity.locked">Locked</span>
@@ -194,6 +198,27 @@
                 <p>When you publish your identity, all the information you provide is made publicly available to the world.</p>
                 <p>If your identity is "Unpublished", it cannot be restored if you uninstall City Hub from your device. All "Unpublished" identities will not be restoreable on other devices.</p>
                 <p>Unpublish will make your identity unavailable for future searches and lookup, but your previously published information can be saved and cached by third parties.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Scan for identities</mat-card-title>
+                <mat-card-subtitle>You can rescan the Hubs for missing identities</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>If you create and delete a lot of identities, sometimes you need to scan longer to find them. Click the button below to perform a long scan for your published identities.</p>
+                <!-- <p *ngIf="scanning">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </p> -->
+                <div class="progress-widget">
+                    <button mat-raised-button color="primary" [disabled]="scanning" (click)="scan()">SCAN</button>
+                    <div  class="progress-widget-spinner">
+                        <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
+                    </div>
+                    <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
+                </div>
             </mat-card-content>
         </mat-card>
 

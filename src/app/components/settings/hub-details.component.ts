@@ -14,8 +14,7 @@ import { Hub } from '@models/hub';
 @Component({
     selector: 'app-hub-details',
     templateUrl: './hub-details.component.html',
-    styleUrls: ['./hub-details.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./hub-details.component.scss']
 })
 export class HubDetailsComponent implements OnInit, OnDestroy {
     @HostBinding('class.network') hostClass = true;

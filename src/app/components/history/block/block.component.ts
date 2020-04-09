@@ -18,8 +18,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-history-block',
     templateUrl: './block.component.html',
-    styleUrls: ['./block.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./block.component.scss']
 })
 export class BlockHistoryComponent implements OnInit, OnDestroy {
     @HostBinding('class.block') hostClass = true;

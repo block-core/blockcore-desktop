@@ -9,8 +9,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 @Component({
     selector: 'app-tools',
     templateUrl: './tools.component.html',
-    styleUrls: ['./tools.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./tools.component.scss']
 })
 export class ToolsComponent implements OnInit {
     @HostBinding('class.app-tools') hostClass = true;

@@ -10,8 +10,7 @@ import { HubService } from 'src/app/services/hub.service';
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
     @HostBinding('class.settings') hostClass = true;

@@ -8,8 +8,7 @@ import { Observable } from 'rxjs';
 @Component({
     selector: 'app-about',
     templateUrl: './about.component.html',
-    styleUrls: ['./about.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
     @HostBinding('class.about') hostClass = true;

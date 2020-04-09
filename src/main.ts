@@ -1,15 +1,24 @@
 
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, ViewEncapsulation } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { BootController } from './boot';
 
 if (environment.production) {
     enableProdMode();
 }
 
-platformBrowserDynamic()
-    .bootstrapModule(AppModule, {
-        preserveWhitespaces: false
-    })
-    .catch(err => console.error(err));
+const init = () => {
+    platformBrowserDynamic().bootstrapModule(AppModule, [
+        {
+            defaultEncapsulation: ViewEncapsulation.None
+        }
+    ])
+        .then(() => (window as any).appBootstrap && (window as any).appBootstrap())
+        .catch(err => console.error('NG Bootstrap Error =>', err));
+};
+
+init();
+
+const boot = BootController.getbootControl().watchReboot().subscribe(() => init());

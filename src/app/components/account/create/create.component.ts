@@ -18,14 +18,12 @@ import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
 import * as wif from 'wif';
 import Dexie from 'dexie';
-import { StorageService } from 'src/app/services/storage.service';
-// import { StorageService } from '../../../services/storage.service';
+import { DatabaseStorageService } from 'src/app/services/storage.service';
 
 @Component({
     selector: 'app-account-create',
     templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./create.component.scss']
 })
 export class CreateAccountComponent implements OnInit {
     @HostBinding('class.account-create') hostClass = true;
@@ -147,7 +145,7 @@ export class CreateAccountComponent implements OnInit {
                     // debugger;
 
                     // Instantiate it
-                    const db = new StorageService('cityhub');
+                    const db = new DatabaseStorageService('cityhub');
 
                     // Open it
                     db.open().catch(err => {

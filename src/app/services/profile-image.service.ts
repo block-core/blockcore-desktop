@@ -11,7 +11,7 @@ export class ProfileImageService {
     }
 
     getImage(id: string): string {
-        let image = localStorage.getItem('Profile:Image:' + id);
+        let image = localStorage.getItem('Identity:Image:' + id);
 
         if (!image) {
             image = 'data:image/png;base64,iVBORw0KGg'
@@ -23,7 +23,7 @@ export class ProfileImageService {
     }
 
     setImage(id: string, value: string) {
-        localStorage.setItem('Profile:Image:' + id, value);
+        localStorage.setItem('Identity:Image:' + id, value);
     }
 
 }

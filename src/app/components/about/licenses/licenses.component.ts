@@ -7,8 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-licenses',
     templateUrl: './licenses.component.html',
-    styleUrls: ['./licenses.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+    styleUrls: ['./licenses.component.scss']
 })
 export class LicensesComponent implements OnDestroy, OnInit {
     @HostBinding('class.licenses') hostClass = true;
