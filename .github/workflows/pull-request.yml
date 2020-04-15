@@ -98,5 +98,3 @@ jobs:
       run: npm run publish:${{ matrix.platform }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
