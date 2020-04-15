@@ -25,7 +25,7 @@ jobs:
             runtime: "osx-x64"
             extension: ".zip"
             platform: "osx"
-        node_version: [10.x]
+        node_version: [12.x]
         dotnet_version: ['2.1.607']
       fail-fast: false
 
@@ -33,9 +33,6 @@ jobs:
     
     env:
       PROJECT_NAME: 'City.Chain'
-      SOLUTION_PATH: 'src/City.Chain.sln'
-      PROJECT_PATH: 'src/City.Chain/City.Chain.csproj'
-      BUILD_CONFIGURATION: 'Release'
       DAEMON: '1.0.24'
       ARCH: 'x64'
 
@@ -92,4 +89,4 @@ jobs:
       run: npm install
 
     - name: Build (npm)
-      run: npm run build:${{ matrix.platform }}
+      run: npm run build:prod

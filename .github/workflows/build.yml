@@ -33,9 +33,6 @@ jobs:
     
     env:
       PROJECT_NAME: 'City.Chain'
-      SOLUTION_PATH: 'src/City.Chain.sln'
-      PROJECT_PATH: 'src/City.Chain/City.Chain.csproj'
-      BUILD_CONFIGURATION: 'Release'
       DAEMON: '1.0.24'
       ARCH: 'x64'
 
@@ -91,10 +88,7 @@ jobs:
     - name: Install (npm)
       run: npm install
 
-    - name: Build (npm)
+    - name: Build and Publish
       run: npm run build:${{ matrix.platform }}
-
-    - name: Release (npm)
-      run: npm run publish:${{ matrix.platform }}
-      # env:
-      #   GH_TOKEN: ${{ secrets.manual_github_token }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
