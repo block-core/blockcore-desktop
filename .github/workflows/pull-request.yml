@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest ]
         include:
           - os: ubuntu-latest
             extension: ".tar.gz"
@@ -25,9 +25,6 @@ jobs:
     
     env:
       PROJECT_NAME: 'City.Chain'
-      SOLUTION_PATH: 'src/City.Chain.sln'
-      PROJECT_PATH: 'src/City.Chain/City.Chain.csproj'
-      BUILD_CONFIGURATION: 'Release'
       DAEMON: '1.0.24'
       ARCH: 'x64'
 
