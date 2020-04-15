@@ -25,7 +25,7 @@ jobs:
             runtime: "osx-x64"
             extension: ".zip"
             platform: "osx"
-        node_version: [10.x]
+        node_version: [12.x]
         dotnet_version: ['2.1.607']
       fail-fast: false
 
@@ -96,5 +96,5 @@ jobs:
 
     - name: Release (npm)
       run: npm run publish:${{ matrix.platform }}
-      env:
-        GH_TOKEN: ${{ secrets.manual_github_token }}
+      # env:
+      #   GH_TOKEN: ${{ secrets.manual_github_token }}
