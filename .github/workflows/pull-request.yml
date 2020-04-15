@@ -97,4 +97,4 @@ jobs:
     - name: Release (npm)
       run: npm run publish:${{ matrix.platform }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: "HELLO-WORLD"
