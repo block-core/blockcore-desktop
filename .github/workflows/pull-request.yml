@@ -82,6 +82,8 @@ jobs:
 
     - name: Build (npm)
       run: npm run build:${{ matrix.platform }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Release (npm)
       run: npm run publish:${{ matrix.platform }}
