@@ -26,8 +26,11 @@ export class HubService {
         return HubService.singletonInstance;
     }
 
-    private api<T>(url: string): Promise<T> {
-        return fetch(url)
+    private api<T>(url: string, method: string = 'GET', data?: any): Promise<T> {
+        return fetch(url, {
+            method,
+            body: JSON.stringify(data)
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(response.statusText);
@@ -36,13 +39,21 @@ export class HubService {
             });
     }
 
-
     private persist() {
         this.settings.hubs = this.hubs;
     }
 
-    post(signedDocument: any) {
+    async post(signedDocument: any) {
         const hub = this.getHub();
+
+        console.log('HUB:', hub);
+        console.log('SIGNED DOCUMENT:', signedDocument);
+
+        const url = hub.url + '/' + signedDocument.container + '/' + signedDocument.id;
+        console.log('URL:', url);
+
+        const results = await this.api<Hub>(url, 'POST', signedDocument);
+        console.log('RESULTS:', results);
     }
 
     async download(url: string) {
@@ -58,6 +69,7 @@ export class HubService {
 
     getHub() {
         const hub = this.hubs.find(h => h.id === this.settings.hub);
+
         return hub;
     }
 

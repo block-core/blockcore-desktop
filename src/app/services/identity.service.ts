@@ -143,12 +143,13 @@ export class IdentityService implements OnDestroy {
 
     sign(document: any): Buffer {
         const encoded: Uint8Array = encode(document, { sortKeys: true });
-        console.log(encoded);
 
-        const encodedText = new TextDecoder('utf-8').decode(encoded);
+        // To avoid issues with UTF-8 encoding of the byte array, we'll rely on base64.
+        const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength).toString('base64');
+
         const identity = this.getIdentityNode(0);
 
-        const signature = bitcoinMessage.sign(encodedText, identity.privateKey, true);
+        const signature = bitcoinMessage.sign(text, identity.privateKey, true);
         console.log(signature);
 
         return signature;
@@ -199,9 +200,6 @@ export class IdentityService implements OnDestroy {
                 signature,
                 item: identity
             };
-
-            // tslint:disable-next-line: no-debugger
-            debugger;
 
             const json = JSON.stringify(payload);
             console.log(json);
