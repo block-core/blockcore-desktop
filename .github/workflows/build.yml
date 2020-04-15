@@ -97,5 +97,4 @@ jobs:
     - name: Release (npm)
       run: npm run publish:${{ matrix.platform }}
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.manual_github_token }}
