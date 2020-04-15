@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - release/action-bug
 
 jobs:
   
@@ -96,5 +97,7 @@ jobs:
 
     - name: Release (npm)
       run: npm run publish:${{ matrix.platform }}
-      # env:
-      #   GH_TOKEN: ${{ secrets.manual_github_token }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
