@@ -197,7 +197,14 @@ export class LoadComponent implements OnDestroy {
                 this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
                     .subscribe(
                         response => {
-                            const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                            let statusResponse = response.featuresData.filter(x => x.namespace === 'Blockcore.Base.BaseFeature');
+                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                                this.statusIntervalSubscription.unsubscribe();
+                                this.start();
+                            }
+
+                            // TODO: Remove this when Stratis based node is removed.
+                            statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
                             if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
                                 this.statusIntervalSubscription.unsubscribe();
                                 this.start();
