@@ -98,7 +98,6 @@
     "dexie": "3.0.1",
     "electron": "9.0.5",
     "electron-builder": "22.7.0",
-    "electron-nightly": "^11.0.0-nightly.20200703",
     "electron-reload": "1.5.0",
     "enhanced-resolve": "4.2.0",
     "hammerjs": "2.0.8",
