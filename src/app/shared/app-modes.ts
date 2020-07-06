@@ -18,6 +18,10 @@ export class AppModes {
         id: 'advanced',
         name: 'Advanced',
         features: ['dashboard', 'wallet', 'history', 'merchants', 'settings', 'logout', 'staking']
+    }, {
+        id: 'experimental',
+        name: 'Experimental',
+        features: ['dashboard', 'wallet', 'history', 'identity', 'merchants', 'settings', 'logout', 'staking', 'hubs']
     }];
 
     active: AppMode;

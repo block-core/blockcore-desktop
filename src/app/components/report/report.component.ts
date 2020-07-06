@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClipboardService } from 'ngx-clipboard';
@@ -16,6 +16,7 @@ export interface ReportDialogData {
     selector: 'app-report-component',
     templateUrl: 'report.component.html',
     styleUrls: ['report.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ReportComponent {
 

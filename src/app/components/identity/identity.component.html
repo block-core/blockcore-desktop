@@ -1,0 +1,287 @@
+<div class="content">
+
+    <app-identity-lookup-widget></app-identity-lookup-widget>
+
+    <button mat-mini-fab class="add-node" routerLink="/identity/create/edit">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-list class="identities-list">
+        <h3 mat-subheader>Your identities</h3>
+
+        <mat-list-item *ngFor="let identity of identityService.identities$ | async">
+            <!-- <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
+            <div class="mat-list-item"><img mat-card-avatar class="" [src]="profileImageService.getImage(identity.id)" /></div> -->
+
+            <img mat-list-avatar class="mat-list-avatar-large" [src]="profileImageService.getImage(identity.id)">
+
+            <h4 mat-line *ngIf="identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+            <h4 mat-line *ngIf="!identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.id}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+
+            <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
+            <p mat-line class="mat-card-subtitle">
+                <span *ngIf="!identity.locked">ID: {{identity.id}}</span><span *ngIf="identity.locked">Locked</span>
+            </p>
+            <p mat-line class="mat-card-subtitle">
+                {{identity.title}}
+            </p>
+
+            <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+
+                    <button mat-menu-item [routerLink]="['/identity', identity.id]">
+                        <mat-icon>person</mat-icon>
+                        <span>View</span>
+                    </button>
+                    <button mat-menu-item [routerLink]="['/identity', identity.id, 'edit']">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit</span>
+                    </button>
+
+                    <mat-divider></mat-divider>
+
+                    <!-- <button *ngIf="!identity.published" mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Publish</span>
+                    </button>
+                    <button *ngIf="identity.published" mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Unpublish</span>
+                    </button>
+                    <button *ngIf="identity.locked" mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>lock_open</mat-icon>
+                        <span>Unlock</span>
+                    </button>
+                    <button *ngIf="!identity.locked" mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>lock</mat-icon>
+                        <span>Lock</span>
+                    </button> -->
+
+                    <mat-divider></mat-divider>
+
+                    <button mat-menu-item (click)="identityService.remove(identity.id)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete</span>
+                    </button>
+
+                </mat-menu>
+            </p>
+        </mat-list-item>
+
+        <!-- <mat-list-item>
+            <mat-icon mat-list-icon class="example-header-image-profile2"></mat-icon>
+            <h4 mat-line><a routerLink="/identity/1">sondre (@sondre)</a></h4>
+            <p mat-line>Published</p>
+            <p mat-line class="mat-card-subtitle">4a076c9f | Private</p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Disconnect node</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Ban Node</span>
+                    </button>
+                </mat-menu>
+            </p>
+        </mat-list-item>
+
+        <mat-list-item>
+            <mat-icon mat-list-icon class="example-header-image-profile3"></mat-icon>
+            <h4 mat-line><a routerLink="/identity/1">Sondre Bjellås (@citychainfoundation)</a></h4>
+            <p mat-line>Published</p>
+            <p mat-line class="mat-card-subtitle">88076c9a | CTO, City Chain Foundation</p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Publish Identity</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Unpublish Identity</span>
+                    </button>
+                </mat-menu>
+            </p>
+        </mat-list-item>
+
+        <mat-list-item>
+            <mat-icon mat-list-icon>person_outline</mat-icon>
+            <h4 mat-line><a routerLink="/identity/1">New Identity</a></h4>
+            <p mat-line>Unpublished</p>
+            <p mat-line class="mat-card-subtitle">76076c9f</p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Disconnect node</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Ban Node</span>
+                    </button>
+                </mat-menu>
+            </p>
+        </mat-list-item>
+
+        <mat-list-item>
+            <mat-icon mat-list-icon>security</mat-icon>
+            <h4 mat-line><a routerLink="/identity/1">Locked</a></h4>
+            <p mat-line>Unpublished</p>
+            <p mat-line class="mat-card-subtitle">?</p>
+
+            <p><button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span>Publish Identity</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Unpublish Identity</span>
+                    </button>
+                </mat-menu>
+            </p>
+        </mat-list-item> -->
+
+        <br>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Privacy and Multiple Identities</mat-card-title>
+                <mat-card-subtitle>Your accounts can be connected by third parties</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <!-- <h3 class="mat-h3">Please wait...</h3>
+                <p>If everything is working normally, you should automatically connected to nodes soon, please wait.</p> -->
+                <p>Depending on how you use City Hub, third parties can be able to connect your identities together through transactions on the blockchain.</p>
+                <p>If you need to ensure your identities are not discoverable and connected through the blockchain, ensure you use different accounts (wallets) for different identities.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <br>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Aliases</mat-card-title>
+                <mat-card-subtitle>Make it easier to find you</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Aliases can be used to more easily find your profile.</p>
+                <p>When you unpublish an identity, your reserved alias will be available for others.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <br>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Publish and Unpublish</mat-card-title>
+                <mat-card-subtitle>You control your identities</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>When you create a new identity, you can choose to publish it, or you can publish manually later.</p>
+                <p>When you publish your identity, all the information you provide is made publicly available to the world.</p>
+                <p>If your identity is "Unpublished", it cannot be restored if you uninstall City Hub from your device. All "Unpublished" identities will not be restoreable on other devices.</p>
+                <p>Unpublish will make your identity unavailable for future searches and lookup, but your previously published information can be saved and cached by third parties.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Scan for identities</mat-card-title>
+                <mat-card-subtitle>You can rescan the Hubs for missing identities</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>If you create and delete a lot of identities, sometimes you need to scan longer to find them. Click the button below to perform a long scan for your published identities.</p>
+                <!-- <p *ngIf="scanning">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </p> -->
+                <div class="progress-widget">
+                    <button mat-raised-button color="primary" [disabled]="scanning" (click)="scan()">SCAN</button>
+                    <div  class="progress-widget-spinner">
+                        <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
+                    </div>
+                    <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- <mat-divider></mat-divider>
+        <h3 mat-subheader>Inbound nodes</h3>
+        <mat-list-item *ngFor="let peer of status.inboundPeers">
+
+            <mat-icon mat-list-icon>computer</mat-icon>
+            <h4 mat-line>{{peer.remoteSocketEndpoint}}</h4>
+            <p mat-line> Version: {{peer.version}} -- Height: {{peer.tipHeight}} </p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Disconnect node</span>
+                    </button>
+                    <button mat-menu-item (click)="banNode(peer.remoteSocketEndpoint)">
+                        <mat-icon>cloud_off</mat-icon>
+                        <span>Ban Node</span>
+                    </button>
+                </mat-menu>
+            </p>
+
+        </mat-list-item>
+        <mat-card class="card" *ngIf="status.inboundPeers == 0">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Zero inbound nodes</mat-card-title>
+                <mat-card-subtitle>You have zero nodes incoming to your computer, likely because your firewall blocks traffic.
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <h3 class="mat-h3">TCP port: {{chain.port}}</h3>
+                <p>If you want to contribute to the network by becoming a public node, please open the above TCP port and forward it to your local computer IP address.</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Banned nodes</h3>
+        <mat-list-item *ngFor="let peer of bans">
+
+            <mat-icon mat-list-icon>computer</mat-icon>
+            <h4 mat-line>{{peer.endPoint}}</h4>
+            <p mat-line> Ban until: {{peer.banUntil | date:'dd-MM-yyyy HH:mm'}} -- {{peer.banReason}} </p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeBan(peer.endPoint)">
+                        <mat-icon>cloud_queue</mat-icon>
+                        <span>Remove ban</span>
+                    </button>
+                </mat-menu>
+            </p>
+
+        </mat-list-item>
+
+        <div class="network-details-footer" *ngIf="bans != 0">
+            <button (click)="removeBans()" mat-raised-button>Remove all bans</button>
+        </div> -->
+
+    </mat-list>
+
+</div>

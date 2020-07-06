@@ -10,9 +10,10 @@ import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ElectronService } from 'ngx-electron';
-import { StorageService } from 'src/app/services/storage.service';
+import { DatabaseStorageService, StorageService } from 'src/app/services/storage.service';
 import * as bip38 from 'city-bip38';
 import { Logger } from 'src/app/services/logger.service';
+import { IdentityService } from 'src/app/services/identity.service';
 
 export interface Account {
     name: string;
@@ -43,9 +44,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private readonly cd: ChangeDetectorRef,
         private authService: AuthenticationService,
+        private walletService: WalletService,
         private router: Router,
         private globalService: GlobalService,
+        private identityService: IdentityService,
         private wallet: WalletService,
+        private storageService: StorageService,
         private electronService: ElectronService,
         private log: Logger,
         private apiService: ApiService,
@@ -79,7 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private async getLocalWalletFiles() {
         try {
             // Read accounts from localStorage.
-            const db = new StorageService('cityhub');
+            const db = new DatabaseStorageService('cityhub');
             const list = await db.wallets.toArray();
             const wallets = list.map((item) => {
                 return { id: item.name, name: item.name };
@@ -171,10 +175,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.unlocking = true;
         this.invalidPassword = false;
 
+        const coinUnit = 'CITY';
+
         this.globalService.setWalletName(this.selectedAccount.name);
+        this.storageService.setWalletName(this.selectedAccount.name, coinUnit);
 
         this.globalService.setCoinName('City Coin');
-        this.globalService.setCoinUnit('CITY');
+        this.globalService.setCoinUnit(coinUnit);
 
         this.getCurrentNetwork();
 
@@ -191,7 +198,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private async loadLocalWallet(walletLoad: WalletLoad) {
-        const db = new StorageService('cityhub');
+        const db = new DatabaseStorageService('cityhub');
         const wallet = await db.wallets.get({ name: walletLoad.name });
         const self = this;
 
@@ -284,6 +291,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.wallet.start();
 
                     localStorage.setItem('Network:Wallet', this.wallet.walletName);
+
+                    // Get the physical path to the wallet file.
+                    const fullPath = this.globalService.getWalletFullPath();
+
+                    this.identityService.unlock(fullPath, walletLoad.password);
 
                     this.router.navigateByUrl('/dashboard');
                     // }

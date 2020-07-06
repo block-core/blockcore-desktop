@@ -16,6 +16,11 @@ import { PaperWalletComponent } from './components/paperwallet/paperwallet.compo
 import { ToolsComponent } from './components/tools/tools.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { NetworkDetailsComponent } from './components/network/network-details.component';
+import { IdentityComponent } from './components/identity/identity.component';
+import { IdentityViewComponent } from './components/identity/identity-view.component';
+import { HubDetailsComponent } from './components/settings/hub-details.component';
+import { IdentityEditComponent } from './components/identity/identity-edit.component';
+import { IdentityLookupComponent } from './components/identity/identity-lookup.component';
 
 const routes: Routes = [
     {
@@ -62,6 +67,41 @@ const routes: Routes = [
         }
     },
     {
+        path: 'identity',
+        component: IdentityComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity'
+        },
+    },
+    {
+        path: 'identity/:id',
+        component: IdentityViewComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'View'
+        },
+    },
+    {
+        path: 'identity/:id/edit',
+        component: IdentityEditComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Edit'
+        },
+    },
+    {
+        path: 'identity/:id/search',
+        component: IdentityLookupComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Lookup'
+        },
+    },
+    {
         path: 'merchants',
         component: MerchantsComponent,
         canActivate: [AuthenticatedUserGuard],
@@ -75,6 +115,14 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Settings'
+        },
+    },
+    {
+        path: 'hubs',
+        component: HubDetailsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Manage Hubs'
         },
     },
     {
@@ -151,7 +199,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+    imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, useHash: true })],
     exports: [RouterModule],
 })
 export class AppRoutingModule { }

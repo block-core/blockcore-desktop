@@ -5,6 +5,8 @@ import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { WalletService } from '../../services/wallet.service';
 import { ApplicationStateService } from '../../services/application-state.service';
+import { Injectable, NgZone } from '@angular/core';
+import { BootController } from '../../../boot';
 
 @Component({
     selector: 'app-logout',
@@ -15,7 +17,10 @@ import { ApplicationStateService } from '../../services/application-state.servic
 export class LogoutComponent {
     @HostBinding('class.logout') hostClass = true;
 
+    loggingOut = false;
+
     constructor(
+        private ngZone: NgZone,
         public wallet: WalletService,
         private authService: AuthenticationService,
         private globalService: GlobalService,
@@ -26,6 +31,10 @@ export class LogoutComponent {
     }
 
     logout() {
+        this.loggingOut = true;
+
+        console.log('Logout is running');
+
         this.wallet.stop();
 
         this.authService.setAnonymous();
@@ -41,6 +50,9 @@ export class LogoutComponent {
                     this.apiService.handleException(error);
                 }
             );
+
+        // Triggers the reboot in main.ts
+        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
 
         this.router.navigateByUrl('/login');
     }

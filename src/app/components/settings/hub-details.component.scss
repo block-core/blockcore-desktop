@@ -1,0 +1,65 @@
+.network {
+    mat-grid-tile {
+    }
+
+    .mat-list-avatar {
+        min-width: 80px !important;
+        min-height: 80px !important;
+        width: 80px !important;
+        height: 80px !important;
+      }
+
+    .add-node {
+        float: right;
+        margin-right: 18px;
+        margin-top: 4px;
+    }
+
+    .card {
+        margin: 0px 20px 20px 20px;
+    }
+
+    .details-content
+    {
+        margin-top: 14px;
+    }
+
+    .network-grid
+    {
+        border-bottom: 1px solid silver;
+    }
+
+    .network-details-footer {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .network-label {
+        color: gray;
+        padding-bottom: 10px;
+    }
+
+    .network-value
+    {
+        font-size: 1.6em;
+    }
+
+    .mat-grid-tile .mat-figure {
+        flex-direction: column !important;
+    }
+
+    .mat-grid-tile {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
+
+    .network-grid > .mat-grid-title {
+        border-right: 1px solid silver !important;
+        border-bottom: 1px solid silver !important;
+    }
+
+    .network-grid .mat-icon {
+        font-size: 1.6em !important;
+    }
+}

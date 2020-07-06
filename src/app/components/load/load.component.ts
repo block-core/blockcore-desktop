@@ -22,7 +22,7 @@ export interface ListItem {
     selector: 'app-load',
     templateUrl: './load.component.html',
     styleUrls: ['./load.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None
 })
 export class LoadComponent implements OnDestroy {
     @HostBinding('class.load') hostClass = true;
@@ -98,6 +98,16 @@ export class LoadComponent implements OnDestroy {
     initialize() {
         this.apiService.initialize();
 
+        // TODO: Should send the correct network, hard-coded to city main for now.
+        // Do this always now, we need this information in the UI for identity handling.
+        const network = coininfo('city').toBitcoinJS();
+        this.appState.networkDefinition = network;
+
+        this.appState.networkParams = {
+            private: network.wif,
+            public: network.pubKeyHash
+        };
+
         if (this.appState.mode === 'full' || this.appState.mode === 'local' || this.appState.mode === 'light') {
             this.loading = true;
             this.appState.connected = false;
@@ -108,13 +118,13 @@ export class LoadComponent implements OnDestroy {
             this.fullNodeConnect();
         } else if (this.appState.mode === 'simple') {
             // TODO: Should send the correct network, hard-coded to city main for now.
-            const network = coininfo('city').toBitcoinJS();
-            this.appState.networkDefinition = network;
+            // const network = coininfo('city').toBitcoinJS();
+            // this.appState.networkDefinition = network;
 
-            this.appState.networkParams = {
-                private: network.wif,
-                public: network.pubKeyHash
-            };
+            // this.appState.networkParams = {
+            //     private: network.wif,
+            //     public: network.pubKeyHash
+            // };
 
             this.loading = false;
             this.appState.connected = true;
@@ -187,7 +197,14 @@ export class LoadComponent implements OnDestroy {
                 this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
                     .subscribe(
                         response => {
-                            const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                            let statusResponse = response.featuresData.filter(x => x.namespace === 'Blockcore.Base.BaseFeature');
+                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                                this.statusIntervalSubscription.unsubscribe();
+                                this.start();
+                            }
+
+                            // TODO: Remove this when Stratis based node is removed.
+                            statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
                             if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
                                 this.statusIntervalSubscription.unsubscribe();
                                 this.start();

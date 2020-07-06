@@ -37,6 +37,7 @@ import { ToolsModule } from './components/tools/tools.module';
 import { NotificationsModule } from './components/notifications/notifications.module';
 import { ReportModule } from './components/report/report.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HubService } from './services/hub.service';
 
 @NgModule({
     declarations: [
@@ -75,10 +76,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     providers: [
         HttpErrorHandler,
         httpInterceptorProviders,
-        ApiService,
-        ChainService,
+        // ApiService,
+        // HubService,
+        // ChainService,
         ElectronService,
-        GlobalService,
+        // GlobalService,
         { provide: APP_TITLE, useValue: 'City Hub' },
     ],
     bootstrap: [RootComponent]

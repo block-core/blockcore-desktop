@@ -1,6 +1,6 @@
 <div class="content">
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex fxLayoutGap="20px grid"  fxLayoutGap.xs="0px grid" fxLayoutGap.sm="0px grid">
+    <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid" fxLayoutGap.sm="0px grid">
         <div fxFlex>
             <mat-card class="dashboard-card">
                 <mat-icon class="dashboard-info-icon" [matTooltip]="walletInfo">info</mat-icon>
@@ -74,13 +74,8 @@
                         {{selectedCoinTicker.price}} {{selectedCoinTicker.pair}} (<span class="marketprice" [ngClass]="{'marketprice-negative': selectedCoinTicker.changePercent24Hr < 0}">{{selectedCoinTicker.changePercent24Hr | priceUnit}}%</span>)<br>
                     </span>
                     <table class="marketprice-table">
-                        <!-- <tr>
-                            <td>Market Cap: {{selectedCoinTicker.marketCap | priceUnit}}</td>
-                            <td>Supply: {{selectedCoinTicker.supply | priceUnit}} {{selectedCoinTicker.symbol}}</td>
-                        </tr> -->
                         <tr>
                             <td>Volume: {{selectedCoinTicker.volume24Hr | priceUnit}} {{selectedCoinTicker.volumepair}}</td>
-                            <!-- <td>Rank: {{selectedCoinTicker.rank}}</td> -->
                         </tr>
                     </table>
                 </mat-card-content>
@@ -102,13 +97,15 @@
                 <mat-card-content>
 
                     <p *ngFor="let tile of notifications.notifications.slice().reverse()">
-                            - {{tile.title}}
+                        - {{tile.title}}
                     </p>
 
                     <button mat-stroked-button routerLink="/notifications">Open Notification Center</button>
                 </mat-card-content>
 
             </mat-card>
+
+            <app-identity-lookup-widget *ngIf="appModes.enabled('hubs')"></app-identity-lookup-widget>
 
             <!-- <mat-card>
                 <mat-card-title>Sweep paper wallet</mat-card-title>

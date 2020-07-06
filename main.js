@@ -31,6 +31,7 @@ if (os.arch() === 'arm') {
 var autoUpdater = require('electron-updater').autoUpdater;
 var fs = require('fs');
 var log = require('electron-log');
+var readChunk = require('read-chunk');
 var DaemonState;
 (function (DaemonState) {
     DaemonState[DaemonState["Unknown"] = 0] = "Unknown";
@@ -126,11 +127,15 @@ electron_1.ipcMain.on('reset-database', function (event, arg) {
         var folderBlocks = path.join(dataFolder, 'blocks');
         var folderChain = path.join(dataFolder, 'chain');
         var folderCoinView = path.join(dataFolder, 'coinview');
+        var folderCommon = path.join(dataFolder, 'common');
+        var folderProvenHeaders = path.join(dataFolder, 'provenheaders');
         var folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
         // After shutdown completes, we'll delete the database.
         deleteFolderRecursive(folderBlocks);
         deleteFolderRecursive(folderChain);
         deleteFolderRecursive(folderCoinView);
+        deleteFolderRecursive(folderCommon);
+        deleteFolderRecursive(folderProvenHeaders);
         deleteFolderRecursive(folderFinalizedBlock);
     });
     event.returnValue = 'OK';
@@ -139,8 +144,25 @@ electron_1.ipcMain.on('open-data-folder', function (event, arg) {
     var userDataPath = electron_1.app.getPath('userData');
     var appDataFolder = path.dirname(userDataPath);
     var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
-    electron_1.shell.openItem(dataFolder);
+    electron_1.shell.openPath(dataFolder);
     event.returnValue = 'OK';
+});
+electron_1.ipcMain.on('get-wallet-seed', function (event, arg) {
+    // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
+    // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
+    // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
+    var dataBuffer = readChunk.sync(arg, 1, 500);
+    var data = dataBuffer.toString('utf8');
+    var key = '"encryptedSeed":"';
+    var startIndex = data.indexOf(key);
+    var endIndex = data.indexOf('",', startIndex);
+    var seed = data.substring(startIndex + key.length, endIndex);
+    var keyChainCode = '"chainCode":"';
+    var startIndexChainCode = data.indexOf(keyChainCode);
+    var endIndexChainCode = data.indexOf('",', startIndexChainCode);
+    var chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
+    // chainCodeDecoded: Buffer.from(chainCode, 'base64')
+    event.returnValue = { encryptedSeed: seed, chainCode: chainCode };
 });
 autoUpdater.on('checking-for-update', function () {
     if (!serve) {
@@ -322,7 +344,7 @@ function startDaemon(chain) {
         daemonName += '.exe';
     }
     else if (chain.path) {
-        daemonName += ".dll";
+        daemonName += '.dll';
     }
     var daemonPath = path.resolve(folderPath, daemonName);
     launchDaemon(daemonPath, chain);

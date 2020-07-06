@@ -29,8 +29,29 @@
             <mat-list class="main-menu">
 
                 <div class="menu-top">
+
                     <img src="assets/{{appState.chain}}/logo.png" class="menu-top-logo">
                     <span *ngIf="showFiller" class="menu-top-text" mat-line>{{coinName}}</span>
+
+                    <!-- <button mat-button [matMenuTriggerFor]="menu">
+                        
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>dialpad</mat-icon>
+                            <span>Redial</span>
+                        </button>
+                        <button mat-menu-item disabled>
+                            <mat-icon>voicemail</mat-icon>
+                            <span>Check voice mail</span>
+                        </button>
+                        <button mat-menu-item>
+                            <mat-icon>notifications_off</mat-icon>
+                            <span>Disable alerts</span>
+                        </button>
+                    </mat-menu> -->
+
                 </div>
 
                 <mat-list-item *ngIf="appModes.enabled('dashboard')" routerLinkActive="main-menu-active" routerLink="/dashboard">
@@ -46,6 +67,11 @@
                 <mat-list-item *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
                     <mat-icon mat-list-icon>history</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>History</h4>
+                </mat-list-item>
+
+                <mat-list-item *ngIf="appModes.enabled('identity')" routerLinkActive="main-menu-active" routerLink="/identity">
+                    <mat-icon mat-list-icon>person</mat-icon>
+                    <h4 *ngIf="showFiller" mat-line>Identity</h4>
                 </mat-list-item>
 
                 <mat-list-item *ngIf="appModes.enabled('merchants')" routerLinkActive="main-menu-active" routerLink="/merchants">
@@ -133,6 +159,10 @@
                 <mat-icon>cloud_off</mat-icon>
             </button>
 
+            <button *ngIf="appModes.enabled('identity')" mat-icon-button [matTooltip]="identityTooltip" [matMenuTriggerFor]="identityMenu">
+                <mat-icon>person</mat-icon>
+            </button>
+
             <button *ngIf="!appState.pageMode && !appState.handset" mat-icon-button [matMenuTriggerFor]="moreMenu">
                 <mat-icon>more_vert</mat-icon>
             </button>
@@ -157,6 +187,13 @@
                 <button mat-menu-item routerLink="/logout">
                     <mat-icon>power_settings_new</mat-icon>
                     <span>Log out</span>
+                </button>
+            </mat-menu>
+
+            <mat-menu #identityMenu="matMenu">
+                <button mat-menu-item routerLink="/about" *ngFor="let identity of identityService.identities$ | async">
+                    <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
+                    <span>{{identity.name}} <span *ngIf="identity.alias">(@{{identity.alias}})</span></span>
                 </button>
             </mat-menu>
 

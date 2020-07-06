@@ -1,0 +1,37 @@
+<!-- THIS IS TEMPORARILY DISABLED DUE TO BUG: https://github.com/merlosy/ngx-material-file-input/issues/56 -->
+<mat-form-field appearance="outline" [formGroup]="formDoc">
+    <mat-label>Change profile image</mat-label>
+    <ngx-mat-file-input (change)="fileChangeEvent($event)" formControlName="basicfile" placeholder="Profile image"></ngx-mat-file-input>
+    <mat-icon matSuffix>image</mat-icon>
+</mat-form-field>
+
+<!-- <input type="file" (change)="fileChangeEvent($event)" /> -->
+
+<span *ngIf="imageChangedEvent">
+
+    <button mat-icon-button (click)="rotateLeft()">
+        <mat-icon>rotate_left</mat-icon>
+    </button>
+    <button mat-icon-button (click)="rotateRight()">
+        <mat-icon>rotate_right</mat-icon>
+    </button>
+    <button mat-icon-button (click)="flipHorizontal()">
+        <mat-icon>flip</mat-icon>
+    </button>
+    <button mat-icon-button (click)="flipVertical()">
+        <mat-icon class="rotate-90">flip</mat-icon>
+    </button>
+    <button mat-icon-button (click)="resetImage()">
+        <mat-icon>undo</mat-icon>
+    </button><br>
+
+    <div>
+        <image-cropper backgroundColor="black" [imageChangedEvent]="imageChangedEvent" [imageURL]="imageURL" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [resizeToWidth]="160" [cropperMinWidth]="160" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    </div>
+
+    <span *ngIf="showPreview">
+        <br>
+        Preview:<br>
+        <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+    </span>
+</span>

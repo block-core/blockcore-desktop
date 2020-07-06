@@ -1,0 +1,50 @@
+<div class="details-content">
+
+    <button mat-mini-fab class="add-node" (click)="addHub()">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-list>
+        <h3 mat-subheader>Hubs</h3>
+
+        <mat-list-item *ngFor="let hub of hubs">
+            <img mat-list-avatar [src]="getImage(hub.icon)">
+
+            <h4 mat-line>{{hub.name}} ({{hub.url}})</h4>
+            <p mat-line>ID: {{hub.id}}</p>
+            <p mat-line class="mat-card-subtitle">Added: {{hub.added}}</p>
+            <p mat-line class="mat-card-subtitle">Status: {{hubStatus(hub)}}</p>
+            <p><button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeHub(hub.id)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove hub</span>
+                    </button>
+                </mat-menu>
+            </p>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+        <br>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>info</mat-icon>
+                <mat-card-title>Public Key Verification</mat-card-title>
+                <mat-card-subtitle>When you add a hub, you must verify the public key. If the server changes public key, we'll give you a warning and you need to re-approve or change active hub.
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                When you add a hub, you must verify the public key. If the server changes public key, we'll give you a warning and you need to re-approve or change active hub.
+            </mat-card-content>
+        </mat-card>
+
+    </mat-list>
+
+</div>
+
+<div class="network-details-footer">
+    <button (click)="back()" mat-raised-button>Go back</button>
+</div>

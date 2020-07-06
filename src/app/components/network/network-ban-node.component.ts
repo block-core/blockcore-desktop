@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface NodeDialogData {
@@ -9,6 +9,7 @@ export interface NodeDialogData {
 @Component({
     selector: 'app-network-ban-node',
     templateUrl: 'network-ban-node.component.html',
+    encapsulation: ViewEncapsulation.None
 })
 export class NetworkBanNodeComponent {
 

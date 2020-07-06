@@ -1,0 +1,39 @@
+@import "~@angular/material/theming";
+
+.identity-view {
+  
+    .mat-card {
+        margin-bottom: 20px;
+    }
+    
+    mat-card {
+        margin-bottom: 20px;
+    }
+
+    .mat-list-avatar-large {
+        min-width: 80px !important;
+        min-height: 80px !important;
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .mat-expansion-panel-header-title,
+    .mat-expansion-panel-header-description {
+        flex-basis: 0;
+    }
+
+    .mat-expansion-panel-header-description {
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mat-form-field + .mat-form-field {
+        margin-left: 8px;
+    }
+
+    .footer {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}

@@ -30,11 +30,11 @@ import { WalletUtxoCountDialogComponent } from './wallet-utxo-count-dialog';
         WalletComponent,
         WalletUtxoCountDialogComponent
     ],
-    entryComponents: [
-        WalletUtxoCountDialogComponent
-    ],
     exports: [
         WalletComponent,
+    ],
+    entryComponents: [
+        WalletUtxoCountDialogComponent
     ],
 })
 export class WalletModule {

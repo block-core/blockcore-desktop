@@ -20,6 +20,8 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { retryWhen, delay, tap } from 'rxjs/operators';
 import { NodeStatus } from '@models/node-status';
 import { ReportComponent } from '../report/report.component';
+import { SettingsService } from 'src/app/services/settings.service';
+import { IdentityService } from 'src/app/services/identity.service';
 
 @Component({
     selector: 'app-root',
@@ -67,6 +69,8 @@ export class RootComponent implements OnInit, OnDestroy {
         private log: Logger,
         public updateService: UpdateService,
         public detailsService: DetailsService,
+        public identityService: IdentityService,
+        public settings: SettingsService,
         private apiService: ApiService,
         private walletService: WalletService,
         private readonly cd: ChangeDetectorRef,
@@ -177,7 +181,12 @@ export class RootComponent implements OnInit, OnDestroy {
             const contentContainer = document.querySelector('.app-view-area-main') || window;
             contentContainer.scrollTo(0, 0);
         });
+    }
 
+    get identityTooltip(): string {
+        if (this.walletService.generalInfo) {
+            return `Sondre Bjellås (@sondreb): ${this.walletService.generalInfo.connectedNodes}\nBlock Height: ${this.walletService.generalInfo.chainTip}\nSynced: ${this.walletService.percentSynced}`;
+        }
     }
 
     get networkStatusTooltip(): string {

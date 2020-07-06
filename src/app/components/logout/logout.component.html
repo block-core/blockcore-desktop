@@ -3,7 +3,9 @@
 
     <p>Are you sure you want to log out?</p>
 
+    <mat-spinner *ngIf="loggingOut"></mat-spinner>
+
     <p *ngIf="wallet.stakingEnabled">Warning: You are currently staking. This will stop the staking process.</p>
 
-    <button (click)="logout()" mat-raised-button color="primary">Yes</button>&nbsp;<button routerLink="/dashboard" mat-stroked-button>No</button>
+    <button (click)="logout()" [disabled]="loggingOut" mat-raised-button color="primary">Yes</button>&nbsp;<button routerLink="/dashboard"  [disabled]="loggingOut" mat-stroked-button>No</button>
 </div>

@@ -1,0 +1,31 @@
+image-cropper {
+    max-height: 33vh;
+}
+
+.image-cropper {
+    max-height: 33vh;
+
+    .rotate-45 {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .rotate-90 {
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    .icon-flipped {
+        -o-transform: scaleX(-1);
+        -moz-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        -ms-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}

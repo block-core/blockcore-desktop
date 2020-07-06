@@ -32,7 +32,7 @@
         <mat-card-header>
             <mat-icon mat-card-avatar>mood</mat-icon>
             <mat-card-title>User Experience</mat-card-title>
-            <mat-card-subtitle>These settings help you improve the user experience.</mat-card-subtitle>
+            <mat-card-subtitle>Settings to customize user experience.</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
             <h3 class="mat-h3">Theme</h3>
@@ -60,6 +60,50 @@
             <h3 class="mat-h3">Autostart on log in</h3>
 
             <mat-checkbox (change)="onChanged($event)" [(ngModel)]="selectedOpenOnLogin">Start City Hub when you log in to your computer</mat-checkbox>
+
+            <!-- DISABLED UNTIL IMPLEMENTED! -->
+            <!-- <h3 class="mat-h3">Language</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
+                    <mat-option value="nb-NO">Norsk</mat-option>
+                    <mat-option value="en-US">English</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <h3 class="mat-h3">Currency</h3>
+
+            <mat-form-field>
+                <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="NOK">NOK</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="settings-card" *ngIf="appModes.enabled('hubs')">
+        <mat-card-header>
+            <mat-icon mat-card-avatar>device_hub</mat-icon>
+            <mat-card-title>Smart City Platform</mat-card-title>
+            <mat-card-subtitle>Settings for the Smart City Platform integration.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <h3 class="mat-h3">Active Hub</h3>
+
+            <mat-form-field>
+                <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedHub">
+                    <mat-option *ngFor="let hub of hubs" [value]="hub.id">
+                        {{hub.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <br>
+
+            <button [routerLink]="['/hubs']" mat-raised-button color="primary">Edit Hubs</button>
 
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>

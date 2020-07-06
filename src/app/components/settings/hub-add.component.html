@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Add hub</h1>
+<div mat-dialog-content>
+  <p>Fill out address of hub</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.url" placeholder="Fill out domain name for hub">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data.url" cdkFocusInitial>Add</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

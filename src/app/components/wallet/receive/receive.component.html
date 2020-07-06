@@ -4,7 +4,7 @@
     <form *ngIf="!showAll">
         <div>
             <div>
-                <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+                <!--<ngx-qrcode [value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>-->
             </div>
             <div>
                 <code class="d-inline-block">{{ address }}</code>
@@ -33,6 +33,7 @@
     <button *ngIf="showAll" mat-stroked-button (click)="showOneAddress()">← Back to one address</button>
 
     <form *ngIf="showAll">
+        
 
         <br>
         <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">

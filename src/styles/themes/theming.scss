@@ -1,86 +1,93 @@
-
 @mixin app-theme($theme) {
-    $background: map-get($theme, 'background');
-    $primary: map-get($theme, 'primary');
-    $accent: map-get($theme, 'accent');
-    
-    @include angular-material-theme($theme);
+  $background: map-get($theme, "background");
+  $primary: map-get($theme, "primary");
+  $accent: map-get($theme, "accent");
 
-    .mat-menu-panel {
-        background-color: map-get($background, 'dialog');
+  @include angular-material-theme($theme);
+
+  .mat-menu-panel {
+    background-color: map-get($background, "dialog");
+  }
+
+  ::selection {
+    background: $app-selection-color;
+  }
+
+  ::-moz-selection {
+    background: $app-selection-color;
+  }
+
+  .mat-tab-link,
+  .mat-tab-label {
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  .mat-tab-label-active {
+    background-color: rgba(mat-color($primary, "default"), 0.3);
+    opacity: 1 !important;
+  }
+
+  .mat-card .mat-card {
+    background: map-get($background, "card-2");
+  }
+
+  .mat-card .mat-card .mat-card {
+    background: map-get($background, "card-3");
+  }
+
+  .mat-slide-toggle-content {
+    font-size: 16px;
+  }
+
+  .link {
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  a {
+    color: mat-color($accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: mat-color($accent);
+    text-decoration: underline;
+  }
+
+  .interactive-table {
+    width: 100%;
+
+    .mat-row {
+      cursor: pointer;
+      //background-color: red! important;
+      //background-color: mat-color($primary, 'default');
+      //color: blue !important;
     }
 
-    ::selection {
-        background: $app-selection-color;
+    .mat-row:hover {
+      background-color: rgba(mat-color($primary, "default"), 0.6);
+      //background-color: red! important;
+      //color: blue !important;
     }
-      
-    ::-moz-selection {
-        background: $app-selection-color;
-    }
+  }
 
-    .mat-tab-link,
-    .mat-tab-label {
-        font-weight: 300;
-        text-transform: uppercase;
-    }
-    
-    .mat-tab-label-active {
-        background-color: rgba(mat-color($primary, 'default'), .3);
-        opacity: 1 !important;
-    }
+  // a {
+  //     color: mat-color($primary, 'default');
+  //     text-decoration: underline;
+  //     transition: color .2ms ease-out;
 
-    .mat-card .mat-card {
-        background: map-get($background, 'card-2');
-    }
+  //     &:hover {
+  //         color: rgba(mat-color($primary, 'default'), .6);
+  //         transition: color .2ms ease-in;
+  //     }
 
-    .mat-card .mat-card .mat-card {
-        background: map-get($background, 'card-3');
-    }
+  //     &:visited {
+  //         color: mat-color($primary, 'default');
+  //     }
+  // }
 
-    .mat-slide-toggle-content {
-        font-size: 16px;
-    }
-
-    .link {
-
-    }
-
-    .link:hover {
-        text-decoration: underline;
-    }
-
-    .interactive-table {
-        width: 100%;
-
-        .mat-row {
-            cursor: pointer;
-            //background-color: red! important;
-            //background-color: mat-color($primary, 'default');
-            //color: blue !important;
-        }
-
-        .mat-row:hover {
-            background-color: rgba(mat-color($primary, 'default'), .6);
-            //background-color: red! important;
-            //color: blue !important;
-        }
-
-    }
-
-    // a {
-    //     color: mat-color($primary, 'default');
-    //     text-decoration: underline;
-    //     transition: color .2ms ease-out;
-
-    //     &:hover {
-    //         color: rgba(mat-color($primary, 'default'), .6);
-    //         transition: color .2ms ease-in;
-    //     }
-
-    //     &:visited {
-    //         color: mat-color($primary, 'default');
-    //     }
-    // }
-
-    //@include app-app-theme($theme);
+  //@include app-app-theme($theme);
 }

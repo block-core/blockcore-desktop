@@ -23,13 +23,13 @@ import { NetworkBanNodeComponent } from './network-ban-node.component';
         NetworkAddNodeComponent,
         NetworkBanNodeComponent,
     ],
-    entryComponents: [
-        NetworkAddNodeComponent,
-        NetworkBanNodeComponent
-    ],
     exports: [
         NetworkComponent,
         NetworkDetailsComponent,
+    ],
+    entryComponents: [
+        NetworkAddNodeComponent,
+        NetworkBanNodeComponent
     ],
 })
 export class NetworkModule {

@@ -25,15 +25,15 @@ jobs:
             runtime: "osx-x64"
             extension: ".zip"
             platform: "osx"
-        node_version: [12.x]
-        dotnet_version: ['2.1.607']
+        node_version: [14.x]
+        dotnet_version: ['2.1.807']
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
     
     env:
       PROJECT_NAME: 'City.Chain'
-      DAEMON: '1.0.24'
+      DAEMON: '1.0.25'
       ARCH: 'x64'
 
     steps:

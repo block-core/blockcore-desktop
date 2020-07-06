@@ -1,0 +1,14 @@
+@import "~@angular/material/theming";
+
+.identity-lookup-widget {
+    margin-bottom: 10px;
+
+    .form-field {
+        width: calc(100% - 110px);
+    }
+
+    .button {
+        width: 90px;
+        margin-left: 20px;
+    }
+}

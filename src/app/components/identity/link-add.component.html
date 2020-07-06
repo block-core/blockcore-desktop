@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Add link</h1>
+<div mat-dialog-content>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Link</mat-label>
+        <input matInput [(ngModel)]="data.url" placeholder="Fill out link value">
+        <mat-icon matSuffix>link</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <input matInput [(ngModel)]="data.type" placeholder="Fill out link value">
+        <mat-icon matSuffix>bookmark</mat-icon>
+    </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Add</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

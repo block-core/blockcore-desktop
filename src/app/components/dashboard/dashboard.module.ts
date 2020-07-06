@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { IdentityModule } from '../identity/identity.module';
 
 @NgModule({
     imports: [
@@ -13,7 +14,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         RouterModule,
         MaterialModule,
         FlexLayoutModule,
+        FormsModule,
         ReactiveFormsModule,
+        IdentityModule,
         AppSharedModule
     ],
     declarations: [

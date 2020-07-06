@@ -29,6 +29,11 @@ export class GlobalService {
         return this.walletPath;
     }
 
+    getWalletFullPath() {
+        // Forward slash to be more universal? This must be tested on all OS.
+        return this.walletPath + '/' + this.currentWalletName + '.wallet.json';
+    }
+
     setWalletPath(walletPath: string) {
         this.walletPath = walletPath;
     }

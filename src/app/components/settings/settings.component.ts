@@ -4,6 +4,8 @@ import { AppModes } from '../../shared/app-modes';
 import { ElectronService } from 'ngx-electron';
 import { Debugger } from 'electron';
 import { SettingsService } from 'src/app/services/settings.service';
+import { JsonHubProtocol } from '@aspnet/signalr';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
     selector: 'app-settings',
@@ -24,10 +26,14 @@ export class SettingsComponent {
     selectedOpenOnLogin: boolean;
     selectedMode: string;
 
+    selectedHub: string;
+    hubs: any;
+
     constructor(
         public readonly theme: Theming,
         public electron: ElectronService,
         public settings: SettingsService,
+        public hubService: HubService,
         public appModes: AppModes) {
 
         this.selectedTheme = theme.currentTheme;
@@ -37,10 +43,11 @@ export class SettingsComponent {
         this.selectedMode = settings.mode;
         this.selectedShowInTaskbar = settings.showInTaskbar;
         this.selectedOpenOnLogin = settings.openOnLogin;
+        this.selectedHub = settings.hub;
+        this.hubs = settings.hubs;
 
         console.log('settings.openOnLogin:', settings.openOnLogin);
         console.log('this.selectedOpenOnLogin:', this.selectedOpenOnLogin);
-
     }
 
     onThemeChange(event) {
@@ -58,6 +65,7 @@ export class SettingsComponent {
         this.settings.openOnLogin = this.selectedOpenOnLogin;
         this.settings.autoLock = this.selectedAutoLock;
         this.settings.clearOnExit = this.selectedClearOnExit;
+        this.settings.hub = this.selectedHub;
 
         console.log('selectedOpenOnLogin:', this.selectedOpenOnLogin);
 
