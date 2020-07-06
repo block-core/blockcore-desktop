@@ -189,7 +189,7 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
     const userDataPath = app.getPath('userData');
     const appDataFolder = path.dirname(userDataPath);
     const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
-    shell.openItem(dataFolder);
+    shell.openPath(dataFolder);
 
     event.returnValue = 'OK';
 });

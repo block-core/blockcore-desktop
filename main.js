@@ -144,7 +144,7 @@ electron_1.ipcMain.on('open-data-folder', function (event, arg) {
     var userDataPath = electron_1.app.getPath('userData');
     var appDataFolder = path.dirname(userDataPath);
     var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
-    electron_1.shell.openItem(dataFolder);
+    electron_1.shell.openPath(dataFolder);
     event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('get-wallet-seed', function (event, arg) {

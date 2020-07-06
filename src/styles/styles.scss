@@ -1,6 +1,6 @@
 @import "~@angular/material/theming";
 
-$roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
+//$roboto-font-path: "roboto-fontface/fonts" !default;
 
 @import "./variables";
 @import "./themes/font";
@@ -24,7 +24,6 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts" !default;
 @import "./themes/theming";
 
 @include mat-core($app-typography);
-
 @include app-theme($app-dark-theme);
 
 .app-light-theme {

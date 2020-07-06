@@ -12,6 +12,7 @@ import { CoincapAsset } from 'src/app/classes/coincap-asset';
 import { CoinAsset } from 'src/app/classes/coin-asset';
 import { NotificationService } from 'src/app/services/notification.service';
 import { P2pb2bAsset } from 'src/app/classes/p2pb2b2-asset';
+import { AppModes } from 'src/app/shared/app-modes';
 
 @Component({
     selector: 'app-dashboard',
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         public notifications: NotificationService,
         private detailsService: DetailsService,
         public wallet: WalletService,
+        public appModes: AppModes,
         private fb: FormBuilder) {
 
         // Make sure we update wallet at higher frequency.
@@ -85,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     this.coincap.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             ));
 
@@ -103,7 +105,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     this.coincap.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             ));
 

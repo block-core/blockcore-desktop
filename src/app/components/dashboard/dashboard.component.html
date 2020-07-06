@@ -74,13 +74,8 @@
                         {{selectedCoinTicker.price}} {{selectedCoinTicker.pair}} (<span class="marketprice" [ngClass]="{'marketprice-negative': selectedCoinTicker.changePercent24Hr < 0}">{{selectedCoinTicker.changePercent24Hr | priceUnit}}%</span>)<br>
                     </span>
                     <table class="marketprice-table">
-                        <!-- <tr>
-                            <td>Market Cap: {{selectedCoinTicker.marketCap | priceUnit}}</td>
-                            <td>Supply: {{selectedCoinTicker.supply | priceUnit}} {{selectedCoinTicker.symbol}}</td>
-                        </tr> -->
                         <tr>
                             <td>Volume: {{selectedCoinTicker.volume24Hr | priceUnit}} {{selectedCoinTicker.volumepair}}</td>
-                            <!-- <td>Rank: {{selectedCoinTicker.rank}}</td> -->
                         </tr>
                     </table>
                 </mat-card-content>
@@ -110,7 +105,7 @@
 
             </mat-card>
 
-            <app-identity-lookup-widget></app-identity-lookup-widget>
+            <app-identity-lookup-widget *ngIf="appModes.enabled('hubs')"></app-identity-lookup-widget>
 
             <!-- <mat-card>
                 <mat-card-title>Sweep paper wallet</mat-card-title>
