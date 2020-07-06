@@ -25,7 +25,7 @@ jobs:
             runtime: "osx-x64"
             extension: ".zip"
             platform: "osx"
-        node_version: [12.x]
+        node_version: [14.x]
         dotnet_version: ['2.1.807']
       fail-fast: false
 
