@@ -3,7 +3,7 @@
 
     <p>Are you sure you want to log out?</p>
 
-    <mat-spinner *ngIf="loading"></mat-spinner>
+    <mat-spinner *ngIf="loggingOut"></mat-spinner>
 
     <p *ngIf="wallet.stakingEnabled">Warning: You are currently staking. This will stop the staking process.</p>
 

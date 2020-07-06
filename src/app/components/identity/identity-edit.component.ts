@@ -82,11 +82,11 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
 
     constructor(
         private appState: ApplicationStateService,
-        private identityService: IdentityService,
         private profileImageService: ProfileImageService,
         private route: ActivatedRoute,
         private location: Location,
         private fb: FormBuilder,
+        public identityService: IdentityService,
         public dialog: MatDialog,
         public router: Router) {
         this.appState.pageMode = false;
