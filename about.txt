@@ -1,0 +1,14 @@
+    <h3 class="mat-h3">August, 2020 (v1.0.27)</h3>
+
+    <ul>
+        <li>Add experimental features that can be enabled in settings.</li>
+        <li>Add experimental prototype of identities.</li>
+    </ul>
+
+    <h3 class="mat-h3">April 15th, 2020 (v1.0.26)</h3>
+
+    <ul>
+        <li>Fixed an issue where full rescan of wallet wouldn't start from the beginning of wallet creation.</li>
+        <li>Fixed an issue where full rescan of wallet wouldn't scan the cold staking accounts.</li>
+        <li>Fixed an issue where history in normal wallet returned cold staking transactions.</li>
+    </ul>
