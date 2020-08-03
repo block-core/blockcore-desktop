@@ -9,7 +9,7 @@ import { ApplicationStateService } from 'src/app/services/application-state.serv
 import { HubAddComponent } from './hub-add.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { HubService } from 'src/app/services/hub.service';
-import { Hub } from '@models/hub';
+import { Hub, HubContainer } from '@models/hub';
 
 @Component({
     selector: 'app-hub-details',
@@ -36,7 +36,6 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
     public chain: Chain;
     public status: any;
     public bans: any;
-    public hubs: any;
 
     constructor(
         private globalService: GlobalService,
@@ -50,21 +49,17 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         public walletService: WalletService) {
 
-        console.log(this.settings.hubs);
-
-        this.hubs = this.settings.hubs;
         this.chain = this.chains.getChain(this.appState.chain, this.appState.network);
     }
 
     ngOnInit() {
-        // this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
-        //     this.status = response;
-        // });
-
-        // this.subscription2 = this.apiService.getBannedNodesCustomInterval(10000).subscribe((response) => {
-        //     this.bans = response;
-        //     console.log(this.bans);
-        // });
+        // Check if the hubs are online every 60 seconds.
+        setInterval(() => {
+            // tslint:disable-next-line: prefer-for-of
+            for (let i = 0; i < this.hubService.hubs.length; i++) {
+                this.hubService.add(this.hubService.hubs[i].originalUrl);
+            }
+        }, 60000);
     }
 
     ngOnDestroy() {
@@ -81,10 +76,6 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
         return image;
     }
 
-    hubStatus(hub: Hub) {
-        return 'Valid';
-    }
-
     async addHub() {
         const dialogRef = this.dialog.open(HubAddComponent, {
             width: '300px',
@@ -99,7 +90,7 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
 
                 this.hubService.add(result).then(data => {
                     // Update the local list of hubs with the one persisted in settings.
-                    this.hubs = this.settings.hubs;
+                    // this.hubService.hubs = this.settings.hubs;
                     this.cd.markForCheck();
                 });
             }
@@ -109,7 +100,7 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
     removeHub(id: string) {
         console.log('Trying to remove:' + id);
         this.hubService.remove(id);
-        this.hubs = this.settings.hubs;
+        // this.hubs = this.settings.hubs;
         this.cd.markForCheck();
     }
 

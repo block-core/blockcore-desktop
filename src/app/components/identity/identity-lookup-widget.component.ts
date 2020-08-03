@@ -34,7 +34,7 @@ export class IdentityLookupWidgetComponent implements OnDestroy, OnInit {
     }
 
     lookup() {
-        this.router.navigateByUrl('identity/1/search');
+        this.router.navigateByUrl('identity/' + this.searchInput + '/search', { replaceUrl: true });
     }
 }
 

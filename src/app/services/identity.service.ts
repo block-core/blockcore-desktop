@@ -248,6 +248,11 @@ export class IdentityService implements OnDestroy {
         return identity;
     }
 
+    async find(id: string) {
+        const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
+        return await this.api<any>(identityApiUrl);
+    }
+
     /** Get identities from localStorage. Only called during object creation. */
     private loadIdentities(): Identity[] {
         // If there are no identities, populate with mock data.

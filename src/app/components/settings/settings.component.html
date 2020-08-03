@@ -95,15 +95,19 @@
 
             <mat-form-field>
                 <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedHub">
-                    <mat-option *ngFor="let hub of hubs" [value]="hub.id">
-                        {{hub.name}}
+                    <mat-option *ngFor="let hub of hubs" [value]="hub.content.identifier">
+                        {{hub.content.name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
 
             <br>
 
-            <button [routerLink]="['/hubs']" mat-raised-button color="primary">Edit Hubs</button>
+            <p>
+                <button [routerLink]="['/hubs']" mat-raised-button color="primary">Edit Hubs</button>
+            </p>
+
+            <p><em>You need at minimum one registered hub to use features such as identity and data storage.</em></p>
 
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>

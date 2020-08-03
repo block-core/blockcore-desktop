@@ -16,6 +16,10 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity-lookup') hostClass = true;
     searchInput = '';
 
+    public identity: any;
+    public container: any;
+    public error: string;
+
     constructor(
         private appState: ApplicationStateService,
         public identityService: IdentityService,
@@ -26,11 +30,42 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
 
     }
 
-    ngOnInit() {
+    private sub: any;
 
+    async ngOnInit() {
+        this.sub = this.route.params.subscribe(async params => {
+            const id = params.id;
+
+            try {
+                this.error = null;
+
+                // Attempt to find the identity.
+                this.container = await this.identityService.find(id);
+
+                if (this.container) {
+                    this.identity = this.container.content;
+                }
+            }
+            catch (err) {
+                this.error = err;
+                this.container = null;
+                this.identity = null;
+            }
+        });
+    }
+
+    getImage(image) {
+        if (!image) {
+            image = 'data:image/png;base64,iVBORw0KGg'
+                + 'oAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAU'
+                + 'AAarVyFEAAAAASUVORK5CYII=';
+        }
+
+        return image;
     }
 
     ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }
 

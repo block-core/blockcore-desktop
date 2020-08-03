@@ -1,10 +1,23 @@
-export interface Hub {
+export interface HubContainer {
+    version: number;
     id: string;
-    url: string;
-    wellKnownUrl?: string;
-    name: string;
-    icon?: string;
+    signature: string;
+    content: Hub;
+    status?: string;
     added?: Date;
-    time?: Date;
-    signature?: string;
+    wellKnownUrl?: string;
+    originalUrl?: string;
+}
+
+export interface Hub {
+    identifier: string;
+    height: number;
+    name: string;
+    shortName: string;
+    alias: string;
+    title: string;
+    email: string;
+    url: string;
+    image: string;
+    hubs: string[];
 }
