@@ -9,7 +9,7 @@
 
     <mat-card *ngIf="identity">
         <mat-card-header>
-            <img mat-card-avatar class="mat-list-avatar-large" [src]="getImage(identity.image)">
+            <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identity.image)">
 
             <mat-card-title *ngIf="identity.name">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
             <mat-card-title *ngIf="!identity.name">{{identity.identifier}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>

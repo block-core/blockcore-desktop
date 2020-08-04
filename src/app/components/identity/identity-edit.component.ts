@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Identity } from '@models/identity';
+import { Identity, IdentityContainer } from '@models/identity';
 import { IdentityService } from 'src/app/services/identity.service';
 import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
@@ -21,8 +21,11 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
 export class IdentityEditComponent implements OnDestroy, OnInit {
     @HostBinding('class.identity-edit') hostClass = true;
 
-    identity: Identity;
-    originalIdentity: Identity;
+    // identity: Identity;
+    // originalIdentity: Identity;
+    identityContainer: IdentityContainer;
+    originalIdentityContainer: IdentityContainer;
+
     form: FormGroup;
     apiError: string;
     image: any;
@@ -33,10 +36,12 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     // tslint:disable-next-line:member-ordering
     formErrors = {
         name: '',
-        shortname: '',
+        shortName: '',
         alias: '',
         title: '',
         email: '',
+        url: '',
+        image: '',
         address: '',
         amount: '',
         fee: '',
@@ -51,7 +56,7 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
             minlength: 'A name is at least 1 characters long.',
             maxlength: 'A name is at maximum 250 characters long.'
         },
-        shortname: {
+        shortName: {
             required: 'A short name is required.',
             minlength: 'A short name is at least 1 characters long.',
             maxlength: 'A short name is at maximum 30 characters long.'
@@ -62,6 +67,12 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         },
         email: {
             email: 'Invalid e-mail address.'
+        },
+        url: {
+            url: 'Invalid url.'
+        },
+        image: {
+            image: 'Invalid image url.'
         },
         amount: {
             required: 'An amount is required.',
@@ -99,19 +110,20 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         console.log('ID:', id);
 
         if (id === 'create') {
-            this.identity = this.identityService.create();
-            this.originalIdentity = this.identity;
-            this.image = this.profileImageService.getImage(this.identity.id);
+            this.identityContainer = this.identityService.create();
+            this.originalIdentityContainer = this.identityContainer;
+            // this.originalIdentity = this.identity;
+            // this.image = this.profileImageService.getImage(this.identity.id);
         } else {
             // Make sure we only edit a copy of the identity.
-            this.originalIdentity = this.identityService.get(id);
-            this.identity = this.jsonCopy(this.originalIdentity);
+            this.originalIdentityContainer = this.identityService.get(id);
+            this.identityContainer = this.jsonCopy(this.originalIdentityContainer);
 
-            if (!this.identity.links) {
-                this.identity.links = [];
-            }
+            // if (!this.identity.links) {
+            //     this.identity.links = [];
+            // }
 
-            this.image = this.profileImageService.getImage(this.identity.id);
+            // this.image = this.profileImageService.getImage(this.identity.identifier);
         }
 
         this.buildSendForm();
@@ -119,14 +131,16 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
 
     private buildSendForm(): void {
         this.form = this.fb.group({
-            name: [this.identity.name, Validators.compose([Validators.maxLength(250)])],
-            shortname: [this.identity.shortname, Validators.compose([Validators.maxLength(30)])],
-            alias: [this.identity.alias],
-            title: [this.identity.title],
-            published: [this.identity.published],
-            email: [this.identity.email, Validators.compose([Validators.email])],
+            name: [this.identityContainer.content.name, Validators.compose([Validators.maxLength(250)])],
+            shortName: [this.identityContainer.content.shortName, Validators.compose([Validators.maxLength(30)])],
+            alias: [this.identityContainer.content.alias],
+            title: [this.identityContainer.content.title],
+            published: [this.identityContainer.published],
+            email: [this.identityContainer.content.email, Validators.compose([Validators.email])],
+            url: [this.identityContainer.content.url, Validators.compose([Validators.maxLength(2000)])],
+            image: [this.identityContainer.content.image, Validators.compose([Validators.maxLength(2000)])],
             // amount: ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((2 - 3) / 100000000)(control)])],
-            restorekey: [this.identity.restorekey]
+            // restorekey: [this.identity.restorekey]
         });
 
         this.form.valueChanges.pipe(debounceTime(300))
@@ -134,34 +148,34 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     }
 
     get formName(): any { return this.form.get('name').value; }
-    get formShortName(): any { return this.form.get('shortname').value; }
+    get formShortName(): any { return this.form.get('shortName').value; }
     get formAlias(): any { return this.form.get('alias').value; }
     get formTitle(): any { return this.form.get('title').value; }
     get formPublished(): any { return this.form.get('published').value; }
 
-    async addLink() {
-        const dialogRef = this.dialog.open(LinkAddComponent, {
-            width: '440px',
-            data: { url: '', type: '' }
-        });
+    // async addLink() {
+    //     const dialogRef = this.dialog.open(LinkAddComponent, {
+    //         width: '440px',
+    //         data: { url: '', type: '' }
+    //     });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed', result);
+    //     dialogRef.afterClosed().subscribe(result => {
+    //         console.log('The dialog was closed', result);
 
-            if (result) {
-                console.log('RESULT:', result);
-                this.identity.links.push(result);
-                // this.hubService.add(result).then(data => {
-                //     // Update the local list of hubs with the one persisted in settings.
-                //     this.hubs = this.settings.hubs;
-                //     this.cd.markForCheck();
-                // });
-            }
-        });
-    }
+    //         if (result) {
+    //             console.log('RESULT:', result);
+    //             this.identity.links.push(result);
+    //             // this.hubService.add(result).then(data => {
+    //             //     // Update the local list of hubs with the one persisted in settings.
+    //             //     this.hubs = this.settings.hubs;
+    //             //     this.cd.markForCheck();
+    //             // });
+    //         }
+    //     });
+    // }
 
     onChanged(event) {
-        if (this.originalIdentity.published && !this.formPublished) {
+        if (this.originalIdentityContainer.published && !this.formPublished) {
             this.publishWarning = true;
         } else {
             this.publishWarning = false;
@@ -172,17 +186,17 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     save() {
         // Save the image.
         // TODO: Make sure we check if image is actually changed, if not, then don't save it.
-        this.profileImageService.setImage(this.identity.id, this.image);
+        // this.profileImageService.setImage(this.identity.id, this.image);
 
         // tslint:disable-next-line:forin
         for (const field in this.form.controls) {
             // Copy all input fields onto our identity.
-            this.identity[field] = this.form.get(field).value;
+            this.identityContainer.content[field] = this.form.get(field).value;
         }
 
-        console.log(this.identity);
+        console.log(this.identityContainer);
 
-        this.identityService.add(this.identity);
+        this.identityService.add(this.identityContainer);
         this.router.navigateByUrl('/identity');
     }
 
@@ -190,14 +204,14 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         return JSON.parse(JSON.stringify(src));
     }
 
-    removeLink(link: Link) {
-        const index = this.identity.links.findIndex(l => l === link);
-        this.identity.links.splice(index, 1);
-        // console.log('Trying to remove:' + id);
-        // this.hubService.remove(id);
-        // this.hubs = this.settings.hubs;
-        // this.cd.markForCheck();
-    }
+    // removeLink(link: Link) {
+    //     const index = this.identity.links.findIndex(l => l === link);
+    //     this.identity.links.splice(index, 1);
+    //     // console.log('Trying to remove:' + id);
+    //     // this.hubService.remove(id);
+    //     // this.hubs = this.settings.hubs;
+    //     // this.cd.markForCheck();
+    // }
 
     imageUpdated(event: ImageCroppedEvent) {
         this.image = event.base64;

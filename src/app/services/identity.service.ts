@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { Identity } from '@models/identity';
+import { Identity, IdentityContainer } from '@models/identity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import { ElectronService } from 'ngx-electron';
@@ -24,10 +24,17 @@ import { ElectronService } from 'ngx-electron';
 })
 export class IdentityService implements OnDestroy {
     // Initialize the BehaviorSubject with data from the localStorage. The subject holds the internal state of the identities.
-    private readonly identitiesSubject = new BehaviorSubject<Identity[]>([]);
-    private readonly identitySubject = new BehaviorSubject<Identity>(null);
+    private readonly identitiesSubject = new BehaviorSubject<IdentityContainer[]>([]);
+    private readonly identitySubject = new BehaviorSubject<IdentityContainer>(null);
 
-    private identityIndex = -1;
+    get identityIndex(): number {
+        return this.storage.getNumber('Identity:Index', -1, true);
+    }
+
+    set identityIndex(value: number) {
+        this.storage.setValue('Identity:Index', value.toString());
+    }
+
     private identityRoot: HDNode;
     private identityExtPubKey: HDNode;
 
@@ -55,11 +62,11 @@ export class IdentityService implements OnDestroy {
 
     readonly publishedIdentities$ = this.identities$.pipe(map(items => items.filter(item => item.published)));
 
-    get identities(): Identity[] {
+    get identities(): IdentityContainer[] {
         return this.identitiesSubject.getValue();
     }
 
-    set identities(val: Identity[]) {
+    set identities(val: IdentityContainer[]) {
         this.identitiesSubject.next(val);
     }
 
@@ -68,7 +75,7 @@ export class IdentityService implements OnDestroy {
         this.identitySubject.next(this.loadIdentity());
 
         // Make sure we set the current identity index, and simply use the current length if value is missing from before.
-        this.identityIndex = this.storage.getNumber('Identity:Index', this.identities.length, true);
+        // this.identityIndex = this.storage.getNumber('Identity:Index', this.identities.length, true);
     }
 
     // get identities(): any {
@@ -150,6 +157,7 @@ export class IdentityService implements OnDestroy {
         const identity = this.getIdentityNode(0);
 
         const signature = bitcoinMessage.sign(text, identity.privateKey, true);
+
         console.log(signature);
 
         return signature;
@@ -161,16 +169,31 @@ export class IdentityService implements OnDestroy {
         const identityId = this.getAddress(identityNode, this.identityNetwork);
 
         const identity: Identity = {
-            id: identityId,
+            identifier: identityId,
             name: '',
-            shortname: '',
-            published: false
+            shortName: '',
+            alias: '',
+            email: '',
+            height: 0,
+            title: '',
+            image: '',
+            url: '',
+            hubs: []
         };
 
-        return identity;
+        const identityContainer: IdentityContainer = {
+            version: 1,
+            id: 'identity/' + identity.identifier,
+            signature: '',
+            content: identity,
+            published: false,
+            index: this.identityIndex + 1 // We should not persist this new index until after we actually save it.
+        };
+
+        return identityContainer;
     }
 
-    add(identity: Identity) {
+    add(identity: IdentityContainer) {
         const index = this.identities.findIndex(t => t.id === identity.id);
 
         if (index === -1) {
@@ -181,7 +204,7 @@ export class IdentityService implements OnDestroy {
             ];
 
             // Increase the spent identity index.
-            this.identityIndex++;
+            // this.identityIndex++;
 
         } else {
             this.identities[index] = identity;
@@ -244,17 +267,27 @@ export class IdentityService implements OnDestroy {
     }
 
     get(id: string) {
-        const identity = this.identities.find(t => t.id === id);
+        const identity = this.identities.find(t => t.content.identifier === id);
         return identity;
     }
 
-    async find(id: string) {
+    getImage(image) {
+        if (!image) {
+            image = 'data:image/png;base64,iVBORw0KGg'
+                + 'oAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAU'
+                + 'AAarVyFEAAAAASUVORK5CYII=';
+        }
+
+        return image;
+    }
+
+    async find(id: string): Promise<IdentityContainer> {
         const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
-        return await this.api<any>(identityApiUrl);
+        return await this.api<IdentityContainer>(identityApiUrl);
     }
 
     /** Get identities from localStorage. Only called during object creation. */
-    private loadIdentities(): Identity[] {
+    private loadIdentities(): IdentityContainer[] {
         // If there are no identities, populate with mock data.
         let identities = this.storage.getJSON('Identities', '[]', true);
 
@@ -267,7 +300,7 @@ export class IdentityService implements OnDestroy {
     }
 
     /** Get identity from localStorage. Only called during object creation. */
-    private loadIdentity(id?: string): Identity {
+    private loadIdentity(id?: string): IdentityContainer {
         const identityId = id || this.storage.getIsolatedValue('Identity');
         return this.identitiesSubject.getValue().find(i => i.id === identityId);
     }
@@ -311,72 +344,127 @@ export class IdentityService implements OnDestroy {
         return address;
     }
 
-    scan(height: number) {
-        // Reset the scan index height.
-        this.identityIndex = -1;
+    /** Performs a query to find identity based on index number */
+    async findByIndex(index: number): Promise<IdentityContainer> {
+        let identity = null;
+        const identityNode = this.getIdentityNode(index);
+        const identityId = this.getAddress(identityNode, this.identityNetwork);
 
-        // TODO: Query for identities.
+        try {
+            identity = await this.find(identityId);
 
-        // Update the identity index based on last found identity.
-        // Right now we'll just use the length, but this must be changed when we are doing the actual scan on the Hubs.
-        this.identityIndex = this.identities.length;
+            if (identity) {
+                this.add(identity);
+            }
+
+            // If the last found index is higher than previously known index height, make sure we save it.
+            if (index > this.identityIndex) {
+                this.identityIndex = index;
+            }
+        }
+        catch (err) {
+            // console.log('Identity find result: ', err);
+        }
+
+        return identity;
     }
 
-    private initialize(): Identity[] {
-        return [{
-            name: 'Sondre Bjellås',
-            shortname: 'Sondre Bjellås',
-            alias: 'sondreb',
-            title: 'Public',
-            id: 'PJZZYTPq2Uf6LJRkdgTVZ4xgRBi3vZmpdf',
-            published: true,
-            locked: false,
-            time: new Date()
-        }, {
-            name: 'SondreB',
-            shortname: 'SondreB',
-            alias: 'sondre',
-            title: 'Personal, Gaming',
-            id: 'PHnT3Fx1EN5uMBbYBivjDdkke3n2pb5svd',
-            published: true,
-            locked: false,
-            time: new Date()
-        }, {
-            name: 'Sondre Bjellås',
-            shortname: 'Sondre Bjellås',
-            alias: 'citychainfoundation',
-            title: 'CTO, City Chain Foundation',
-            id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
-            published: true,
-            locked: false,
-            time: new Date()
-        }, {
-            name: 'New Identity',
-            shortname: 'New Identity',
-            alias: null,
-            title: 'Random',
-            id: 'PH99VjuZKX36CoKkXE4Z87BPKt2c4FyTwZ',
-            published: false,
-            locked: false,
-            time: new Date()
-        }, {
-            name: 'Locked',
-            shortname: 'Locked',
-            alias: null,
-            title: '?',
-            id: 'PMzHABeaLVHP7kLDYFeHkE1CZaeS8wXvxv',
-            published: true,
-            locked: true,
-            time: new Date()
-        }, {
-            name: 'Locked',
-            shortname: 'Locked',
-            alias: null,
-            title: '?',
-            id: 'PFfMFoJWHmHuQWfxoAmjgq7cqVxC9xTXfr',
-            published: false,
-            locked: true,
-            time: new Date()
-        }];
+    /** Performs a scan of identities from index and number of coint. Returns true if anything is found. */
+    async scan2(index: number, count: number) {
+        // Reset the scan index height.
+        // this.identityIndex = -1;
+
+        let found = false;
+        let lastFoundIndex = 0;
+
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = index; i < count; i++) {
+
+            const identityNode = this.getIdentityNode(i);
+            const identityId = this.getAddress(identityNode, this.identityNetwork);
+
+            try {
+                const identity = await this.find(identityId);
+
+                if (identity) {
+                    this.add(identity);
+                }
+
+                console.log('FOUND!!!');
+
+                found = true;
+
+                lastFoundIndex = index;
+            }
+            catch (err) {
+                // console.log('Identity find result: ', err);
+            }
+        }
+
+        // If the last found index is higher than previously known index height, make sure we save it.
+        if (lastFoundIndex > this.identityIndex) {
+            this.identityIndex = lastFoundIndex;
+        }
+
+        return found;
+    }
+
+    private initialize(): IdentityContainer[] {
+        return [];
+        // return [{
+        //     name: 'Sondre Bjellås',
+        //     shortName: 'Sondre Bjellås',
+        //     alias: 'sondreb',
+        //     title: 'Public',
+        //     id: 'PJZZYTPq2Uf6LJRkdgTVZ4xgRBi3vZmpdf',
+        //     published: true,
+        //     locked: false,
+        //     time: new Date()
+        // }, {
+        //     name: 'SondreB',
+        //     shortname: 'SondreB',
+        //     alias: 'sondre',
+        //     title: 'Personal, Gaming',
+        //     id: 'PHnT3Fx1EN5uMBbYBivjDdkke3n2pb5svd',
+        //     published: true,
+        //     locked: false,
+        //     time: new Date()
+        // }, {
+        //     name: 'Sondre Bjellås',
+        //     shortname: 'Sondre Bjellås',
+        //     alias: 'citychainfoundation',
+        //     title: 'CTO, City Chain Foundation',
+        //     id: 'PXdMWVDaG1kmqbQX5JdsE5m4HFnRVxoqHf',
+        //     published: true,
+        //     locked: false,
+        //     time: new Date()
+        // }, {
+        //     name: 'New Identity',
+        //     shortname: 'New Identity',
+        //     alias: null,
+        //     title: 'Random',
+        //     id: 'PH99VjuZKX36CoKkXE4Z87BPKt2c4FyTwZ',
+        //     published: false,
+        //     locked: false,
+        //     time: new Date()
+        // }, {
+        //     name: 'Locked',
+        //     shortname: 'Locked',
+        //     alias: null,
+        //     title: '?',
+        //     id: 'PMzHABeaLVHP7kLDYFeHkE1CZaeS8wXvxv',
+        //     published: true,
+        //     locked: true,
+        //     time: new Date()
+        // }, {
+        //     name: 'Locked',
+        //     shortname: 'Locked',
+        //     alias: null,
+        //     title: '?',
+        //     id: 'PFfMFoJWHmHuQWfxoAmjgq7cqVxC9xTXfr',
+        //     published: false,
+        //     locked: true,
+        //     time: new Date()
+        // }];
     }
 }

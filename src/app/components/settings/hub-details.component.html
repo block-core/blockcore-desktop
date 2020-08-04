@@ -8,7 +8,7 @@
         <h3 mat-subheader>Hubs</h3>
 
         <mat-list-item *ngFor="let hub of hubService.hubs">
-            <img mat-list-avatar [src]="getImage(hub.content.image)">
+            <img mat-list-avatar [src]="identityService.getImage(hub.content.image)">
 
             <h4 mat-line>{{hub.content.name}} ({{hub.originalUrl}})</h4>
             <p mat-line>ID: <a href="https://identity.city-chain.org/view/{{hub.content.identifier}}" target="_blank">{{hub.content.identifier}}</a></p>

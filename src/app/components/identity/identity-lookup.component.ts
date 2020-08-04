@@ -54,16 +54,6 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
         });
     }
 
-    getImage(image) {
-        if (!image) {
-            image = 'data:image/png;base64,iVBORw0KGg'
-                + 'oAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAU'
-                + 'AAarVyFEAAAAASUVORK5CYII=';
-        }
-
-        return image;
-    }
-
     ngOnDestroy() {
         this.sub.unsubscribe();
     }

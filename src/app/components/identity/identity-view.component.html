@@ -2,12 +2,12 @@
 
     <mat-card *ngIf="identityService.identity$">
         <mat-card-header>
-            <img mat-card-avatar class="mat-list-avatar-large" [src]="image">
-            
-            <mat-card-title *ngIf="identity.name">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
-            <mat-card-title *ngIf="!identity.name">{{identity.id}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
+            <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
 
-            <mat-card-subtitle>{{identity.title}}<br>ID: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
+            <mat-card-title *ngIf="identityContainer.content.name">{{identityContainer.content.name}} <span *ngIf="identityContainer.content.alias">| @{{identityContainer.content.alias}}</span></mat-card-title>
+            <mat-card-title *ngIf="!identityContainer.content.name">{{identityContainer.content.identifier}} <span *ngIf="identityContainer.content.alias">| @{{identityContainer.content.alias}}</span></mat-card-title>
+
+            <mat-card-subtitle>{{identityContainer.content.title}}<br>ID: {{identityContainer.content.identifier}}<br>Height: {{identityContainer.content.height}}</mat-card-subtitle>
         </mat-card-header>
         <!-- <img mat-card-image src="assets/profile1.jpg" [src]="image"> -->
         <mat-card-content>
@@ -15,50 +15,56 @@
             <mat-list>
                 <div mat-subheader>Details</div>
 
-                <mat-list-item *ngIf="identity.name">
+                <mat-list-item *ngIf="identityContainer.content.name">
                     <mat-icon mat-list-icon>face</mat-icon>
-                    <div mat-line>{{identity.name}}</div>
+                    <div mat-line>{{identityContainer.content.name}}</div>
                     <div mat-line class="mat-card-subtitle">Name</div>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="identity.shortname">
+                <mat-list-item *ngIf="identityContainer.content.shortName">
                     <mat-icon mat-list-icon>face</mat-icon>
-                    <div mat-line>{{identity.shortname}}</div>
+                    <div mat-line>{{identityContainer.content.shortName}}</div>
                     <div mat-line class="mat-card-subtitle">Short name</div>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="identity.alias">
+                <mat-list-item *ngIf="identityContainer.content.alias">
                     <mat-icon mat-list-icon>font_download</mat-icon>
-                    <div mat-line>{{identity.alias}}</div>
+                    <div mat-line>{{identityContainer.content.alias}}</div>
                     <div mat-line class="mat-card-subtitle">Alias</div>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="identity.title">
+                <mat-list-item *ngIf="identityContainer.content.title">
                     <mat-icon mat-list-icon>book</mat-icon>
-                    <div mat-line>{{identity.title}}</div>
+                    <div mat-line>{{identityContainer.content.title}}</div>
                     <div mat-line class="mat-card-subtitle">Title</div>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="identity.email">
+                <mat-list-item *ngIf="identityContainer.content.email">
                     <mat-icon mat-list-icon>mail</mat-icon>
-                    <div mat-line>{{identity.email}}</div>
+                    <div mat-line>{{identityContainer.content.email}}</div>
                     <div mat-line class="mat-card-subtitle">E-mail</div>
                 </mat-list-item>
 
-                <mat-list-item>
+                <mat-list-item *ngIf="identityContainer.content.url">
+                    <mat-icon mat-list-icon>link</mat-icon>
+                    <div mat-line>{{identityContainer.content.url}}</div>
+                    <div mat-line class="mat-card-subtitle">Url</div>
+                </mat-list-item>
+
+                <!-- <mat-list-item>
                     <mat-icon mat-list-icon>cloud_queue</mat-icon>
                     <div mat-line>{{identity.published}}</div>
                     <div mat-line class="mat-card-subtitle">Published</div>
-                </mat-list-item>
+                </mat-list-item> -->
 
                 <!-- <mat-divider></mat-divider> -->
 
-                <div mat-subheader *ngIf="identity.links && identity.links.length > 0">Links</div>
+                <!-- <div mat-subheader *ngIf="identity.links && identity.links.length > 0">Links</div>
                 <mat-list-item *ngFor="let link of identity.links">
                     <mat-icon mat-list-icon>link</mat-icon>
                     <div mat-line>{{link.url}}</div>
                     <div mat-line class="mat-card-subtitle">{{link.type}}</div>
-                </mat-list-item>
+                </mat-list-item> -->
             </mat-list>
 
             <!-- <mat-list>
@@ -73,7 +79,7 @@
 
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="primary" [routerLink]="['/identity', identity.id, 'edit']">EDIT</button>
+            <button mat-raised-button color="primary" [routerLink]="['/identity', identityContainer.content.identifier, 'edit']">EDIT</button>
             <!-- <button *ngIf="!identity.published" mat-stroked-button color="primary">PUBLISH</button>
             <button *ngIf="identity.published" mat-stroked-button color="primary">UNPUBLISH</button> -->
             <!-- <button mat-raised-button color="warn">DELETE</button> -->

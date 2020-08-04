@@ -10,6 +10,7 @@ import { HubAddComponent } from './hub-add.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { HubService } from 'src/app/services/hub.service';
 import { Hub, HubContainer } from '@models/hub';
+import { IdentityService } from 'src/app/services/identity.service';
 
 @Component({
     selector: 'app-hub-details',
@@ -45,6 +46,7 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
         private chains: ChainService,
         public settings: SettingsService,
         public hubService: HubService,
+        public identityService: IdentityService,
         public router: Router,
         public dialog: MatDialog,
         public walletService: WalletService) {
@@ -64,16 +66,6 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // this.subscription.unsubscribe();
-    }
-
-    getImage(image) {
-        if (!image) {
-            image = 'data:image/png;base64,iVBORw0KGg'
-                + 'oAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAU'
-                + 'AAarVyFEAAAAASUVORK5CYII=';
-        }
-
-        return image;
     }
 
     async addHub() {

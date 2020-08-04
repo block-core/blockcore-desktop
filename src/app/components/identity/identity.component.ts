@@ -23,6 +23,10 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     scanning = false;
     scanningStatus: string;
+
+    scanningDeep = false;
+    scanningDeepStatus: string;
+
     searchInput = '';
     // public identities: Identity[];
 
@@ -113,29 +117,51 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     }
 
-    scan() {
-
-        this.identityService.scan(100);
+    async scan() {
+        let index = 0;
+        const length = 10;
 
         this.scanning = true;
+        this.scanningStatus = 'Scanning identity index ' + index + '...';
 
-        this.scanningStatus = 'Scanning 10 of 100...';
+        // Keep scanning until we no longer find.
+        // while (await this.identityService.findByIndex(index)) {
+        //     index++;
+        //     this.scanningStatus = 'Scanning identity index ' + index + '...';
+        // }
 
-        setTimeout(() => {
-            this.scanningStatus = 'Scanning 20 of 100...';
-        }, 1000);
+        setTimeout(async () => {
+            // With the deep scan we won't stop until we have done a full lengthy scan of identities.
+            while (index < length) {
+                await this.identityService.findByIndex(index);
+                index++;
+                this.scanningStatus = 'Scanning identity index ' + index + '...';
+            }
 
-        setTimeout(() => {
-            this.scanningStatus = 'Scanning 30 of 100...';
-        }, 2000);
-
-        setTimeout(() => {
-            this.scanningStatus = 'Scanning 40 of 100...';
-        }, 4000);
-
-        setTimeout(() => {
+            this.scanningStatus = '';
             this.scanning = false;
-        }, 5000);
+        }, 0);
+    }
+
+    async scanDeep() {
+
+        let index = 0;
+        const length = 100;
+
+        this.scanningDeep = true;
+        this.scanningDeepStatus = 'Scanning identity index ' + index + '...';
+
+        setTimeout(async () => {
+            // With the deep scan we won't stop until we have done a full lengthy scan of identities.
+            while (index < length) {
+                await this.identityService.findByIndex(index);
+                index++;
+                this.scanningDeepStatus = 'Scanning identity index ' + index + '...';
+            }
+
+            this.scanningDeepStatus = '';
+            this.scanningDeep = false;
+        }, 0);
     }
 
     delete(id: string) {

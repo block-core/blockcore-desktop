@@ -3,12 +3,12 @@
     <mat-card *ngIf="identityService.identity$">
         <form [formGroup]="form">
             <mat-card-header>
-                <img mat-card-avatar class="mat-list-avatar-large" [src]="image">
+                <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
 
                 <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
-                <mat-card-title *ngIf="!formName">{{identity.id}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+                <mat-card-title *ngIf="!formName">{{identityContainer.content.identifier}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
 
-                <mat-card-subtitle>{{formTitle}}<br>ID: {{identity.id}}<br>Updated: {{identity.time}}</mat-card-subtitle>
+                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Height: {{identityContainer.content.height}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
 
@@ -25,16 +25,26 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Short Name</mat-label>
-                    <input matInput id="shortnameInput" maxlength="30" formControlName="shortname" name="shortname" placeholder="Short version of your full name">
+                    <input matInput id="shortNameInput" maxlength="30" formControlName="shortName" name="shortName" placeholder="Short version of your full name">
                     <mat-icon matSuffix>face</mat-icon>
-                    <mat-error *ngIf="formErrors.shortname">
-                        {{ formErrors.shortname }}
+                    <mat-error *ngIf="formErrors.shortName">
+                        {{ formErrors.shortName }}
                     </mat-error>
                 </mat-form-field>
 
                 <br>
 
-                <app-image-cropper (imageUpdated)="imageUpdated($event)" [showPreview]="false"></app-image-cropper>
+                <mat-form-field appearance="outline">
+                    <mat-label>Image (URL)</mat-label>
+                    <input matInput id="imageInput" maxlength="2000" formControlName="image" name="image" placeholder="Url to your profile image">
+                    <mat-icon matSuffix>image</mat-icon>
+                    <mat-error *ngIf="formErrors.image">
+                        {{ formErrors.image }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- This amazing image cropper must be used with an API that allows us to upload binaries. We could also use the hub to store the profile image in the future. -->
+                <!-- <app-image-cropper (imageUpdated)="imageUpdated($event)" [showPreview]="false"></app-image-cropper> -->
 
                 <br>
 
@@ -71,7 +81,18 @@
 
                 <br>
 
-                <button mat-mini-fab class="add-link" (click)="addLink()">
+                <mat-form-field appearance="outline">
+                    <mat-label>Url</mat-label>
+                    <input matInput id="urlInput" formControlName="url" name="url" placeholder="Your public URL.">
+                    <mat-icon matSuffix>link</mat-icon>
+                    <mat-error *ngIf="formErrors.url">
+                        {{ formErrors.url }}
+                    </mat-error>
+                </mat-form-field>
+
+                <br>
+
+                <!-- <button mat-mini-fab class="add-link" (click)="addLink()">
                     <mat-icon>add</mat-icon>
                 </button>
                 <br>
@@ -94,11 +115,11 @@
                             </mat-menu>
                         </p>
                     </mat-list-item>
-                </mat-list>
+                </mat-list> -->
 
                 <br>
 
-                <mat-form-field appearance="outline">
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Identity Recovery Public Key</mat-label>
                     <input matInput id="restoreKeyInput" formControlName="restorekey" name="restorekey" placeholder="Your identity restore public key.">
                     <mat-icon matSuffix>security</mat-icon>
@@ -107,7 +128,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <br>
+                <br> -->
 
                 <mat-checkbox (change)="onChanged($event)" formControlName="published" name="published">Publish Profile</mat-checkbox>
                 <br> <br>

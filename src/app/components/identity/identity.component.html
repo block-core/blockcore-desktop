@@ -15,15 +15,15 @@
 
             <img mat-list-avatar class="mat-list-avatar-large" [src]="profileImageService.getImage(identity.id)">
 
-            <h4 mat-line *ngIf="identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
-            <h4 mat-line *ngIf="!identity.name"><a [routerLink]="['/identity', identity.id]">{{identity.id}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></a></h4>
+            <h4 mat-line *ngIf="identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.name}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
+            <h4 mat-line *ngIf="!identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.identifier}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
 
             <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
             <p mat-line class="mat-card-subtitle">
-                <span *ngIf="!identity.locked">ID: {{identity.id}}</span><span *ngIf="identity.locked">Locked</span>
+                <span *ngIf="!identity.locked">ID: {{identity.content.identifier}}</span><span *ngIf="identity.locked">Locked</span>
             </p>
             <p mat-line class="mat-card-subtitle">
-                {{identity.title}}
+                {{identity.content.title}}
             </p>
 
             <p><button mat-icon-button [matMenuTriggerFor]="menu">
@@ -31,11 +31,11 @@
                 </button>
                 <mat-menu #menu="matMenu">
 
-                    <button mat-menu-item [routerLink]="['/identity', identity.id]">
+                    <button mat-menu-item [routerLink]="['/identity', identity.content.identifier]">
                         <mat-icon>person</mat-icon>
                         <span>View</span>
                     </button>
-                    <button mat-menu-item [routerLink]="['/identity', identity.id, 'edit']">
+                    <button mat-menu-item [routerLink]="['/identity', identity.content.identifier, 'edit']">
                         <mat-icon>edit</mat-icon>
                         <span>Edit</span>
                     </button>
@@ -61,7 +61,7 @@
 
                     <mat-divider></mat-divider>
 
-                    <button mat-menu-item (click)="identityService.remove(identity.id)">
+                    <button mat-menu-item (click)="identityService.remove(identity.content.identifier)">
                         <mat-icon>delete</mat-icon>
                         <span>Delete</span>
                     </button>
@@ -69,6 +69,16 @@
                 </mat-menu>
             </p>
         </mat-list-item>
+
+        <br>
+
+        <div class="progress-widget">
+            <button mat-raised-button color="primary" [disabled]="scanning" (click)="scan()">SCAN</button>
+            <div  class="progress-widget-spinner">
+                <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
+            </div>
+            <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
+        </div>
 
         <!-- <mat-list-item>
             <mat-icon mat-list-icon class="example-header-image-profile2"></mat-icon>
@@ -161,7 +171,7 @@
             <mat-card-header>
                 <mat-icon mat-card-avatar>info</mat-icon>
                 <mat-card-title>Privacy and Multiple Identities</mat-card-title>
-                <mat-card-subtitle>Your accounts can be connected by third parties</mat-card-subtitle>
+                <mat-card-subtitle>Your identities can be connected by third parties</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <!-- <h3 class="mat-h3">Please wait...</h3>
@@ -173,7 +183,7 @@
 
         <br>
 
-        <mat-card class="card">
+        <!-- <mat-card class="card">
             <mat-card-header>
                 <mat-icon mat-card-avatar>info</mat-icon>
                 <mat-card-title>Aliases</mat-card-title>
@@ -185,7 +195,7 @@
             </mat-card-content>
         </mat-card>
 
-        <br>
+        <br> -->
 
         <mat-card class="card">
             <mat-card-header>
@@ -197,15 +207,15 @@
                 <p>When you create a new identity, you can choose to publish it, or you can publish manually later.</p>
                 <p>When you publish your identity, all the information you provide is made publicly available to the world.</p>
                 <p>If your identity is "Unpublished", it cannot be restored if you uninstall City Hub from your device. All "Unpublished" identities will not be restoreable on other devices.</p>
-                <p>Unpublish will make your identity unavailable for future searches and lookup, but your previously published information can be saved and cached by third parties.</p>
+                <p>Unpublish will make your identity unavailable for future searches and lookup, but your previously published information can potentially be saved and cached by third parties.</p>
             </mat-card-content>
         </mat-card>
 
         <mat-card class="card">
             <mat-card-header>
                 <mat-icon mat-card-avatar>info</mat-icon>
-                <mat-card-title>Scan for identities</mat-card-title>
-                <mat-card-subtitle>You can rescan the Hubs for missing identities</mat-card-subtitle>
+                <mat-card-title>Deep scan for identities</mat-card-title>
+                <mat-card-subtitle>You can rescan more deeply (more attempts) the Hubs for missing identities</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <p>If you create and delete a lot of identities, sometimes you need to scan longer to find them. Click the button below to perform a long scan for your published identities.</p>
@@ -213,11 +223,11 @@
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                 </p> -->
                 <div class="progress-widget">
-                    <button mat-raised-button color="primary" [disabled]="scanning" (click)="scan()">SCAN</button>
+                    <button mat-raised-button color="primary" [disabled]="scanningDeep" (click)="scanDeep()">DEEP SCAN</button>
                     <div  class="progress-widget-spinner">
-                        <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
+                        <mat-spinner *ngIf="scanningDeep" diameter="30"></mat-spinner>
                     </div>
-                    <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
+                    <div *ngIf="scanningDeep" class="progress-widget-text">{{scanningDeepStatus}}</div>
                 </div>
             </mat-card-content>
         </mat-card>
