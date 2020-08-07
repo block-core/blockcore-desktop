@@ -31,6 +31,7 @@ export class IdentityViewComponent implements OnDestroy, OnInit {
         const id = this.route.snapshot.paramMap.get('id');
         console.log('ID:', id);
         this.identityContainer = this.identityService.get(id);
+
         // this.image = this.profileImageService.getImage(this.identity.id);
     }
 

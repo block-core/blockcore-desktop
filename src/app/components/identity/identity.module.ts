@@ -10,6 +10,7 @@ import { ImageModule } from 'src/app/shared/image/image.module';
 import { LinkAddComponent } from './link-add.component';
 import { IdentityLookupComponent } from './identity-lookup.component';
 import { IdentityLookupWidgetComponent } from './identity-lookup-widget.component';
+import { AppSharedModule } from 'src/app/shared/app-shared.module';
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import { IdentityLookupWidgetComponent } from './identity-lookup-widget.componen
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
+        AppSharedModule,
         ImageModule,
     ],
     declarations: [

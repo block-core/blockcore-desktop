@@ -36,7 +36,7 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     // tslint:disable-next-line:member-ordering
     formErrors = {
         name: '',
-        shortName: '',
+        shortname: '',
         alias: '',
         title: '',
         email: '',
@@ -56,7 +56,7 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
             minlength: 'A name is at least 1 characters long.',
             maxlength: 'A name is at maximum 250 characters long.'
         },
-        shortName: {
+        shortname: {
             required: 'A short name is required.',
             minlength: 'A short name is at least 1 characters long.',
             maxlength: 'A short name is at maximum 30 characters long.'
@@ -132,10 +132,11 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     private buildSendForm(): void {
         this.form = this.fb.group({
             name: [this.identityContainer.content.name, Validators.compose([Validators.maxLength(250)])],
-            shortName: [this.identityContainer.content.shortName, Validators.compose([Validators.maxLength(30)])],
+            shortname: [this.identityContainer.content.shortname, Validators.compose([Validators.maxLength(30)])],
             alias: [this.identityContainer.content.alias],
             title: [this.identityContainer.content.title],
             published: [this.identityContainer.published],
+            publish: [this.identityContainer.publish],
             email: [this.identityContainer.content.email, Validators.compose([Validators.email])],
             url: [this.identityContainer.content.url, Validators.compose([Validators.maxLength(2000)])],
             image: [this.identityContainer.content.image, Validators.compose([Validators.maxLength(2000)])],
@@ -148,10 +149,11 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     }
 
     get formName(): any { return this.form.get('name').value; }
-    get formShortName(): any { return this.form.get('shortName').value; }
+    get formShortName(): any { return this.form.get('shortname').value; }
     get formAlias(): any { return this.form.get('alias').value; }
     get formTitle(): any { return this.form.get('title').value; }
     get formPublished(): any { return this.form.get('published').value; }
+    get formPublish(): any { return this.form.get('publish').value; }
 
     // async addLink() {
     //     const dialogRef = this.dialog.open(LinkAddComponent, {
@@ -175,11 +177,10 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
     // }
 
     onChanged(event) {
-        if (this.originalIdentityContainer.published && !this.formPublished) {
+        if (this.originalIdentityContainer.published && !this.formPublish) {
             this.publishWarning = true;
         } else {
             this.publishWarning = false;
-
         }
     }
 
@@ -191,10 +192,17 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
         // tslint:disable-next-line:forin
         for (const field in this.form.controls) {
             // Copy all input fields onto our identity.
+
+            if (field === 'published' || field === 'publish') {
+                continue;
+            }
+
             this.identityContainer.content[field] = this.form.get(field).value;
         }
 
-        console.log(this.identityContainer);
+        // Set the published from the form.
+        this.identityContainer.publish = this.form.get('publish').value;
+        this.identityContainer.published = this.form.get('publish').value;
 
         this.identityService.add(this.identityContainer);
         this.router.navigateByUrl('/identity');

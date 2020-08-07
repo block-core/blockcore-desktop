@@ -14,10 +14,10 @@ import * as wif from 'wif';
 import * as coininfo from 'city-coininfo';
 import { HubService } from './hub.service';
 import { encode, decode } from '@msgpack/msgpack';
-import * as bitcoinMessage from 'bitcoinjs-message';
 import { StorageService } from './storage.service';
 import { AuthenticationService } from './authentication.service';
 import { ElectronService } from 'ngx-electron';
+import * as bitcoinMessage from 'bitcoinjs-message';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +32,7 @@ export class IdentityService implements OnDestroy {
     }
 
     set identityIndex(value: number) {
-        this.storage.setValue('Identity:Index', value.toString());
+        this.storage.setValue('Identity:Index', value.toString(), true);
     }
 
     private identityRoot: HDNode;
@@ -148,17 +148,20 @@ export class IdentityService implements OnDestroy {
         return this.identityRoot.deriveHardened(index);
     }
 
-    sign(document: any): Buffer {
+    sign(document: any, index: number): Buffer {
         const encoded: Uint8Array = encode(document, { sortKeys: true });
 
         // To avoid issues with UTF-8 encoding of the byte array, we'll rely on base64.
-        const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength).toString('base64');
+        // const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength).toString('base64');
+        const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
 
-        const identity = this.getIdentityNode(0);
+        console.log('DOCUMENT: ', encoded.toString());
+
+        const identity = this.getIdentityNode(index);
 
         const signature = bitcoinMessage.sign(text, identity.privateKey, true);
 
-        console.log(signature);
+        console.log('SIGNATURE: ', new Uint8Array(signature).toString());
 
         return signature;
     }
@@ -168,33 +171,37 @@ export class IdentityService implements OnDestroy {
         const identityNode = this.getIdentityNode(this.identityIndex + 1);
         const identityId = this.getAddress(identityNode, this.identityNetwork);
 
-        const identity: Identity = {
-            identifier: identityId,
-            name: '',
-            shortName: '',
-            alias: '',
-            email: '',
-            height: 0,
-            title: '',
-            image: '',
-            url: '',
-            hubs: []
-        };
+        // const identity: Identity = {
+        //     identifier: identityId,
+        //     name: '',
+        //     shortname: '',
+        //     alias: '',
+        //     email: '',
+        //     height: 0,
+        //     title: '',
+        //     image: '',
+        //     url: '',
+        //     hubs: []
+        // };
 
-        const identityContainer: IdentityContainer = {
-            version: 1,
-            id: 'identity/' + identity.identifier,
-            signature: '',
-            content: identity,
-            published: false,
-            index: this.identityIndex + 1 // We should not persist this new index until after we actually save it.
-        };
+        const identity = new Identity();
+        identity.identifier = identityId;
 
-        return identityContainer;
+        // TODO: Get the latest block height off the local node / API.
+        identity.height = 1; //
+
+        const container = new IdentityContainer(identity);
+        container.signature = '';
+        container.published = false;
+        container.publish = true;
+        container.index = this.identityIndex + 1; // We should not persist this new index until after we actually save it.
+
+        return container;
     }
 
-    add(identity: IdentityContainer) {
-        const index = this.identities.findIndex(t => t.id === identity.id);
+    /** Add the identity locally and publish if both publish parameter is specified, and .publish on the identity. */
+    add(identity: IdentityContainer, publish: boolean =  true) {
+        const index = this.identities.findIndex(t => t.content.identifier === identity.content.identifier);
 
         if (index === -1) {
             // Ensure we create a new array and don't modify existing.
@@ -210,24 +217,33 @@ export class IdentityService implements OnDestroy {
             this.identities[index] = identity;
         }
 
+        // Now that we have added this new identity to the identities locally, make sure we register that the index is spent.
+        this.identityIndex = identity.index;
+
         // If publish is turned on, ensure we send our updated identity to one of the platform hubs.
-        if (identity.published) {
+        if (publish && identity.publish) {
             // Get the signature for the entity.
-            const signatureBuffer = this.sign(identity);
+            const signatureBuffer = this.sign(identity.content, identity.index);
             const signature = signatureBuffer.toString('base64');
 
-            const payload = {
-                id: identity.id,
-                container: 'identity',
-                type: 'identity',
-                signature,
-                item: identity
-            };
+            identity.signature = signature;
 
-            const json = JSON.stringify(payload);
+            // Figure out another way to do this, as this edits our original (persisted) identity.
+            // We should remove these values, especially index, before publish to hub.
+            // delete identity.index;
+            // delete identity.published;
+            // delete identity.publish;
+
+            // const payload = {
+            //     id: identity.id,
+            //     signature,
+            //     content: identity
+            // };
+
+            const json = JSON.stringify(identity);
             console.log(json);
 
-            this.hubService.post(payload);
+            this.hubService.put(identity);
         }
 
         // try {
@@ -251,8 +267,8 @@ export class IdentityService implements OnDestroy {
     }
 
     remove(id: string) {
-        const identity = this.identities.find(t => t.id === id);
-        this.identities = this.identities.filter(i => i.id !== id);
+        const identity = this.identities.find(t => t.content.identifier === id);
+        this.identities = this.identities.filter(i => i.content.identifier !== id);
 
         // Save to service, then update again.
         try {
@@ -282,7 +298,13 @@ export class IdentityService implements OnDestroy {
     }
 
     async find(id: string): Promise<IdentityContainer> {
-        const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
+        // const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
+        const baseUrl = this.hubService.getHub().content.url;
+        console.log(baseUrl);
+
+        // const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
+        const identityApiUrl = 'http://localhost:4335/api/identity/' + id;
+
         return await this.api<IdentityContainer>(identityApiUrl);
     }
 
@@ -346,7 +368,7 @@ export class IdentityService implements OnDestroy {
 
     /** Performs a query to find identity based on index number */
     async findByIndex(index: number): Promise<IdentityContainer> {
-        let identity = null;
+        let identity: IdentityContainer = null;
         const identityNode = this.getIdentityNode(index);
         const identityId = this.getAddress(identityNode, this.identityNetwork);
 
@@ -354,7 +376,12 @@ export class IdentityService implements OnDestroy {
             identity = await this.find(identityId);
 
             if (identity) {
-                this.add(identity);
+                // Update local state fo the container.
+                identity.published = true;
+                identity.publish = true;
+                identity.index = index;
+
+                this.add(identity, false);
             }
 
             // If the last found index is higher than previously known index height, make sure we save it.
@@ -370,44 +397,44 @@ export class IdentityService implements OnDestroy {
     }
 
     /** Performs a scan of identities from index and number of coint. Returns true if anything is found. */
-    async scan2(index: number, count: number) {
-        // Reset the scan index height.
-        // this.identityIndex = -1;
+    // async scan2(index: number, count: number) {
+    //     // Reset the scan index height.
+    //     // this.identityIndex = -1;
 
-        let found = false;
-        let lastFoundIndex = 0;
+    //     let found = false;
+    //     let lastFoundIndex = 0;
 
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = index; i < count; i++) {
+    //     // tslint:disable-next-line: prefer-for-of
+    //     for (let i = index; i < count; i++) {
 
-            const identityNode = this.getIdentityNode(i);
-            const identityId = this.getAddress(identityNode, this.identityNetwork);
+    //         const identityNode = this.getIdentityNode(i);
+    //         const identityId = this.getAddress(identityNode, this.identityNetwork);
 
-            try {
-                const identity = await this.find(identityId);
+    //         try {
+    //             const identity = await this.find(identityId);
 
-                if (identity) {
-                    this.add(identity);
-                }
+    //             if (identity) {
+    //                 this.add(identity);
+    //             }
 
-                console.log('FOUND!!!');
+    //             console.log('FOUND!!!');
 
-                found = true;
+    //             found = true;
 
-                lastFoundIndex = index;
-            }
-            catch (err) {
-                // console.log('Identity find result: ', err);
-            }
-        }
+    //             lastFoundIndex = index;
+    //         }
+    //         catch (err) {
+    //             // console.log('Identity find result: ', err);
+    //         }
+    //     }
 
-        // If the last found index is higher than previously known index height, make sure we save it.
-        if (lastFoundIndex > this.identityIndex) {
-            this.identityIndex = lastFoundIndex;
-        }
+    //     // If the last found index is higher than previously known index height, make sure we save it.
+    //     if (lastFoundIndex > this.identityIndex) {
+    //         this.identityIndex = lastFoundIndex;
+    //     }
 
-        return found;
-    }
+    //     return found;
+    // }
 
     private initialize(): IdentityContainer[] {
         return [];

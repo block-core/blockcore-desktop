@@ -29,6 +29,10 @@ export class HubService {
     private api<T>(url: string, method: string = 'GET', data?: any): Promise<T> {
         return fetch(url, {
             method,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(data)
         })
             .then(response => {
@@ -43,16 +47,17 @@ export class HubService {
         this.settings.hubs = this.hubs;
     }
 
-    async post(signedDocument: any) {
+    async put(signedDocument: any) {
         const hub = this.getHub();
 
-        console.log('HUB:', hub);
-        console.log('SIGNED DOCUMENT:', signedDocument);
+        console.log('CONTAINER:', signedDocument);
 
-        const url = hub.content.url + '/' + signedDocument.container + '/' + signedDocument.id;
-        console.log('URL:', url);
+        // TODO: Use the URL from the Hub. For now relay on the City Chain Identity host.
+        // const url = hub.content.url + '/' + signedDocument.content['@type'] + '/' + signedDocument.content.id;
+        const url = 'http://localhost:4335/api/' + signedDocument.id; // .id is a shortcut of '@type/' + id.
+        // const url = 'https://identity.city-chain.org/' + signedDocument.container + '/' + signedDocument.id;
 
-        const results = await this.api<Hub>(url, 'POST', signedDocument);
+        const results = await this.api<any>(url, 'PUT', signedDocument);
         console.log('RESULTS:', results);
     }
 
@@ -68,7 +73,7 @@ export class HubService {
     }
 
     getHub() {
-        const hub = this.hubs.find(h => h.id === this.settings.hub);
+        const hub = this.hubs.find(h => h.content.identifier === this.settings.hub);
 
         return hub;
     }
@@ -77,7 +82,7 @@ export class HubService {
      * Remvoe a hub hub
      */
     remove(id: string) {
-        const index = this.hubs.findIndex(h => h.id === id);
+        const index = this.hubs.findIndex(h => h.content.identifier === id);
 
         console.log('Found index:' + index);
 
@@ -149,35 +154,6 @@ export class HubService {
         }
 
         this.persist();
-
-        // Consumer
-        // this.api<{ title: string; message: string }>('v1/posts/1')
-        //     .then(({ title, message }) => {
-        //         console.log(title, message)
-        //     })
-        //     .catch(error => {
-        //         /* show error message */
-        //     })
-
-        // fetch('http://swapi.co/api/people/1/')
-        //     .then(res => res.json<Actor>())
-        //     .then(res => {
-        //         let b: Actor = res;
-        //     });
-
-        // const params = new HttpParams({
-        //     fromObject: {
-        //         command: 'add',
-        //         endpoint: ip,
-        //     }
-        // });
-
-        // console.log(params);
-
-        // return this.http
-        //     .get(this.apiUrl + '/ConnectionManager/addnode', { headers: this.headers, params })
-        //     .pipe(catchError(this.handleError.bind(this)))
-        //     .pipe(map((response: Response) => response));
     }
 
     private initialize(): HubContainer[] {

@@ -11,6 +11,7 @@ import { Logger } from 'src/app/services/logger.service';
 import * as bip38 from 'city-bip38';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
+import { encode } from '@msgpack/msgpack';
 
 @Component({
     selector: 'app-identity',
@@ -28,7 +29,6 @@ export class IdentityComponent implements OnDestroy, OnInit {
     scanningDeepStatus: string;
 
     searchInput = '';
-    // public identities: Identity[];
 
     constructor(
         private appState: ApplicationStateService,
@@ -45,128 +45,167 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     ngOnInit() {
 
-        console.log(this.identityService.getId(0));
-        console.log(this.identityService.getId(1));
-        console.log(this.identityService.getId(2));
-        console.log(this.identityService.getId(3));
-        console.log(this.identityService.getId(4));
-        console.log(this.identityService.getId(5));
-        console.log(this.identityService.getId(6));
-
-        // // tslint:disable-next-line: no-debugger
-        // debugger;
-
-        // // Parameters required for FLO address generation
-        // const FLOTESTNET = {
-        //     messagePrefix: '\x19FLO testnet Signed Message:\n',
-        //     bip32: {
-        //         public: 0x013440e2,
-        //         private: 0x01343c23
-        //     },
-        //     pubKeyHash: 0x73,
-        //     scriptHash: 0xc6,
-        //     wif: 0xef
-        // };
-
-        // const identity = this.identityService.getId(0);
-        // console.log('Identity:', identity);
-
-        // // const bytes = Buffer.from('003c176e659bea0f29a3e9bf7880c112b1b31b4dc826268187', 'hex');
-        // const address2 = bs58.encode(identity.publicKey);
-        // console.log(address2);
-
-        // const message = 'hello world';
-
-        // const signature = bitcoinMessage.sign(message, identity.privateKey, true, this.appState.networkDefinition);
-        // console.log(signature.toString('base64'));
-
-        // // const signature2 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2sh(p2wpkh)' });
-        // // console.log(signature2.toString('base64'));
-
-        // // const signature3 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2wpkh' });
-        // // console.log(signature3.toString('base64'));
-
-        // // var address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN';
-
-        // const verified = bitcoinMessage.verify(message, address2, signature, this.appState.networkDefinition);
-
-        // console.log(verified);
-        // => true
-
-        // const address = '16UjcYNBG9GTK4uq2f7yYEbuifqCzoLMGS';
-        // const bytes = bs58.decode(address);
-        // console.log(bytes.toString('hex'));
-        // => 003c176e659bea0f29a3e9bf7880c112b1b31b4dc826268187
-
-        // this.identities = this.settings.identities;
-        // console.log(this.identities);
-
-        // // Read the seed from the file on disk.
-        // const seed = this.electronService.ipcRenderer.sendSync('get-wallet-seed', this.walletService.generalInfo.walletFilePath);
-
-        // // Descrypt the seed with the password provided on unlock (login).
-        // bip38.decryptAsync(seed, 'default', (decryptedKey) => {
-        //     console.log(decryptedKey);
-
-        //     // TODO: Add generation of HD wallet with purpose 302 here.
-
-        // }, null, this.appState.networkParams);
     }
 
     ngOnDestroy() {
 
     }
 
+    // async scan() {
+
+    //     const icons = ['https://image.flaticon.com/icons/svg/236/236832.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236832.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236832.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236832.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236831.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236800.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236810.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236806.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236846.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236818.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236808.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236804.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234679.svg',
+    //         'https://image.flaticon.com/icons/svg/424/424783.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236849.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236801.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236829.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233914.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233954.svg',
+    //         'https://image.flaticon.com/icons/svg/424/424796.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233958.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233922.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233950.svg',
+    //         'https://image.flaticon.com/icons/svg/424/424779.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233927.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233878.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233938.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233894.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233949.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233883.svg',
+    //         'https://image.flaticon.com/icons/svg/233/233893.svg',
+    //         'https://image.flaticon.com/icons/svg/424/424763.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234588.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234724.svg',
+    //         'https://image.flaticon.com/icons/svg/236/236808.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234668.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234829.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234794.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234771.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234736.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234757.svg',
+    //         'https://image.flaticon.com/icons/svg/424/424788.svg',
+    //         'https://image.flaticon.com/icons/svg/306/306294.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234248.svg',
+    //         'https://image.flaticon.com/icons/svg/314/314271.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234213.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234207.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234214.svg',
+    //         'https://image.flaticon.com/icons/svg/2162/2162579.svg',
+    //         'https://image.flaticon.com/icons/svg/825/825540.svg',
+    //         'https://image.flaticon.com/icons/svg/825/825465.svg',
+    //         'https://image.flaticon.com/icons/svg/1870/1870449.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234163.svg',
+    //         'https://image.flaticon.com/icons/svg/234/234121.svg'];
+
+    //     // tslint:disable-next-line: prefer-for-of
+    //     for (let i = 0; i < icons.length; ++i) {
+    //         const icon = icons[i];
+
+    //         const identityContainer = this.identityService.create();
+    //         identityContainer.content.image = icon;
+    //         identityContainer.publish = true;
+    //         identityContainer.published = true;
+
+    //         this.identityService.add(identityContainer);
+    //     }
+    // }
+
     async scan() {
-        let index = 0;
-        const length = 10;
-
         this.scanning = true;
-        this.scanningStatus = 'Scanning identity index ' + index + '...';
+        this.scanningStatus = 'Scanning identity index 0...';
 
-        // Keep scanning until we no longer find.
-        // while (await this.identityService.findByIndex(index)) {
-        //     index++;
-        //     this.scanningStatus = 'Scanning identity index ' + index + '...';
-        // }
+        const seek = async () => {
 
-        setTimeout(async () => {
+            let index = 0;
+            let height = 10;
+            let hasFound = false;
+            const length = 10;
+
             // With the deep scan we won't stop until we have done a full lengthy scan of identities.
-            while (index < length) {
-                await this.identityService.findByIndex(index);
+            while (index < height) {
+                const identity = await this.identityService.findByIndex(index);
+
+                // Every time we find an identity, extend the search range with 10 more.
+                if (identity) {
+                    hasFound = true;
+                }
+
                 index++;
+
                 this.scanningStatus = 'Scanning identity index ' + index + '...';
+
+                // When we are at last index, check if we found anything, if we did, extend with another 10 indexes to search.
+                if (index === height && hasFound) {
+                    height = (height + length);
+                    hasFound = false;
+                }
             }
 
             this.scanningStatus = '';
             this.scanning = false;
-        }, 0);
+        };
+
+        setTimeout(seek, 0);
     }
 
     async scanDeep() {
+        this.scanning = true;
+        this.scanningStatus = 'Scanning identity index 0...';
 
-        let index = 0;
-        const length = 100;
+        const seek = async () => {
 
-        this.scanningDeep = true;
-        this.scanningDeepStatus = 'Scanning identity index ' + index + '...';
+            let index = 0;
+            let height = 100;
+            let hasFound = false;
+            const length = 100;
 
-        setTimeout(async () => {
             // With the deep scan we won't stop until we have done a full lengthy scan of identities.
-            while (index < length) {
-                await this.identityService.findByIndex(index);
+            while (index < height) {
+                const identity = await this.identityService.findByIndex(index);
+
+                // Every time we find an identity, extend the search range with 10 more.
+                if (identity) {
+                    hasFound = true;
+                }
+
                 index++;
-                this.scanningDeepStatus = 'Scanning identity index ' + index + '...';
+
+                this.scanningStatus = 'Scanning identity index ' + index + '...';
+
+                // When we are at last index, check if we found anything, if we did, extend with another 10 indexes to search.
+                if (index === height && hasFound) {
+                    height = (height + length);
+                    hasFound = false;
+                }
+
             }
 
-            this.scanningDeepStatus = '';
-            this.scanningDeep = false;
-        }, 0);
+            this.scanningStatus = '';
+            this.scanning = false;
+        };
+
+        setTimeout(seek, 0);
     }
 
     delete(id: string) {
         this.identityService.remove(id);
         // this.identities = this.settings.identities;
         this.cd.markForCheck();
+    }
+
+    deleteAll()
+    {
+        this.identityService.identities = [];
     }
 }

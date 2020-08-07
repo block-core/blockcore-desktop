@@ -16,7 +16,42 @@ import { Link } from './link';
 //     restorekey?: string;
 // }
 
-export interface IdentityContainer {
+export class EntityBase {
+
+    constructor(type: string)
+    {
+        this['@type'] = type;
+    }
+
+    identifier: string = null;
+    height: number = null;
+    '@type': string = null;
+}
+
+export class Identity extends EntityBase {
+
+    constructor() {
+        super('identity');
+    }
+
+    name: string = null;
+    shortname: string = null;
+    alias: string = null;
+    title: string = null;
+    email: string = null;
+    url: string = null;
+    image: string = null;
+    hubs: string[] = null;
+}
+
+export class IdentityContainer {
+
+    constructor(identity: Identity) {
+        this.id = identity['@type'] + '/' + identity.identifier;
+        this.content = identity;
+        this.version = 2;
+    }
+
     version: number;
     id: string;
     signature: string;
@@ -27,18 +62,6 @@ export interface IdentityContainer {
     added?: Date;
     locked?: boolean;
     published: boolean;
+    publish: boolean;
     index: number; // Make sure we don't publish this, we don't want to expose the user's identity indexes.
-}
-
-export interface Identity {
-    identifier: string;
-    height: number;
-    name: string;
-    shortName: string;
-    alias: string;
-    title: string;
-    email: string;
-    url: string;
-    image: string;
-    hubs: string[];
 }

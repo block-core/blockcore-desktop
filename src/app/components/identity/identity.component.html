@@ -9,11 +9,12 @@
     <mat-list class="identities-list">
         <h3 mat-subheader>Your identities</h3>
 
-        <mat-list-item *ngFor="let identity of identityService.identities$ | async">
+        <mat-list-item *ngFor="let identity of identityService.identities$ | async | sortBy: 'asc':'index'">
             <!-- <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
             <div class="mat-list-item"><img mat-card-avatar class="" [src]="profileImageService.getImage(identity.id)" /></div> -->
 
-            <img mat-list-avatar class="mat-list-avatar-large" [src]="profileImageService.getImage(identity.id)">
+            <img mat-list-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identity.content.image)">
+            <!-- <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)"> -->
 
             <h4 mat-line *ngIf="identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.name}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
             <h4 mat-line *ngIf="!identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.identifier}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
@@ -78,7 +79,11 @@
                 <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
             </div>
             <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
+            &nbsp;
+            <button mat-raised-button color="primary" (click)="deleteAll()">DELETE ALL (LOCALLY)</button>
         </div>
+
+        
 
         <!-- <mat-list-item>
             <mat-icon mat-list-icon class="example-header-image-profile2"></mat-icon>

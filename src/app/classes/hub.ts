@@ -13,7 +13,7 @@ export interface Hub {
     identifier: string;
     height: number;
     name: string;
-    shortName: string;
+    shortname: string;
     alias: string;
     title: string;
     email: string;

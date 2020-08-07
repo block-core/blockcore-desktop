@@ -5,8 +5,10 @@ import { PasswordValidationDirective } from './directives/password-validation.di
 import { CoinNotationPipe } from './pipes/coin-notation.pipe';
 import { SizeUnitPipe } from './pipes/size-unit.pipe';
 import { PriceUnitPipe } from './pipes/price-unit.pipe';
+import { YesNoPipe } from './pipes/yesno.pipe';
+import { SortByPipe } from './pipes/sort-by.pipe';
 
-const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe];
+const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe];
 
 @NgModule({
     declarations: [

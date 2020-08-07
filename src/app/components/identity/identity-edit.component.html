@@ -8,7 +8,7 @@
                 <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
                 <mat-card-title *ngIf="!formName">{{identityContainer.content.identifier}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
 
-                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Height: {{identityContainer.content.height}}</mat-card-subtitle>
+                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Index: {{identityContainer.index}} - Height: {{identityContainer.content.height}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
 
@@ -25,10 +25,10 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Short Name</mat-label>
-                    <input matInput id="shortNameInput" maxlength="30" formControlName="shortName" name="shortName" placeholder="Short version of your full name">
+                    <input matInput id="shortnameInput" maxlength="30" formControlName="shortname" name="shortname" placeholder="Short version of your full name">
                     <mat-icon matSuffix>face</mat-icon>
-                    <mat-error *ngIf="formErrors.shortName">
-                        {{ formErrors.shortName }}
+                    <mat-error *ngIf="formErrors.shortname">
+                        {{ formErrors.shortname }}
                     </mat-error>
                 </mat-form-field>
 
@@ -130,10 +130,9 @@
 
                 <br> -->
 
-                <mat-checkbox (change)="onChanged($event)" formControlName="published" name="published">Publish Profile</mat-checkbox>
+                <mat-checkbox (change)="onChanged($event)" formControlName="publish" name="publish">Publish Profile</mat-checkbox>
                 <br> <br>
                 <mat-card class="mat-elevation-z8" *ngIf="publishWarning">This profile was previously published. When you save it, it will be unpublished and only locally available.</mat-card>
-
 
             </mat-card-content>
             <mat-card-actions>
