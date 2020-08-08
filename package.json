@@ -51,7 +51,13 @@
     "version": "node -p \"require('./package.json').version\"",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "mobile-start": "npm run mobile-build && npm run mobile-browser",
+    "mobile-setup": "npm install -g cordova && cd mobile && cordova platform add android && cordova platform add ios && cordova platform add browser && cd ..",
+    "mobile-build": "ng lint && ng build --outputPath=./mobile/www",
+    "mobile-android": "cd mobile && cordova run android && cd ..",
+    "mobile-ios": "cd mobile && cordova run ios && cd ..",
+    "mobile-browser": "cd mobile && cordova run browser && cd .."
   },
   "private": true,
   "dependencies": {
@@ -71,6 +77,7 @@
     "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^10.0.0",
     "@angular-devkit/build-angular": "~0.1000.1",
     "@angular/animations": "10.0.2",
     "@angular/cdk": "10.0.1",

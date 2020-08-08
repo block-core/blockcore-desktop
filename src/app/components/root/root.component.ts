@@ -85,64 +85,67 @@ export class RootComponent implements OnInit, OnDestroy {
 
         this.isAuthenticated = authService.isAuthenticated();
 
-        if (this.electronService.remote) {
-            const applicationVersion = this.electronService.remote.app.getVersion();
+        if (this.electronService.ipcRenderer) {
+            if (this.electronService.remote) {
+                const applicationVersion = this.electronService.remote.app.getVersion();
 
-            this.appState.setVersion(applicationVersion);
-            this.log.info('Version: ' + applicationVersion);
-        }
+                this.appState.setVersion(applicationVersion);
+                this.log.info('Version: ' + applicationVersion);
+            }
 
-        this.ipc = electronService.ipcRenderer;
+            this.ipc = electronService.ipcRenderer;
 
-        this.ipc.on('daemon-exiting', (event, error) => {
-            this.log.info('daemon is currently being stopped... please wait...');
-            this.appState.shutdownInProgress = true;
-            this.cd.detectChanges();
-
-            // If the exit takes a very long time, we want to allow users to forcefully exit City Hub.
-            setTimeout(() => {
-                this.appState.shutdownDelayed = true;
+            this.ipc.on('daemon-exiting', (event, error) => {
+                this.log.info('daemon is currently being stopped... please wait...');
+                this.appState.shutdownInProgress = true;
                 this.cd.detectChanges();
-            }, 60000);
 
-        });
+                // If the exit takes a very long time, we want to allow users to forcefully exit City Hub.
+                setTimeout(() => {
+                    this.appState.shutdownDelayed = true;
+                    this.cd.detectChanges();
+                }, 60000);
 
-        this.ipc.on('daemon-exited', (event, error) => {
-            this.log.info('daemon is stopped.');
-            this.appState.shutdownInProgress = false;
-            this.appState.shutdownDelayed = false;
-
-            // Perform a new close event on the window, this time it will close itself.
-            window.close();
-        });
-
-        this.ipc.on('daemon-error', (event, error) => {
-
-            this.log.error(error);
-
-            const dialogRef = this.dialog.open(ReportComponent, {
-                data: {
-                    title: 'Failed to start City Chain background daemon',
-                    error,
-                    lines: this.log.lastEntries()
-             } });
-
-            dialogRef.afterClosed().subscribe(result => {
-                this.log.info(`Dialog result: ${result}`);
             });
-        });
 
-        this.ipc.on('log-debug', (event, msg: any) => {
-            this.log.verbose(msg);
-        });
+            this.ipc.on('daemon-exited', (event, error) => {
+                this.log.info('daemon is stopped.');
+                this.appState.shutdownInProgress = false;
+                this.appState.shutdownDelayed = false;
 
-        this.ipc.on('log-info', (event, msg: any) => {
-            this.log.info(msg);
-        });
+                // Perform a new close event on the window, this time it will close itself.
+                window.close();
+            });
 
-        this.ipc.on('log-error', (event, msg: any) => {
-            this.log.error(msg);
-        });
+            this.ipc.on('daemon-error', (event, error) => {
+
+                this.log.error(error);
+
+                const dialogRef = this.dialog.open(ReportComponent, {
+                    data: {
+                        title: 'Failed to start City Chain background daemon',
+                        error,
+                        lines: this.log.lastEntries()
+                    }
+                });
+
+                dialogRef.afterClosed().subscribe(result => {
+                    this.log.info(`Dialog result: ${result}`);
+                });
+            });
+
+            this.ipc.on('log-debug', (event, msg: any) => {
+                this.log.verbose(msg);
+            });
+
+            this.ipc.on('log-info', (event, msg: any) => {
+                this.log.info(msg);
+            });
+
+            this.ipc.on('log-error', (event, msg: any) => {
+                this.log.error(msg);
+            });
+        }
 
         // Upon initial load, we'll check if we are on mobile or not and show/hide menu.
         const isSmallScreen = breakpointObserver.isMatched(Breakpoints.HandsetPortrait);

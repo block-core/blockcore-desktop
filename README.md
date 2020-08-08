@@ -71,6 +71,40 @@ $ ./City.*.AppImage
 ### Mac
 
 
+## Mobile (Android/iOS)
+
+Support for running City Hub on mobile devices is currently under development. To build and run the mobile version, you need to do the following.
+
+
+### Development environment
+
+Make sure you have Node.JS install, and open a console promt and navigate to the root of the repo.
+
+```sh
+# Install the packages if you have not yet.
+npm install
+```
+
+### Install tooling
+```sh
+# Run the script that will install tooling and add platforms. It installs Cordova globally, and add support for android, ios and browser.
+npm run mobile-setup
+```
+
+### Build to mobile
+
+Normally the "npm start" will build to the dist folder and launch Electron on the desktop. For mobile running, we do currently not have an auto-reload 
+development setup. It's a manual build and run.
+
+```sh
+# This will build the Angular code and output to the mobile/www folder.
+npm run mobile-build
+
+# This will launch the web browser, or you can use "mobile-android" or "mobile-ios".
+npm run mobile-browser
+```
+
+
 ## Contribution
 
 If you're interested in being a contributor and want to get involved in development of City Chain and City Hub, get started by reading these:

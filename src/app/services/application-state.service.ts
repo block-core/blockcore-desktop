@@ -44,8 +44,10 @@ export class ApplicationStateService {
                 datafolder: localStorage.getItem('Network:DataFolder') || ''
             };
 
-            // On startup, we'll send the initial hiding settings to main thread.
-            electron.ipcRenderer.send('settings', { openAtLogin: settings.openOnLogin, showInTaskbar: settings.showInTaskbar });
+            if (electron.ipcRenderer) {
+                // On startup, we'll send the initial hiding settings to main thread.
+                electron.ipcRenderer.send('settings', { openAtLogin: settings.openOnLogin, showInTaskbar: settings.showInTaskbar });
+            }
 
             ApplicationStateService.singletonInstance = this;
         }
