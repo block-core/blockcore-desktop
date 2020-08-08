@@ -89,7 +89,7 @@
     "@angular/flex-layout": "10.0.0-beta.32",
     "@angular/forms": "10.0.8",
     "@angular/language-service": "10.0.8",
-    "@angular/material": "10.0.1",
+    "@angular/material": "10.1.2",
     "@angular/platform-browser": "10.0.8",
     "@angular/platform-browser-dynamic": "10.0.8",
     "@angular/router": "10.0.8",
