@@ -344,7 +344,7 @@ function finishDecryptECMult(seedBPass, encryptedPart1, encryptedPart2, passInt,
     decipher2.end(tmp.slice(0, 8)); // last 8 bytes
 
     const seedBPart1 = xor(decipher2.read(), derivedHalf1.slice(0, 16));
-    const seedB = Buff.concat([seedBPart1, seedBPart2], 24);
+    const seedB = Buffer.concat([seedBPart1, seedBPart2], 24);
     const factorB = BigInteger.fromBuffer(hash256(seedB));
 
     // d = passFactor * factorB (mod n)
