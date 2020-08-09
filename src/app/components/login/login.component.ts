@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DatabaseStorageService, StorageService } from 'src/app/services/storage.service';
-import * as bip38 from 'city-bip38';
+import * as bip38 from '../../../libs/bip38';
 import { Logger } from 'src/app/services/logger.service';
 import { IdentityService } from 'src/app/services/identity.service';
 
@@ -171,6 +171,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     unlock() {
+
         this.errorMessage = '';
         this.unlocking = true;
         this.invalidPassword = false;
@@ -209,26 +210,29 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             console.log(wallet);
 
-            bip38.decryptAsync(wallet.encryptedSeed, walletLoad.password, (decryptedKey) => {
-                console.log('decrypted!');
-                console.log(decryptedKey);
+            // bip38.decryptAsync(wallet.encryptedSeed, walletLoad.password, (decryptedKey) => {
+            // }, null, this.appState.networkParams);
 
-                const stop = new Date().getTime();
+            const decryptedKey = bip38.decrypt(wallet.encryptedSeed, walletLoad.password, null, null, this.appState.networkParams);
 
-                const diff = stop - start;
-                console.log(diff + 'ms taken to decrypt.');
-                // console.log('decryptedKey:', decryptedKey);
+            console.log('decrypted!');
+            console.log(decryptedKey);
 
-                self.authService.setAuthenticated();
-                self.unlocking = false;
-                localStorage.setItem('Network:Wallet', wallet.name);
+            const stop = new Date().getTime();
 
-                // Make sure the unlocked wallet is available, especially the extpubkey is required to generate addresses.
-                this.wallet.activeWallet = wallet;
+            const diff = stop - start;
+            console.log(diff + 'ms taken to decrypt.');
+            // console.log('decryptedKey:', decryptedKey);
 
-                self.router.navigateByUrl('/dashboard');
+            self.authService.setAuthenticated();
+            self.unlocking = false;
+            localStorage.setItem('Network:Wallet', wallet.name);
 
-            }, null, this.appState.networkParams);
+            // Make sure the unlocked wallet is available, especially the extpubkey is required to generate addresses.
+            this.wallet.activeWallet = wallet;
+
+            self.router.navigateByUrl('/dashboard');
+
         } catch (err) {
             if (err.message !== 'AssertionError [ERR_ASSERTION]') {
                 self.log.error('Unknown failure on wallet unlock', err);

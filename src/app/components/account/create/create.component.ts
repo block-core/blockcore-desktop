@@ -13,7 +13,7 @@ import { Logger } from '../../../services/logger.service';
 import { ApplicationStateService } from 'src/app/services/application-state.service';
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import * as bip38 from 'city-bip38';
+import * as bip38 from '../../../../libs/bip38';
 import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
 import * as wif from 'wif';
@@ -140,38 +140,41 @@ export class CreateAccountComponent implements OnInit {
                 const accountNode = masterNode.derivePath("m/44'/1926'/0'"); // TODO: Get the coin type from network definition.
                 const xpub = accountNode.neutered().toBase58();
 
-                bip38.encryptAsync(masterNode.privateKey, true, wallet.password, (out) => {
+                // bip38.encryptAsync(masterNode.privateKey, true, wallet.password, (out) => {
+                // }, null, this.appState.networkParams);
 
-                    // tslint:disable-next-line
-                    // debugger;
+                // tslint:disable-next-line: prefer-const
+                let encryptedKeySeed = bip38.encrypt(masterNode.privateKey, true, wallet.password, null, null, this.appState.networkParams);
 
-                    // Instantiate it
-                    const db = new DatabaseStorageService('cityhub');
+                // tslint:disable-next-line
+                // debugger;
 
-                    // Open it
-                    db.open().catch(err => {
-                        console.error(`Open failed: ${err.stack}`);
-                    });
+                // Instantiate it
+                const db = new DatabaseStorageService('cityhub');
 
-                    db.wallets.add({
-                        name: wallet.name,
-                        isExtPubKeyWallet: false,
-                        extPubKey: xpub,
-                        encryptedSeed: out,
-                        chainCode: masterNode.chainCode,
-                        network: 'CityMain',
-                        creationTime: Date.now() / 1000,
-                        coinType: 1926,
-                        lastBlockSyncedHeight: 0,
-                        lastBlockSyncedHash: ''
-                    });
+                // Open it
+                db.open().catch(err => {
+                    console.error(`Open failed: ${err.stack}`);
+                });
 
-                    self.saving = false;
-                    self.log.info('Wallet Created!');
-                    self.snackBar.open('Account successfully created!', null, { duration: 3000 });
-                    self.router.navigateByUrl('/login');
+                db.wallets.add({
+                    name: wallet.name,
+                    isExtPubKeyWallet: false,
+                    extPubKey: xpub,
+                    encryptedSeed: encryptedKeySeed,
+                    chainCode: masterNode.chainCode,
+                    network: 'CityMain',
+                    creationTime: Date.now() / 1000,
+                    coinType: 1926,
+                    lastBlockSyncedHeight: 0,
+                    lastBlockSyncedHash: ''
+                });
 
-                }, null, this.appState.networkParams);
+                self.saving = false;
+                self.log.info('Wallet Created!');
+                self.snackBar.open('Account successfully created!', null, { duration: 3000 });
+                self.router.navigateByUrl('/login');
+
 
             });
         } else {

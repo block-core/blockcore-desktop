@@ -15,7 +15,7 @@ import { Logger } from '../../../services/logger.service';
 import { ApplicationStateService } from 'src/app/services/application-state.service';
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import * as bip38 from 'city-bip38';
+import * as bip38 from '../../../../libs/bip38';
 import * as city from 'city-lib';
 import * as coininfo from 'city-coininfo';
 import { HDNode } from 'city-lib';
@@ -96,29 +96,29 @@ describe('AppComponent', () => {
 
         expect(accountExtPubKey).toEqual('xpub6BwCLtuvjt6TZ495sJruY1UWPXg6ME9HA92ro75YDHvGpPKY6kQ6ifp6DEszRpJGMtdBvWBaSn4gQDTz4Ctm5m1BMLeFUh3F19mTXA4s3bE');
 
-        bip38.encryptAsync(masterNode.privateKey, true, walletPassword, (out) => {
-            console.log('BIP38:', out);
-            expect(out).toEqual('6PYW8DRnFZSu3CVC3NfghKFSozZE8gmf76GmsGrrA9ciWbv6F6HhVSKkEQ');
+        // bip38.encryptAsync(masterNode.privateKey, true, walletPassword, (out) => {
+        //     console.log('BIP38:', out);
+        //     expect(out).toEqual('6PYW8DRnFZSu3CVC3NfghKFSozZE8gmf76GmsGrrA9ciWbv6F6HhVSKkEQ');
 
-            bip38.decryptAsync(out, walletPassword, (decryptedKey) => {
+        //     bip38.decryptAsync(out, walletPassword, (decryptedKey) => {
 
-                const masterNodeDecrypted = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
+        //         const masterNodeDecrypted = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-                // tslint:disable-next-line: quotemark
-                const accountNodeDecrypted = masterNodeDecrypted.derivePath("m/44'/1926'/0'");
-                const accountExtPubKeyDecrypted = accountNodeDecrypted.neutered().toBase58();
+        //         // tslint:disable-next-line: quotemark
+        //         const accountNodeDecrypted = masterNodeDecrypted.derivePath("m/44'/1926'/0'");
+        //         const accountExtPubKeyDecrypted = accountNodeDecrypted.neutered().toBase58();
 
-                expect(accountExtPubKeyDecrypted).toEqual(accountExtPubKey);
+        //         expect(accountExtPubKeyDecrypted).toEqual(accountExtPubKey);
 
-            }, null, {
-                private: network.wif,
-                public: network.pubKeyHash
-            });
+        //     }, null, {
+        //         private: network.wif,
+        //         public: network.pubKeyHash
+        //     });
 
-        }, null, {
-            private: network.wif,
-            public: network.pubKeyHash
-        });
+        // }, null, {
+        //     private: network.wif,
+        //     public: network.pubKeyHash
+        // });
 
         console.log('Seed:', masterSeed);
         console.log('masterNode:', masterNode);
@@ -133,23 +133,23 @@ describe('AppComponent', () => {
         const network = coininfo('city').toBitcoinJS();
 
         // Descrypt the seed with the password provided on unlock (login).
-        bip38.decryptAsync(seed.encryptedSeed, walletPassword, (decryptedKey) => {
+        // bip38.decryptAsync(seed.encryptedSeed, walletPassword, (decryptedKey) => {
 
-            const chainCode = Buffer.from(seed.chainCode, 'base64');
-            console.log('chainCode decoded:', chainCode);
+        //     const chainCode = Buffer.from(seed.chainCode, 'base64');
+        //     console.log('chainCode decoded:', chainCode);
 
-            const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
+        //     const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-            // tslint:disable-next-line: quotemark
-            const accountNode = masterNode.derivePath("m/44'/1926'/0'");
-            const accountExtPubKey = accountNode.neutered().toBase58();
+        //     // tslint:disable-next-line: quotemark
+        //     const accountNode = masterNode.derivePath("m/44'/1926'/0'");
+        //     const accountExtPubKey = accountNode.neutered().toBase58();
 
-            expect(accountExtPubKey).toEqual('xpub6Cfb24ubLfoVvJJMHuHT1keeWW7jnXv7GvR81yhVHMDE7KomSKAq42pBoM6jLzGEbcLPD6SahYLhHdCe92XY3nawKHMPcKFL8dwczU8xEFJ');
+        //     expect(accountExtPubKey).toEqual('xpub6Cfb24ubLfoVvJJMHuHT1keeWW7jnXv7GvR81yhVHMDE7KomSKAq42pBoM6jLzGEbcLPD6SahYLhHdCe92XY3nawKHMPcKFL8dwczU8xEFJ');
 
-        }, null, {
-            private: network.wif,
-            public: network.pubKeyHash
-        });
+        // }, null, {
+        //     private: network.wif,
+        //     public: network.pubKeyHash
+        // });
 
         expect(true).toBeTruthy();
 
@@ -162,103 +162,103 @@ describe('AppComponent', () => {
         const network = coininfo('city').toBitcoinJS();
 
         // Descrypt the seed with the password provided on unlock (login).
-        bip38.decryptAsync(seed.encryptedSeed, walletPassword, (decryptedKey) => {
+        // bip38.decryptAsync(seed.encryptedSeed, walletPassword, (decryptedKey) => {
 
-            const chainCode = Buffer.from(seed.chainCode, 'base64');
-            console.log('chainCode decoded:', chainCode);
+        //     const chainCode = Buffer.from(seed.chainCode, 'base64');
+        //     console.log('chainCode decoded:', chainCode);
 
-            const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
+        //     const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-            // tslint:disable-next-line: quotemark
-            const identityNode = masterNode.derivePath("m/302'/0'");
+        //     // tslint:disable-next-line: quotemark
+        //     const identityNode = masterNode.derivePath("m/302'/0'");
 
-            const wif2 = identityNode.toWIF();
-            console.log('WIF:', wif2);
+        //     const wif2 = identityNode.toWIF();
+        //     console.log('WIF:', wif2);
 
-            // const keyPair = city.ECPair.fromWIF('5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss');
+        //     // const keyPair = city.ECPair.fromWIF('5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss');
 
-            const keyPair = city.ECPair.fromWIF(wif2, network);
+        //     const keyPair = city.ECPair.fromWIF(wif2, network);
 
-            // console.log(keyPair);
-            // console.log(keyPair.compressed);
+        //     // console.log(keyPair);
+        //     // console.log(keyPair.compressed);
 
-            const privateKey = keyPair.privateKey;
-            const message = 'This is an example of a signed message.';
+        //     const privateKey = keyPair.privateKey;
+        //     const message = 'This is an example of a signed message.';
 
-            const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed, network.messagePrefix);
-            console.log('Signature:', signature.toString('base64'));
+        //     const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed, network.messagePrefix);
+        //     console.log('Signature:', signature.toString('base64'));
 
-            // const wif = identityNode.toWIF();
-            // const keyPair = city.ECPair.fromWIF(wif);
+        //     // const wif = identityNode.toWIF();
+        //     // const keyPair = city.ECPair.fromWIF(wif);
 
-            // const privateKey = keyPair.privateKey;
-            // const message = 'This is an example of a signed message.';
+        //     // const privateKey = keyPair.privateKey;
+        //     // const message = 'This is an example of a signed message.';
 
-            // const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed);
-            // console.log(signature.toString('base64'));
+        //     // const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed);
+        //     // console.log(signature.toString('base64'));
 
-            // const address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN';
+        //     // const address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN';
 
-            const decoded = bs58.decode('1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN');
-            console.log('decoded:', decoded.toString());
+        //     const decoded = bs58.decode('1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN');
+        //     console.log('decoded:', decoded.toString());
 
-            const addressFromKey = bs58.encode(keyPair.publicKey);
-            console.log('addressFromKey:', addressFromKey);
+        //     const addressFromKey = bs58.encode(keyPair.publicKey);
+        //     console.log('addressFromKey:', addressFromKey);
 
-            const address = getAddress(identityNode, network);
-            console.log('addressFromIdentityNode:', address);
+        //     const address = getAddress(identityNode, network);
+        //     console.log('addressFromIdentityNode:', address);
 
-            console.log('network:', network);
+        //     console.log('network:', network);
 
-            // const address = bs58.encode(decoded);
-            // const address = bs58.encode(keyPair.publicKey);
-            // console.log('Address:', address);
+        //     // const address = bs58.encode(decoded);
+        //     // const address = bs58.encode(keyPair.publicKey);
+        //     // console.log('Address:', address);
 
-            const verified = bitcoinMessage.verify(message, address, signature, network.messagePrefix);
-            console.log(verified);
+        //     const verified = bitcoinMessage.verify(message, address, signature, network.messagePrefix);
+        //     console.log(verified);
 
-            expect(verified).toBeTruthy();
+        //     expect(verified).toBeTruthy();
 
-            // Parameters required for FLO address generation
-            // const FLOTESTNET = {
-            //     messagePrefix: '\x19FLO testnet Signed Message:\n',
-            //     bip32: {
-            //         public: 0x013440e2,
-            //         private: 0x01343c23
-            //     },
-            //     pubKeyHash: 0x73,
-            //     scriptHash: 0xc6,
-            //     wif: 0xef
-            // };
+        //     // Parameters required for FLO address generation
+        //     // const FLOTESTNET = {
+        //     //     messagePrefix: '\x19FLO testnet Signed Message:\n',
+        //     //     bip32: {
+        //     //         public: 0x013440e2,
+        //     //         private: 0x01343c23
+        //     //     },
+        //     //     pubKeyHash: 0x73,
+        //     //     scriptHash: 0xc6,
+        //     //     wif: 0xef
+        //     // };
 
-            // const identity = this.identityService.getId(0);
-            // console.log('Identity:', identityNode);
+        //     // const identity = this.identityService.getId(0);
+        //     // console.log('Identity:', identityNode);
 
-            // // const bytes = Buffer.from('003c176e659bea0f29a3e9bf7880c112b1b31b4dc826268187', 'hex');
-            // const address2 = bs58.encode(identityNode.publicKey);
-            // console.log(address2);
+        //     // // const bytes = Buffer.from('003c176e659bea0f29a3e9bf7880c112b1b31b4dc826268187', 'hex');
+        //     // const address2 = bs58.encode(identityNode.publicKey);
+        //     // console.log(address2);
 
-            // const message = 'hello world';
+        //     // const message = 'hello world';
 
-            // const signature = bitcoinMessage.sign(message, identityNode.privateKey, true, '\u0018Bitcoin Signed Message:\n');
-            // console.log(signature.toString('base64'));
+        //     // const signature = bitcoinMessage.sign(message, identityNode.privateKey, true, '\u0018Bitcoin Signed Message:\n');
+        //     // console.log(signature.toString('base64'));
 
-            // // const signature2 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2sh(p2wpkh)' });
-            // // console.log(signature2.toString('base64'));
+        //     // // const signature2 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2sh(p2wpkh)' });
+        //     // // console.log(signature2.toString('base64'));
 
-            // // const signature3 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2wpkh' });
-            // // console.log(signature3.toString('base64'));
+        //     // // const signature3 = bitcoinMessage.sign(message, identity.privateKey, true, { segwitType: 'p2wpkh' });
+        //     // // console.log(signature3.toString('base64'));
 
-            // // var address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN';
+        //     // // var address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN';
 
-            // const verified = bitcoinMessage.verify(message, address2, signature, '\u0018Bitcoin Signed Message:\n');
+        //     // const verified = bitcoinMessage.verify(message, address2, signature, '\u0018Bitcoin Signed Message:\n');
 
-            // expect(verified).toBeTruthy();
+        //     // expect(verified).toBeTruthy();
 
-        }, null, {
-            private: network.wif,
-            public: network.pubKeyHash
-        });
+        // }, null, {
+        //     private: network.wif,
+        //     public: network.pubKeyHash
+        // });
     }));
 
     it('should generate profile address', async(() => {

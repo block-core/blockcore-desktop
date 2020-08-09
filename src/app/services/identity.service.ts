@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { ApplicationStateService } from './application-state.service';
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import * as bip38 from 'city-bip38';
+import * as bip38 from '../../libs/bip38';
 import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
 import * as wif from 'wif';
@@ -111,31 +111,37 @@ export class IdentityService implements OnDestroy {
 
     unlock(path: string, password: string) {
 
+        // tslint:disable-next-line: no-debugger
+        debugger;
+
         // Read the seed from the file on disk.
         const seed: { encryptedSeed: string, chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
 
         // Descrypt the seed with the password provided on unlock (login).
-        bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
-            // tslint:disable-next-line: no-debugger
-            // debugger;
+        // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
+        // }, null, this.appState.networkParams);
 
-            const chainCode = Buffer.from(seed.chainCode, 'base64');
+        // tslint:disable-next-line: no-debugger
+        // debugger;
 
-            // Dispose of this object, we don't want to keep the root extkey after initial login.
-            const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
+        const decryptedKey = bip38.decrypt(seed.encryptedSeed, password, null, null, this.appState.networkParams);
 
-            // tslint:disable-next-line: quotemark
-            const identityRoot: HDNode = masterNode.derivePath("m/302'");
+        const chainCode = Buffer.from(seed.chainCode, 'base64');
 
-            // Persist the identity node that we need to generate identities and keys for them.
-            this.identityRoot = identityRoot;
+        // Dispose of this object, we don't want to keep the root extkey after initial login.
+        const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
 
-            this.identityExtPubKey = identityRoot.neutered();
+        // tslint:disable-next-line: quotemark
+        const identityRoot: HDNode = masterNode.derivePath("m/302'");
 
-            // Load identities after unlocking.
-            this.load();
+        // Persist the identity node that we need to generate identities and keys for them.
+        this.identityRoot = identityRoot;
 
-        }, null, this.appState.networkParams);
+        this.identityExtPubKey = identityRoot.neutered();
+
+        // Load identities after unlocking.
+        this.load();
+
     }
 
     getIdentityNode(index: number) {
@@ -200,7 +206,7 @@ export class IdentityService implements OnDestroy {
     }
 
     /** Add the identity locally and publish if both publish parameter is specified, and .publish on the identity. */
-    add(identity: IdentityContainer, publish: boolean =  true) {
+    add(identity: IdentityContainer, publish: boolean = true) {
         const index = this.identities.findIndex(t => t.content.identifier === identity.content.identifier);
 
         if (index === -1) {

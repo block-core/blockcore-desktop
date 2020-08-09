@@ -8,7 +8,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { ElectronService } from 'ngx-electron';
 import { Logger } from 'src/app/services/logger.service';
-import * as bip38 from 'city-bip38';
+import * as bip38 from '../../../libs/bip38';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
 import { encode } from '@msgpack/msgpack';

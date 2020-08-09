@@ -44,7 +44,27 @@
                                 "src/styles"
                             ]
                         },
-                        "scripts": []
+                        "scripts": [],
+                        "allowedCommonJsDependencies": [
+                            "lodash",
+                            "assert",
+                            "bigi",
+                            "ecurve",
+                            "scryptsy",
+                            "bs58check",
+                            "varuint-bitcoin",
+                            "secp256k1",
+                            "create-hash",
+                            "browserify-aes",
+                            "bip32",
+                            "city-coininfo",
+                            "lodash",
+                            "bip39",
+                            "wif",
+                            "tiny-secp256k1",
+                            "typeforce",
+                            "safe-buffer"
+                         ]
                     },
                     "configurations": {
                         "production": {

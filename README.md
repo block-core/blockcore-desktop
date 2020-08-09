@@ -26,7 +26,7 @@ Smart City Platform.
 
 ![City Hub screenshot (2018-07-18)](doc/images/2018-08-11.png "City Hub (2018-08-11)")
 
-## Installation
+## 💿 Installation
 
 You'll find the latest releases on the [releases](https://github.com/CityChainFoundation/city-hub/releases) tab. Make sure you pick the latest release.
 

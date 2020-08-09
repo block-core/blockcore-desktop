@@ -3,6 +3,7 @@
 module.exports = {
     node: {
         crypto: true,
-        buffer: true
+        buffer: true,
+        stream: true
     }
 };
