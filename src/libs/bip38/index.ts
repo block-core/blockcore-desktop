@@ -212,9 +212,6 @@ function finishDecryptRaw(buffer, salt, compressed, scryptBuf, networkParams) {
     const address = getAddress(d, compressed, networkParams);
     const checksum = hash256(address).slice(0, 4);
 
-    // tslint:disable-next-line: no-debugger
-    debugger;
-
     // The underlaying buffer will be different, we only compare the initial 4 values.
     assert.strictEqual(true, salt.every((value, index) => value === checksum[index]));
     // assert.deepStrictEqual(salt, checksum);

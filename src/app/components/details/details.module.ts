@@ -4,14 +4,12 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { DetailsComponent } from './details.component';
 import { AppSharedModule } from '../../shared/app-shared.module';
-import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
         AppSharedModule,
-        ClipboardModule,
         MaterialModule,
     ],
     declarations: [

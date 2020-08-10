@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
-import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
 import { HistoryComponent } from './history.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +18,6 @@ import { HistoryRoutingModule } from './history-routing.module';
         FormsModule,
         ReactiveFormsModule,
         AppSharedModule,
-        ClipboardModule,
         MaterialModule,
         HistoryRoutingModule
     ],

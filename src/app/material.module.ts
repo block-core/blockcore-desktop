@@ -37,6 +37,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 
+import { ClipboardModule } from '@angular/cdk/clipboard';
+
 @NgModule({
     imports: [
         CdkTableModule,
@@ -75,7 +77,8 @@ import { MatTreeModule } from '@angular/material/tree';
         MatTabsModule,
         MatToolbarModule,
         MatTooltipModule,
-        MatTreeModule],
+        MatTreeModule,
+        ClipboardModule],
     exports: [CdkTableModule,
         CdkTreeModule,
         MatAutocompleteModule,
@@ -112,7 +115,8 @@ import { MatTreeModule } from '@angular/material/tree';
         MatTabsModule,
         MatToolbarModule,
         MatTooltipModule,
-        MatTreeModule],
+        MatTreeModule,
+        ClipboardModule],
 })
 export class MaterialModule {
 

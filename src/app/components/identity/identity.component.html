@@ -21,7 +21,9 @@
 
             <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
             <p mat-line class="mat-card-subtitle">
-                <span *ngIf="!identity.locked">ID: {{identity.content.identifier}}</span><span *ngIf="identity.locked">Locked</span>
+                <span *ngIf="!identity.locked">ID: {{identity.content.identifier}} <button class="copy-button-small" mat-icon-button ngbTooltip="Copy to clipboard" [cdkCopyToClipboard]="identity.content.identifier" (click)="onCopiedClick()">
+                    <mat-icon>content_copy</mat-icon>
+                </button></span><span *ngIf="identity.locked">Locked</span>
             </p>
             <p mat-line class="mat-card-subtitle">
                 {{identity.content.title}}

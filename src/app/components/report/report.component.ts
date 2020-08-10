@@ -1,9 +1,8 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ClipboardService } from 'ngx-clipboard';
 import { ApplicationStateService } from 'src/app/services/application-state.service';
-
+import { Clipboard } from '@angular/cdk/clipboard';
 
 export interface ReportDialogData {
     title: string;
@@ -22,7 +21,7 @@ export class ReportComponent {
 
     constructor(
         public snackBar: MatSnackBar,
-        private clipboardService: ClipboardService,
+        private clipboard: Clipboard,
         private appState: ApplicationStateService,
         public dialogRef: MatDialogRef<ReportComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ReportDialogData) {
@@ -36,7 +35,8 @@ export class ReportComponent {
     }
 
     public onCopiedClick() {
-        this.clipboardService.copyFromContent(document.getElementById('error-lines').innerText);
+        this.clipboard.copy(document.getElementById('error-lines').innerText);
+
         this.snackBar.open('The error log has been copied to your clipboard.', null, { duration: 3000 });
         return false;
     }

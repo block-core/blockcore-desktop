@@ -12,6 +12,7 @@ import * as bip38 from '../../../libs/bip38';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
 import { encode } from '@msgpack/msgpack';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-identity',
@@ -36,6 +37,7 @@ export class IdentityComponent implements OnDestroy, OnInit {
         public profileImageService: ProfileImageService,
         private apiService: ApiService,
         private log: Logger,
+        private snackBar: MatSnackBar,
         private electronService: ElectronService,
         private walletService: WalletService,
         private readonly cd: ChangeDetectorRef,
@@ -49,6 +51,11 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     ngOnDestroy() {
 
+    }
+
+    public onCopiedClick() {
+        this.snackBar.open('Identity identifier has been copied to your clipboard.', null, { duration: 3000 });
+        return false;
     }
 
     // async scan() {

@@ -1,0 +1,78 @@
+<div class="content">
+
+    <mat-card *ngIf="identityService.identity$">
+        <form [formGroup]="form">
+            <mat-card-header>
+                <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
+
+                <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+                <mat-card-title *ngIf="!formName">{{identityContainer.content.identifier}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+
+                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Index: {{identityContainer.index}} - Height: {{identityContainer.content.height}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+
+                <h2 class=".mat-h2">Please read:</h2>
+
+                <p>You can export this identity to your mobile device by scanning a QR code with apps such as City Chain Identity or City Hub on your mobile.</p>
+
+                <mat-icon mat-card-avatar>info</mat-icon>
+
+                <p> WARNING: After you unlock with your wallet password, the private key (secret) of your identity will be displayed. Make sure that nobody is watching your
+                    screen when you do this.
+                </p>
+
+                <p>If anyone get a copy of your private key, they can also edit your identity so make sure to keep it safe.</p>
+
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Password (your wallet password)</mat-label>
+                    <input matInput type="password" id="passwordInput" formControlName="password" name="password" placeholder="Password for your wallet.">
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error *ngIf="formErrors.password">
+                        {{ formErrors.password }}
+                    </mat-error>
+                </mat-form-field> -->
+
+                <br>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Password (your wallet password)</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" id="passwordInput" formControlName="password" name="password" placeholder="Password for your wallet.">
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="formErrors.password">
+                        WHops: {{ formErrors.password }}
+                    </mat-error>
+                </mat-form-field>
+
+                <div *ngIf="invalidPassword"><br>The password is not correct.</div>
+
+                <br>
+
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Identity Recovery Public Key</mat-label>
+                    <input matInput id="restoreKeyInput" formControlName="restorekey" name="restorekey" placeholder="Your identity restore public key.">
+                    <mat-icon matSuffix>security</mat-icon>
+                    <mat-error *ngIf="formErrors.restorekey">
+                        {{ formErrors.restorekey }}
+                    </mat-error>
+                </mat-form-field>
+
+                <br> -->
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="unlock()">UNLOCK</button>
+                <button mat-stroked-button (click)="back()">CANCEL</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+
+    <br>
+
+    <div class="footer">
+        <button routerLink="/identity" mat-raised-button>Go back</button>
+    </div>
+
+</div>

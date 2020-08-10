@@ -3,15 +3,13 @@ import { ReceiveComponent } from './receive.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
-import { ClipboardModule } from 'ngx-clipboard';
-// import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
-        ClipboardModule,
-        // NgxQRCodeModule,
+        NgxQRCodeModule,
         MaterialModule,
     ],
     declarations: [

@@ -1,0 +1,38 @@
+<div class="content">
+
+    <mat-card *ngIf="identityService.identity$">
+        <form [formGroup]="form">
+            <mat-card-header>
+                <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
+
+                <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+                <mat-card-title *ngIf="!formName">{{identityContainer.content.identifier}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
+
+                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Index: {{identityContainer.index}} - Height: {{identityContainer.content.height}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+
+                <h2>Identity Private Key</h2>
+
+                <ngx-qrcode cssClass="qr-address" elementType="canvas" [value]="qrString" errorCorrectionLevel="L"></ngx-qrcode>
+
+                <br>
+
+                <p>Private Key: {{qrString}}</p>
+
+                <p>With this QR code you can copy your identity onto your mobile device.</p>
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" [routerLink]="['/identity', id]">DONE</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+
+    <br>
+
+    <div class="footer">
+        <button routerLink="/identity" mat-raised-button>Go back</button>
+    </div>
+
+</div>

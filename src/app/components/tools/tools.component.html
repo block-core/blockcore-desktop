@@ -6,7 +6,7 @@
 
             <p>With this key, you or a computer system, can generate payment addresses for your wallet, without sharing the private key.</p>
 
-            <p><strong>Extended Public Key:</strong> <button mat-icon-button ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="extPubKey" (click)="onCopiedClick()">
+            <p><strong>Extended Public Key:</strong> <button mat-icon-button ngbTooltip="Copy to clipboard" [cdkCopyToClipboard]="extPubKey" (click)="onCopiedClick()">
                     <mat-icon>content_copy</mat-icon>
                 </button></p>
             <p class="code-block">{{ extPubKey }}</p>

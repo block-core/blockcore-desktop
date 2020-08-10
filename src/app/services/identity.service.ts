@@ -37,6 +37,7 @@ export class IdentityService implements OnDestroy {
 
     private identityRoot: HDNode;
     private identityExtPubKey: HDNode;
+    private seed: any;
 
     private identityNetwork = {
         pubKeyHash: 55,
@@ -109,13 +110,17 @@ export class IdentityService implements OnDestroy {
         return buf;
     }
 
+    verifyPassword(password: string) {
+        const decryptedKey = bip38.decrypt(this.seed.encryptedSeed, password, null, null, this.appState.networkParams);
+        console.log(decryptedKey);
+    }
+
     unlock(path: string, password: string) {
-
-        // tslint:disable-next-line: no-debugger
-        debugger;
-
         // Read the seed from the file on disk.
         const seed: { encryptedSeed: string, chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
+
+        // Keep a copy of the encrypted seed. For mobile mode, this will be available in the local storage / indexeddb.
+        this.seed = seed;
 
         // Descrypt the seed with the password provided on unlock (login).
         // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {

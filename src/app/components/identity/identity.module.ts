@@ -11,6 +11,9 @@ import { LinkAddComponent } from './link-add.component';
 import { IdentityLookupComponent } from './identity-lookup.component';
 import { IdentityLookupWidgetComponent } from './identity-lookup-widget.component';
 import { AppSharedModule } from 'src/app/shared/app-shared.module';
+import { IdentityUnlockComponent } from './identity-unlock.component';
+import { IdentityExportComponent } from './identity-export.component';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
     imports: [
@@ -21,6 +24,7 @@ import { AppSharedModule } from 'src/app/shared/app-shared.module';
         MaterialModule,
         AppSharedModule,
         ImageModule,
+        NgxQRCodeModule,
     ],
     declarations: [
         IdentityComponent,
@@ -28,14 +32,18 @@ import { AppSharedModule } from 'src/app/shared/app-shared.module';
         IdentityEditComponent,
         LinkAddComponent,
         IdentityLookupComponent,
-        IdentityLookupWidgetComponent
+        IdentityLookupWidgetComponent,
+        IdentityUnlockComponent,
+        IdentityExportComponent
     ],
     exports: [
         IdentityComponent,
         IdentityViewComponent,
         IdentityEditComponent,
         IdentityLookupComponent,
-        IdentityLookupWidgetComponent
+        IdentityLookupWidgetComponent,
+        IdentityUnlockComponent,
+        IdentityExportComponent
     ],
     entryComponents: [
         LinkAddComponent

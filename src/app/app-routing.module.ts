@@ -21,6 +21,8 @@ import { IdentityViewComponent } from './components/identity/identity-view.compo
 import { HubDetailsComponent } from './components/settings/hub-details.component';
 import { IdentityEditComponent } from './components/identity/identity-edit.component';
 import { IdentityLookupComponent } from './components/identity/identity-lookup.component';
+import { IdentityUnlockComponent } from './components/identity/identity-unlock.component';
+import { IdentityExportComponent } from './components/identity/identity-export.component';
 
 const routes: Routes = [
     {
@@ -90,6 +92,24 @@ const routes: Routes = [
         data: {
             title: 'Identity',
             prefix: 'Edit'
+        },
+    },
+    {
+        path: 'identity/:id/unlock',
+        component: IdentityUnlockComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Unlock'
+        },
+    },
+    {
+        path: 'identity/:id/export',
+        component: IdentityExportComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Identity',
+            prefix: 'Export'
         },
     },
     {
