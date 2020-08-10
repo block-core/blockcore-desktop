@@ -53,15 +53,6 @@ export class StorageService {
         localStorage.setItem(key, value);
     }
 
-    getIsolatedValue(key: string, defaultValue?: string): string {
-        return localStorage.getItem(key) || defaultValue;
-    }
-
-    setIsolatedValue(key: string, value: string) {
-        localStorage.setItem(this.coinType + ':' + this.walletName + ':' + key, value);
-    }
-
-
     getJSON(key: string, defaultValue?: string, isolated?: boolean): any {
         if (isolated) {
             key = this.getIsolatedKey(key);

@@ -67,8 +67,20 @@ export class IdentityService implements OnDestroy {
         return this.identitiesSubject.getValue();
     }
 
+
     set identities(val: IdentityContainer[]) {
         this.identitiesSubject.next(val);
+    }
+
+    get identity(): IdentityContainer {
+        return this.identitySubject.getValue();
+    }
+
+    set identity(val: IdentityContainer) {
+        this.identitySubject.next(val);
+
+        // Persist the set identity as active identity.
+        this.storage.setValue('Identity', val.content.identifier, true);
     }
 
     load() {
@@ -78,26 +90,6 @@ export class IdentityService implements OnDestroy {
         // Make sure we set the current identity index, and simply use the current length if value is missing from before.
         // this.identityIndex = this.storage.getNumber('Identity:Index', this.identities.length, true);
     }
-
-    // get identities(): any {
-    //     return this.storage.getJSON('Settings:Identities');
-    // }
-
-    // set identities(value: any) {
-    //     this.storage.setJSON('Settings:Identities', value);
-    // }
-
-    // get identity(): string {
-    //     return this.storage.getValue('Settings:Identity');
-    // }
-
-    // set identity(value: string) {
-    //     this.storage.setValue('Settings:Identity', value);
-    // }
-
-    // getAddress(node: any, network?: any): string {
-    //     return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network }).address!;
-    // }
 
     ngOnDestroy() { console.log('IdentityService instance destroyed.'); }
 
@@ -334,8 +326,11 @@ export class IdentityService implements OnDestroy {
 
     /** Get identity from localStorage. Only called during object creation. */
     private loadIdentity(id?: string): IdentityContainer {
-        const identityId = id || this.storage.getIsolatedValue('Identity');
-        return this.identitiesSubject.getValue().find(i => i.id === identityId);
+        const identityId = id || this.storage.getValue('Identity', null, true);
+
+        console.log('LOADING IDENTITY', identityId);
+
+        return this.identitiesSubject.getValue().find(i => i.content.identifier === identityId);
     }
 
     private saveIdentities() {

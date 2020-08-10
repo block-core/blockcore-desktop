@@ -22,6 +22,7 @@ import { NodeStatus } from '@models/node-status';
 import { ReportComponent } from '../report/report.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { IdentityService } from 'src/app/services/identity.service';
+import { IdentityContainer } from '@models/identity';
 
 @Component({
     selector: 'app-root',
@@ -187,8 +188,12 @@ export class RootComponent implements OnInit, OnDestroy {
     }
 
     get identityTooltip(): string {
-        if (this.walletService.generalInfo) {
-            return `Sondre Bjellås (@sondreb): ${this.walletService.generalInfo.connectedNodes}\nBlock Height: ${this.walletService.generalInfo.chainTip}\nSynced: ${this.walletService.percentSynced}`;
+        if (this.identityService.identity) {
+            const name = this.identityService.identity.content.name || this.identityService.identity.content.identifier;
+            const alias = this.identityService.identity.content.alias ? ' (@' + this.identityService.identity.content.alias + ')' : '';
+            const title = this.identityService.identity.content.title ? '\n' + this.identityService.identity.content.title : '';
+
+            return `${name}${alias}\nID: ${this.identityService.identity.content.identifier}${title}`;
         }
     }
 
@@ -245,6 +250,10 @@ export class RootComponent implements OnInit, OnDestroy {
 
     forceExit() {
         window.close();
+    }
+
+    selectIdentity(identity: IdentityContainer) {
+        this.identityService.identity = identity;
     }
 
     ngOnInit() {
