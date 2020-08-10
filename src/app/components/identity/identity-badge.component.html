@@ -1,0 +1,10 @@
+<mat-card-header *ngIf="container">
+    <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(container.content.image)">
+
+    <mat-card-title *ngIf="container.content.name">{{container.content.name}} <span *ngIf="container.content.alias">| @{{container.content.alias}}</span></mat-card-title>
+    <mat-card-title *ngIf="!container.content.name">{{container.content.identifier}} <span *ngIf="container.content.alias">| @{{container.content.alias}}</span></mat-card-title>
+
+    <mat-card-subtitle>{{container.content.title}}<br>ID: <a href="https://identity.city-chain.org/view/{{container.content.identifier}}" target="_blank">{{container.content.identifier}}</a> <button class="copy-button-small" mat-icon-button ngbTooltip="Copy to clipboard" [cdkCopyToClipboard]="container.content.identifier" (click)="onCopiedClick()">
+            <mat-icon>content_copy</mat-icon>
+        </button><br><span *ngIf="container.index != null">Index: {{container.index}} - </span>Height: {{container.content.height}}</mat-card-subtitle>
+</mat-card-header>

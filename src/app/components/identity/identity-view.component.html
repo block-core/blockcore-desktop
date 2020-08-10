@@ -1,21 +1,9 @@
 <div class="content">
 
     <mat-card *ngIf="identityService.identity$">
-        <mat-card-header>
-            <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
-
-            <mat-card-title *ngIf="identityContainer.content.name">{{identityContainer.content.name}} <span *ngIf="identityContainer.content.alias">| @{{identityContainer.content.alias}}</span></mat-card-title>
-            <mat-card-title *ngIf="!identityContainer.content.name">{{identityContainer.content.identifier}} <span *ngIf="identityContainer.content.alias">| @{{identityContainer.content.alias}}</span></mat-card-title>
-
-            <mat-card-subtitle>{{identityContainer.content.title}}<br>ID: {{identityContainer.content.identifier}} <button class="copy-button-small" mat-icon-button ngbTooltip="Copy to clipboard" [cdkCopyToClipboard]="identityContainer.content.identifier" (click)="onCopiedClick()">
-                    <mat-icon>content_copy</mat-icon>
-                </button><br>Index: {{identityContainer.index}} - Height: {{identityContainer.content.height}}</mat-card-subtitle>
-        </mat-card-header>
-        <!-- <img mat-card-image src="assets/profile1.jpg" [src]="image"> -->
+        <app-identity-badge [identity]="identityContainer"></app-identity-badge>
         <mat-card-content>
-
             <mat-list>
-                <!-- <div mat-subheader>Details</div> -->
 
                 <mat-list-item *ngIf="identityContainer.content.name">
                     <mat-icon mat-list-icon>face</mat-icon>

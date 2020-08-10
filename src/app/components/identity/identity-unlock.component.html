@@ -2,14 +2,7 @@
 
     <mat-card *ngIf="identityService.identity$">
         <form [formGroup]="form">
-            <mat-card-header>
-                <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identityContainer.content.image)">
-
-                <mat-card-title *ngIf="formName">{{formName}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
-                <mat-card-title *ngIf="!formName">{{identityContainer.content.identifier}} <span *ngIf="formAlias">| @{{formAlias}}</span></mat-card-title>
-
-                <mat-card-subtitle>{{formTitle}}<br>ID: {{identityContainer.content.identifier}}<br>Index: {{identityContainer.index}} - Height: {{identityContainer.content.height}}</mat-card-subtitle>
-            </mat-card-header>
+            <app-identity-badge [identity]="identityContainer"></app-identity-badge>
             <mat-card-content>
 
                 <h2 class=".mat-h2">Please read:</h2>

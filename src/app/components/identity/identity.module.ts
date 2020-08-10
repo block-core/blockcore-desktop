@@ -13,6 +13,7 @@ import { IdentityLookupWidgetComponent } from './identity-lookup-widget.componen
 import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { IdentityUnlockComponent } from './identity-unlock.component';
 import { IdentityExportComponent } from './identity-export.component';
+import { IdentityBadgeComponent } from './identity-badge.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
@@ -34,7 +35,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
         IdentityLookupComponent,
         IdentityLookupWidgetComponent,
         IdentityUnlockComponent,
-        IdentityExportComponent
+        IdentityExportComponent,
+        IdentityBadgeComponent,
     ],
     exports: [
         IdentityComponent,
@@ -43,7 +45,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
         IdentityLookupComponent,
         IdentityLookupWidgetComponent,
         IdentityUnlockComponent,
-        IdentityExportComponent
+        IdentityExportComponent,
+        IdentityBadgeComponent,
     ],
     entryComponents: [
         LinkAddComponent

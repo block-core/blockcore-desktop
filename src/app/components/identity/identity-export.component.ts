@@ -116,8 +116,6 @@ export class IdentityExportComponent implements OnDestroy, OnInit {
         this.identityContainer = this.jsonCopy(this.originalIdentityContainer);
 
         this.identityNode = this.identityService.getIdentityNode(this.identityContainer.index);
-
-        console.log(this.identityNode);
         this.qrString = this.identityNode.toWIF();
 
         this.buildSendForm();

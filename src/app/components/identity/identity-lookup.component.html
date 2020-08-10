@@ -8,14 +8,17 @@
     </div>
 
     <mat-card *ngIf="identity">
-        <mat-card-header>
+        <!-- <mat-card-header>
             <img mat-card-avatar class="mat-list-avatar-large" [src]="identityService.getImage(identity.image)">
 
             <mat-card-title *ngIf="identity.name">{{identity.name}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
             <mat-card-title *ngIf="!identity.name">{{identity.identifier}} <span *ngIf="identity.alias">| @{{identity.alias}}</span></mat-card-title>
 
             <mat-card-subtitle>{{identity.title}}<br>ID: <a href="https://identity.city-chain.org/view/{{identity.identifier}}" target="_blank">{{identity.identifier}}</a><br>Height: {{identity.height}}</mat-card-subtitle>
-        </mat-card-header>
+        </mat-card-header> -->
+
+        <app-identity-badge [identity]="container"></app-identity-badge>
+
         <mat-card-content>
 
             <mat-list>
