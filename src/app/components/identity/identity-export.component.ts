@@ -118,8 +118,7 @@ export class IdentityExportComponent implements OnDestroy, OnInit {
         this.identityNode = this.identityService.getIdentityNode(this.identityContainer.index);
 
         console.log(this.identityNode);
-
-        this.qrString = this.identityNode.privateKey.toString('hex');
+        this.qrString = this.identityNode.toWIF();
 
         this.buildSendForm();
     }
