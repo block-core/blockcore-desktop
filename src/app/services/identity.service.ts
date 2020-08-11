@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { Identity, IdentityContainer } from '@models/identity';
+import { Identity, IdentityContainer, Signature } from '@models/identity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import { ElectronService } from 'ngx-electron';
@@ -194,7 +194,7 @@ export class IdentityService implements OnDestroy {
         identity.height = 1; //
 
         const container = new IdentityContainer(identity);
-        container.signature = '';
+        container.signature = null;
         container.published = false;
         container.publish = true;
         container.index = this.identityIndex + 1; // We should not persist this new index until after we actually save it.
@@ -205,6 +205,9 @@ export class IdentityService implements OnDestroy {
     /** Add the identity locally and publish if both publish parameter is specified, and .publish on the identity. */
     add(identity: IdentityContainer, publish: boolean = true) {
         const index = this.identities.findIndex(t => t.content.identifier === identity.content.identifier);
+
+        // Upgrade the version to what we currently support.
+        identity.version = 3;
 
         if (index === -1) {
             // Ensure we create a new array and don't modify existing.
@@ -229,7 +232,7 @@ export class IdentityService implements OnDestroy {
             const signatureBuffer = this.sign(identity.content, identity.index);
             const signature = signatureBuffer.toString('base64');
 
-            identity.signature = signature;
+            identity.signature = new Signature(identity.content.identifier, signature);
 
             // Figure out another way to do this, as this edits our original (persisted) identity.
             // We should remove these values, especially index, before publish to hub.

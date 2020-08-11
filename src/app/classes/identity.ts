@@ -18,14 +18,27 @@ import { Link } from './link';
 
 export class EntityBase {
 
-    constructor(type: string)
-    {
+    constructor(type: string) {
         this['@type'] = type;
     }
 
     identifier: string = null;
     height: number = null;
     '@type': string = null;
+}
+
+export class Signature {
+
+    constructor(identity: string = null, value: string = null) {
+        this.identity = identity;
+        this.value = value;
+    }
+
+    type = 'sha256-ecdsa-secp256k1-v1';
+
+    identity: string = null;
+
+    value: string = null;
 }
 
 export class Identity extends EntityBase {
@@ -49,12 +62,12 @@ export class IdentityContainer {
     constructor(identity: Identity) {
         this.id = identity['@type'] + '/' + identity.identifier;
         this.content = identity;
-        this.version = 2;
+        this.version = 3;
     }
 
     version: number;
     id: string;
-    signature: string;
+    signature: Signature;
     content: Identity;
 
     // Local custom values:
