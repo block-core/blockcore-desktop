@@ -53,9 +53,11 @@ export class HubService {
         console.log('CONTAINER:', signedDocument);
 
         // TODO: Use the URL from the Hub. For now relay on the City Chain Identity host.
-        // const url = hub.content.url + '/' + signedDocument.content['@type'] + '/' + signedDocument.content.id;
-        const url = 'http://localhost:4335/api/' + signedDocument.id; // .id is a shortcut of '@type/' + id.
+        const url = hub.content.url + '/api/' + signedDocument.content['@type'] + '/' + signedDocument.content.identifier;
+        // const url = 'http://localhost:4335/api/' + signedDocument.id; // .id is a shortcut of '@type/' + id.
         // const url = 'https://identity.city-chain.org/' + signedDocument.container + '/' + signedDocument.id;
+
+        console.log('url', url);
 
         const results = await this.api<any>(url, 'PUT', signedDocument);
         console.log('RESULTS:', results);

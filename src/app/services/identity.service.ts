@@ -340,11 +340,11 @@ export class IdentityService implements OnDestroy {
     async find(id: string): Promise<IdentityContainer> {
         // const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
         const baseUrl = this.hubService.getHub().content.url;
-        console.log(baseUrl);
-
+        console.log('baseUrl', baseUrl);
+        const identityApiUrl = baseUrl + '/api/identity/' + id;
+        console.log('identityApiUrl', identityApiUrl);
         // const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
-        const identityApiUrl = 'http://localhost:4335/api/identity/' + id;
-
+        // const identityApiUrl = 'http://localhost:4335/api/identity/' + id;
         return await this.api<IdentityContainer>(identityApiUrl);
     }
 

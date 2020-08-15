@@ -18,7 +18,7 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="removeHub(hub.id)">
+                    <button mat-menu-item (click)="removeHub(hub.content.identifier)">
                         <mat-icon>delete</mat-icon>
                         <span>Remove hub</span>
                     </button>
