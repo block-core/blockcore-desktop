@@ -148,6 +148,11 @@ export class IdentityEditComponent implements OnDestroy, OnInit {
             .subscribe(data => this.onValueChanged(data));
     }
 
+    public delete() {
+        this.identityService.remove(this.identityContainer.content.identifier);
+        this.router.navigateByUrl('/identity');
+    }
+
     get formName(): any { return this.form.get('name').value; }
     get formShortName(): any { return this.form.get('shortname').value; }
     get formAlias(): any { return this.form.get('alias').value; }

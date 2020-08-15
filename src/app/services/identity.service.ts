@@ -83,6 +83,10 @@ export class IdentityService implements OnDestroy {
         this.storage.setValue('Identity', val.content.identifier, true);
     }
 
+    public refresh(): void {
+        this.identitiesSubject.next(this.identities);
+    }
+
     load() {
         this.identities = this.loadIdentities();
         this.identitySubject.next(this.loadIdentity());
@@ -276,13 +280,43 @@ export class IdentityService implements OnDestroy {
         const identity = this.identities.find(t => t.content.identifier === id);
         this.identities = this.identities.filter(i => i.content.identifier !== id);
 
-        // Save to service, then update again.
-        try {
+        if (identity.published) {
+            // Save to service, then update again.
+            try {
+                // Get the signature for the entity.
 
-        } catch (e) {
-            console.error(e);
-            // Add the identity back to the collection again, we did not successfully delete it.
-            this.identities = [...this.identities, identity];
+                // Reset the identity to an empty entity.
+                identity.content = new Identity();
+                identity.content.identifier = id;
+                identity.content.height = 1; // TODO: Get height from the node.
+                identity.content['@state'] = 999;
+
+                const signatureBuffer = this.sign(identity.content, identity.index);
+                const signature = signatureBuffer.toString('base64');
+
+                identity.signature = new Signature(identity.content.identifier, signature);
+
+                // Figure out another way to do this, as this edits our original (persisted) identity.
+                // We should remove these values, especially index, before publish to hub.
+                // delete identity.index;
+                // delete identity.published;
+                // delete identity.publish;
+
+                // const payload = {
+                //     id: identity.id,
+                //     signature,
+                //     content: identity
+                // };
+
+                const json = JSON.stringify(identity);
+                console.log(json);
+
+                this.hubService.put(identity);
+            } catch (e) {
+                console.error(e);
+                // Add the identity back to the collection again, we did not successfully delete it.
+                this.identities = [...this.identities, identity];
+            }
         }
 
         this.saveIdentities();

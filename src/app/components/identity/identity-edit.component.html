@@ -130,15 +130,15 @@
 
                 <br> -->
 
-                <mat-checkbox (change)="onChanged($event)" formControlName="publish" name="publish">Publish Profile</mat-checkbox>
+                <!-- <mat-checkbox (change)="onChanged($event)" formControlName="publish" name="publish">Publish Profile</mat-checkbox>
                 <br> <br>
-                <mat-card class="mat-elevation-z8" *ngIf="publishWarning">This profile was previously published. When you save it, it will be unpublished and only locally available.</mat-card>
+                <mat-card class="mat-elevation-z8" *ngIf="publishWarning">This profile was previously published. When you save it, it will be unpublished and only locally available.</mat-card> -->
 
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="save()">SAVE</button>
                 <button mat-stroked-button (click)="back()">CANCEL</button>
-                <button mat-raised-button color="warn">DELETE</button>
+                <button mat-raised-button color="warn" (click)="delete()">DELETE</button>
 
             </mat-card-actions>
         </form>

@@ -9,7 +9,22 @@
     <mat-list class="identities-list">
         <h3 mat-subheader>Your identities</h3>
 
-        <mat-list-item *ngFor="let identity of identityService.identities$ | async | sortBy: 'asc':'index'">
+        <!-- <app-identity-filter (search)="searchFilter = $event"></app-identity-filter> -->
+
+        <div class="filter-container">
+            <mat-form-field class="example-form-field">
+                <mat-label>Filter by name:</mat-label>
+                <input matInput type="text" [(ngModel)]="filter">
+                <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            &nbsp;&nbsp;
+            <!-- Filter by name: <input name="term" [(ngModel)]="filter"> &nbsp;&nbsp; -->
+            <mat-slide-toggle [(ngModel)]="showDeleted">Show deleted</mat-slide-toggle>
+        </div>
+
+        <mat-list-item *ngFor="let identity of identityService.identities$ | async | filterIdentity : filter:showDeleted | sortBy: 'asc':'index'">
             <!-- <mat-icon mat-list-icon class="example-header-image-profile1"></mat-icon>
             <div class="mat-list-item"><img mat-card-avatar class="" [src]="profileImageService.getImage(identity.id)" /></div> -->
 
@@ -19,11 +34,11 @@
             <h4 mat-line *ngIf="identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.name}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
             <h4 mat-line *ngIf="!identity.content.name"><a [routerLink]="['/identity', identity.content.identifier]">{{identity.content.identifier}} <span *ngIf="identity.content.alias">| @{{identity.content.alias}}</span></a></h4>
 
-            <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span></p>
+            <p mat-line><span *ngIf="identity.published">Published</span><span *ngIf="!identity.published">Unpublished</span> | <app-identity-state [state]="identity.content['@state']"></app-identity-state></p>
             <p mat-line class="mat-card-subtitle">
                 <span *ngIf="!identity.locked">ID: {{identity.content.identifier}} <button class="copy-button-small" mat-icon-button ngbTooltip="Copy to clipboard" [cdkCopyToClipboard]="identity.content.identifier" (click)="onCopiedClick()">
-                    <mat-icon>content_copy</mat-icon>
-                </button></span><span *ngIf="identity.locked">Locked</span>
+                        <mat-icon>content_copy</mat-icon>
+                    </button></span><span *ngIf="identity.locked">Locked</span>
             </p>
             <p mat-line class="mat-card-subtitle">
                 {{identity.content.title}}
@@ -77,15 +92,13 @@
 
         <div class="progress-widget">
             <button mat-raised-button color="primary" [disabled]="scanning" (click)="scan()">SCAN</button>
-            <div  class="progress-widget-spinner">
+            <div class="progress-widget-spinner">
                 <mat-spinner *ngIf="scanning" diameter="30"></mat-spinner>
             </div>
             <div *ngIf="scanning" class="progress-widget-text">{{scanningStatus}}</div>
             &nbsp;
-            <button mat-raised-button color="primary" (click)="deleteAll()">DELETE ALL (LOCALLY)</button>
+            <button mat-raised-button (click)="deleteAll()">DELETE ALL (LOCALLY)</button>
         </div>
-
-        
 
         <!-- <mat-list-item>
             <mat-icon mat-list-icon class="example-header-image-profile2"></mat-icon>
@@ -231,7 +244,7 @@
                 </p> -->
                 <div class="progress-widget">
                     <button mat-raised-button color="primary" [disabled]="scanningDeep" (click)="scanDeep()">DEEP SCAN</button>
-                    <div  class="progress-widget-spinner">
+                    <div class="progress-widget-spinner">
                         <mat-spinner *ngIf="scanningDeep" diameter="30"></mat-spinner>
                     </div>
                     <div *ngIf="scanningDeep" class="progress-widget-text">{{scanningDeepStatus}}</div>

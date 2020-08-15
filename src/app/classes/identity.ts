@@ -25,6 +25,7 @@ export class EntityBase {
     identifier: string = null;
     height: number = null;
     '@type': string = null;
+    '@state' = 0;
 }
 
 export class Signature {

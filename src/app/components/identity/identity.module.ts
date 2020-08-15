@@ -14,6 +14,9 @@ import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { IdentityUnlockComponent } from './identity-unlock.component';
 import { IdentityExportComponent } from './identity-export.component';
 import { IdentityBadgeComponent } from './identity-badge.component';
+import { IdentityFilterComponent } from './identity-filter.component';
+import { IdentityStateComponent } from './identity-state.component';
+import { IdentityFilterPipe } from './identity-filter.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
@@ -37,6 +40,9 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
         IdentityUnlockComponent,
         IdentityExportComponent,
         IdentityBadgeComponent,
+        IdentityFilterComponent,
+        IdentityFilterPipe,
+        IdentityStateComponent,
     ],
     exports: [
         IdentityComponent,
@@ -47,6 +53,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
         IdentityUnlockComponent,
         IdentityExportComponent,
         IdentityBadgeComponent,
+        IdentityFilterComponent,
+        IdentityStateComponent,
     ],
     entryComponents: [
         LinkAddComponent

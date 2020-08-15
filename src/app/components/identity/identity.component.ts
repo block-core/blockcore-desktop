@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef, Input } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { Identity } from '@models/identity';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -25,11 +25,12 @@ export class IdentityComponent implements OnDestroy, OnInit {
 
     scanning = false;
     scanningStatus: string;
-
     scanningDeep = false;
     scanningDeepStatus: string;
-
     searchInput = '';
+    showDeleted = false;
+
+    public filter = '';
 
     constructor(
         private appState: ApplicationStateService,
@@ -211,8 +212,7 @@ export class IdentityComponent implements OnDestroy, OnInit {
         this.cd.markForCheck();
     }
 
-    deleteAll()
-    {
+    deleteAll() {
         this.identityService.identities = [];
     }
 }
