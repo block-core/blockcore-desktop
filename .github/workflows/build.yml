@@ -89,6 +89,6 @@ jobs:
       run: npm install
 
     - name: Build and Publish
-      run: npm run build:${{ matrix.platform }}
+      run: npm run publish:${{ matrix.platform }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
