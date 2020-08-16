@@ -23,6 +23,11 @@ export class HubService {
             this.hubs = settings.hubs;
         }
 
+        // Handle empty hubs array that can happen on new or clean clients.
+        if (this.hubs == null) {
+            this.hubs = [];
+        }
+
         return HubService.singletonInstance;
     }
 
