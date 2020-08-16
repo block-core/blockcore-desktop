@@ -31,7 +31,13 @@ export class SettingsService {
     }
 
     get hubs(): any {
-        return this.storage.getJSON('Settings:Hubs');
+        const hubs = this.storage.getJSON('Settings:Hubs', '[]');
+
+        if (hubs === 'undefined') {
+            return [];
+        }
+
+        return hubs;
     }
 
     set hubs(value: any) {

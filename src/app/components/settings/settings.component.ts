@@ -47,16 +47,13 @@ export class SettingsComponent {
         this.selectedHub = settings.hub;
         this.hubs = settings.hubs;
 
-        console.log('settings.openOnLogin:', settings.openOnLogin);
-        console.log('this.selectedOpenOnLogin:', this.selectedOpenOnLogin);
     }
 
     onThemeChange(event) {
         this.theme.toggle();
     }
 
-    openDevTools()
-    {
+    openDevTools() {
         this.electronService.ipcRenderer.sendSync('open-dev-tools');
         // const win = new BrowserWindow();
         // win.webContents.openDevTools();
