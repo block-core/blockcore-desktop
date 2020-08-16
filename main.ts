@@ -3,12 +3,23 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
+const log = require('electron-log');
+const { autoUpdater } = require('electron-updater');
+const fs = require('fs');
+const readChunk = require('read-chunk');
+
+// Set the log level to info. This is only for logging in this Electron main process.
+log.transports.file.level = 'info';
+
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
+    writeLog('Another instance of node is running. Quitting this instance.');
     app.quit();
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
+        writeLog('Another instance of node is running. Attempting to show the UI.');
+
         // Someone tried to run a second instance, we should focus our window.
         if (mainWindow) {
             // If not visible, ensure we show it.
@@ -28,13 +39,9 @@ if (!gotTheLock) {
 }
 
 if (os.arch() === 'arm') {
+    writeLog('ARM: Disabling hardware acceleration.');
     app.disableHardwareAcceleration();
 }
-
-const { autoUpdater } = require('electron-updater');
-const fs = require('fs');
-const log = require('electron-log');
-const readChunk = require('read-chunk');
 
 enum DaemonState {
     Unknown = 0,
@@ -65,9 +72,6 @@ interface Settings {
     showInTaskbar: boolean;
 }
 
-// Set the log level to info. This is only for logging in this Electron main process.
-log.transports.file.level = 'info';
-
 // We don't want to support auto download.
 autoUpdater.autoDownload = false;
 
@@ -90,7 +94,7 @@ require('electron-context-menu')({
 
 process.on('uncaughtException', (error) => {
     writeLog('Uncaught exception happened:');
-    writeLog(error);
+    writeLog('Error: ' + error);
 });
 
 ipcMain.on('start-daemon', (event, arg: Chain) => {
@@ -101,6 +105,7 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     }
 
     daemonState = DaemonState.Starting;
+
     console.log(arg);
 
     // The "chain" object is supplied over the IPC channel and we should consider
@@ -160,6 +165,9 @@ ipcMain.on('daemon-change', (event, arg: any) => {
 
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 ipcMain.on('reset-database', (event, arg: string) => {
+
+    writeLog('reset-database: User want to reset database, first attempting to shutdown the node.');
+
     // Make sure the daemon is shut down first:
     shutdownDaemon((success, error) => {
         const userDataPath = app.getPath('userData');
@@ -195,6 +203,9 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
 });
 
 ipcMain.on('get-wallet-seed', (event, arg: string) => {
+
+    writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
+
     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
     // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
     // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
@@ -270,8 +281,7 @@ function createWindow() {
         minWidth: 260,
         minHeight: 400,
         title: 'City Hub',
-        webPreferences: { webSecurity: false, nodeIntegration: true },
-        icon: __dirname + '/app.ico'
+        webPreferences: { webSecurity: false, nodeIntegration: true }
     });
 
     contents = mainWindow.webContents;
@@ -284,12 +294,17 @@ function createWindow() {
         shell.openExternal(linkUrl);
     });
 
+
+
     if (serve) {
         require('electron-reload')(__dirname, {
             electron: require(`${__dirname}/node_modules/electron`)
         });
+
+        writeLog('Creating Window and loading: http://localhost:4200?coin=' + coin.identity);
         mainWindow.loadURL('http://localhost:4200?coin=' + coin.identity);
     } else {
+        writeLog('Creating Window and loading: ' + path.join(__dirname, 'dist/index.html'));
         mainWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'dist/index.html'),
             protocol: 'file:',
@@ -424,6 +439,8 @@ function startDaemon(chain: Chain) {
     }
 
     const daemonPath = path.resolve(folderPath, daemonName);
+
+    writeLog('start-daemon: ' + daemonPath);
 
     launchDaemon(daemonPath, chain);
 }
@@ -634,17 +651,26 @@ function createTray() {
 
 function writeDebug(msg) {
     log.debug(msg);
-    contents.send('log-debug', msg);
+
+    if (contents) {
+        contents.send('log-debug', msg);
+    }
 }
 
 function writeLog(msg) {
     log.info(msg);
-    contents.send('log-info', msg);
+
+    if (contents) {
+        contents.send('log-info', msg);
+    }
 }
 
 function writeError(msg) {
     log.error(msg);
-    contents.send('log-error', msg);
+
+    if (contents) {
+        contents.send('log-error', msg);
+    }
 }
 
 function isNumber(value: string | number): boolean {
