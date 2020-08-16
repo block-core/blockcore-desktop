@@ -31,6 +31,7 @@ export class SettingsComponent {
 
     constructor(
         public readonly theme: Theming,
+        private electronService: ElectronService,
         public electron: ElectronService,
         public settings: SettingsService,
         public hubService: HubService,
@@ -52,6 +53,13 @@ export class SettingsComponent {
 
     onThemeChange(event) {
         this.theme.toggle();
+    }
+
+    openDevTools()
+    {
+        this.electronService.ipcRenderer.sendSync('open-dev-tools');
+        // const win = new BrowserWindow();
+        // win.webContents.openDevTools();
     }
 
     onChanged(event) {

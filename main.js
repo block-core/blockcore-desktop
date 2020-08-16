@@ -151,6 +151,10 @@ electron_1.ipcMain.on('open-data-folder', function (event, arg) {
     electron_1.shell.openPath(dataFolder);
     event.returnValue = 'OK';
 });
+electron_1.ipcMain.on('open-dev-tools', function (event, arg) {
+    mainWindow.webContents.openDevTools();
+    event.returnValue = 'OK';
+});
 electron_1.ipcMain.on('get-wallet-seed', function (event, arg) {
     writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and

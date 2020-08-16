@@ -202,6 +202,11 @@ ipcMain.on('open-data-folder', (event, arg: string) => {
     event.returnValue = 'OK';
 });
 
+ipcMain.on('open-dev-tools', (event, arg: string) => {
+    mainWindow.webContents.openDevTools();
+    event.returnValue = 'OK';
+});
+
 ipcMain.on('get-wallet-seed', (event, arg: string) => {
 
     writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');

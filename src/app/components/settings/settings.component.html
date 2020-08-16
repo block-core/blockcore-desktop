@@ -170,4 +170,17 @@
         </mat-card-content>
     </mat-card>
 
+    <mat-card class="settings-card" *ngIf="appModes.enabled('debug')">
+        <mat-card-header>
+            <mat-icon mat-card-avatar>adb</mat-icon>
+            <mat-card-title>Debug Settings</mat-card-title>
+            <mat-card-subtitle>Allows you to enable debug options</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+
+            <button mat-raised-button color="primary" (click)="openDevTools()">Open Developer Tools</button>
+
+        </mat-card-content>
+    </mat-card>
+
 </div>
