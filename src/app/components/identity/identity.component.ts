@@ -11,7 +11,6 @@ import { Logger } from 'src/app/services/logger.service';
 import * as bip38 from '../../../libs/bip38';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
-import { encode } from '@msgpack/msgpack';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

@@ -23,24 +23,24 @@ export class EntityBase {
     }
 
     identifier: string = null;
-    height: number = null;
+    iat: number = null;
     '@type': string = null;
     '@state' = 0;
 }
 
-export class Signature {
+// export class Signature {
 
-    constructor(identity: string = null, value: string = null) {
-        this.identity = identity;
-        this.value = value;
-    }
+//     constructor(identity: string = null, value: string = null) {
+//         this.identity = identity;
+//         this.value = value;
+//     }
 
-    type = 'sha256-ecdsa-secp256k1-v1';
+//     type = 'sha256-ecdsa-secp256k1-v1';
 
-    identity: string = null;
+//     identity: string = null;
 
-    value: string = null;
-}
+//     value: string = null;
+// }
 
 export class Identity extends EntityBase {
 
@@ -61,14 +61,18 @@ export class Identity extends EntityBase {
 export class IdentityContainer {
 
     constructor(identity: Identity) {
-        this.id = identity['@type'] + '/' + identity.identifier;
+        this.id = 'did:is:' + identity.identifier;
         this.content = identity;
-        this.version = 3;
+        this.version = 4;
     }
 
     version: number;
     id: string;
-    signature: Signature;
+
+    header: string;
+    signature: string;
+    payload: string;
+
     content: Identity;
 
     // Local custom values:

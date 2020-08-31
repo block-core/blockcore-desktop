@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Hub, HubContainer } from '@models/hub';
-import { decodeAsync } from '@msgpack/msgpack';
 
 @Injectable({
     providedIn: 'root'
@@ -52,13 +51,15 @@ export class HubService {
         this.settings.hubs = this.hubs;
     }
 
-    async put(signedDocument: any) {
+    async put(signedDocument: any, type: string) {
         const hub = this.getHub();
 
         console.log('CONTAINER:', signedDocument);
 
         // TODO: Use the URL from the Hub. For now relay on the City Chain Identity host.
-        const url = hub.content.url + '/api/' + signedDocument.content['@type'] + '/' + signedDocument.content.identifier;
+        // const url = hub.content.url + '/api/' + type;
+        const url = 'http://localhost:4335/api/' + type;
+
         // const url = 'http://localhost:4335/api/' + signedDocument.id; // .id is a shortcut of '@type/' + id.
         // const url = 'https://identity.city-chain.org/' + signedDocument.container + '/' + signedDocument.id;
 
@@ -74,7 +75,10 @@ export class HubService {
         const response = await fetch(url);
         const contentType = response.headers.get('Content-Type');
         if (contentType && contentType.startsWith(MSGPACK_TYPE) && response.body != null) {
-            const object = await decodeAsync(response.body);
+
+            // TODO: FIX!
+            // const object = await decodeAsync(response.body);
+            const object = null;
             // do something with object
         } else { /* handle errors */ }
     }

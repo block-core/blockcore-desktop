@@ -1,23 +1,18 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { Identity, IdentityContainer, Signature } from '@models/identity';
+import { Identity, IdentityContainer } from '@models/identity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-// import { ElectronService } from 'ngx-electron';
 import { ApplicationStateService } from './application-state.service';
-import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import * as bip38 from '../../libs/bip38';
 import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
-import * as wif from 'wif';
-import * as coininfo from 'city-coininfo';
 import { HubService } from './hub.service';
-import { encode, decode } from '@msgpack/msgpack';
 import { StorageService } from './storage.service';
 import { AuthenticationService } from './authentication.service';
 import { ElectronService } from 'ngx-electron';
-import * as bitcoinMessage from 'bitcoinjs-message';
+import { Jws } from '../shared/jose';
 
 @Injectable({
     providedIn: 'root'
@@ -146,31 +141,18 @@ export class IdentityService implements OnDestroy {
     }
 
     getIdentityNode(index: number) {
-        // tslint:disable-next-line: quotemark
         return this.identityRoot.deriveHardened(index);
     }
 
     getKey(index: number) {
-        // tslint:disable-next-line: quotemark
         return this.identityRoot.deriveHardened(index);
     }
 
-    sign(document: any, index: number): Buffer {
-        const encoded: Uint8Array = encode(document, { sortKeys: true });
-
-        // To avoid issues with UTF-8 encoding of the byte array, we'll rely on base64.
-        // const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength).toString('base64');
-        const text = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-
-        console.log('DOCUMENT: ', encoded.toString());
-
+    sign(document: any, index: number): string {
         const identity = this.getIdentityNode(index);
+        const jwt = Jws.encode(document, identity);
 
-        const signature = bitcoinMessage.sign(text, identity.privateKey, true);
-
-        console.log('SIGNATURE: ', new Uint8Array(signature).toString());
-
-        return signature;
+        return jwt;
     }
 
     create() {
@@ -178,26 +160,14 @@ export class IdentityService implements OnDestroy {
         const identityNode = this.getIdentityNode(this.identityIndex + 1);
         const identityId = this.getAddress(identityNode, this.identityNetwork);
 
-        // const identity: Identity = {
-        //     identifier: identityId,
-        //     name: '',
-        //     shortname: '',
-        //     alias: '',
-        //     email: '',
-        //     height: 0,
-        //     title: '',
-        //     image: '',
-        //     url: '',
-        //     hubs: []
-        // };
-
         const identity = new Identity();
-        identity.identifier = identityId;
-
-        // TODO: Get the latest block height off the local node / API.
-        identity.height = 1; //
+        identity.identifier = 'did:is:' + identityId;
+        identity.iat = Date.now();
 
         const container = new IdentityContainer(identity);
+
+        container.header = null;
+        container.payload = null;
         container.signature = null;
         container.published = false;
         container.publish = true;
@@ -233,27 +203,20 @@ export class IdentityService implements OnDestroy {
         // If publish is turned on, ensure we send our updated identity to one of the platform hubs.
         if (publish && identity.publish) {
             // Get the signature for the entity.
-            const signatureBuffer = this.sign(identity.content, identity.index);
-            const signature = signatureBuffer.toString('base64');
+            const jwt = this.sign(identity.content, identity.index);
 
-            identity.signature = new Signature(identity.content.identifier, signature);
+            const jwtValues = jwt.split('.');
 
-            // Figure out another way to do this, as this edits our original (persisted) identity.
-            // We should remove these values, especially index, before publish to hub.
-            // delete identity.index;
-            // delete identity.published;
-            // delete identity.publish;
+            identity.header = jwtValues[0];
+            identity.payload = jwtValues[1];
+            identity.signature = jwtValues[2];
 
-            // const payload = {
-            //     id: identity.id,
-            //     signature,
-            //     content: identity
-            // };
+            const message = {
+                version: 4,
+                content: jwt
+            };
 
-            const json = JSON.stringify(identity);
-            console.log(json);
-
-            this.hubService.put(identity);
+            this.hubService.put(message, 'identity');
         }
 
         // try {
@@ -283,35 +246,27 @@ export class IdentityService implements OnDestroy {
         if (identity.published) {
             // Save to service, then update again.
             try {
-                // Get the signature for the entity.
-
                 // Reset the identity to an empty entity.
                 identity.content = new Identity();
                 identity.content.identifier = id;
-                identity.content.height = 1; // TODO: Get height from the node.
+                identity.content.iat = Date.now();
                 identity.content['@state'] = 999;
 
-                const signatureBuffer = this.sign(identity.content, identity.index);
-                const signature = signatureBuffer.toString('base64');
+                // Get the signature for the entity.
+                const jwt = this.sign(identity.content, identity.index);
 
-                identity.signature = new Signature(identity.content.identifier, signature);
+                const jwtValues = jwt.split('.');
 
-                // Figure out another way to do this, as this edits our original (persisted) identity.
-                // We should remove these values, especially index, before publish to hub.
-                // delete identity.index;
-                // delete identity.published;
-                // delete identity.publish;
+                identity.header = jwtValues[0];
+                identity.payload = jwtValues[1];
+                identity.signature = jwtValues[2];
 
-                // const payload = {
-                //     id: identity.id,
-                //     signature,
-                //     content: identity
-                // };
+                const message = {
+                    version: 4,
+                    content: jwt
+                };
 
-                const json = JSON.stringify(identity);
-                console.log(json);
-
-                this.hubService.put(identity);
+                this.hubService.put(message, 'identity');
             } catch (e) {
                 console.error(e);
                 // Add the identity back to the collection again, we did not successfully delete it.
@@ -345,6 +300,7 @@ export class IdentityService implements OnDestroy {
         console.log('identityApiUrl', identityApiUrl);
         // const identityApiUrl = 'https://identity.city-chain.org/api/identity/' + id;
         // const identityApiUrl = 'http://localhost:4335/api/identity/' + id;
+
         return await this.api<IdentityContainer>(identityApiUrl);
     }
 
