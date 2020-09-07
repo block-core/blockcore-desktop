@@ -48,8 +48,6 @@
         "e2e": "npm run postinstall:web && ng e2e",
         "version": "node -p \"require('./package.json').version\"",
         "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-        "snyk-protect": "snyk protect",
-        "prepare": "npm run snyk-protect",
         "mobile-start": "npm run mobile-build && npm run mobile-browser",
         "mobile-setup": "npm install -g cordova && cd mobile && cordova platform add android && cordova platform add ios && cordova platform add browser && cd ..",
         "mobile-build": "ng lint && ng build --outputPath=./mobile/www",
@@ -81,7 +79,6 @@
         "read-chunk": "3.2.0",
         "safe-buffer": "~5.1.1",
         "scryptsy": "^2.1.0",
-        "snyk": "^1.370.1",
         "tslib": "^2.0.1",
         "utf8": "^3.0.0"
     },
@@ -137,6 +134,5 @@
         "typescript": "3.9.7",
         "wait-on": "5.1.0",
         "zone.js": "~0.10.3"
-    },
-    "snyk": true
+    }
 }
