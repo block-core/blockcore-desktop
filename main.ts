@@ -286,6 +286,7 @@ function createWindow() {
         minWidth: 260,
         minHeight: 400,
         title: 'City Hub',
+        icon: __dirname + '/app.ico',
         webPreferences: { webSecurity: false, nodeIntegration: true }
     });
 

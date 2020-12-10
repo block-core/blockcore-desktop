@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.startSubscriptions();
+        // this.startSubscriptions();
     }
 
     changeTicker(change) {
