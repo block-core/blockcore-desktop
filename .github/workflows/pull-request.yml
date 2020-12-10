@@ -48,8 +48,8 @@ jobs:
 
     - name: Variables
       run: |
-        echo "::set-env name=VERSION::$(npm run version --silent)"
-        echo "::set-env name=RELEASE_CONFIGURATION::${{ matrix.runtime }}"
+        echo VERSION=$(npm run version --silent) >> $GITHUB_ENV
+      shell: bash
 
     - name: Tooling
       if: matrix.os == 'ubuntu-latest'
