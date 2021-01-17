@@ -69,13 +69,39 @@ export class LoadComponent implements OnDestroy {
                 { id: 'readonly', name: 'Read-only' });
         }
 
+        // TODO: Move this somewhere else and extend the configurations.
         this.networks = [
             // { id: 'main', name: 'Main' },
+
+            { id: 'bcpmain', name: 'Blockcore Platform' },
+            { id: 'bcptest', name: 'Blockcore Platform (Test)' },
+
+            { id: 'bcpmain', name: 'Bitcoin' },
+            { id: 'bcptest', name: 'Bitcoin (Test)' },
+
             { id: 'citymain', name: 'City Chain' },
             { id: 'citytest', name: 'City Chain (Test)' },
-            // { id: 'stratistest', name: 'Stratis (Test)' },
-            // { id: 'stratismain', name: 'Stratis' },
-            // { id: 'regtest', name: 'RegTest' }
+
+            { id: 'exosmain', name: 'EXOS' },
+            { id: 'exostest', name: 'EXOS (Test)' },
+
+            { id: 'implxmain', name: 'IMPLX' },
+            { id: 'implxtest', name: 'IMPLX (Test)' },
+
+            { id: 'rutamain', name: 'RUTA' },
+            { id: 'rutatest', name: 'RUTA (Test)' },
+
+            { id: 'straxmain', name: 'Stratis' },
+            { id: 'straxtest', name: 'Stratis (Test)' },
+
+            { id: 'x42main', name: 'x42' },
+            { id: 'x42test', name: 'x42 (Test)' },
+
+            { id: 'xdsmain', name: 'XDS' },
+            { id: 'xdstest', name: 'XDS (Test)' },
+
+            { id: 'xlrmain', name: 'XLR' },
+            { id: 'xlrtest', name: 'XLR (Test)' },
         ];
 
 

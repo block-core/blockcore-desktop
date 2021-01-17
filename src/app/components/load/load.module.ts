@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { FormsModule } from '@angular/forms';
+import { AppSharedModule } from 'src/app/shared/app-shared.module';
 
 @NgModule({
     imports: [
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
         RouterModule,
         FormsModule,
         MaterialModule,
+        AppSharedModule
     ],
     declarations: [
         LoadComponent,

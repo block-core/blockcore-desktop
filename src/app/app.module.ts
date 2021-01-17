@@ -41,6 +41,7 @@ import { HubService } from './services/hub.service';
 
 @NgModule({
     declarations: [
+        
     ],
     imports: [
         BrowserModule,

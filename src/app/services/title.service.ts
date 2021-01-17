@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SetupService } from './setup.service';
 
 export const APP_TITLE = new InjectionToken<string>('App Title Postfix');
 
@@ -15,6 +16,7 @@ export class TitleService {
 
     constructor(
         private readonly router: Router,
+        private setup: SetupService,
         @Inject(DOCUMENT) private readonly document: any,
         @Optional() @Inject(APP_TITLE) private readonly appTitle: any) {
 
@@ -55,10 +57,10 @@ export class TitleService {
             }
 
             // For the document title, we'll append the app title.
-            if (this.appTitle != null) {
+            // if (this.appTitle != null) {
                 // this.document.title = formattedTitle + ' - ' + this.appTitle;
-                this.document.title = this.appTitle + ' - ' + formattedTitle;
-            }
+                this.document.title = this.setup.name + ' - ' + formattedTitle;
+            // }
 
             this.title.next(formattedTitle);
         });

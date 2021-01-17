@@ -1,0 +1,7 @@
+<div *ngIf="logoIsImage" class="app-logo">
+    <img [src]="setup.logo"  class="app-logo-image">
+</div>
+
+<div *ngIf="!logoIsImage" class="app-logo">
+    {{setup.logo}}
+</div>

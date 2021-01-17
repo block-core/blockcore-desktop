@@ -7,6 +7,7 @@ import { SizeUnitPipe } from './pipes/size-unit.pipe';
 import { PriceUnitPipe } from './pipes/price-unit.pipe';
 import { YesNoPipe } from './pipes/yesno.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
+import { LogoModule } from './logo/logo.module';
 
 const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe];
 
@@ -15,10 +16,12 @@ const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNota
         SHARED_DIRECTIVES
     ],
     imports: [
-        ViewAreaModule
+        ViewAreaModule,
+        LogoModule
     ],
     exports: [
         ViewAreaModule,
+        LogoModule,
         SHARED_DIRECTIVES
     ]
 })
