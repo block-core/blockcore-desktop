@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RootComponent } from '../../root/root.component';
 import { CreateAccountComponent } from './create.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -38,7 +38,7 @@ function toBuffer(ab) {
 }
 
 describe('AppComponent', () => {
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 RootComponent
@@ -48,7 +48,7 @@ describe('AppComponent', () => {
         }).compileComponents();
     }));
 
-    it('should produce correct extpubkey', async(() => {
+    it('should produce correct extpubkey', waitForAsync(() => {
         // This test is a replicate of 'ShouldProduceCorrectExtPubKey' test in C# (City Chain)
         const passphrase = '';
         const recoveryPhrase = 'mystery problem faith negative member bottom concert bundle asthma female process twelve';
@@ -126,7 +126,7 @@ describe('AppComponent', () => {
         console.log('network:', network);
     }));
 
-    it('should decrypt to correct extpubkey', async(() => {
+    it('should decrypt to correct extpubkey', waitForAsync(() => {
 
         const walletPassword = 'default';
         const seed = { encryptedSeed: '6PYU7o49DHmWDomcbGJyU3UqewrZBRp5fefjoL4xDRJ9V2qWx64aXwJYt4', chainCode: 'pARfSpivCg04m0l2EDH4c1hp/ydQo/hnbaVsNjgi9M8=' };
@@ -155,7 +155,7 @@ describe('AppComponent', () => {
 
     }));
 
-    it('should sign and verify correctly', async(() => {
+    it('should sign and verify correctly', waitForAsync(() => {
 
         const walletPassword = 'default';
         const seed = { encryptedSeed: '6PYU7o49DHmWDomcbGJyU3UqewrZBRp5fefjoL4xDRJ9V2qWx64aXwJYt4', chainCode: 'pARfSpivCg04m0l2EDH4c1hp/ydQo/hnbaVsNjgi9M8=' };
@@ -261,7 +261,7 @@ describe('AppComponent', () => {
         // });
     }));
 
-    it('should generate profile address', async(() => {
+    it('should generate profile address', waitForAsync(() => {
         const passphrase = '';
         const recoveryPhrase = 'mystery problem faith negative member bottom concert bundle asthma female process twelve';
         const walletPassword = 'test';
