@@ -75,7 +75,6 @@
     "lodash": "^4.17.20",
     "ngx-image-cropper": "^3.2.1",
     "ngx-material-file-input": "^2.1.1",
-    "npm-check-updates": "^7.0.3",
     "read-chunk": "3.2.0",
     "safe-buffer": "~5.1.1",
     "scryptsy": "^2.1.0",
