@@ -12,6 +12,7 @@ import { NodeStatus } from '@models/node-status';
 import { ElectronService } from 'ngx-electron';
 import { environment } from 'src/environments/environment';
 import * as coininfo from 'city-coininfo';
+import { ChainService } from 'src/app/services/chain.service';
 
 export interface ListItem {
     name: string;
@@ -28,7 +29,7 @@ export class LoadComponent implements OnDestroy {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: ListItem;
-    selectedNetwork: ListItem;
+    selectedNetwork: any;
     loading: boolean;
     hasWallet = false;
     modes: ListItem[] = [];
@@ -50,6 +51,7 @@ export class LoadComponent implements OnDestroy {
         private authService: AuthenticationService,
         private electronService: ElectronService,
         private router: Router,
+        public chains: ChainService,
         private log: Logger,
         private zone: NgZone,
         private apiService: ApiService,
@@ -70,43 +72,42 @@ export class LoadComponent implements OnDestroy {
         }
 
         // TODO: Move this somewhere else and extend the configurations.
-        this.networks = [
-            // { id: 'main', name: 'Main' },
+        // this.networks = [
+        //     // { id: 'main', name: 'Main' },
 
-            { id: 'bcpmain', name: 'Blockcore Platform' },
-            { id: 'bcptest', name: 'Blockcore Platform (Test)' },
+        //     { id: 'bcpmain', name: 'Blockcore Platform' },
+        //     { id: 'bcptest', name: 'Blockcore Platform (Test)' },
 
-            { id: 'bcpmain', name: 'Bitcoin' },
-            { id: 'bcptest', name: 'Bitcoin (Test)' },
+        //     { id: 'bcpmain', name: 'Bitcoin' },
+        //     { id: 'bcptest', name: 'Bitcoin (Test)' },
 
-            { id: 'citymain', name: 'City Chain' },
-            { id: 'citytest', name: 'City Chain (Test)' },
+        //     { id: 'citymain', name: 'City Chain' },
+        //     { id: 'citytest', name: 'City Chain (Test)' },
 
-            { id: 'exosmain', name: 'EXOS' },
-            { id: 'exostest', name: 'EXOS (Test)' },
+        //     { id: 'exosmain', name: 'EXOS' },
+        //     { id: 'exostest', name: 'EXOS (Test)' },
 
-            { id: 'implxmain', name: 'IMPLX' },
-            { id: 'implxtest', name: 'IMPLX (Test)' },
+        //     { id: 'implxmain', name: 'IMPLX' },
+        //     { id: 'implxtest', name: 'IMPLX (Test)' },
 
-            { id: 'rutamain', name: 'RUTA' },
-            { id: 'rutatest', name: 'RUTA (Test)' },
+        //     { id: 'rutamain', name: 'RUTA' },
+        //     { id: 'rutatest', name: 'RUTA (Test)' },
 
-            { id: 'straxmain', name: 'Stratis' },
-            { id: 'straxtest', name: 'Stratis (Test)' },
+        //     { id: 'straxmain', name: 'Stratis' },
+        //     { id: 'straxtest', name: 'Stratis (Test)' },
 
-            { id: 'x42main', name: 'x42' },
-            { id: 'x42test', name: 'x42 (Test)' },
+        //     { id: 'x42main', name: 'x42' },
+        //     { id: 'x42test', name: 'x42 (Test)' },
 
-            { id: 'xdsmain', name: 'XDS' },
-            { id: 'xdstest', name: 'XDS (Test)' },
+        //     { id: 'xdsmain', name: 'XDS' },
+        //     { id: 'xdstest', name: 'XDS (Test)' },
 
-            { id: 'xlrmain', name: 'XLR' },
-            { id: 'xlrtest', name: 'XLR (Test)' },
-        ];
-
+        //     { id: 'xlrmain', name: 'XLR' },
+        //     { id: 'xlrtest', name: 'XLR (Test)' },
+        // ];
 
         this.selectedMode = this.modes.find(mode => mode.id === this.appState.mode);
-        this.selectedNetwork = this.networks.find(network => network.id === this.appState.network);
+        this.selectedNetwork = this.chains.availableChains.find(network => network.network === this.appState.network);
         this.remember = true;
 
         this.log.info('Mode:', this.selectedMode);
@@ -179,7 +180,7 @@ export class LoadComponent implements OnDestroy {
     }
 
     launch() {
-        this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.selectedNetwork.id, this.appState.daemon.path, this.appState.daemon.datafolder);
+        this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.selectedNetwork.network, this.appState.daemon.path, this.appState.daemon.datafolder);
 
         // If the selected mode is not 'local', we'll reset the path and data folder.
         if (this.appState.mode !== 'local') {

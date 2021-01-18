@@ -59,7 +59,7 @@ export class TitleService {
             // For the document title, we'll append the app title.
             // if (this.appTitle != null) {
                 // this.document.title = formattedTitle + ' - ' + this.appTitle;
-                this.document.title = this.setup.name + ' - ' + formattedTitle;
+            this.document.title = this.setup.name + ' - ' + formattedTitle;
             // }
 
             this.title.next(formattedTitle);
