@@ -85,7 +85,8 @@ export class ApiService {
                         title: 'City Chain background error',
                         hint: 'Messages from the background process received in City Hub',
                         message: this.daemon,
-                        icon: (this.daemon.indexOf('City Hub was started in development mode') > -1) ? 'build' : 'warning'
+                        icon: 'warning'
+                        // icon: (this.daemon.indexOf('City Hub was started in development mode') > -1) ? 'build' : 'warning'
                     });
                     // this.snackBar.open(this.daemon, null, { duration: 7000 });
                 }
@@ -547,7 +548,7 @@ export class ApiService {
      */
     shutdownNode(): Observable<any> {
         return this.http
-            .post(this.apiUrl + '/node/shutdown', { headers: this.headers })
+            .post(this.apiUrl + '/node/shutdown', 'true', { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

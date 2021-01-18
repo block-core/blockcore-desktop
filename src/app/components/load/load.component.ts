@@ -12,7 +12,7 @@ import { NodeStatus } from '@models/node-status';
 import { ElectronService } from 'ngx-electron';
 import { environment } from 'src/environments/environment';
 import * as coininfo from 'city-coininfo';
-import { ChainService } from 'src/app/services/chain.service';
+import { Chain, ChainService } from 'src/app/services/chain.service';
 
 export interface ListItem {
     name: string;
@@ -29,7 +29,7 @@ export class LoadComponent implements OnDestroy {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: ListItem;
-    selectedNetwork: any;
+    selectedNetwork: Chain;
     loading: boolean;
     hasWallet = false;
     modes: ListItem[] = [];
@@ -38,6 +38,8 @@ export class LoadComponent implements OnDestroy {
     connection: signalR.HubConnection;
     delayed = false;
     apiSubscription: any;
+    // dataFolder: string;
+    // nodePath: string;
 
     private subscription: Subscription;
     private statusIntervalSubscription: Subscription;
@@ -45,6 +47,7 @@ export class LoadComponent implements OnDestroy {
     private readonly MaxRetryCount = 50;
     loadingFailed = false;
     public apiConnected = false;
+    private ipc: Electron.IpcRenderer;
 
     constructor(
         private http: HttpClient,
@@ -120,6 +123,21 @@ export class LoadComponent implements OnDestroy {
         if (existingMode != null) {
             this.initialize();
         }
+
+        this.ipc = electronService.ipcRenderer;
+
+        this.ipc.on('choose-data-folder', (event, path: string) => {
+            // notificationService.show({ title: 'Checking for update...', body: JSON.stringify(info) });
+            console.log('choose-data-folder: ', path);
+            this.appState.daemon.datafolder = path;
+        });
+
+        this.ipc.on('choose-node-path', (event, path: string) => {
+            // notificationService.show({ title: 'Checking for update...', body: JSON.stringify(info) });
+            console.log('choose-node-path: ', path);
+            // this.nodePath = path;
+            this.appState.daemon.path = path;
+        });
     }
 
     initialize() {
@@ -127,13 +145,18 @@ export class LoadComponent implements OnDestroy {
 
         // TODO: Should send the correct network, hard-coded to city main for now.
         // Do this always now, we need this information in the UI for identity handling.
-        const network = coininfo('city').toBitcoinJS();
-        this.appState.networkDefinition = network;
+        // const network = coininfo('city').toBitcoinJS();
+        // this.appState.networkDefinition = network;
 
         this.appState.networkParams = {
-            private: network.wif,
-            public: network.pubKeyHash
+            private: this.selectedNetwork.private, // WIF
+            public: this.selectedNetwork.public // PubKeyHash
         };
+
+        // this.appState.networkParams = {
+        //     private: network.wif,
+        //     public: network.pubKeyHash
+        // };
 
         if (this.appState.mode === 'full' || this.appState.mode === 'local' || this.appState.mode === 'light') {
             this.loading = true;
@@ -167,6 +190,22 @@ export class LoadComponent implements OnDestroy {
         } else {
             this.appState.daemon.path = '';
         }
+    }
+
+    chooseNodeExecutable() {
+        this.electronService.ipcRenderer.send('choose-node-path');
+    }
+
+    clearNodePath() {
+        this.appState.daemon.path = '';
+    }
+
+    chooseDataFolder() {
+        this.electronService.ipcRenderer.send('choose-data-folder');
+    }
+
+    clearDataFolder() {
+        this.appState.daemon.datafolder = '';
     }
 
     onDataFolderChange(event) {
@@ -248,7 +287,6 @@ export class LoadComponent implements OnDestroy {
 
     start() {
         // this.simpleWalletConnect();
-
         // We have successful connection with daemon, make sure we inform the main process of |.
         this.electronService.ipcRenderer.send('daemon-started');
 

@@ -55,6 +55,7 @@ enum DaemonState {
 
 interface Chain {
     name: string;
+    chain: string;
     identity: string;
     tooltip: string;
     port: number;
@@ -116,8 +117,6 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
     assert(isNumber(arg.port));
     assert(isNumber(arg.rpcPort));
     assert(isNumber(arg.apiPort));
-    assert(isNumber(arg.wsPort));
-    assert(arg.network.length < 20);
 
     currentChain = arg;
 
@@ -161,6 +160,55 @@ ipcMain.on('daemon-started', (event, arg: Chain) => {
 
 ipcMain.on('daemon-change', (event, arg: any) => {
     daemonState = DaemonState.Changing;
+});
+
+ipcMain.on('choose-data-folder', (event, arg: Chain) => {
+
+    const paths = dialog.showOpenDialogSync(mainWindow, {
+        title: 'Choose a data folder',
+        properties: ['openDirectory']
+    });
+
+    console.log('PATHS:', paths);
+
+    if (paths.length > 0) {
+        event.returnValue = paths[0];
+        contents.send('choose-data-folder', paths[0]);
+    } else {
+        event.returnValue = null;
+        contents.send('choose-data-folder', null);
+    }
+
+    // dialog.showOpenDialog(null, options, (filePaths) => {
+    //     event.sender.send('open-dialog-paths-selected', filePaths)
+    // });
+});
+
+ipcMain.on('choose-node-path', (event, arg: Chain) => {
+
+    const paths = dialog.showOpenDialogSync(mainWindow, {
+        title: 'Choose a data folder',
+        filters: [
+            { name: 'Executable', extensions: ['exe'] },
+            { name: 'Assembly', extensions: ['dll'] },
+            { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile', 'dontAddToRecent']
+    });
+
+    console.log('PATHS:', paths);
+
+    if (paths.length > 0) {
+        event.returnValue = paths[0];
+        contents.send('choose-node-path', paths[0]);
+    } else {
+        event.returnValue = null;
+        contents.send('choose-node-path', null);
+    }
+
+    // dialog.showOpenDialog(null, options, (filePaths) => {
+    //     event.sender.send('open-dialog-paths-selected', filePaths)
+    // });
 });
 
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
@@ -425,28 +473,29 @@ app.on('activate', () => {
 function startDaemon(chain: Chain) {
     hasDaemon = true;
     const folderPath = chain.path || getDaemonPath();
-    let daemonName;
 
-    if (chain.identity === 'city') {
-        daemonName = 'City.Chain';
-    } else if (chain.identity === 'stratis') {
-        daemonName = 'Stratis.StratisD';
-    } else if (chain.identity === 'bitcoin') {
-        daemonName = 'Stratis.StratisD';
-    }
+    // let daemonName;
+
+    // if (chain.identity === 'city') {
+    //     daemonName = 'City.Chain';
+    // } else if (chain.identity === 'stratis') {
+    //     daemonName = 'Stratis.StratisD';
+    // } else if (chain.identity === 'bitcoin') {
+    //     daemonName = 'Stratis.StratisD';
+    // }
 
     // If path is not specified and Win32, we'll append .exe
-    if (!chain.path && os.platform() === 'win32') {
-        daemonName += '.exe';
-    } else if (chain.path) {
-        daemonName += '.dll';
-    }
+    // if (!chain.path && os.platform() === 'win32') {
+    //     daemonName += '.exe';
+    // } else if (chain.path) {
+    //     daemonName += '.dll';
+    // }
 
-    const daemonPath = path.resolve(folderPath, daemonName);
+    // const daemonPath = path.resolve(folderPath, daemonName);
 
-    writeLog('start-daemon: ' + daemonPath);
+    writeLog('start-daemon: ' + folderPath);
 
-    launchDaemon(daemonPath, chain);
+    launchDaemon(folderPath, chain);
 }
 
 function getDaemonPath() {
@@ -463,6 +512,9 @@ function getDaemonPath() {
 }
 
 function launchDaemon(apiPath: string, chain: Chain) {
+
+    console.log('launchDaemon is called.');
+
     let daemonProcess;
 
     // TODO: Consider a future improvement that would ensure we don't loose a reference to an existing spawned process.
@@ -471,21 +523,22 @@ function launchDaemon(apiPath: string, chain: Chain) {
 
     const commandLineArguments = [];
 
-    if (chain.mode === 'local') {
-        if (!apiPath || apiPath.length < 3 || !chain.datafolder || chain.datafolder.length < 3) {
-            contents.send('daemon-error', `CRITICAL: Cannot launch daemon, missing either daemon path or data folder path.`);
-            daemonState = DaemonState.Failed;
-            return;
-        }
+    // if (chain.mode === 'local') {
+    //     if (!apiPath || apiPath.length < 3 || !chain.datafolder || chain.datafolder.length < 3) {
+    //         contents.send('daemon-error', `CRITICAL: Cannot launch daemon, missing either daemon path or data folder path.`);
+    //         daemonState = DaemonState.Failed;
+    //         return;
+    //     }
 
-        // Only append the apiPath as argument if we are in local mode.
-        commandLineArguments.push(apiPath);
-    }
+    //     // Only append the apiPath as argument if we are in local mode.
+    //     commandLineArguments.push(apiPath);
+    // }
 
     if (chain.datafolder) {
         commandLineArguments.push('-datadir=' + chain.datafolder);
     }
 
+    commandLineArguments.push('--chain=' + chain.chain);
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
@@ -511,11 +564,12 @@ function launchDaemon(apiPath: string, chain: Chain) {
 
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
 
-    if (chain.mode === 'local') {
+    if (chain.path.endsWith('.dll')) {
         daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
             detached: true
         });
-    } else {
+    }
+    else {
         daemonProcess = spawnDaemon(apiPath, commandLineArguments, {
             detached: true
         });
@@ -678,7 +732,7 @@ function writeError(msg) {
 }
 
 function isNumber(value: string | number): boolean {
-    return !isNaN(Number(value.toString()));
+    return !isNaN(Number(value?.toString()));
 }
 
 function assert(result: boolean) {

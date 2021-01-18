@@ -83,8 +83,6 @@ electron_1.ipcMain.on('start-daemon', function (event, arg) {
     assert(isNumber(arg.port));
     assert(isNumber(arg.rpcPort));
     assert(isNumber(arg.apiPort));
-    assert(isNumber(arg.wsPort));
-    assert(arg.network.length < 20);
     currentChain = arg;
     writeLog(currentChain);
     if (arg.mode === 'manual') {
@@ -119,6 +117,47 @@ electron_1.ipcMain.on('daemon-started', function (event, arg) {
 });
 electron_1.ipcMain.on('daemon-change', function (event, arg) {
     daemonState = DaemonState.Changing;
+});
+electron_1.ipcMain.on('choose-data-folder', function (event, arg) {
+    var paths = electron_1.dialog.showOpenDialogSync(mainWindow, {
+        title: 'Choose a data folder',
+        properties: ['openDirectory']
+    });
+    console.log('PATHS:', paths);
+    if (paths.length > 0) {
+        event.returnValue = paths[0];
+        contents.send('choose-data-folder', paths[0]);
+    }
+    else {
+        event.returnValue = null;
+        contents.send('choose-data-folder', null);
+    }
+    // dialog.showOpenDialog(null, options, (filePaths) => {
+    //     event.sender.send('open-dialog-paths-selected', filePaths)
+    // });
+});
+electron_1.ipcMain.on('choose-node-path', function (event, arg) {
+    var paths = electron_1.dialog.showOpenDialogSync(mainWindow, {
+        title: 'Choose a data folder',
+        filters: [
+            { name: 'Executable', extensions: ['exe'] },
+            { name: 'Assembly', extensions: ['dll'] },
+            { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile', 'dontAddToRecent']
+    });
+    console.log('PATHS:', paths);
+    if (paths.length > 0) {
+        event.returnValue = paths[0];
+        contents.send('choose-node-path', paths[0]);
+    }
+    else {
+        event.returnValue = null;
+        contents.send('choose-node-path', null);
+    }
+    // dialog.showOpenDialog(null, options, (filePaths) => {
+    //     event.sender.send('open-dialog-paths-selected', filePaths)
+    // });
 });
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 electron_1.ipcMain.on('reset-database', function (event, arg) {
@@ -340,26 +379,23 @@ electron_1.app.on('activate', function () {
 function startDaemon(chain) {
     hasDaemon = true;
     var folderPath = chain.path || getDaemonPath();
-    var daemonName;
-    if (chain.identity === 'city') {
-        daemonName = 'City.Chain';
-    }
-    else if (chain.identity === 'stratis') {
-        daemonName = 'Stratis.StratisD';
-    }
-    else if (chain.identity === 'bitcoin') {
-        daemonName = 'Stratis.StratisD';
-    }
+    // let daemonName;
+    // if (chain.identity === 'city') {
+    //     daemonName = 'City.Chain';
+    // } else if (chain.identity === 'stratis') {
+    //     daemonName = 'Stratis.StratisD';
+    // } else if (chain.identity === 'bitcoin') {
+    //     daemonName = 'Stratis.StratisD';
+    // }
     // If path is not specified and Win32, we'll append .exe
-    if (!chain.path && os.platform() === 'win32') {
-        daemonName += '.exe';
-    }
-    else if (chain.path) {
-        daemonName += '.dll';
-    }
-    var daemonPath = path.resolve(folderPath, daemonName);
-    writeLog('start-daemon: ' + daemonPath);
-    launchDaemon(daemonPath, chain);
+    // if (!chain.path && os.platform() === 'win32') {
+    //     daemonName += '.exe';
+    // } else if (chain.path) {
+    //     daemonName += '.dll';
+    // }
+    // const daemonPath = path.resolve(folderPath, daemonName);
+    writeLog('start-daemon: ' + folderPath);
+    launchDaemon(folderPath, chain);
 }
 function getDaemonPath() {
     var apiPath;
@@ -375,23 +411,25 @@ function getDaemonPath() {
     return apiPath;
 }
 function launchDaemon(apiPath, chain) {
+    console.log('launchDaemon is called.');
     var daemonProcess;
     // TODO: Consider a future improvement that would ensure we don't loose a reference to an existing spawned process.
     // If launch is called twice, it might spawn two processes and loose the reference to the first one, and the new process will die due to TCP port lock.
     var spawnDaemon = require('child_process').spawn;
     var commandLineArguments = [];
-    if (chain.mode === 'local') {
-        if (!apiPath || apiPath.length < 3 || !chain.datafolder || chain.datafolder.length < 3) {
-            contents.send('daemon-error', "CRITICAL: Cannot launch daemon, missing either daemon path or data folder path.");
-            daemonState = DaemonState.Failed;
-            return;
-        }
-        // Only append the apiPath as argument if we are in local mode.
-        commandLineArguments.push(apiPath);
-    }
+    // if (chain.mode === 'local') {
+    //     if (!apiPath || apiPath.length < 3 || !chain.datafolder || chain.datafolder.length < 3) {
+    //         contents.send('daemon-error', `CRITICAL: Cannot launch daemon, missing either daemon path or data folder path.`);
+    //         daemonState = DaemonState.Failed;
+    //         return;
+    //     }
+    //     // Only append the apiPath as argument if we are in local mode.
+    //     commandLineArguments.push(apiPath);
+    // }
     if (chain.datafolder) {
         commandLineArguments.push('-datadir=' + chain.datafolder);
     }
+    commandLineArguments.push('--chain=' + chain.chain);
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
@@ -412,7 +450,7 @@ function launchDaemon(apiPath, chain) {
     // if (chain.dataDir != null)
     // commandLineArguments.push("-datadir=" + chain.dataDir);
     writeLog('Starting daemon with parameters: ' + commandLineArguments);
-    if (chain.mode === 'local') {
+    if (chain.path.endsWith('.dll')) {
         daemonProcess = spawnDaemon('dotnet', commandLineArguments, {
             detached: true
         });
@@ -556,7 +594,7 @@ function writeError(msg) {
     }
 }
 function isNumber(value) {
-    return !isNaN(Number(value.toString()));
+    return !isNaN(Number(value === null || value === void 0 ? void 0 : value.toString()));
 }
 function assert(result) {
     if (result !== true) {

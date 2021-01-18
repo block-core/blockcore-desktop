@@ -3,6 +3,17 @@
     <app-logo></app-logo>
 
     <ng-template [ngIf]="!loading" [ngIfElse]="spinner">
+
+        <mat-form-field>
+            <mat-select placeholder="Select network" [(ngModel)]="selectedNetwork">
+                <mat-option *ngFor="let network of chains.availableChains" [value]="network">
+                    {{network.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <br>
+
         <mat-form-field>
             <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
                 <mat-option *ngFor="let mode of modes" [value]="mode">
@@ -13,27 +24,41 @@
 
         <div *ngIf="selectedMode?.id == 'local'">
             <br>
-            Daemon folder:<br>
-            <input class="custom-file-mode" type="file" (change)="onDaemonFolderChange($event)" webkitdirectory="true" />
-            <br><br>
+
+            <button (click)="chooseNodeExecutable()" mat-raised-button>Node executable:</button>
+
+            <br>
+
+            <div *ngIf="appState.daemon.path"><br>
+                {{appState.daemon.path}} <button (click)="clearNodePath()" mat-icon-button>
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+
+            <!-- Node executable:<br>
+            <input class="custom-file-mode" type="file" (change)="onDaemonFolderChange($event)" />
+            <br><br> -->
             <!-- Data folder:<br>
             <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" webkitdirectory="true" />
             <br><br> -->
         </div>
         <br>
-        <mat-form-field>
-            <mat-select placeholder="Select network" [(ngModel)]="selectedNetwork">
-                <mat-option *ngFor="let network of chains.availableChains" [value]="network">
-                    {{network.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
 
         <div *ngIf="selectedMode?.id != 'mobile'">
             <br>
-            Data folder:<br>
-            <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" webkitdirectory="true" />
-            <br><br>
+            <!-- Data folder:<br>
+            <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" />
+            <br><br> -->
+            <button (click)="chooseDataFolder()" mat-raised-button>Choose data folder:</button>
+
+            <br>
+
+            <div *ngIf="appState.daemon.datafolder"><br>
+                {{appState.daemon.datafolder}} <button (click)="clearDataFolder()" mat-icon-button>
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+            <br>
         </div>
         <br>
 
