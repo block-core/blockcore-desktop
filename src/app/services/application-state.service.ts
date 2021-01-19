@@ -33,12 +33,18 @@ export class ApplicationStateService {
             this.chain = this.getParam('chain') || 'city';
 
             // TODO: These properties are deprecated, refactor!
-            this.mode = localStorage.getItem('Network:Mode') || 'full';
-            this.network = localStorage.getItem('Network:Network') || 'citymain';
-            this.path = localStorage.getItem('Network:Path') || '';
+            // this.mode = localStorage.getItem('Network:Mode') || 'full';
+            // this.network = localStorage.getItem('Network:Network') || 'citymain';
+            // this.path = localStorage.getItem('Network:Path') || '';
+
+            let mode = localStorage.getItem('Network:Mode');
+
+            if (!mode) {
+                mode = localStorage.getItem('Network:ModePrevious');
+            }
 
             this.daemon = {
-                mode: localStorage.getItem('Network:Mode') || 'full',
+                mode: mode || 'full',
                 network: localStorage.getItem('Network:Network') || 'citymain',
                 path: localStorage.getItem('Network:Path') || '',
                 datafolder: localStorage.getItem('Network:DataFolder') || ''
@@ -67,11 +73,11 @@ export class ApplicationStateService {
 
     daemon: DaemonConfiguration;
 
-    mode: string;
+    // mode: string;
 
-    network: string;
+    // network: string;
 
-    path: string;
+    // path: string;
 
     pageMode = false;
 
@@ -101,7 +107,7 @@ export class ApplicationStateService {
     }
 
     get isSimpleMode(): boolean {
-        return this.mode === 'simple';
+        return this.daemon.mode === 'simple';
     }
 
     getParam(n) {
@@ -136,8 +142,8 @@ export class ApplicationStateService {
         this.daemon.datafolder = datafolder;
 
         // TODO: Remove and depricate these properties.
-        this.mode = mode;
-        this.network = network;
+        // this.mode = mode;
+        // this.network = network;
 
         if (persist) {
             localStorage.setItem('Network:Mode', mode);

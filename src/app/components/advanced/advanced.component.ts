@@ -47,12 +47,12 @@ export class AdvancedComponent {
 
     resetDatabase() {
         this.log.info('Reset Blockchain Database...');
-        const path = this.electronService.ipcRenderer.sendSync('reset-database', this.appState.network);
+        const path = this.electronService.ipcRenderer.sendSync('reset-database', this.appState.daemon.network);
         this.log.info('Reset completed: ' + path);
     }
 
     openDataFolder() {
-        const path = this.electronService.ipcRenderer.sendSync('open-data-folder', this.appState.network);
+        const path = this.electronService.ipcRenderer.sendSync('open-data-folder', this.appState.daemon.network);
     }
 
     checkForUpdate() {

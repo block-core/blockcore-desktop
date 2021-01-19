@@ -45,7 +45,7 @@ export class NetworkDetailsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         public walletService: WalletService) {
 
-        this.chain = this.chains.getChain(this.appState.chain, this.appState.network);
+        this.chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
     }
 
     ngOnInit() {

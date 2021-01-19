@@ -67,13 +67,14 @@ export class LoadComponent implements OnInit, OnDestroy {
         ];
 
         if (!environment.production) {
-            this.modes.push({ id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
+            this.modes.push(
+                // { id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
                 { id: 'local', name: 'Custom' }, // Launches the daemon by specifying path to .dll file.
                 { id: 'manual', name: 'Manual' }, // Manual startup of daemon, does not send shutdown messages. Useful when you debug node with Visual Studio.
-                { id: 'simple', name: 'Mobile' }, // API Wallet mode.
-                { id: 'light', name: 'Light' }, // Full Node in Purge mode and other features disabled.
-                { id: 'pos', name: 'Point-of-Sale (POS)' },
-                { id: 'readonly', name: 'Read-only' });
+                { id: 'simple', name: 'Mobile' }); // API Wallet mode.
+            // { id: 'light', name: 'Light' }, // Full Node in Purge mode and other features disabled.
+            // { id: 'pos', name: 'Point-of-Sale (POS)' },
+            // { id: 'readonly', name: 'Read-only' });
         }
 
         // TODO: Move this somewhere else and extend the configurations.
@@ -111,8 +112,8 @@ export class LoadComponent implements OnInit, OnDestroy {
         //     { id: 'xlrtest', name: 'XLR (Test)' },
         // ];
 
-        this.selectedMode = this.modes.find(mode => mode.id === this.appState.mode);
-        this.selectedNetwork = this.chains.availableChains.find(network => network.network === this.appState.network);
+        this.selectedMode = this.modes.find(mode => mode.id === this.appState.daemon.mode);
+        this.selectedNetwork = this.chains.availableChains.find(network => network.network === this.appState.daemon.network);
         this.remember = true;
 
         this.log.info('Mode:', this.selectedMode);
@@ -160,15 +161,15 @@ export class LoadComponent implements OnInit, OnDestroy {
         //     public: network.pubKeyHash
         // };
 
-        if (this.appState.mode === 'full' || this.appState.mode === 'local' || this.appState.mode === 'light') {
+        if (this.appState.daemon.mode === 'full' || this.appState.daemon.mode === 'local' || this.appState.daemon.mode === 'light') {
             this.loading = true;
             this.appState.connected = false;
             this.fullNodeConnect();
-        } else if (this.appState.mode === 'manual') {
+        } else if (this.appState.daemon.mode === 'manual') {
             this.loading = false;
             this.appState.connected = true;
             this.fullNodeConnect();
-        } else if (this.appState.mode === 'simple') {
+        } else if (this.appState.daemon.mode === 'simple') {
             // TODO: Should send the correct network, hard-coded to city main for now.
             // const network = coininfo('city').toBitcoinJS();
             // this.appState.networkDefinition = network;
@@ -224,7 +225,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.selectedNetwork.network, this.appState.daemon.path, this.appState.daemon.datafolder);
 
         // If the selected mode is not 'local', we'll reset the path and data folder.
-        if (this.appState.mode !== 'local') {
+        if (this.appState.daemon.mode !== 'local') {
             localStorage.removeItem('Network:Path');
             localStorage.removeItem('Network:DataFolder');
         }
@@ -301,13 +302,11 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.routingSubscription = this.route
             .queryParams
             .subscribe(params => {
-                if (params['loading']) {
+                if (params.loading) {
                     this.loading = true;
                     this.loadingFailed = false;
                     this.appState.connected = false;
-                }
-                else
-                {
+                } else {
                     this.loading = false;
                 }
             });
@@ -338,7 +337,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.appState.connected = false;
         this.loading = false;
         this.delayed = false;
-        this.appState.mode = null;
+        this.appState.daemon.mode = null;
     }
 
     simpleWalletConnect() {

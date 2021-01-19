@@ -59,7 +59,7 @@ export class ApiService {
     /** Initialized the daemon running in the background, by sending configuration that has been picked by user, including chain, network and mode. */
     initialize() {
         // Get the current network (main, regtest, testnet), current blockchain (city, stratis, bitcoin) and the mode (full, light, mobile)
-        const chain = this.chains.getChain(this.appState.chain, this.appState.network);
+        const chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
 
         // Get the correct name of the chain that was found.
         this.appState.chain = chain.identity;

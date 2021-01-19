@@ -100,6 +100,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     changeMode() {
+        // Persist the current mode as PreviousMode.
+        localStorage.setItem('Network:ModePrevious', localStorage.getItem('Network:Mode'));
         localStorage.removeItem('Network:Mode');
 
         this.appState.changingMode = true;
@@ -108,12 +110,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         // Make sure we shut down the existing node when user choose the change mode action.
         this.apiService.shutdownNode().subscribe(response => {
             // Navigate again to hide the loading indicator.
-            this.router.navigate(['/load']);
-
-            // Used to test loading indicator...
-            // setTimeout(() => {
-            //     this.router.navigate(['/load']);
-            // }, 0);
+            // The response from shutdown is returned before the node is fully exited, so put a small delay here.
+            setTimeout(() => {
+                this.router.navigate(['/load']);
+            }, 1500);
         });
 
         // Navigate and show loading indicator.

@@ -45,7 +45,7 @@
         </div>
 
         <div class="login-mode">
-            <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
+            <button mat-button (click)="changeMode()">Change network</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
         </div>
     </div>
     <div class="login-banner">
@@ -57,12 +57,13 @@
                 Network: {{appState.network}}<br>
                 Mode: {{appState.mode}}<br>
                 <span *ngIf="status">
-                    Connections: {{status?.inboundPeers.length + status?.outboundPeers.length}}
+                    Height: {{status.consensusHeight}}<br>
+                    Connections: {{status.inboundPeers.length + status.outboundPeers.length}}
                 </span>
             </p>
         </div>
         <div class="login-mode-mobile">
-            <button mat-button (click)="changeMode()">Change mode</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
+            <button mat-button (click)="changeMode()">Change network</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
         </div>
     </div>
 </div>
