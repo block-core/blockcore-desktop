@@ -79,7 +79,7 @@
 
     <ng-template #spinner>
         <mat-spinner></mat-spinner>
-        <span class="load-text">Connecting... please wait.<br><br>Release {{appState.release}}</span>
+        <span class="load-text">Loading... please wait.<br><br>Release {{appState.release}}</span>
         <span *ngIf="delayed">
             <br>
             <button routerLink="/advanced" mat-raised-button>Advanced</button>&nbsp;

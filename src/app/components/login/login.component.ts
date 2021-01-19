@@ -107,9 +107,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // Make sure we shut down the existing node when user choose the change mode action.
         this.apiService.shutdownNode().subscribe(response => {
+            // Navigate again to hide the loading indicator.
+            this.router.navigate(['/load']);
+
+            // Used to test loading indicator...
+            // setTimeout(() => {
+            //     this.router.navigate(['/load']);
+            // }, 0);
         });
 
-        this.router.navigateByUrl('/load');
+        // Navigate and show loading indicator.
+        this.router.navigate(['/load'], { queryParams: { loading: true } });
     }
 
     cancel() {

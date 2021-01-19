@@ -1,6 +1,6 @@
-import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
 import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
@@ -25,7 +25,7 @@ export interface ListItem {
     styleUrls: ['./load.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class LoadComponent implements OnDestroy {
+export class LoadComponent implements OnInit, OnDestroy {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: ListItem;
@@ -38,6 +38,7 @@ export class LoadComponent implements OnDestroy {
     connection: signalR.HubConnection;
     delayed = false;
     apiSubscription: any;
+    routingSubscription: any;
     // dataFolder: string;
     // nodePath: string;
 
@@ -50,6 +51,7 @@ export class LoadComponent implements OnDestroy {
     private ipc: Electron.IpcRenderer;
 
     constructor(
+        private route: ActivatedRoute,
         private http: HttpClient,
         private authService: AuthenticationService,
         private electronService: ElectronService,
@@ -295,11 +297,36 @@ export class LoadComponent implements OnDestroy {
         this.router.navigateByUrl('/login');
     }
 
+    ngOnInit() {
+        this.routingSubscription = this.route
+            .queryParams
+            .subscribe(params => {
+                if (params['loading']) {
+                    this.loading = true;
+                    this.loadingFailed = false;
+                    this.appState.connected = false;
+                }
+                else
+                {
+                    this.loading = false;
+                }
+            });
+
+        // this.route.paramMap.subscribe(params => {
+        //     console.log('Routing change...');
+        //     const loading = params.get('loading');
+        // });
+    }
+
     ngOnDestroy() {
         this.unsubscribe();
     }
 
     unsubscribe() {
+        if (this.routingSubscription) {
+            this.routingSubscription.unsubscribe();
+        }
+
         if (this.apiSubscription) {
             this.apiSubscription.unsubscribe();
         }
