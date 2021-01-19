@@ -29,7 +29,7 @@
 
             <br>
 
-            <div *ngIf="appState.daemon.path"><br>
+            <div class="path" *ngIf="appState.daemon.path"><br>
                 {{appState.daemon.path}} <button (click)="clearNodePath()" mat-icon-button>
                     <mat-icon>clear</mat-icon>
                 </button>
@@ -53,8 +53,8 @@
 
             <br>
 
-            <div *ngIf="appState.daemon.datafolder"><br>
-                {{appState.daemon.datafolder}} <button (click)="clearDataFolder()" mat-icon-button>
+            <div class="path" *ngIf="appState.daemon.datafolder"><br>
+                <span class="path">{{appState.daemon.datafolder}}</span> <button (click)="clearDataFolder()" mat-icon-button>
                     <mat-icon>clear</mat-icon>
                 </button>
             </div>

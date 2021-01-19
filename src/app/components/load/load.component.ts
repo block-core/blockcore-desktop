@@ -68,8 +68,8 @@ export class LoadComponent implements OnInit, OnDestroy {
 
         if (!environment.production) {
             this.modes.push({ id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
-                { id: 'local', name: 'Local' }, // Launches the daemon by specifying path to .dll file.
-                { id: 'manual', name: 'Manual' }, // Manual startup of daemon, does not send shutdown messages.
+                { id: 'local', name: 'Custom' }, // Launches the daemon by specifying path to .dll file.
+                { id: 'manual', name: 'Manual' }, // Manual startup of daemon, does not send shutdown messages. Useful when you debug node with Visual Studio.
                 { id: 'simple', name: 'Mobile' }, // API Wallet mode.
                 { id: 'light', name: 'Light' }, // Full Node in Purge mode and other features disabled.
                 { id: 'pos', name: 'Point-of-Sale (POS)' },
