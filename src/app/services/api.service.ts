@@ -658,7 +658,7 @@ export class ApiService {
         if (error.error instanceof ErrorEvent) {
             errorMessage = 'An error occurred:' + error.error.message;
             // A client-side or network error occurred. Handle it accordingly.
-        } else if (error.error.errors) {
+        } else if (error.error?.errors) {
             errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
         } else if (error.name === 'HttpErrorResponse') {
             errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;

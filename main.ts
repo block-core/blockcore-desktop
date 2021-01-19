@@ -587,6 +587,7 @@ function launchDaemon(apiPath: string, chain: Chain) {
         // in those cases we get an unexpected shutdown code and signal.
         if (daemonState === DaemonState.Changing) {
             writeLog('Daemon exit was expected, the user is changing the network mode.');
+            contents.send('daemon-changing');
         } else if (daemonState === DaemonState.Starting) {
             contents.send('daemon-error', `CRITICAL: City Chain daemon process exited during startup with code ${code} and signal ${signal}.`);
         } else if (daemonState === DaemonState.Started) {

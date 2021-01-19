@@ -14,6 +14,7 @@ import { DatabaseStorageService, StorageService } from 'src/app/services/storage
 import * as bip38 from '../../../libs/bip38';
 import { Logger } from 'src/app/services/logger.service';
 import { IdentityService } from 'src/app/services/identity.service';
+import { ChainService } from 'src/app/services/chain.service';
 
 export interface Account {
     name: string;
@@ -51,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private wallet: WalletService,
         private storageService: StorageService,
         private electronService: ElectronService,
+        private chains: ChainService,
         private log: Logger,
         private apiService: ApiService,
         public appState: ApplicationStateService) {
@@ -109,11 +111,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // Make sure we shut down the existing node when user choose the change mode action.
         this.apiService.shutdownNode().subscribe(response => {
-            // Navigate again to hide the loading indicator.
             // The response from shutdown is returned before the node is fully exited, so put a small delay here.
-            setTimeout(() => {
-                this.router.navigate(['/load']);
-            }, 1500);
+            // setTimeout(() => {
+            //     this.router.navigate(['/load']);
+            // }, 1500);
         });
 
         // Navigate and show loading indicator.
@@ -179,17 +180,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     unlock() {
-
         this.errorMessage = '';
         this.unlocking = true;
         this.invalidPassword = false;
+        
+        const chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
+        const coinUnit = chain.unit || chain.chain;
 
-        const coinUnit = 'CITY';
+        if (!chain.coin) {
+            chain.coin = chain.name;
+        }
 
         this.globalService.setWalletName(this.selectedAccount.name);
         this.storageService.setWalletName(this.selectedAccount.name, coinUnit);
 
-        this.globalService.setCoinName('City Coin');
+        this.globalService.setCoinName(chain.coin);
         this.globalService.setCoinUnit(coinUnit);
 
         this.getCurrentNetwork();
@@ -260,30 +265,31 @@ export class LoginComponent implements OnInit, OnDestroy {
                     // if (response.status >= 200 && response.status < 400) {
                     const responseMessage = response;
 
+                    // TODO: Figure out what we want to do with this node call. The coin name and unit is now being set by the definitions.
                     this.globalService.setNetwork(responseMessage.network);
 
-                    if (responseMessage.network === 'CityMain') {
-                        this.globalService.setCoinName('City');
-                        this.globalService.setCoinUnit('CITY');
-                    } else if (responseMessage.network === 'CityTest') {
-                        this.globalService.setCoinName('CityTest');
-                        this.globalService.setCoinUnit('TCITY');
-                    } else if (responseMessage.network === 'CityRegTest') {
-                        this.globalService.setCoinName('CityRegTest');
-                        this.globalService.setCoinUnit('TCITY');
-                    } else if (responseMessage.network === 'StratisMain') {
-                        this.globalService.setCoinName('Stratis');
-                        this.globalService.setCoinUnit('STRAT');
-                    } else if (responseMessage.network === 'StratisTest') {
-                        this.globalService.setCoinName('TestStratis');
-                        this.globalService.setCoinUnit('TSTRAT');
-                    } else if (responseMessage.network === 'Main') {
-                        this.globalService.setCoinName('Bitcoin');
-                        this.globalService.setCoinUnit('BTC');
-                    } else if (responseMessage.network === 'Test') {
-                        this.globalService.setCoinName('BitcoinTest');
-                        this.globalService.setCoinUnit('TBTC');
-                    }
+                    // if (responseMessage.network === 'CityMain') {
+                    //     this.globalService.setCoinName('City');
+                    //     this.globalService.setCoinUnit('CITY');
+                    // } else if (responseMessage.network === 'CityTest') {
+                    //     this.globalService.setCoinName('CityTest');
+                    //     this.globalService.setCoinUnit('TCITY');
+                    // } else if (responseMessage.network === 'CityRegTest') {
+                    //     this.globalService.setCoinName('CityRegTest');
+                    //     this.globalService.setCoinUnit('TCITY');
+                    // } else if (responseMessage.network === 'StratisMain') {
+                    //     this.globalService.setCoinName('Stratis');
+                    //     this.globalService.setCoinUnit('STRAT');
+                    // } else if (responseMessage.network === 'StratisTest') {
+                    //     this.globalService.setCoinName('TestStratis');
+                    //     this.globalService.setCoinUnit('TSTRAT');
+                    // } else if (responseMessage.network === 'Main') {
+                    //     this.globalService.setCoinName('Bitcoin');
+                    //     this.globalService.setCoinUnit('BTC');
+                    // } else if (responseMessage.network === 'Test') {
+                    //     this.globalService.setCoinName('BitcoinTest');
+                    //     this.globalService.setCoinUnit('TBTC');
+                    // }
                     // }
                 },
                 error => {

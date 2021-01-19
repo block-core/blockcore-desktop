@@ -118,6 +118,15 @@ export class RootComponent implements OnInit, OnDestroy {
                 window.close();
             });
 
+            this.ipc.on('daemon-changing', (event, error) => {
+                this.log.info('daemon change is requested and shutdown was successful.');
+
+                // Navigate again to hide the loading indicator.
+                this.router.navigate(['/load']);
+
+                this.cd.detectChanges();
+            });
+
             this.ipc.on('daemon-error', (event, error) => {
 
                 this.log.error(error);

@@ -138,6 +138,10 @@ export class GlobalService {
                 case 'TuSTRAT':
                     temp = value / 100;
                     return temp.toFixed(this.decimalLimit);
+
+                default:
+                    temp = value / 100000000;
+                    return temp.toFixed(this.decimalLimit);
             }
         }
     }

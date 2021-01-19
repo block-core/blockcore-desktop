@@ -54,11 +54,12 @@
             <br>
             <br>
             <p class="login-banner-text">Release {{appState.release}}<br>
-                Network: {{appState.network}}<br>
-                Mode: {{appState.mode}}<br>
+                Network: {{appState.daemon.network}}<br>
+                Mode: {{appState.daemon.mode}}<br>
                 <span *ngIf="status">
                     Height: {{status.consensusHeight}}<br>
-                    Connections: {{status.inboundPeers.length + status.outboundPeers.length}}
+                    Connections: {{status.inboundPeers.length + status.outboundPeers.length}}<br>
+                    Node version: {{status.version}}
                 </span>
             </p>
         </div>
