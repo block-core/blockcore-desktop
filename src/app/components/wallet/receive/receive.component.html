@@ -1,6 +1,13 @@
 <div class="content content-centered">
     <h1 class="mat-h1" *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
 
+    <mat-button-toggle-group (change)="onAddressTypeChange($event)" class="address-type-toggle">
+        <mat-button-toggle value="legacy">Legacy</mat-button-toggle>
+        <mat-button-toggle value="segwit">Segwit</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <br>
+
     <form *ngIf="!showAll">
         <div>
             <div>
@@ -31,7 +38,7 @@
             </div>
             <div>
                 <p class="mat-caption">
-                    When this address is used, you will receive another address. Addresses can be used multiple times. Make sure you always use a fresh 
+                    When this address is used, you will receive another address. Addresses can be used multiple times. Make sure you always use a fresh
                     address to increase your privacy.
                 </p>
             </div>
@@ -41,7 +48,7 @@
     <button *ngIf="showAll" mat-stroked-button (click)="showOneAddress()">← Back to one address</button>
 
     <form *ngIf="showAll">
-        
+
 
         <br>
         <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">

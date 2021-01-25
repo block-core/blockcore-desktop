@@ -183,7 +183,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.errorMessage = '';
         this.unlocking = true;
         this.invalidPassword = false;
-        
+
         const chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
         const coinUnit = chain.unit || chain.chain;
 

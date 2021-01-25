@@ -57,6 +57,7 @@ var contents = null;
 var currentChain;
 var settings;
 var hasDaemon = false;
+var daemons = [];
 var args = process.argv.slice(1);
 var serve = args.some(function (val) { return val === '--serve'; });
 var coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
@@ -66,6 +67,9 @@ require('electron-context-menu')({
 process.on('uncaughtException', function (error) {
     writeLog('Uncaught exception happened:');
     writeLog('Error: ' + error);
+});
+process.on('exit', function (code) {
+    return console.log("About to exit with code " + code);
 });
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
     if (daemonState === DaemonState.Started) {
@@ -261,7 +265,7 @@ function createWindow() {
         minHeight: 400,
         title: 'City Hub',
         icon: __dirname + '/app.ico',
-        webPreferences: { webSecurity: false, nodeIntegration: true }
+        webPreferences: { webSecurity: false, nodeIntegration: true, contextIsolation: false }
     });
     contents = mainWindow.webContents;
     mainWindow.setMenu(null);
@@ -336,6 +340,7 @@ electron_1.app.on('ready', function () {
 });
 electron_1.app.on('before-quit', function () {
     writeLog('City Hub was exited.');
+    exitGuard();
 });
 var shutdown = function (callback) {
     writeLog('Signal a shutdown to the daemon.');
@@ -410,6 +415,21 @@ function getDaemonPath() {
     }
     return apiPath;
 }
+function exitGuard() {
+    console.log('Exit Guard is processing...');
+    if (daemons && daemons.length > 0) {
+        for (var i = 0; i < daemons.length; i++) {
+            try {
+                console.log('Killing (' + daemons[i].pid + '): ' + daemons[i].spawnfile);
+                daemons[i].kill();
+            }
+            catch (err) {
+                console.log('Failed to kill daemon: ' + err);
+                console.log(daemons[i]);
+            }
+        }
+    }
+}
 function launchDaemon(apiPath, chain) {
     console.log('launchDaemon is called.');
     var daemonProcess;
@@ -433,7 +453,6 @@ function launchDaemon(apiPath, chain) {
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
-    commandLineArguments.push('-wsport=' + chain.wsPort);
     commandLineArguments.push('-txindex=1'); // Required for History (Block) explorer.
     if (chain.mode === 'light') {
         commandLineArguments.push('-light');
@@ -460,6 +479,7 @@ function launchDaemon(apiPath, chain) {
             detached: true
         });
     }
+    daemons.push(daemonProcess);
     daemonProcess.stdout.on('data', function (data) {
         writeDebug("City Chain: " + data);
     });

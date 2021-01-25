@@ -94,7 +94,7 @@
       <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
     </form>
 
-    <button mat-raised-button color="primary" [disabled]="!sendForm.valid || isSending || !estimatedFee" (click)="send()">Send</button>&nbsp;
+    <button mat-raised-button color="primary" [disabled]="!sendForm.valid || isSending || estimatedFee == null" (click)="send()">Send</button>&nbsp;
     <button mat-stroked-button [disabled]="isSending" (click)="cancel()">Cancel</button>
 
   </mat-card>

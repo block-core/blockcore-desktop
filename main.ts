@@ -61,7 +61,6 @@ interface Chain {
     port: number;
     rpcPort: number;
     apiPort?: number;
-    wsPort?: number;
     network: string;
     mode?: string;
     path: string; // Used to define a custom path to launch dll with dotnet.
@@ -84,6 +83,7 @@ let contents = null;
 let currentChain: Chain;
 let settings: Settings;
 let hasDaemon = false;
+let daemons = [];
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
@@ -96,6 +96,10 @@ require('electron-context-menu')({
 process.on('uncaughtException', (error) => {
     writeLog('Uncaught exception happened:');
     writeLog('Error: ' + error);
+});
+
+process.on('exit', function (code) {
+    return console.log(`About to exit with code ${code}`);
 });
 
 ipcMain.on('start-daemon', (event, arg: Chain) => {
@@ -335,7 +339,7 @@ function createWindow() {
         minHeight: 400,
         title: 'City Hub',
         icon: __dirname + '/app.ico',
-        webPreferences: { webSecurity: false, nodeIntegration: true }
+        webPreferences: { webSecurity: false, nodeIntegration: true, contextIsolation: false }
     });
 
     contents = mainWindow.webContents;
@@ -424,6 +428,7 @@ app.on('ready', () => {
 
 app.on('before-quit', () => {
     writeLog('City Hub was exited.');
+    exitGuard();
 });
 
 const shutdown = (callback) => {
@@ -511,6 +516,23 @@ function getDaemonPath() {
     return apiPath;
 }
 
+function exitGuard() {
+    console.log('Exit Guard is processing...');
+
+    if (daemons && daemons.length > 0) {
+        for (var i = 0; i < daemons.length; i++) {
+            try {
+                console.log('Killing (' + daemons[i].pid + '): ' + daemons[i].spawnfile);
+                daemons[i].kill();
+            }
+            catch (err) {
+                console.log('Failed to kill daemon: ' + err);
+                console.log(daemons[i]);
+            }
+        }
+    }
+}
+
 function launchDaemon(apiPath: string, chain: Chain) {
 
     console.log('launchDaemon is called.');
@@ -542,7 +564,6 @@ function launchDaemon(apiPath: string, chain: Chain) {
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
     commandLineArguments.push('-apiport=' + chain.apiPort);
-    commandLineArguments.push('-wsport=' + chain.wsPort);
     commandLineArguments.push('-txindex=1'); // Required for History (Block) explorer.
 
     if (chain.mode === 'light') {
@@ -574,6 +595,8 @@ function launchDaemon(apiPath: string, chain: Chain) {
             detached: true
         });
     }
+
+    daemons.push(daemonProcess);
 
     daemonProcess.stdout.on('data', (data) => {
         writeDebug(`City Chain: ${data}`);

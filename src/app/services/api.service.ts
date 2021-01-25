@@ -408,11 +408,12 @@ export class ApiService {
     /**
      * Get an unused receive address for a certain wallet from the API.
      */
-    getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
+    getUnusedReceiveAddress(data: WalletInfo, addressType: string): Observable<any> {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0'
+                accountName: 'account 0',
+                segwit: (addressType == 'segwit').toString()
             }
         });
 
@@ -425,11 +426,12 @@ export class ApiService {
     /**
      * Get an unused receive address for a certain wallet from the API.
      */
-    getFirstReceiveAddress(data: WalletInfo): Observable<any> {
+    getFirstReceiveAddress(data: WalletInfo, addressType: string): Observable<any> {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0'
+                accountName: 'account 0',
+                segwit: (addressType == 'segwit').toString()
             }
         });
 
@@ -442,12 +444,13 @@ export class ApiService {
     /**
      * Get multiple unused receive addresses for a certain wallet from the API.
      */
-    getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
+    getUnusedReceiveAddresses(data: WalletInfo, count: string, addressType: string): Observable<any> {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
                 accountName: 'account 0',
-                count
+                count,
+                segwit: (addressType == 'segwit').toString()
             }
         });
 
@@ -460,11 +463,12 @@ export class ApiService {
     /**
      * Get get all addresses for an account of a wallet from the API.
      */
-    getAllAddresses(data: WalletInfo): Observable<any> {
+    getAllAddresses(data: WalletInfo, addressType: string): Observable<any> {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0'
+                accountName: 'account 0',
+                segwit: (addressType == 'segwit').toString()
             }
         });
 

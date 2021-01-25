@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
@@ -78,6 +78,7 @@ export class RootComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         public notifications: NotificationService,
         private globalService: GlobalService,
+        private zone: NgZone,
         private readonly breakpointObserver: BreakpointObserver,
     ) {
         this.log.info('Expanded:', localStorage.getItem('Menu:Expanded'));
@@ -106,7 +107,6 @@ export class RootComponent implements OnInit, OnDestroy {
                     this.appState.shutdownDelayed = true;
                     this.cd.detectChanges();
                 }, 60000);
-
             });
 
             this.ipc.on('daemon-exited', (event, error) => {
@@ -119,12 +119,15 @@ export class RootComponent implements OnInit, OnDestroy {
             });
 
             this.ipc.on('daemon-changing', (event, error) => {
-                this.log.info('daemon change is requested and shutdown was successful.');
+                this.zone.run(() => {
+                    this.log.info('daemon change is requested and shutdown was successful.');
+                    this.cd.detectChanges();
 
-                // Navigate again to hide the loading indicator.
-                this.router.navigate(['/load']);
+                    // Navigate again to hide the loading indicator.
+                    this.router.navigate(['/load']);
 
-                this.cd.detectChanges();
+                    this.cd.detectChanges();
+                });
             });
 
             this.ipc.on('daemon-error', (event, error) => {

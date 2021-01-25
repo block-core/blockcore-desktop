@@ -28,6 +28,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     public unusedAddresses: string[];
     public changeAddresses: string[];
     private errorMessage: string;
+    public addressType: string = 'legacy';
 
     constructor(
         public readonly appState: ApplicationStateService,
@@ -42,10 +43,23 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (this.wallet.isMultiAddressMode) {
-            this.getUnusedReceiveAddress();
-        } else {
-            this.getFirstReceiveAddress();
+        this.load();
+    }
+
+    load() {
+        if (this.showAll) {
+            if (this.appState.isSimpleMode) {
+                this.getAddressesSimpleMode();
+            } else {
+                this.getAddressesFullNode();
+            }
+        }
+        else {
+            if (this.wallet.isMultiAddressMode) {
+                this.getUnusedReceiveAddress();
+            } else {
+                this.getFirstReceiveAddress();
+            }
         }
     }
 
@@ -56,6 +70,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     public onCopiedClick() {
         this.snackBar.open('Your address has been copied to your clipboard.', null, { duration: 3000 });
         return false;
+    }
+
+    public onAddressTypeChange(event) {
+        this.addressType = event.value;
+        this.load();
     }
 
     public showAllAddresses() {
@@ -76,7 +95,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     private getFirstReceiveAddress() {
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
 
-        this.apiService.getFirstReceiveAddress(walletInfo)
+        this.apiService.getFirstReceiveAddress(walletInfo, this.addressType)
             .subscribe(
                 response => {
                     this.address = response;
@@ -122,7 +141,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     private getUnusedReceiveAddressFullNode() {
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
 
-        this.apiService.getUnusedReceiveAddress(walletInfo)
+        this.apiService.getUnusedReceiveAddress(walletInfo, this.addressType)
             .subscribe(
                 response => {
                     this.address = response;
@@ -189,7 +208,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     private getAddressesFullNode() {
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
 
-        this.apiService.getAllAddresses(walletInfo)
+        this.apiService.getAllAddresses(walletInfo, this.addressType)
             .subscribe(
                 response => {
                     this.allAddresses = [];

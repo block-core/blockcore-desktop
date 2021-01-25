@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
@@ -59,6 +59,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         public chains: ChainService,
         private log: Logger,
         private zone: NgZone,
+        private readonly cd: ChangeDetectorRef,
         private apiService: ApiService,
         public appState: ApplicationStateService) {
 
@@ -120,13 +121,6 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.log.info('Network:', this.selectedNetwork);
         this.log.info('Daemon App State:', JSON.stringify(this.appState.daemon));
 
-        const existingMode = localStorage.getItem('Network:Mode');
-
-        // If user has choosen to remember mode, we'll redirect directly to login, when connected.
-        if (existingMode != null) {
-            this.initialize();
-        }
-
         this.ipc = electronService.ipcRenderer;
 
         this.ipc.on('choose-data-folder', (event, path: string) => {
@@ -161,13 +155,17 @@ export class LoadComponent implements OnInit, OnDestroy {
         //     public: network.pubKeyHash
         // };
 
+        console.log('INITILIZE!....', this.appState.daemon);
+
         if (this.appState.daemon.mode === 'full' || this.appState.daemon.mode === 'local' || this.appState.daemon.mode === 'light') {
             this.loading = true;
             this.appState.connected = false;
+            this.cd.detectChanges();
             this.fullNodeConnect();
         } else if (this.appState.daemon.mode === 'manual') {
             this.loading = false;
             this.appState.connected = true;
+            this.cd.detectChanges();
             this.fullNodeConnect();
         } else if (this.appState.daemon.mode === 'simple') {
             // TODO: Should send the correct network, hard-coded to city main for now.
@@ -315,6 +313,13 @@ export class LoadComponent implements OnInit, OnDestroy {
         //     console.log('Routing change...');
         //     const loading = params.get('loading');
         // });
+
+        const existingMode = localStorage.getItem('Network:Mode');
+
+        // If user has choosen to remember mode, we'll redirect directly to login, when connected.
+        if (existingMode != null) {
+            this.initialize();
+        }
     }
 
     ngOnDestroy() {

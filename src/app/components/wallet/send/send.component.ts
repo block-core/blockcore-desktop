@@ -106,6 +106,7 @@ export class SendComponent implements OnInit, OnDestroy {
     }
 
     cancel() {
+        this.isSending = false;
         this.location.back();
     }
 
