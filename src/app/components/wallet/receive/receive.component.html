@@ -2,7 +2,7 @@
     <h1 class="mat-h1" *ngIf="appState.handset">{{appState.appTitle$ | async}}</h1>
 
     <mat-button-toggle-group (change)="onAddressTypeChange($event)" class="address-type-toggle">
-        <mat-button-toggle value="legacy">Legacy</mat-button-toggle>
+        <mat-button-toggle value="legacy" checked="true">Legacy</mat-button-toggle>
         <mat-button-toggle value="segwit">Segwit</mat-button-toggle>
     </mat-button-toggle-group>
 
