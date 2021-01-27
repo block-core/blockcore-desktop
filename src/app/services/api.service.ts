@@ -542,7 +542,7 @@ export class ApiService {
      */
     stopStaking(): Observable<any> {
         return this.http
-            .post(this.apiUrl + '/staking/stopstaking', { headers: this.headers })
+            .post(this.apiUrl + '/staking/stopstaking', 'true', { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
