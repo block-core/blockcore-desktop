@@ -28,7 +28,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     public unusedAddresses: string[];
     public changeAddresses: string[];
     private errorMessage: string;
-    public addressType: string = 'legacy';
+    public addressType = 'legacy';
 
     constructor(
         public readonly appState: ApplicationStateService,
