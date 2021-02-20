@@ -77,37 +77,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
             asset = 'bitcoin'; // Until coincap.io supports CITY, we'll revert to Bitcoin.
         }
 
-        this.subscriptions.push(this.coincap.getAsset(asset)
-            .subscribe(
-                response => {
-                    const coincapAsset = response.data as CoincapAsset;
-                    coincapAsset.pair = 'USD';
-                    coincapAsset.volumepair = 'USD';
-                    this.coins[1] = this.mapCoincapToAsset(coincapAsset);
-                },
-                error => {
-                    this.coincap.handleException(error);
-                    // this.reactivate();
-                }
-            ));
+        // this.subscriptions.push(this.coincap.getAsset(asset)
+        //     .subscribe(
+        //         response => {
+        //             const coincapAsset = response.data as CoincapAsset;
+        //             coincapAsset.pair = 'USD';
+        //             coincapAsset.volumepair = 'USD';
+        //             this.coins[1] = this.mapCoincapToAsset(coincapAsset);
+        //         },
+        //         error => {
+        //             this.coincap.handleException(error);
+        //             // this.reactivate();
+        //         }
+        //     ));
 
-        this.subscriptions.push(this.coin.getTicker('btc')
-            .subscribe(
-                response => {
-                    const coinAsset = response.result as P2pb2bAsset;
-                    coinAsset.pair = 'BTC';
-                    coinAsset.volumepair = 'CITY';
-                    this.coins[0] = this.mapP2pb2bToAsset(coinAsset);
+        // this.subscriptions.push(this.coin.getTicker('btc')
+        //     .subscribe(
+        //         response => {
+        //             const coinAsset = response.result as P2pb2bAsset;
+        //             coinAsset.pair = 'BTC';
+        //             coinAsset.volumepair = 'CITY';
+        //             this.coins[0] = this.mapP2pb2bToAsset(coinAsset);
 
-                    if (this.selectedCoinTickerIndex === -1) {
-                        this.changeTicker(1);
-                    }
-                },
-                error => {
-                    this.coincap.handleException(error);
-                    // this.reactivate();
-                }
-            ));
+        //             if (this.selectedCoinTickerIndex === -1) {
+        //                 this.changeTicker(1);
+        //             }
+        //         },
+        //         error => {
+        //             this.coincap.handleException(error);
+        //             // this.reactivate();
+        //         }
+        //     ));
 
         // this.subscriptions.push(this.coin.getTicker('usd')
         //     .subscribe(

@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } fr
 import { Theming } from '../../services/theming.service';
 import { AppModes } from '../../shared/app-modes';
 import { ElectronService } from 'ngx-electron';
-import { Debugger } from 'electron';
 import { SettingsService } from 'src/app/services/settings.service';
 import { JsonHubProtocol } from '@aspnet/signalr';
 import { HubService } from 'src/app/services/hub.service';

@@ -283,6 +283,15 @@ ipcMain.on('get-wallet-seed', (event, arg: string) => {
     event.returnValue = { encryptedSeed: seed, chainCode };
 });
 
+ipcMain.on('update-icon', (event, arg: { icon, title }) => {
+    if (arg) {
+        mainWindow.setOverlayIcon(__dirname + arg.icon, arg.title);
+    }
+    else {
+        mainWindow.setOverlayIcon(null, '');
+    }
+});
+
 autoUpdater.on('checking-for-update', () => {
     if (!serve) {
         contents.send('checking-for-update');
@@ -689,9 +698,11 @@ function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-        trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        /// trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        trayIcon = nativeImage.createFromPath('./src/favicon.ico');
     } else {
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        // trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
     }
 
     const systemTray = new Tray(trayIcon);

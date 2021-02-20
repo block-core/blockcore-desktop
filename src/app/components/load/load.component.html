@@ -6,67 +6,88 @@
 
         <mat-form-field>
             <mat-select placeholder="Select network" [(ngModel)]="selectedNetwork">
-                <mat-option *ngFor="let network of chains.availableChains" [value]="network">
+                <mat-option *ngFor="let network of filteredAvailableChains" [value]="network">
                     {{network.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <br>
+        <button class="start-button" (click)="launch()" [disabled]="selectedMode == null || selectedNetwork == null" mat-raised-button color="primary">Start</button>
 
-        <mat-form-field>
-            <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
-                <mat-option *ngFor="let mode of modes" [value]="mode">
-                    {{mode.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <mat-accordion class="setup-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <!-- <mat-panel-title>
+                  Configuration
+                </mat-panel-title> -->
+                    <mat-panel-description>
+                        Configuration
+                        <mat-icon>build</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
 
-        <div *ngIf="selectedMode?.id == 'local'">
-            <br>
+                <div>
 
-            <button (click)="chooseNodeExecutable()" mat-raised-button>Node executable:</button>
+                    <mat-form-field>
+                        <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
+                            <mat-option *ngFor="let mode of modes" [value]="mode">
+                                {{mode.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-            <br>
+                    <div *ngIf="selectedMode?.id == 'local'">
+                        <br>
 
-            <div class="path" *ngIf="appState.daemon.path"><br>
-                {{appState.daemon.path}} <button (click)="clearNodePath()" mat-icon-button>
-                    <mat-icon>clear</mat-icon>
-                </button>
-            </div>
+                        <button (click)="chooseNodeExecutable()" mat-raised-button>Node executable:</button>
 
-            <!-- Node executable:<br>
+                        <br>
+
+                        <div class="path" *ngIf="appState.daemon.path"><br>
+                            {{appState.daemon.path}} <button (click)="clearNodePath()" mat-icon-button>
+                                <mat-icon>clear</mat-icon>
+                            </button>
+                        </div>
+
+                        <!-- Node executable:<br>
             <input class="custom-file-mode" type="file" (change)="onDaemonFolderChange($event)" />
             <br><br> -->
-            <!-- Data folder:<br>
+                        <!-- Data folder:<br>
             <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" webkitdirectory="true" />
             <br><br> -->
-        </div>
-        <br>
+                    </div>
+                    <br>
 
-        <div *ngIf="selectedMode?.id != 'mobile'">
-            <br>
-            <!-- Data folder:<br>
+                    <div *ngIf="selectedMode?.id != 'mobile'">
+                        <br>
+                        <!-- Data folder:<br>
             <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" />
             <br><br> -->
-            <button (click)="chooseDataFolder()" mat-raised-button>Choose data folder:</button>
+                        <button (click)="chooseDataFolder()" mat-raised-button>Choose data folder:</button>
 
-            <br>
+                        <br>
 
-            <div class="path" *ngIf="appState.daemon.datafolder"><br>
-                <span class="path">{{appState.daemon.datafolder}}</span> <button (click)="clearDataFolder()" mat-icon-button>
-                    <mat-icon>clear</mat-icon>
-                </button>
-            </div>
-            <br>
-        </div>
-        <br>
+                        <div class="path" *ngIf="appState.daemon.datafolder"><br>
+                            <span class="path">{{appState.daemon.datafolder}}</span> <button (click)="clearDataFolder()" mat-icon-button>
+                                <mat-icon>clear</mat-icon>
+                            </button>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
 
-        <mat-checkbox class="example-margin" [(ngModel)]="remember">Remember</mat-checkbox>
-        <br>
-        <br>
-        <button (click)="launch()" [disabled]="selectedMode == null || selectedNetwork == null" mat-raised-button color="primary">Start</button>
-        <br>
+                    <mat-checkbox [(ngModel)]="listTestNetworks">Show Test networks</mat-checkbox>
+                    <br><br>
+
+                    <mat-checkbox [(ngModel)]="remember">Remember</mat-checkbox>
+                    <br>
+
+                </div>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
         <!-- <p class="mat-caption">
             During PREVIEW RELEASE testing, <br>these options are set by default.
         </p> -->

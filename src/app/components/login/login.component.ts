@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     errorMessage: string;
     private subscription: any;
     public status: any;
+    private ipc: Electron.IpcRenderer;
 
     constructor(
         private http: HttpClient,
@@ -56,6 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         private log: Logger,
         private apiService: ApiService,
         public appState: ApplicationStateService) {
+
+        if (electronService.ipcRenderer) {
+            this.ipc = electronService.ipcRenderer;
+        }
 
     }
 
@@ -116,6 +121,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             //     this.router.navigate(['/load']);
             // }, 1500);
         });
+
+        this.electronService.ipcRenderer.send('update-icon', null);
 
         // Navigate and show loading indicator.
         this.router.navigate(['/load'], { queryParams: { loading: true } });
@@ -184,7 +191,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.unlocking = true;
         this.invalidPassword = false;
 
-        const chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
+        const chain = this.chains.getChain(this.appState.daemon.network);
         const coinUnit = chain.unit || chain.chain;
 
         if (!chain.coin) {

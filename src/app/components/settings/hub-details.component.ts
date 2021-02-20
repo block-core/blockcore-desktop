@@ -51,7 +51,7 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         public walletService: WalletService) {
 
-        this.chain = this.chains.getChain(this.appState.chain, this.appState.daemon.network);
+        this.chain = this.chains.getChain(this.appState.daemon.network);
     }
 
     ngOnInit() {

@@ -48,12 +48,13 @@
             <button mat-button (click)="changeMode()">Change network</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
         </div>
     </div>
-    <div class="login-banner">
+    <div class="login-banner"  [ngClass]="'login-banner-' + appState.chain" id="login-banner-wallpaper">
         <div class="login-banner-content">
             <img src="assets/{{appState.chain}}/logo-full-light.png" class="login-logo">
             <br>
             <br>
-            <p class="login-banner-text">Release {{appState.release}}<br>
+            <p class="login-banner-text">
+                Release {{appState.release}}<br>
                 Network: {{appState.daemon.network}}<br>
                 Mode: {{appState.daemon.mode}}<br>
                 <span *ngIf="status">

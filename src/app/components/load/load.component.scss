@@ -1,6 +1,5 @@
 .load {
-    .load-text
-    {
+    .load-text {
         margin-top: 20px;
         text-align: center;
     }
@@ -13,4 +12,23 @@
 .path {
     overflow-wrap: break-word;
     max-width: 300px;
+}
+
+.setup-headers-align {
+    padding-bottom: 2em;
+    padding-top: 2em;
+}
+
+.setup-headers-align .mat-expansion-panel-header-title,
+.setup-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+}
+
+.setup-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.start-button {
+    margin-bottom: 2em;
 }

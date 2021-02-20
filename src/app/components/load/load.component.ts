@@ -13,6 +13,7 @@ import { ElectronService } from 'ngx-electron';
 import { environment } from 'src/environments/environment';
 import * as coininfo from 'city-coininfo';
 import { Chain, ChainService } from 'src/app/services/chain.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 export interface ListItem {
     name: string;
@@ -61,6 +62,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         private zone: NgZone,
         private readonly cd: ChangeDetectorRef,
         private apiService: ApiService,
+        private storage: StorageService,
         public appState: ApplicationStateService) {
 
         this.modes = [
@@ -127,6 +129,9 @@ export class LoadComponent implements OnInit, OnDestroy {
             // notificationService.show({ title: 'Checking for update...', body: JSON.stringify(info) });
             console.log('choose-data-folder: ', path);
             this.appState.daemon.datafolder = path;
+
+            // We must force a detection here to make it update immediately.
+            this.cd.detectChanges();
         });
 
         this.ipc.on('choose-node-path', (event, path: string) => {
@@ -134,6 +139,9 @@ export class LoadComponent implements OnInit, OnDestroy {
             console.log('choose-node-path: ', path);
             // this.nodePath = path;
             this.appState.daemon.path = path;
+
+            // We must force a detection here to make it update immediately.
+            this.cd.detectChanges();
         });
     }
 
@@ -156,6 +164,10 @@ export class LoadComponent implements OnInit, OnDestroy {
         // };
 
         console.log('INITILIZE!....', this.appState.daemon);
+        console.log(this.appState);
+
+        // Update the overlay icon to visualize current chain.
+        this.electronService.ipcRenderer.send('update-icon', { icon: '/src/assets/' + this.appState.chain + '/logo.png', title: this.appState.chain });
 
         if (this.appState.daemon.mode === 'full' || this.appState.daemon.mode === 'local' || this.appState.daemon.mode === 'light') {
             this.loading = true;
@@ -181,6 +193,20 @@ export class LoadComponent implements OnInit, OnDestroy {
             this.appState.connected = true;
             this.router.navigateByUrl('/login');
         }
+    }
+
+    get listTestNetworks(): boolean {
+        return this.storage.getValue('Network:ListTestNetworks') === 'true';
+    }
+
+    set listTestNetworks(value: boolean) {
+        this.storage.setValue('Network:ListTestNetworks', value.toString());
+    }
+
+    get filteredAvailableChains() {
+        return this.listTestNetworks ?
+            this.chains.availableChains :
+            this.chains.availableChains.filter(language => !language.test);
     }
 
     onDaemonFolderChange(event) {

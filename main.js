@@ -216,6 +216,14 @@ electron_1.ipcMain.on('get-wallet-seed', function (event, arg) {
     // chainCodeDecoded: Buffer.from(chainCode, 'base64')
     event.returnValue = { encryptedSeed: seed, chainCode: chainCode };
 });
+electron_1.ipcMain.on('update-icon', function (event, arg) {
+    if (arg) {
+        mainWindow.setOverlayIcon(__dirname + arg.icon, arg.title);
+    }
+    else {
+        mainWindow.setOverlayIcon(null, '');
+    }
+});
 autoUpdater.on('checking-for-update', function () {
     if (!serve) {
         contents.send('checking-for-update');
@@ -560,10 +568,12 @@ function createTray() {
     // Put the app in system tray
     var trayIcon;
     if (serve) {
-        trayIcon = electron_1.nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        /// trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        trayIcon = electron_1.nativeImage.createFromPath('./src/favicon.ico');
     }
     else {
-        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        // trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
     }
     var systemTray = new electron_1.Tray(trayIcon);
     var contextMenu = electron_1.Menu.buildFromTemplate([
