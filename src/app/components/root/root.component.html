@@ -28,29 +28,87 @@
         <app-view-area>
             <mat-list class="main-menu">
 
+                <!-- <mat-toolbar class="logo-icon" [matMenuTriggerFor]="animals">
+                    <img src="assets/{{appState.chain}}/logo.png">
+                    <div *ngIf="showFiller" class="menu-top-text">{{coinName}}</div>
+                </mat-toolbar>
+
+                <mat-menu #animals="matMenu" hasBackdrop="true" backdropClass="menu-mode-backdrop" overlapTrigger="false">
+                    <button mat-menu-item [matMenuTriggerFor]="accounts">Account</button>
+                    <button mat-menu-item [matMenuTriggerFor]="servers">Server</button>
+                    <button mat-menu-item [matMenuTriggerFor]="gateways">Gateway</button>
+                </mat-menu>
+
+                <mat-menu #accounts="matMenu">
+                    <button mat-menu-item>Sondre</button>
+                    <button mat-menu-item>Sondre Bjellås</button>
+                    <button mat-menu-item>Hax0rz cat</button>
+                </mat-menu>
+
+                <mat-menu #servers="matMenu">
+                    <button mat-menu-item>server.blockcore.net</button>
+                    <button mat-menu-item>server.liberstad.com</button>
+                    <button mat-menu-item>server.city-chain.org</button>
+                </mat-menu>
+
+                <mat-menu #gateways="matMenu">
+                    <button mat-menu-item>gateway.blockcore.net</button>
+                    <button mat-menu-item>gateway.liberstad.com</button>
+                    <button mat-menu-item>gateway.city-chain.org</button>
+                </mat-menu> -->
+
                 <div class="menu-top">
 
-                    <img src="assets/{{appState.chain}}/logo.png" class="menu-top-logo">
+                    <!-- <img src="assets/{{appState.chain}}/logo.png" class="menu-top-logo">
                     <span *ngIf="showFiller" class="menu-top-text" mat-line>{{coinName}}</span>
 
-                    <!-- <button mat-button [matMenuTriggerFor]="menu">
-                        
+                    <br> -->
+
+                    <button mat-button class="menu-top-button" [matMenuTriggerFor]="menu">
+                        <img src="/assets/{{appState.chain}}/logo.png" class="menu-top-logo">
+                        <span *ngIf="showFiller" class="menu-top-text" mat-line>{{coinName}}</span>
                     </button>
 
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                    <mat-menu #menu="matMenu" hasBackdrop="true" backdropClass="menu-mode-backdrop" overlapTrigger="false">
+
+                        <!-- <mat-option *ngFor="let network of filteredAvailableChains" [value]="network">
+                            {{network.name}}
+                        </mat-option> -->
+
+                        <!-- <div>Wallets:</div> -->
+
+                        <button mat-menu-item (click)="changeWallet(account)" *ngFor="let account of appState.accounts" [disabled]="account.name === globalService.getWalletName()">
+                            <mat-icon>account_balance_wallet</mat-icon>
+                            <span>{{account.name}}</span>
+                        </button>
+
+                        <mat-divider></mat-divider>
+
+                        <!-- <div>Chains:</div> -->
+
+                        <button (click)="changeMode(network)" mat-menu-item *ngFor="let network of filteredAvailableChains">
+                            <img src="/assets/{{network.chain.toLowerCase()}}/logo.png" class="mat-icon notranslate material-icons mat-icon-no-color">
+                            <span>{{network.name}}</span>
+                        </button>
+
+                        <!-- <button mat-menu-item [matMenuTriggerFor]="accounts">
                             <mat-icon>dialpad</mat-icon>
-                            <span>Redial</span>
+                            <span>Bitcoin</span>
                         </button>
                         <button mat-menu-item disabled>
                             <mat-icon>voicemail</mat-icon>
-                            <span>Check voice mail</span>
+                            <span>City Chain</span>
                         </button>
                         <button mat-menu-item>
                             <mat-icon>notifications_off</mat-icon>
-                            <span>Disable alerts</span>
-                        </button>
-                    </mat-menu> -->
+                            <span>x42</span>
+                        </button> -->
+                    </mat-menu>
+
+                    <mat-menu #accounts="matMenu">
+                        <button mat-menu-item>main1</button>
+                        <button mat-menu-item>main2</button>
+                    </mat-menu>
 
                 </div>
 

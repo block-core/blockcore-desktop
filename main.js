@@ -515,10 +515,10 @@ function launchDaemon(apiPath, chain) {
             contents.send('daemon-changing');
         }
         else if (daemonState === DaemonState.Starting) {
-            contents.send('daemon-error', "CRITICAL: City Chain daemon process exited during startup with code " + code + " and signal " + signal + ".");
+            contents.send('daemon-error', "CRITICAL: Node daemon process exited during startup with code " + code + " and signal " + signal + ".");
         }
         else if (daemonState === DaemonState.Started) {
-            contents.send('daemon-error', "City Chain daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
+            contents.send('daemon-error', "Node daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
         }
         else {
             // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
@@ -533,12 +533,12 @@ function launchDaemon(apiPath, chain) {
         daemonState = DaemonState.Stopped;
     });
     daemonProcess.on('error', function (code, signal) {
-        writeError("City Chain daemon process failed to start. Code " + code + " and signal " + signal + ".");
+        writeError("Node daemon process failed to start. Code " + code + " and signal " + signal + ".");
     });
 }
 function shutdownDaemon(callback) {
     if (!hasDaemon) {
-        writeLog('City Hub is in mobile mode, no daemon to shutdown.');
+        writeLog('Blockcore Hub is in mobile mode, no daemon to shutdown.');
         callback(true, null);
         contents.send('daemon-exited'); // Make the app shutdown.
         return;

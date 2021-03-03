@@ -71,6 +71,8 @@ export class LoadComponent implements OnInit, OnDestroy {
             { id: 'full', name: 'Full' },
         ];
 
+        debugger;
+
         if (!environment.production) {
             this.modes.push(
                 // { id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
@@ -82,45 +84,22 @@ export class LoadComponent implements OnInit, OnDestroy {
             // { id: 'readonly', name: 'Read-only' });
         }
 
-        // TODO: Move this somewhere else and extend the configurations.
-        // this.networks = [
-        //     // { id: 'main', name: 'Main' },
-
-        //     { id: 'bcpmain', name: 'Blockcore Platform' },
-        //     { id: 'bcptest', name: 'Blockcore Platform (Test)' },
-
-        //     { id: 'bcpmain', name: 'Bitcoin' },
-        //     { id: 'bcptest', name: 'Bitcoin (Test)' },
-
-        //     { id: 'citymain', name: 'City Chain' },
-        //     { id: 'citytest', name: 'City Chain (Test)' },
-
-        //     { id: 'exosmain', name: 'EXOS' },
-        //     { id: 'exostest', name: 'EXOS (Test)' },
-
-        //     { id: 'implxmain', name: 'IMPLX' },
-        //     { id: 'implxtest', name: 'IMPLX (Test)' },
-
-        //     { id: 'rutamain', name: 'RUTA' },
-        //     { id: 'rutatest', name: 'RUTA (Test)' },
-
-        //     { id: 'straxmain', name: 'Stratis' },
-        //     { id: 'straxtest', name: 'Stratis (Test)' },
-
-        //     { id: 'x42main', name: 'x42' },
-        //     { id: 'x42test', name: 'x42 (Test)' },
-
-        //     { id: 'xdsmain', name: 'XDS' },
-        //     { id: 'xdstest', name: 'XDS (Test)' },
-
-        //     { id: 'xlrmain', name: 'XLR' },
-        //     { id: 'xlrtest', name: 'XLR (Test)' },
-        // ];
-
         this.selectedMode = this.modes.find(mode => mode.id === this.appState.daemon.mode);
 
-        // Make sure that the chain setup is available in the appstate.
-        this.appState.activeChain = this.chains.availableChains.find(network => network.network === this.appState.daemon.network);
+        if (this.appState.isChangingToChain) {
+            // If the user has selected a new chain to change to, just do it automatically.
+            this.appState.activeChain = this.appState.changeToChain;
+            // this.appState.changeToChain = null;
+
+            // if (this.appState.changeToChain) {
+
+            //     this.appState.changeToChain = null;
+            // }
+        }
+        else {
+            // Make sure that the chain setup is available in the appstate.
+            this.appState.activeChain = this.chains.availableChains.find(network => network.network === this.appState.daemon.network);
+        }
 
         this.remember = true;
 
@@ -151,6 +130,8 @@ export class LoadComponent implements OnInit, OnDestroy {
     }
 
     initialize() {
+        debugger;
+
         this.apiService.initialize();
 
         // TODO: Should send the correct network, hard-coded to city main for now.
@@ -331,6 +312,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.routingSubscription = this.route
             .queryParams
             .subscribe(params => {
+                debugger;
                 if (params.loading) {
                     this.loading = true;
                     this.loadingFailed = false;
@@ -338,7 +320,27 @@ export class LoadComponent implements OnInit, OnDestroy {
                 } else {
                     this.loading = false;
                 }
+
+                if (params.changing) {
+
+                }
             });
+
+        debugger;
+
+        // this.unsubscribe(); // Make sure we unsubscribe existing listeners.
+
+        // this.launch();
+        // this.initialize();
+        // }
+        // else {
+        //     const existingMode = localStorage.getItem('Network:Mode');
+
+        //     // If user has choosen to remember mode, we'll redirect directly to login, when connected.
+        //     if (existingMode != null) {
+        //         this.initialize();
+        //     }
+        // }
 
         const existingMode = localStorage.getItem('Network:Mode');
 

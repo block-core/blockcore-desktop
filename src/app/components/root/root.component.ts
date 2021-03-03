@@ -25,6 +25,9 @@ import { ReportComponent } from '../report/report.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { IdentityService } from 'src/app/services/identity.service';
 import { IdentityContainer } from '@models/identity';
+import { StorageService } from 'src/app/services/storage.service';
+import { ChainService } from 'src/app/services/chain.service';
+import { BootController } from 'src/boot';
 // import { slideInAnimation } from 'src/app/app.animations';
 
 @Component({
@@ -80,10 +83,14 @@ export class RootComponent implements OnInit, OnDestroy {
         public settings: SettingsService,
         private apiService: ApiService,
         private walletService: WalletService,
+        public wallet: WalletService,
         private readonly cd: ChangeDetectorRef,
         public dialog: MatDialog,
+        private ngZone: NgZone,
+        private storage: StorageService,
+        public chains: ChainService,
         public notifications: NotificationService,
-        private globalService: GlobalService,
+        public globalService: GlobalService,
         private zone: NgZone,
         private readonly breakpointObserver: BreakpointObserver,
     ) {
@@ -130,7 +137,10 @@ export class RootComponent implements OnInit, OnDestroy {
                     this.cd.detectChanges();
 
                     // Navigate again to hide the loading indicator.
-                    this.router.navigate(['/load']);
+
+                    // if (!this.appState.isChangingToChain) {
+                        this.router.navigate(['/load']);
+                    // }
 
                     this.cd.detectChanges();
                 });
@@ -142,7 +152,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
                 const dialogRef = this.dialog.open(ReportComponent, {
                     data: {
-                        title: 'Failed to start City Chain background daemon',
+                        title: 'Failed to start node background daemon',
                         error,
                         lines: this.log.lastEntries()
                     }
@@ -242,6 +252,82 @@ export class RootComponent implements OnInit, OnDestroy {
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
+    }
+
+    get listTestNetworks(): boolean {
+        return this.storage.getValue('Network:ListTestNetworks') === 'true';
+    }
+
+    set listTestNetworks(value: boolean) {
+        this.storage.setValue('Network:ListTestNetworks', value.toString());
+    }
+
+    get filteredAvailableChains() {
+        return this.listTestNetworks ?
+            this.chains.availableChains :
+            this.chains.availableChains.filter(language => !language.test);
+    }
+
+    changeWallet(wallet) {
+        // Write the "previous wallet" and then logout.
+        localStorage.setItem('Network:Wallet', wallet.name);
+
+        this.stopWallet();
+
+        this.router.navigateByUrl('/login');
+    }
+
+    stopWallet() {
+        // TODO: This code is replicated from logout.component.ts, should be refactored into some state management controller.
+        this.wallet.stop();
+
+        this.authService.setAnonymous();
+
+        this.apiService.stopStaking()
+            .subscribe(
+                response => {
+                    // if (response.status >= 200 && response.status < 400) {
+                    console.log('Staking was stopped.');
+                    // }
+                },
+                error => {
+                    this.apiService.handleException(error);
+                }
+            );
+
+        // Triggers the reboot in main.ts
+        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+    }
+
+    changeMode(chain) {
+
+        debugger;
+
+        // Update the change to chain to be what user want to change to.
+        this.appState.changeToChain = chain;
+        this.appState.isChangingToChain = true;
+
+        this.stopWallet();
+
+        // Persist the current mode as PreviousMode.
+        localStorage.setItem('Network:ModePrevious', localStorage.getItem('Network:Mode'));
+        localStorage.removeItem('Network:Mode');
+
+        this.appState.changingMode = true;
+        this.electronService.ipcRenderer.send('daemon-change');
+
+        // Make sure we shut down the existing node when user choose the change mode action.
+        this.apiService.shutdownNode().subscribe(response => {
+            // The response from shutdown is returned before the node is fully exited, so put a small delay here.
+            // setTimeout(() => {
+            //     this.router.navigate(['/load']);
+            // }, 1500);
+        });
+
+        this.electronService.ipcRenderer.send('update-icon', null);
+
+        // Navigate and show loading indicator.
+        this.router.navigate(['/load'], { queryParams: { loading: true, changing: true } });
     }
 
     prepareRoute(outlet: RouterOutlet) {

@@ -1,1 +1,14 @@
 //@import '~roboto-fontface/css/roboto/sass/roboto-fontface.scss';
+
+// $roboto-font-path: "roboto-fontface/fonts" !default;
+// $roboto-font-path: "~roboto-fontface/fonts" !default;
+// @import "~roboto-fontface/css/roboto/sass/roboto-fontface";
+
+@import "~@fontsource/roboto/index.css"; // Weight 400.
+@import "~@fontsource/roboto/100.css";
+@import "~@fontsource/roboto/300.css";
+@import "~@fontsource/roboto/300-italic.css";
+@import "~@fontsource/roboto/400.css";
+@import "~@fontsource/roboto/500.css";
+@import "~@fontsource/roboto/700.css";
+@import "~@fontsource/roboto/900.css";

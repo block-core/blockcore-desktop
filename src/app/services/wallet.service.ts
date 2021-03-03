@@ -162,7 +162,11 @@ export class WalletService {
     private startSubscriptions() {
         this.getWalletBalance();
         this.getHistory();
-        this.getStakingInfo();
+
+        if (this.appState.activeChain.pos) {
+            this.getStakingInfo();
+        }
+
         this.getGeneralWalletInfo();
     }
 

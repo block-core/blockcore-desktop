@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { SettingsService } from './settings.service';
 import { Chain, ChainService } from './chain.service';
+import { WalletAccount } from '../components/login/login.component';
 
 export interface DaemonConfiguration {
     mode: string;
@@ -44,7 +45,7 @@ export class ApplicationStateService {
 
             this.daemon = {
                 mode: mode || 'full',
-                network: localStorage.getItem('Network:Network') || 'CityMain',
+                network: localStorage.getItem('Network:Network'),
                 path: localStorage.getItem('Network:Path') || '',
                 datafolder: localStorage.getItem('Network:DataFolder') || ''
             };
@@ -63,6 +64,8 @@ export class ApplicationStateService {
         return ApplicationStateService.singletonInstance;
     }
 
+    accounts: WalletAccount[] = [];
+
     networkDefinition: any;
 
     networkParams: any;
@@ -74,6 +77,10 @@ export class ApplicationStateService {
     chain: string;
 
     activeChain: Chain;
+
+    changeToChain: Chain;
+
+    isChangingToChain: boolean;
 
     daemon: DaemonConfiguration;
 

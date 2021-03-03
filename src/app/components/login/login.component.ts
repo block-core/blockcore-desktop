@@ -18,10 +18,11 @@ import { Logger } from 'src/app/services/logger.service';
 import { IdentityService } from 'src/app/services/identity.service';
 import { ChainService } from 'src/app/services/chain.service';
 
-export interface Account {
+export interface WalletAccount {
     name: string;
     id: string;
 }
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -32,9 +33,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     @HostBinding('class.login') hostClass = true;
 
     private wallets: [string];
-    selectedAccount: Account;
+    selectedAccount: WalletAccount;
     hasWallet = false;
-    accounts: Account[] = [];
+    accounts: WalletAccount[] = [];
     unlocking: boolean;
     password = ''; // Default to empty string, not null/undefined.
     invalidPassword: boolean;
@@ -97,6 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             const wallets = list.map((item) => ({ id: item.name, name: item.name }));
 
             this.accounts = wallets;
+            this.appState.accounts = wallets;
 
             console.log(list);
 
@@ -153,6 +155,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                             const account = { id, name };
 
                             this.accounts.push(account);
+                            this.appState.accounts = this.accounts;
 
                             if (lastUsedWallet && lastUsedWallet === name) {
                                 this.selectedAccount = account;

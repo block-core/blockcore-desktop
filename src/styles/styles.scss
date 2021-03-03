@@ -1,6 +1,8 @@
 @import "~@angular/material/theming";
 
-//$roboto-font-path: "roboto-fontface/fonts" !default;
+// for npm material-icons package (to load local files)
+// $material-icons-font-path: '~material-icons/iconfont/';
+// @import '~material-icons/iconfont/material-icons.scss';
 
 @import "./variables";
 @import "./themes/font";
