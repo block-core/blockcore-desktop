@@ -6,6 +6,13 @@ import { Injectable } from '@angular/core';
 export class GlobalService {
 
     static singletonInstance: GlobalService;
+    private walletPath: string | undefined;
+    private currentWalletName!: string;
+    private coinType: number | undefined;
+    private coinName: string | undefined;
+    private coinUnit: string | undefined;
+    private network: string | undefined;
+    private decimalLimit = 8;
 
     constructor() {
 
@@ -16,14 +23,6 @@ export class GlobalService {
         return GlobalService.singletonInstance;
 
     }
-
-    private walletPath: string;
-    private currentWalletName: string;
-    private coinType: number;
-    private coinName: string;
-    private coinUnit: string;
-    private network: string;
-    private decimalLimit = 8;
 
     getWalletPath() {
         return this.walletPath;
@@ -46,7 +45,7 @@ export class GlobalService {
         this.network = network;
     }
 
-    getWalletName() {
+    getWalletName(): string {
         return this.currentWalletName;
     }
 
@@ -78,7 +77,7 @@ export class GlobalService {
         this.coinUnit = coinUnit;
     }
 
-    transform(value: number) {
+    transform(value: number): string {
         let temp;
         if (typeof value === 'number') {
             switch (this.getCoinUnit()) {
@@ -144,5 +143,7 @@ export class GlobalService {
                     return temp.toFixed(this.decimalLimit);
             }
         }
+
+        return '';
     }
 }

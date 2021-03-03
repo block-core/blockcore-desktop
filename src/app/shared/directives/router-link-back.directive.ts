@@ -2,9 +2,9 @@ import { Location } from '@angular/common';
 import { Directive, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
-// tslint:disable-next-line:directive-selector
+// eslint-disable-next-line @angular-eslint/directive-selector
 @Directive({ selector: ':not(a)[routerLinkBack]' })
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class RouterLinkBack {
 
     constructor(private location: Location, private router: Router) { }

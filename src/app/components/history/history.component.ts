@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DetailsService } from '../../services/details.service';
 import { ApiService } from '../../services/api.service';

@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable */
 exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
@@ -53,6 +54,8 @@ autoUpdater.autoDownload = false;
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
 var daemonState;
+var resetMode = false;
+var resetArg = null;
 var contents = null;
 var currentChain;
 var settings;
@@ -166,31 +169,28 @@ electron_1.ipcMain.on('choose-node-path', function (event, arg) {
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
 electron_1.ipcMain.on('reset-database', function (event, arg) {
     writeLog('reset-database: User want to reset database, first attempting to shutdown the node.');
+    // Mark the daemon state to be in reset mode.
+    resetMode = true;
+    resetArg = arg;
     // Make sure the daemon is shut down first:
     shutdownDaemon(function (success, error) {
-        var userDataPath = electron_1.app.getPath('userData');
-        var appDataFolder = path.dirname(userDataPath);
-        var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
-        var folderBlocks = path.join(dataFolder, 'blocks');
-        var folderChain = path.join(dataFolder, 'chain');
-        var folderCoinView = path.join(dataFolder, 'coinview');
-        var folderCommon = path.join(dataFolder, 'common');
-        var folderProvenHeaders = path.join(dataFolder, 'provenheaders');
-        var folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
-        // After shutdown completes, we'll delete the database.
-        deleteFolderRecursive(folderBlocks);
-        deleteFolderRecursive(folderChain);
-        deleteFolderRecursive(folderCoinView);
-        deleteFolderRecursive(folderCommon);
-        deleteFolderRecursive(folderProvenHeaders);
-        deleteFolderRecursive(folderFinalizedBlock);
+        console.log('SHUTDOWN COMPLETED, NOW WIPE FOLDERS! ... this code is never called.');
     });
     event.returnValue = 'OK';
 });
+function parseDataFolder(arg) {
+    console.log('parseDataFolder: ', arg);
+    // If the first argument is empty string, we must add the user data path.
+    if (arg[0] === '') {
+        // Build the node data folder, the userData includes app of the UI-app, so we must navigate down one folder.
+        var nodeDataFolder = path.join(electron_1.app.getPath('userData'), '..', 'Blockcore');
+        arg.unshift(nodeDataFolder);
+    }
+    var dataFolder = path.join.apply(path, arg);
+    return dataFolder;
+}
 electron_1.ipcMain.on('open-data-folder', function (event, arg) {
-    var userDataPath = electron_1.app.getPath('userData');
-    var appDataFolder = path.dirname(userDataPath);
-    var dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+    var dataFolder = parseDataFolder(arg);
     electron_1.shell.openPath(dataFolder);
     event.returnValue = 'OK';
 });
@@ -489,11 +489,25 @@ function launchDaemon(apiPath, chain) {
     }
     daemons.push(daemonProcess);
     daemonProcess.stdout.on('data', function (data) {
-        writeDebug("City Chain: " + data);
+        writeDebug("Node: " + data);
     });
     /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
-        writeLog("City Chain daemon process exited with code " + code + " and signal " + signal + " when the state was " + daemonState + ".");
+        writeLog("Node daemon process exited with code " + code + " and signal " + signal + " when the state was " + daemonState + ".");
+        if (resetMode) {
+            daemonState = DaemonState.Changing;
+            writeLog('Daemon reset was expected, the user is resetting the blockchain database. Proceeding to delete files...');
+            var dataFolder = parseDataFolder(resetArg);
+            // After shutdown completes, we'll delete the database.
+            deleteFolderRecursive(path.join(dataFolder, 'blocks'));
+            deleteFolderRecursive(path.join(dataFolder, 'chain'));
+            deleteFolderRecursive(path.join(dataFolder, 'coindb'));
+            deleteFolderRecursive(path.join(dataFolder, 'common'));
+            deleteFolderRecursive(path.join(dataFolder, 'provenheaders'));
+            writeLog('All folders deleted at: ' + dataFolder);
+            contents.send('daemon-changing');
+            return;
+        }
         // There are many reasons why the daemon process can exit, we'll show details
         // in those cases we get an unexpected shutdown code and signal.
         if (daemonState === DaemonState.Changing) {
@@ -535,34 +549,34 @@ function shutdownDaemon(callback) {
         callback(true, null);
         return;
     }
-    if (process.platform !== 'darwin') {
-        writeLog('Sending POST request to shut down daemon.');
-        var http = require('http');
-        var options = {
-            hostname: 'localhost',
-            port: currentChain.apiPort,
-            path: '/api/node/shutdown',
-            method: 'POST'
-        };
-        var req = http.request(options);
-        req.on('response', function (res) {
-            if (res.statusCode === 200) {
-                writeLog('Request to shutdown daemon returned HTTP success code.');
-                callback(true, null);
-            }
-            else {
-                writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
-                callback(false, res);
-            }
-        });
-        req.on('error', function (err) {
-            writeError('Request to shutdown daemon failed.');
-            callback(false, err);
-        });
-        req.setHeader('content-type', 'application/json-patch+json');
-        req.write('true');
-        req.end();
-    }
+    // if (process.platform !== 'darwin') {
+    writeLog('Sending POST request to shut down daemon.');
+    var http = require('http');
+    var options = {
+        hostname: 'localhost',
+        port: currentChain.apiPort,
+        path: '/api/node/shutdown',
+        method: 'POST'
+    };
+    var req = http.request(options);
+    req.on('response', function (res) {
+        if (res.statusCode === 200) {
+            writeLog('Request to shutdown daemon returned HTTP success code.');
+            callback(true, null);
+        }
+        else {
+            writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+            callback(false, res);
+        }
+    });
+    req.on('error', function (err) {
+        writeError('Request to shutdown daemon failed.');
+        callback(false, err);
+    });
+    req.setHeader('content-type', 'application/json-patch+json');
+    req.write('true');
+    req.end();
+    // }
 }
 function createTray() {
     // Put the app in system tray

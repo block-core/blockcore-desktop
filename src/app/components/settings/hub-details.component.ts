@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
@@ -57,7 +59,7 @@ export class HubDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Check if the hubs are online every 60 seconds.
         setInterval(() => {
-            // tslint:disable-next-line: prefer-for-of
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of
             for (let i = 0; i < this.hubService.hubs.length; i++) {
                 this.hubService.add(this.hubService.hubs[i].originalUrl);
             }

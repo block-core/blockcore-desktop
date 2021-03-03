@@ -10,7 +10,7 @@ export class AuthenticatedUserGuard implements CanActivate {
     constructor(private authService: AuthenticationService) { }
 
     canActivate(
-        // tslint:disable-next-line: variable-name
+        // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
         _next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         return this.authService.isAuthenticated();

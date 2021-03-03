@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostBinding, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -207,12 +209,16 @@ export class RootComponent implements OnInit, OnDestroy {
 
             return `${name}${alias}\nID: ${this.identityService.identity.content.identifier}${title}`;
         }
+
+        return '';
     }
 
     get networkStatusTooltip(): string {
         if (this.walletService.generalInfo) {
             return `Connections: ${this.walletService.generalInfo.connectedNodes}\nBlock Height: ${this.walletService.generalInfo.chainTip}\nSynced: ${this.walletService.percentSynced}`;
         }
+
+        return '';
     }
 
     /** Whenever we are downloading, show the download icon. */
@@ -301,24 +307,24 @@ export class RootComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     private subscription: Subscription;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     private statusIntervalSubscription: Subscription;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     private readonly MaxRetryCount = 50;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     private readonly TryDelayMilliseconds = 3000;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     public apiConnected = false;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     loading = true;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     loadingFailed = false;
 }

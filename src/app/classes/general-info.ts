@@ -1,5 +1,14 @@
 export class GeneralInfo {
 
+    chainTip: number;
+    connectedNodes: number;
+    creationTime: Date | string | number | any;
+    isChainSynced: boolean;
+    isDecrypted: boolean;
+    lastBlockSyncedHeight: number;
+    network: string;
+    walletFilePath: string;
+
     constructor(
         chainTip: number, connectedNodes: number, creationTime: Date, isChainSynced: boolean, isDecrypted: boolean, lastBlockSyncedHeight: number, network: string, walletFilePath: string) {
         this.chainTip = chainTip;
@@ -11,13 +20,4 @@ export class GeneralInfo {
         this.network = network;
         this.walletFilePath = walletFilePath;
     }
-
-    chainTip: number;
-    connectedNodes: number;
-    creationTime: Date | string | number | any;
-    isChainSynced: boolean;
-    isDecrypted: boolean;
-    lastBlockSyncedHeight: number;
-    network: string;
-    walletFilePath: string;
 }

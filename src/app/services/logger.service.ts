@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 
 export enum LogLevel {
@@ -65,20 +67,20 @@ export class Logger {
 
         switch (logLevel) {
             case LogLevel.Verbose:
-                console.log(`[City Hub] ${message}`, ...args);
+                console.log(`[Hub] ${message}`, ...args);
                 break;
             case LogLevel.Info:
-                // tslint:disable-next-line:no-console
-                console.info(`[City Hub] ${message}`, ...args);
+                // eslint-disable-next-line no-console
+                console.info(`[Hub] ${message}`, ...args);
                 break;
             case LogLevel.Warn:
-                console.warn(`[City Hub] ${message}`, ...args);
+                console.warn(`[Hub] ${message}`, ...args);
                 break;
             case LogLevel.Error:
-                console.error(`[City Hub] ${message}`, ...args);
+                console.error(`[Hub] ${message}`, ...args);
                 break;
             case LogLevel.Critical:
-                console.error(`[City Hub] [CRITICAL] ${message}`, ...args);
+                console.error(`[Hub] [CRITICAL] ${message}`, ...args);
                 break;
             default:
                 break;

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 import { Observable, interval, throwError, empty } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';

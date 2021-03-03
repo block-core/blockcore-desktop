@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UpdateInfo } from '../components/update/update-info';
@@ -109,27 +111,6 @@ export class NotificationService {
         //     });
     }
 
-    private find(tile: NotificationTile) {
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < this.notifications.length; ++i) {
-            if (this.notifications[i].message === tile.message) {
-                return this.notifications[i];
-            }
-        }
-    }
-
-    private sort() {
-        this.notifications = this.notifications.sort((a, b) => {
-            if (a.date > b.date) {
-                return 1;
-            }
-
-            if (a.date < b.date) {
-                return -1;
-            }
-        });
-    }
-
     show(tile: NotificationMessage) {
 
         const notification = {
@@ -179,7 +160,7 @@ export class NotificationService {
     }
 
     read() {
-        // tslint:disable-next-line: prefer-for-of
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < this.notifications.length; ++i) {
             this.notifications[i].read = true;
         }
@@ -193,4 +174,29 @@ export class NotificationService {
     clear() {
         this.notifications = new Array<NotificationTile>();
     }
+
+    private find(tile: NotificationTile) {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < this.notifications.length; ++i) {
+            if (this.notifications[i].message === tile.message) {
+                return this.notifications[i];
+            }
+        }
+
+        return null;
+    }
+
+    private sort() {
+        this.notifications = this.notifications.sort((a, b) => {
+            if (a.date > b.date) {
+                return 1;
+            } else if (a.date < b.date) {
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        });
+    }
+
 }

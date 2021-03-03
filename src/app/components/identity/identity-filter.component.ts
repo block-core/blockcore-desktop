@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 export class IdentityFilterComponent {
     public searchCtrl: FormControl = new FormControl();
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @Output()
     public search: Observable<string> = this.searchCtrl.valueChanges;
 }

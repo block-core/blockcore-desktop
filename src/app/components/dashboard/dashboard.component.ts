@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';
@@ -163,7 +165,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // tslint:disable-next-line: prefer-for-of
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < this.subscriptions.length; i++) {
             this.subscriptions[i].unsubscribe();
         }

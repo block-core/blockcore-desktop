@@ -16,7 +16,7 @@ export class ToolsComponent implements OnInit {
     @HostBinding('class.app-tools') hostClass = true;
 
     public resyncTriggered = false;
-    public extPubKey: string;
+    public extPubKey: string | undefined;
 
     constructor(
         public snackBar: MatSnackBar,
@@ -30,19 +30,6 @@ export class ToolsComponent implements OnInit {
     ngOnInit() {
         const walletInfo = new WalletInfo(this.globalService.getWalletName());
         this.getExtPubKey(walletInfo);
-    }
-
-    private getExtPubKey(walletInfo: WalletInfo) {
-        this.apiService.getExtPubkey(walletInfo)
-            .subscribe(
-                response => {
-                    this.extPubKey = response;
-                },
-                error => {
-                    this.apiService.handleError(error);
-                }
-            )
-            ;
     }
 
     public resync() {
@@ -60,5 +47,18 @@ export class ToolsComponent implements OnInit {
     public onCopiedClick() {
         this.snackBar.open('The extended public key has been copied to your clipboard.', null, { duration: 3000 });
         return false;
+    }
+
+    private getExtPubKey(walletInfo: WalletInfo) {
+        this.apiService.getExtPubkey(walletInfo)
+            .subscribe(
+                response => {
+                    this.extPubKey = response;
+                },
+                error => {
+                    this.apiService.handleError(error);
+                }
+            )
+            ;
     }
 }

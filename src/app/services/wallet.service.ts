@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 import { GlobalService } from './global.service';
@@ -44,7 +46,7 @@ export class WalletService {
     public stakingInfo: StakingInfo;
     public activeWallet: any;
 
-    // tslint:disable-next-line: variable-name
+    // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
     private _history = new Subject();
     public history$ = this._history.asObservable();
 

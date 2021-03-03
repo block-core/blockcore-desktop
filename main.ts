@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, shell, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
@@ -79,6 +81,8 @@ autoUpdater.autoDownload = false;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
 let daemonState: DaemonState;
+let resetMode = false;
+let resetArg = null;
 let contents = null;
 let currentChain: Chain;
 let settings: Settings;
@@ -216,39 +220,41 @@ ipcMain.on('choose-node-path', (event, arg: Chain) => {
 });
 
 // Called when the app needs to reset the blockchain database. It will delete the "blocks", "chain" and "coinview" folders.
-ipcMain.on('reset-database', (event, arg: string) => {
-
+ipcMain.on('reset-database', (event, arg: any) => {
     writeLog('reset-database: User want to reset database, first attempting to shutdown the node.');
+
+    // Mark the daemon state to be in reset mode.
+    resetMode = true;
+    resetArg = arg;
 
     // Make sure the daemon is shut down first:
     shutdownDaemon((success, error) => {
-        const userDataPath = app.getPath('userData');
-        const appDataFolder = path.dirname(userDataPath);
-
-        const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
-        const folderBlocks = path.join(dataFolder, 'blocks');
-        const folderChain = path.join(dataFolder, 'chain');
-        const folderCoinView = path.join(dataFolder, 'coinview');
-        const folderCommon = path.join(dataFolder, 'common');
-        const folderProvenHeaders = path.join(dataFolder, 'provenheaders');
-        const folderFinalizedBlock = path.join(dataFolder, 'finalizedBlock');
-
-        // After shutdown completes, we'll delete the database.
-        deleteFolderRecursive(folderBlocks);
-        deleteFolderRecursive(folderChain);
-        deleteFolderRecursive(folderCoinView);
-        deleteFolderRecursive(folderCommon);
-        deleteFolderRecursive(folderProvenHeaders);
-        deleteFolderRecursive(folderFinalizedBlock);
+        console.log('SHUTDOWN COMPLETED, NOW WIPE FOLDERS! ... this code is never called.');
     });
 
     event.returnValue = 'OK';
 });
 
-ipcMain.on('open-data-folder', (event, arg: string) => {
-    const userDataPath = app.getPath('userData');
-    const appDataFolder = path.dirname(userDataPath);
-    const dataFolder = path.join(appDataFolder, 'CityChain', 'city', arg);
+function parseDataFolder(arg: any) {
+    console.log('parseDataFolder: ', arg);
+
+    // If the first argument is empty string, we must add the user data path.
+    if (arg[0] === '') {
+        // Build the node data folder, the userData includes app of the UI-app, so we must navigate down one folder.
+        const nodeDataFolder = path.join(app.getPath('userData'), '..', 'Blockcore');
+
+        arg.unshift(nodeDataFolder);
+    }
+
+    const dataFolder = path.join(...arg);
+
+    return dataFolder;
+}
+
+ipcMain.on('open-data-folder', (event, arg: any) => {
+
+    const dataFolder = parseDataFolder(arg);
+
     shell.openPath(dataFolder);
 
     event.returnValue = 'OK';
@@ -608,12 +614,31 @@ function launchDaemon(apiPath: string, chain: Chain) {
     daemons.push(daemonProcess);
 
     daemonProcess.stdout.on('data', (data) => {
-        writeDebug(`City Chain: ${data}`);
+        writeDebug(`Node: ${data}`);
     });
 
     /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
-        writeLog(`City Chain daemon process exited with code ${code} and signal ${signal} when the state was ${daemonState}.`);
+        writeLog(`Node daemon process exited with code ${code} and signal ${signal} when the state was ${daemonState}.`);
+
+        if (resetMode) {
+            daemonState = DaemonState.Changing;
+            writeLog('Daemon reset was expected, the user is resetting the blockchain database. Proceeding to delete files...');
+
+            const dataFolder = parseDataFolder(resetArg);
+
+            // After shutdown completes, we'll delete the database.
+            deleteFolderRecursive(path.join(dataFolder, 'blocks'));
+            deleteFolderRecursive(path.join(dataFolder, 'chain'));
+            deleteFolderRecursive(path.join(dataFolder, 'coindb'));
+            deleteFolderRecursive(path.join(dataFolder, 'common'));
+            deleteFolderRecursive(path.join(dataFolder, 'provenheaders'));
+
+            writeLog('All folders deleted at: ' + dataFolder);
+
+            contents.send('daemon-changing');
+            return;
+        }
 
         // There are many reasons why the daemon process can exit, we'll show details
         // in those cases we get an unexpected shutdown code and signal.
@@ -660,7 +685,7 @@ function shutdownDaemon(callback) {
         return;
     }
 
-    if (process.platform !== 'darwin') {
+    // if (process.platform !== 'darwin') {
         writeLog('Sending POST request to shut down daemon.');
 
         const http = require('http');
@@ -691,7 +716,7 @@ function shutdownDaemon(callback) {
         req.setHeader('content-type', 'application/json-patch+json');
         req.write('true');
         req.end();
-    }
+    // }
 }
 
 function createTray() {

@@ -15,6 +15,9 @@
                 },
                 "@schematics/angular:directive": {
                     "prefix": "app"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
                 }
             },
             "architect": {
@@ -23,12 +26,12 @@
                     "options": {
                         "customWebpackConfig": {
                             "path": "webpack.config.js"
-                          },
+                        },
                         "outputPath": "dist",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.app.json",
+                        "tsConfig": "tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
                             "src/startup.js",
@@ -64,7 +67,7 @@
                             "tiny-secp256k1",
                             "typeforce",
                             "safe-buffer"
-                         ]
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -89,10 +92,10 @@
                                     "maximumWarning": "2mb",
                                     "maximumError": "5mb"
                                 },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb"
+                                }
                             ]
                         }
                     }
@@ -120,8 +123,8 @@
                     "options": {
                         "main": "src/test.ts",
                         "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "karmaConfig": "src/karma.conf.js",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
                         "styles": [
                             "src/styles/styles.scss",
                             "src/styles/print.scss",
@@ -135,14 +138,11 @@
                     }
                 },
                 "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
+                    "builder": "@angular-eslint/builder:lint",
                     "options": {
-                        "tsConfig": [
-                            "src/tsconfig.app.json",
-                            "src/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
+                        "lintFilePatterns": [
+                            "src/**/*.ts",
+                            "src/**/*.html"
                         ]
                     }
                 }
@@ -163,15 +163,6 @@
                         "production": {
                             "devServerTarget": "city-hub:serve:production"
                         }
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": "e2e/tsconfig.e2e.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }

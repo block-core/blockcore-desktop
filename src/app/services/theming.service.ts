@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { Injectable, Inject } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -16,6 +19,8 @@ export enum Theme {
 export class Theming {
 
     static singletonInstance: Theming;
+
+    private readonly currentThemeSubject = new BehaviorSubject<Theme>(this.getCurrentTheme());
 
     constructor(
         private readonly log: Logger,
@@ -36,17 +41,6 @@ export class Theming {
 
     get currentTheme$(): Observable<Theme> {
         return this.currentThemeSubject.asObservable();
-    }
-
-    private readonly currentThemeSubject = new BehaviorSubject<Theme>(this.getCurrentTheme());
-
-    private getCurrentTheme(): Theme {
-        return localStorage.getItem('Settings:Theme') as Theme || Theme.Dark;
-    }
-
-    private setCurrentTheme(theme: Theme) {
-        localStorage.setItem('Settings:Theme', theme);
-        this.currentThemeSubject.next(theme);
     }
 
     start() {
@@ -75,6 +69,15 @@ export class Theming {
             this.log.verbose('Toggle theme to "Dark" theme.');
             this.dark();
         }
+    }
+
+    private getCurrentTheme(): Theme {
+        return localStorage.getItem('Settings:Theme') as Theme || Theme.Dark;
+    }
+
+    private setCurrentTheme(theme: Theme) {
+        localStorage.setItem('Settings:Theme', theme);
+        this.currentThemeSubject.next(theme);
     }
 
     private switchToLight() {

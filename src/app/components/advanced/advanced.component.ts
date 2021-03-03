@@ -46,13 +46,20 @@ export class AdvancedComponent {
     }
 
     resetDatabase() {
-        this.log.info('Reset Blockchain Database...');
-        const path = this.electronService.ipcRenderer.sendSync('reset-database', this.appState.daemon.network);
+        // Send array of path information to be used in path.join to get native full path in the main process.
+        const pathInfo = [this.appState.daemon.datafolder, this.appState.activeChain.rootFolderName, this.appState.activeChain.network];
+        this.log.info('Reset Blockchain Database...', pathInfo);
+
+        const path = this.electronService.ipcRenderer.sendSync('reset-database', pathInfo);
         this.log.info('Reset completed: ' + path);
     }
 
     openDataFolder() {
-        const path = this.electronService.ipcRenderer.sendSync('open-data-folder', this.appState.daemon.network);
+        // Send array of path information to be used in path.join to get native full path in the main process.
+        const pathInfo = [this.appState.daemon.datafolder, this.appState.activeChain.rootFolderName, this.appState.activeChain.network];
+
+        this.log.info('Open Data Folder...', pathInfo);
+        const path = this.electronService.ipcRenderer.sendSync('open-data-folder', pathInfo);
     }
 
     checkForUpdate() {

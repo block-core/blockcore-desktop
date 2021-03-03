@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, HostBinding, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ApplicationStateService } from '../../../services/application-state.service';
@@ -65,7 +67,7 @@ export class SendComponent implements OnInit, OnDestroy {
         this.cancelSubscriptions();
     }
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     formErrors = {
         address: '',
         amount: '',
@@ -73,7 +75,7 @@ export class SendComponent implements OnInit, OnDestroy {
         password: ''
     };
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     validationMessages = {
         address: {
             required: 'An address is required.',
@@ -114,14 +116,14 @@ export class SendComponent implements OnInit, OnDestroy {
         if (!this.sendForm) { return; }
         const form = this.sendForm;
 
-        // tslint:disable-next-line:forin
+        // eslint-disable-next-line guard-for-in
         for (const field in this.formErrors) {
             this.formErrors[field] = '';
             const control = form.get(field);
             if (control && control.dirty && !control.valid) {
                 const messages = this.validationMessages[field];
 
-                // tslint:disable-next-line:forin
+                // eslint-disable-next-line guard-for-in
                 for (const key in control.errors) {
                     this.formErrors[field] += messages[key] + ' ';
                 }

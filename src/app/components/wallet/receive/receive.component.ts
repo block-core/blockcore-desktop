@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, HostBinding, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { ApplicationStateService } from '../../../services/application-state.service';
 import { ApiService } from '../../../services/api.service';
@@ -117,7 +119,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getUnusedReceiveAddressSimpleMode() {
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         // debugger;
         const network = this.appState.networkDefinition;
         const xpubkey = this.wallet.activeWallet.extPubKey;
@@ -132,8 +134,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getAddress(node, network) {
-        // tslint:disable-next-line
-        debugger;
         const p2pkh = city.payments.p2pkh({ pubkey: node.publicKey, network });
         return p2pkh.address;
     }
@@ -166,13 +166,13 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         const xpubkey = this.wallet.activeWallet.extPubKey;
         const root = bip32.fromBase58(xpubkey);
 
-        // tslint:disable-next-line: prefer-for-of
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < 20; i++) {
             // TODO: Find the last used indexed from querying indexer (persisted to IndexedDB locally)
             const address = this.getAddress(root.derivePath('0/' + i), network);
             this.unusedAddresses.push(address);
 
-            // tslint:disable-next-line
+            // eslint-disable-next-line
             // debugger;
         }
 

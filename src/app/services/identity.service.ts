@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable, OnDestroy } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Identity, IdentityContainer } from '@models/identity';
@@ -108,7 +110,7 @@ export class IdentityService implements OnDestroy {
 
     unlock(path: string, password: string) {
         // Read the seed from the file on disk.
-        const seed: { encryptedSeed: string, chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
+        const seed: { encryptedSeed: string; chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
 
         // Keep a copy of the encrypted seed. For mobile mode, this will be available in the local storage / indexeddb.
         this.seed = seed;
@@ -117,7 +119,7 @@ export class IdentityService implements OnDestroy {
         // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
         // }, null, this.appState.networkParams);
 
-        // tslint:disable-next-line: no-debugger
+        // eslint-disable-next-line no-debugger
         // debugger;
 
         const decryptedKey = bip38.decrypt(seed.encryptedSeed, password, null, null, this.appState.networkParams);
@@ -127,7 +129,7 @@ export class IdentityService implements OnDestroy {
         // Dispose of this object, we don't want to keep the root extkey after initial login.
         const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
 
-        // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line @typescript-eslint/quotes
         const identityRoot: HDNode = masterNode.derivePath("m/302'");
 
         // Persist the identity node that we need to generate identities and keys for them.
@@ -403,7 +405,7 @@ export class IdentityService implements OnDestroy {
     //     let found = false;
     //     let lastFoundIndex = 0;
 
-    //     // tslint:disable-next-line: prefer-for-of
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     //     for (let i = index; i < count; i++) {
 
     //         const identityNode = this.getIdentityNode(i);

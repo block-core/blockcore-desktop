@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, AfterContentInit, HostBinding, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ApiService } from '../../services/api.service';

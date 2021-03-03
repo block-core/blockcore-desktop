@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
@@ -92,9 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             // Read accounts from localStorage.
             const db = new DatabaseStorageService('cityhub');
             const list = await db.wallets.toArray();
-            const wallets = list.map((item) => {
-                return { id: item.name, name: item.name };
-            });
+            const wallets = list.map((item) => ({ id: item.name, name: item.name }));
 
             this.accounts = wallets;
 
@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         this.hasWallet = true;
                         const lastUsedWallet = localStorage.getItem('Network:Wallet');
 
-                        // tslint:disable-next-line:forin
+                        // eslint-disable-next-line guard-for-in
                         for (const wallet in this.wallets) {
                             const id = wallet;
                             const name = this.wallets[wallet].slice(0, -12);

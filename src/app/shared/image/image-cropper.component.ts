@@ -10,6 +10,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ImageCropperComponent {
     @HostBinding('class.image-cropper') hostClass = true;
+    @Input() showPreview = true;
+    @Output() imageUpdated = new EventEmitter<ImageCroppedEvent>();
 
     imageChangedEvent: any = '';
     croppedImage: any = '';
@@ -19,11 +21,8 @@ export class ImageCropperComponent {
     showCropper = false;
     containWithinAspectRatio = false;
     transform: ImageTransform = {};
-    imageURL: string;
+    imageURL: string | undefined;
     formDoc: FormGroup;
-
-    @Input() showPreview = true;
-    @Output() imageUpdated = new EventEmitter<ImageCroppedEvent>();
 
     constructor(private fb: FormBuilder) {
         this.formDoc = this.fb.group({
@@ -65,17 +64,6 @@ export class ImageCropperComponent {
         this.canvasRotation++;
         this.flipAfterRotate();
     }
-
-    private flipAfterRotate() {
-        const flippedH = this.transform.flipH;
-        const flippedV = this.transform.flipV;
-        this.transform = {
-            ...this.transform,
-            flipH: flippedV,
-            flipV: flippedH
-        };
-    }
-
 
     flipHorizontal() {
         this.transform = {
@@ -122,6 +110,16 @@ export class ImageCropperComponent {
         this.transform = {
             ...this.transform,
             rotate: this.rotation
+        };
+    }
+
+    private flipAfterRotate() {
+        const flippedH = this.transform.flipH;
+        const flippedV = this.transform.flipV;
+        this.transform = {
+            ...this.transform,
+            flipH: flippedV,
+            flipV: flippedH
         };
     }
 }

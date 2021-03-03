@@ -5,14 +5,14 @@ import { GlobalService } from '../../services/global.service';
     name: 'coinNotation'
 })
 export class CoinNotationPipe implements PipeTransform {
+    private coinUnit: string | undefined;
+    // private coinNotation: number;
+
     constructor(private globalService: GlobalService) {
         this.setCoinUnit();
     }
 
-    private coinUnit: string;
-    // private coinNotation: number;
-
-    transform(value: number): number {
+    transform(value: number): string {
       return this.globalService.transform(value);
     }
 

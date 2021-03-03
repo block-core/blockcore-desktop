@@ -14,6 +14,8 @@ export class TitleService {
 
     static singletonInstance: TitleService;
 
+    private readonly title = new BehaviorSubject<string>(this.document.title);
+
     constructor(
         private readonly router: Router,
         private setup: SetupService,
@@ -32,8 +34,6 @@ export class TitleService {
         return this.title.asObservable();
     }
 
-    private readonly title = new BehaviorSubject<string>(this.document.title);
-
     initialize() {
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd),
@@ -46,7 +46,7 @@ export class TitleService {
             }),
             filter(route => route.outlet === 'primary'),
             mergeMap(route => route.data),
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             map(data => ({ title: data['title'], prefix: data['prefix'] })),
         ).subscribe(title => {
 
@@ -58,7 +58,7 @@ export class TitleService {
 
             // For the document title, we'll append the app title.
             // if (this.appTitle != null) {
-                // this.document.title = formattedTitle + ' - ' + this.appTitle;
+            // this.document.title = formattedTitle + ' - ' + this.appTitle;
             this.document.title = this.setup.name + ' - ' + formattedTitle;
             // }
 

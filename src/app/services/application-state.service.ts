@@ -1,8 +1,11 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { SettingsService } from './settings.service';
+import { Chain, ChainService } from './chain.service';
 
 export interface DaemonConfiguration {
     mode: string;
@@ -26,16 +29,12 @@ export class ApplicationStateService {
     constructor(
         private electron: ElectronService,
         private settings: SettingsService,
+        public chains: ChainService,
         private readonly titleService: TitleService,
     ) {
         if (!ApplicationStateService.singletonInstance) {
 
             this.chain = this.getParam('chain') || 'city';
-
-            // TODO: These properties are deprecated, refactor!
-            // this.mode = localStorage.getItem('Network:Mode') || 'full';
-            // this.network = localStorage.getItem('Network:Network') || 'citymain';
-            // this.path = localStorage.getItem('Network:Path') || '';
 
             let mode = localStorage.getItem('Network:Mode');
 
@@ -45,10 +44,13 @@ export class ApplicationStateService {
 
             this.daemon = {
                 mode: mode || 'full',
-                network: localStorage.getItem('Network:Network') || 'citymain',
+                network: localStorage.getItem('Network:Network') || 'CityMain',
                 path: localStorage.getItem('Network:Path') || '',
                 datafolder: localStorage.getItem('Network:DataFolder') || ''
             };
+
+            // Make sure that the chain setup is available in the appstate on startup.
+            this.activeChain = this.chains.availableChains.find(network => network.network === this.daemon.network);
 
             if (electron.ipcRenderer) {
                 // On startup, we'll send the initial hiding settings to main thread.
@@ -71,13 +73,9 @@ export class ApplicationStateService {
 
     chain: string;
 
+    activeChain: Chain;
+
     daemon: DaemonConfiguration;
-
-    // mode: string;
-
-    // network: string;
-
-    // path: string;
 
     pageMode = false;
 
@@ -89,7 +87,7 @@ export class ApplicationStateService {
 
     shutdownDelayed = false;
 
-    /** Indicates if we are connected from City Hub with the City Chain daemon. */
+    /** Indicates if we are connected from Hub to the node. */
     connected = false;
 
     changingMode = false;
@@ -140,10 +138,6 @@ export class ApplicationStateService {
         this.daemon.network = network;
         this.daemon.path = path;
         this.daemon.datafolder = datafolder;
-
-        // TODO: Remove and depricate these properties.
-        // this.mode = mode;
-        // this.network = network;
 
         if (persist) {
             localStorage.setItem('Network:Mode', mode);

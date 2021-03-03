@@ -115,7 +115,7 @@ export class IdentityComponent implements OnDestroy, OnInit {
     //         'https://image.flaticon.com/icons/svg/234/234163.svg',
     //         'https://image.flaticon.com/icons/svg/234/234121.svg'];
 
-    //     // tslint:disable-next-line: prefer-for-of
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     //     for (let i = 0; i < icons.length; ++i) {
     //         const icon = icons[i];
 

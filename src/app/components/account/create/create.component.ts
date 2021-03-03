@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, HostBinding, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { Router } from '@angular/router';
@@ -136,17 +138,17 @@ export class CreateAccountComponent implements OnInit {
                 const self = this;
                 const masterNode = bip32.fromSeed(masterSeed, this.appState.networkDefinition);
 
-                // tslint:disable-next-line
+                // eslint-disable-next-line
                 const accountNode = masterNode.derivePath("m/44'/1926'/0'"); // TODO: Get the coin type from network definition.
                 const xpub = accountNode.neutered().toBase58();
 
                 // bip38.encryptAsync(masterNode.privateKey, true, wallet.password, (out) => {
                 // }, null, this.appState.networkParams);
 
-                // tslint:disable-next-line: prefer-const
+                // eslint-disable-next-line prefer-const
                 let encryptedKeySeed = bip38.encrypt(masterNode.privateKey, true, wallet.password, null, null, this.appState.networkParams);
 
-                // tslint:disable-next-line
+                // eslint-disable-next-line
                 // debugger;
 
                 // Instantiate it

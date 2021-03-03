@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -36,7 +38,7 @@ export class IdentityUnlockComponent implements OnDestroy, OnInit {
     private subscription: any;
     private id: string;
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     formErrors = {
         password: '',
         shortname: '',
@@ -51,7 +53,7 @@ export class IdentityUnlockComponent implements OnDestroy, OnInit {
         restorekey: ''
     };
 
-    // tslint:disable-next-line:member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     validationMessages = {
         name: {
             required: 'A name is required.',
@@ -196,7 +198,7 @@ export class IdentityUnlockComponent implements OnDestroy, OnInit {
         // TODO: Make sure we check if image is actually changed, if not, then don't save it.
         // this.profileImageService.setImage(this.identity.id, this.image);
 
-        // tslint:disable-next-line:forin
+        // eslint-disable-next-line guard-for-in
         // for (const field in this.form.controls) {
         //     // Copy all input fields onto our identity.
 
@@ -236,14 +238,14 @@ export class IdentityUnlockComponent implements OnDestroy, OnInit {
     onValueChanged(data?: any) {
         if (!this.form) { return; }
 
-        // tslint:disable-next-line:forin
+        // eslint-disable-next-line guard-for-in
         for (const field in this.formErrors) {
             this.formErrors[field] = '';
             const control = this.form.get(field);
             if (control && control.dirty && !control.valid) {
                 const messages = this.validationMessages[field];
 
-                // tslint:disable-next-line:forin
+                // eslint-disable-next-line guard-for-in
                 for (const key in control.errors) {
                     this.formErrors[field] += messages[key] + ' ';
                 }

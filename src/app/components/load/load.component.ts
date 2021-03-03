@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,7 +32,7 @@ export class LoadComponent implements OnInit, OnDestroy {
     @HostBinding('class.load') hostClass = true;
 
     selectedMode: ListItem;
-    selectedNetwork: Chain;
+    // selectedNetwork: Chain;
     loading: boolean;
     hasWallet = false;
     modes: ListItem[] = [];
@@ -116,11 +118,14 @@ export class LoadComponent implements OnInit, OnDestroy {
         // ];
 
         this.selectedMode = this.modes.find(mode => mode.id === this.appState.daemon.mode);
-        this.selectedNetwork = this.chains.availableChains.find(network => network.network === this.appState.daemon.network);
+
+        // Make sure that the chain setup is available in the appstate.
+        this.appState.activeChain = this.chains.availableChains.find(network => network.network === this.appState.daemon.network);
+
         this.remember = true;
 
         this.log.info('Mode:', this.selectedMode);
-        this.log.info('Network:', this.selectedNetwork);
+        this.log.info('Network:', this.appState.activeChain);
         this.log.info('Daemon App State:', JSON.stringify(this.appState.daemon));
 
         this.ipc = electronService.ipcRenderer;
@@ -154,8 +159,8 @@ export class LoadComponent implements OnInit, OnDestroy {
         // this.appState.networkDefinition = network;
 
         this.appState.networkParams = {
-            private: this.selectedNetwork.private, // WIF
-            public: this.selectedNetwork.public // PubKeyHash
+            private: this.appState.activeChain.private, // WIF
+            public: this.appState.activeChain.public // PubKeyHash
         };
 
         // this.appState.networkParams = {
@@ -246,7 +251,7 @@ export class LoadComponent implements OnInit, OnDestroy {
     }
 
     launch() {
-        this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.selectedNetwork.network, this.appState.daemon.path, this.appState.daemon.datafolder);
+        this.appState.updateNetworkSelection(this.remember, this.selectedMode.id, this.appState.activeChain.network, this.appState.daemon.path, this.appState.daemon.datafolder);
 
         // If the selected mode is not 'local', we'll reset the path and data folder.
         if (this.appState.daemon.mode !== 'local') {
@@ -334,11 +339,6 @@ export class LoadComponent implements OnInit, OnDestroy {
                     this.loading = false;
                 }
             });
-
-        // this.route.paramMap.subscribe(params => {
-        //     console.log('Routing change...');
-        //     const loading = params.get('loading');
-        // });
 
         const existingMode = localStorage.getItem('Network:Mode');
 

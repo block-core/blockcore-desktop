@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*
 The MIT License (MIT)
 
@@ -37,6 +39,7 @@ const xor = require('buffer-xor/inplace');
 const ecurve = require('ecurve');
 const curve = ecurve.getCurveByName('secp256k1');
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const BigInteger = require('bigi');
 
 // constants
@@ -53,7 +56,7 @@ const NETWORK_PARAMS = {
 
 const NULL = Buffer.alloc(0);
 
-function hash160(buffer) {
+function hash160(buffer: any) {
     let hash;
     try {
         hash = createHash('rmd160');
@@ -65,7 +68,7 @@ function hash160(buffer) {
     ).digest();
 }
 
-function hash256(buffer) {
+function hash256(buffer: Buffer) {
     return createHash('sha256').update(
         createHash('sha256').update(buffer).digest()
     ).digest();
@@ -267,12 +270,12 @@ export function decrypt(text, passphrase, progressCallback, scryptParams, networ
 
 function prepareDecryptECMult(buffer, passphrase, progressCallback, scryptParams) {
     const flag = buffer.readUInt8(1);
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     const compressed = (flag & 0x20) !== 0;
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     const hasLotSeq = (flag & 0x04) !== 0;
 
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     assert.strictEqual((flag & 0x24), flag, 'Invalid private key.');
 
     const addressHash = buffer.slice(2, 6);
@@ -426,7 +429,7 @@ export function verify(text) {
 
         // EC mult
     } else if (type === 0x43) {
-        // tslint:disable-next-line: no-bitwise
+        // eslint-disable-next-line no-bitwise
         if ((flag & ~0x24)) { return false; }
     } else {
         return false;

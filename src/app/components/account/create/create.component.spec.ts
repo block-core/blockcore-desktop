@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RootComponent } from '../../root/root.component';
 import { CreateAccountComponent } from './create.component';
@@ -81,16 +83,16 @@ describe('AppComponent', () => {
         // Ensure that the generated address is a City Chain address and not Bitcoin.
         expect(address).toEqual('CQtq75vu4bAceku6FmenWBh35i1Y4oskdu');
 
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         const publicNode = masterNode.derivePath("m/44'/1926'/0'/0/0");
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         const changeNode = masterNode.derivePath("m/44'/1926'/0'/1/0");
 
         expect(getAddress(publicNode, network)).toEqual('CPtzM2XwLCVS3L6BFK1xYsCcGqgrgsxHrP');
         expect(getAddress(changeNode, network)).toEqual('CY35ZGxzZBYHKyNV4KWKunYLHsTWejVSdR');
 
         // Get the first account in the HD wallet, this is same as the level stored in the wallet files.
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         const accountNode = masterNode.derivePath("m/44'/1926'/0'");
         const accountExtPubKey = accountNode.neutered().toBase58();
 
@@ -104,7 +106,7 @@ describe('AppComponent', () => {
 
         //         const masterNodeDecrypted = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-        //         // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line , @typescript-eslint/quotes
         //         const accountNodeDecrypted = masterNodeDecrypted.derivePath("m/44'/1926'/0'");
         //         const accountExtPubKeyDecrypted = accountNodeDecrypted.neutered().toBase58();
 
@@ -140,7 +142,7 @@ describe('AppComponent', () => {
 
         //     const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-        //     // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line , @typescript-eslint/quotes
         //     const accountNode = masterNode.derivePath("m/44'/1926'/0'");
         //     const accountExtPubKey = accountNode.neutered().toBase58();
 
@@ -169,7 +171,7 @@ describe('AppComponent', () => {
 
         //     const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-        //     // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line , @typescript-eslint/quotes
         //     const identityNode = masterNode.derivePath("m/302'/0'");
 
         //     const wif2 = identityNode.toWIF();
@@ -273,17 +275,17 @@ describe('AppComponent', () => {
         const masterSeed = bip39.mnemonicToSeedSync(recoveryPhrase, passphrase);
         const masterNode = bip32.fromSeed(masterSeed, network);
 
-        // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line @typescript-eslint/quotes
         const identityNode = masterNode.derivePath("m/302'/0'");
         const address = getAddress(identityNode, network);
 
         // Ensure that the generated address is a profile address and not Bitcoin.
         expect(address).toEqual('PTe6MFNouKATrLF5YbjxR1bsei2zwzdyLU');
 
-        // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line @typescript-eslint/quotes
         expect(getAddress(masterNode.derivePath("m/302'/1'"), network)).toEqual('PAcmQwEMW2oxzRBz7u6oFQMtYPSYqoXyiw');
 
-        // tslint:disable-next-line: quotemark
+        // eslint-disable-next-line @typescript-eslint/quotes
         expect(getAddress(masterNode.derivePath("m/302'/2'"), network)).toEqual('PCkPNkdd1paW5SwDEjzDBDs1vHxFabXhKf');
     }));
 
@@ -304,7 +306,7 @@ describe('AppComponent', () => {
 
     //     const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, network);
 
-    //     // tslint:disable-next-line: quotemark
+    // eslint-disable-next-line @typescript-eslint/quotes
     //     const identityNode = masterNode.derivePath("m/302'/0'");
 
     //     const wif = identityNode.toWIF();

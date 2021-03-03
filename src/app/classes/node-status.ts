@@ -1,4 +1,22 @@
 export class NodeStatus {
+    public agent: string;
+    public version: string;
+    public network: string;
+    public coinTicker: string;
+    public processId: number;
+    public consensusHeight: number;
+    public blockStoreHeight: number;
+    public inboundPeers: [Peer];
+    public outbountPeers: [Peer];
+    public featuresData: [FeatureData];
+    public dataDirectoryPath: string;
+    public runningTime: string;
+    public difficulty: number;
+    public protocolVersion: number;
+    public testnet: boolean;
+    public relayFee: number;
+    public state: string;
+
     constructor(
         agent: string,
         version: string,
@@ -35,44 +53,26 @@ export class NodeStatus {
         this.relayFee = relayFee;
         this.state = state;
     }
-
-    public agent: string;
-    public version: string;
-    public network: string;
-    public coinTicker: string;
-    public processId: number;
-    public consensusHeight: number;
-    public blockStoreHeight: number;
-    public inboundPeers: [Peer];
-    public outbountPeers: [Peer];
-    public featuresData: [FeatureData];
-    public dataDirectoryPath: string;
-    public runningTime: string;
-    public difficulty: number;
-    public protocolVersion: number;
-    public testnet: boolean;
-    public relayFee: number;
-    public state: string;
 }
 
 class Peer {
-    constructor(version, remoteSocketEndpoint, tipHeight) {
+    public version: string;
+    public remoteSocketEndpoint: string;
+    public tipHeight: number;
+
+    constructor(version: string, remoteSocketEndpoint: string, tipHeight: number) {
         this.version = version;
         this.remoteSocketEndpoint = remoteSocketEndpoint;
         this.tipHeight = tipHeight;
     }
-
-    public version: string;
-    public remoteSocketEndpoint: string;
-    public tipHeight: number;
 }
 
 class FeatureData {
+    public namespace: string;
+    public state: string;
+
     constructor(namespace: string, state: string) {
         this.namespace = namespace;
         this.state = state;
     }
-
-    public namespace: string;
-    public state: string;
 }

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Hub, HubContainer } from '@models/hub';

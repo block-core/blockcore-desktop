@@ -17,15 +17,14 @@ import { Link } from './link';
 // }
 
 export class EntityBase {
-
-    constructor(type: string) {
-        this['@type'] = type;
-    }
-
     identifier: string = null;
     iat: number = null;
     '@type': string = null;
     '@state' = 0;
+
+    constructor(type: string) {
+        this['@type'] = type;
+    }
 }
 
 // export class Signature {
@@ -43,11 +42,6 @@ export class EntityBase {
 // }
 
 export class Identity extends EntityBase {
-
-    constructor() {
-        super('identity');
-    }
-
     name: string = null;
     shortname: string = null;
     alias: string = null;
@@ -56,16 +50,13 @@ export class Identity extends EntityBase {
     url: string = null;
     image: string = null;
     hubs: string[] = null;
+
+    constructor() {
+        super('identity');
+    }
 }
 
 export class IdentityContainer {
-
-    constructor(identity: Identity) {
-        this.id = 'did:is:' + identity.identifier;
-        this.content = identity;
-        this.version = 4;
-    }
-
     version: number;
     id: string;
 
@@ -82,4 +73,10 @@ export class IdentityContainer {
     published: boolean;
     publish: boolean;
     index: number; // Make sure we don't publish this, we don't want to expose the user's identity indexes.
+
+    constructor(identity: Identity) {
+        this.id = 'did:is:' + identity.identifier;
+        this.content = identity;
+        this.version = 4;
+    }
 }
