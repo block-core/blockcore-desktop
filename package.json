@@ -1,21 +1,21 @@
 {
-  "name": "cityhub",
+  "name": "blockcorehub",
   "version": "1.0.27",
   "license": "MIT",
   "author": {
-    "name": "City Chain Foundation",
-    "email": "post@city-chain.org",
-    "url": "https://www.city-chain.org"
+    "name": "Blockcore",
+    "email": "post@blockcore.net",
+    "url": "https://www.blockcore.net"
   },
-  "description": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
+  "description": "Blockcore Hub is your hub into everything on blockchains and the Smart City Platform.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CityChainFoundation/city-hub.git"
+    "url": "git+https://github.com/block-core/blockcore-wallet.git"
   },
   "bugs": {
-    "url": "https://github.com/CityChainFoundation/city-hub/issues"
+    "url": "https://github.com/block-core/blockcore-wallet/issues"
   },
-  "homepage": "https://github.com/CityChainFoundation/city-hub#readme",
+  "homepage": "https://github.com/block-core/blockcore-wallet#readme",
   "main": "main.js",
   "scripts": {
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",

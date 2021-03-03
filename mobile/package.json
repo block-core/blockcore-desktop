@@ -1,13 +1,13 @@
 {
-  "name": "hub.city_chain.org",
-  "displayName": "City Hub",
+  "name": "hub.blockcore.net",
+  "displayName": "Blockcore Hub",
   "version": "1.0.0",
-  "description": "City Hub for mobile devices",
+  "description": "Blockcore Hub for mobile devices",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "City Chain Labs",
+  "author": "Blockcore",
   "license": "MIT",
   "devDependencies": {
     "cordova-android": "^9.0.0",

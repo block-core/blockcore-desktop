@@ -59,7 +59,7 @@
 
             <h3 class="mat-h3">Autostart on log in</h3>
 
-            <mat-checkbox (change)="onChanged($event)" [(ngModel)]="selectedOpenOnLogin">Start City Hub when you log in to your computer</mat-checkbox>
+            <mat-checkbox (change)="onChanged($event)" [(ngModel)]="selectedOpenOnLogin">Start Blockcore Hub when you log in to your computer</mat-checkbox>
 
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>
@@ -132,7 +132,7 @@
         </mat-card-content>
     </mat-card>
 
-    <mat-card class="settings-card">
+    <mat-card class="settings-card" *ngIf="appModes.enabled('walletmode')">
         <mat-card-header>
             <mat-icon mat-card-avatar>account_balance_wallet</mat-icon>
             <mat-card-title>Wallet Options</mat-card-title>

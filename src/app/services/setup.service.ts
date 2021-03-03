@@ -18,8 +18,8 @@ export class SetupService {
 
     /** Returns the name of the logo or path to the logo to be displayed in case an image is used. */
     get logo(): string {
-        return 'Blockcore Hub';
-        // return 'assets/city-hub/city-hub-dark.png';
+        // return 'Blockcore Hub';
+        return 'assets/blockcore-hub-dark.png';
     }
 
 }

@@ -19,11 +19,11 @@ export class AppModes {
     }, {
         id: 'advanced',
         name: 'Advanced',
-        features: ['dashboard', 'wallet', 'history', 'merchants', 'settings', 'logout', 'staking']
+        features: ['dashboard', 'wallet', 'history', 'merchants', 'settings', 'logout', 'staking', 'walletmode']
     }, {
         id: 'experimental',
         name: 'Experimental',
-        features: ['dashboard', 'wallet', 'history', 'identity', 'merchants', 'settings', 'logout', 'staking', 'hubs', 'debug']
+        features: ['dashboard', 'wallet', 'history', 'identity', 'merchants', 'settings', 'logout', 'staking', 'hubs', 'debug', 'walletmode']
     }];
 
     active: AppMode;

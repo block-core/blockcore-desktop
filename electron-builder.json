@@ -1,17 +1,17 @@
 {
-    "appId": "org.city-chain.hub",
-    "artifactName": "City.Hub-${version}-${os}-${arch}.${ext}",
-    "productName": "City Hub",
+    "appId": "net.blockcore.hub",
+    "artifactName": "Blockcore.Hub-${version}-${os}-${arch}.${ext}",
+    "productName": "Blockcore Hub",
     "asar": true,
     "publish": [
         {
             "provider": "github",
-            "owner": "CityChainFoundation",
-            "repo": "city-hub"
+            "owner": "block-core",
+            "repo": "blockcore-wallet"
         }
     ],
     "releaseInfo": {
-        "releaseName": "City Hub"
+        "releaseName": "Blockcore Hub"
     },
     "files": [
         "dist/**",
@@ -25,14 +25,14 @@
         "target": [
             "nsis"
         ],
-        "artifactName": "City.Hub-${version}-${os}-${env.arch}.${ext}"
+        "artifactName": "Blockcore.Hub-${version}-${os}-${env.arch}.${ext}"
     },
     "linux": {
         "icon": "dist/assets/images/",
         "target": [
             "AppImage:x64"
         ],
-        "synopsis": "City Hub is your hub into everything on City Chain and the Smart City Platform.",
+        "synopsis": "Blockcore is your hub into everything on blockchains and the Smart City Platform.",
         "category": "Utility"
     },
     "mac": {
@@ -72,7 +72,7 @@
     },
     "extraResources": [
         "daemon/**/*",
-        "dist/assets/city/icon-tray.ico",
+        "favicon.ico",
         "dist/assets/license.txt"
     ]
 }

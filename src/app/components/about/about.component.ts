@@ -24,6 +24,6 @@ export class AboutComponent implements OnInit {
     }
 
     openFolder(directory: string): void {
-        this.electron.shell.showItemInFolder(directory);
+        this.electron.shell.openPath(directory);
     }
 }

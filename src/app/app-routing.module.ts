@@ -174,7 +174,7 @@ const routes: Routes = [
         component: UpdateComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'Update City Hub'
+            title: 'Update Blockcore Hub'
         },
     },
     {

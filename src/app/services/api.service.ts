@@ -678,7 +678,7 @@ export class ApiService {
 
         this.notifications.add({
             title: 'Communication error',
-            hint: 'These types of errors are not uncommon, happens when there is issues communicating between City Hub and City Chain background process',
+            hint: 'These types of errors are not uncommon, happens when there is issues communicating between Blockcore Hub and Blockcore Node background process',
             message: errorMessage,
             icon: 'warning'
         });

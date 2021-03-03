@@ -91,7 +91,7 @@ let daemons = [];
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
-const coin = { identity: 'city', tooltip: 'City Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
+const coin = { identity: 'city', tooltip: 'Blockcore Hub' }; // To simplify third party forks and different UIs for different coins, we'll define this constant that loads different assets.
 
 require('electron-context-menu')({
     showInspectElement: serve
@@ -132,7 +132,7 @@ ipcMain.on('start-daemon', (event, arg: Chain) => {
 
     if (arg.mode === 'manual') {
         daemonState = DaemonState.Started;
-        const msg = 'City Hub was started in development mode. This requires the user to be running the daemon manually.';
+        const msg = 'Blockcore Hub was started in development mode. This requires the user to be running the daemon manually.';
         writeLog(msg);
         event.returnValue = msg;
     } else {
