@@ -5,14 +5,14 @@
     <ng-template [ngIf]="!loading" [ngIfElse]="spinner">
 
         <mat-form-field>
-            <mat-select placeholder="Select network" [(ngModel)]="selectedNetwork">
+            <mat-select placeholder="Select network" [(ngModel)]="appState.activeChain">
                 <mat-option *ngFor="let network of filteredAvailableChains" [value]="network">
                     {{network.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <button class="start-button" (click)="launch()" [disabled]="selectedMode == null || selectedNetwork == null" mat-raised-button color="primary">Start</button>
+        <button class="start-button" (click)="launch()" [disabled]="selectedMode == null || appState.activeChain == null" mat-raised-button color="primary">Start</button>
 
         <mat-accordion class="setup-headers-align" multi>
             <mat-expansion-panel>
