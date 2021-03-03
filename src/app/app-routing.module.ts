@@ -34,21 +34,24 @@ const routes: Routes = [
         path: 'load',
         component: LoadComponent,
         data: {
-            title: 'Setup'
+            title: 'Setup',
+            animation: 'LoadPage'
         },
     },
     {
         path: 'advanced',
         component: AdvancedComponent,
         data: {
-            title: 'Advanced Tools'
+            title: 'Advanced Tools',
+            animation: 'AdvancedPage'
         },
     },
     {
         path: 'login',
         component: LoginComponent,
         data: {
-            title: 'Log in'
+            title: 'Log in',
+            animation: 'LoginPage'
         },
     },
     {
@@ -57,7 +60,8 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
         // canActivate: [AuthenticatedUserGuard, ConnectedToNetworkdGuard],
         data: {
-            title: 'Dashboard'
+            title: 'Dashboard',
+            animation: 'DashboardPage'
         }
     },
     {
@@ -158,7 +162,8 @@ const routes: Routes = [
         component: NetworkComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'Network Status'
+            title: 'Network Status',
+            animation: 'StatusPage'
         },
     },
     {
@@ -190,7 +195,8 @@ const routes: Routes = [
         component: NotificationsComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'Notification Center'
+            title: 'Notification Center',
+            animation: 'NotificationPage'
         },
     },
     {

@@ -11,7 +11,8 @@ const routes: Routes = [
         path: '', component: AboutComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'About'
+            title: 'About',
+            animation: 'AboutPage'
         }
     },
     {

@@ -11,7 +11,7 @@ import { TitleService } from '../../services/title.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
 import { ElectronService } from 'ngx-electron';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
 import { UpdateService } from '../../services/update.service';
@@ -25,6 +25,7 @@ import { ReportComponent } from '../report/report.component';
 import { SettingsService } from 'src/app/services/settings.service';
 import { IdentityService } from 'src/app/services/identity.service';
 import { IdentityContainer } from '@models/identity';
+// import { slideInAnimation } from 'src/app/app.animations';
 
 @Component({
     selector: 'app-root',
@@ -32,6 +33,9 @@ import { IdentityContainer } from '@models/identity';
     styleUrls: ['./root.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.Default,
+    // animations: [
+    //     slideInAnimation
+    // ]
 })
 export class RootComponent implements OnInit, OnDestroy {
 
@@ -238,6 +242,10 @@ export class RootComponent implements OnInit, OnDestroy {
 
     get appTitle$(): Observable<string> {
         return this.titleService.$title;
+    }
+
+    prepareRoute(outlet: RouterOutlet) {
+        return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
     }
 
     loadFiller() {

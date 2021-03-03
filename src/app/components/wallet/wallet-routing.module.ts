@@ -11,7 +11,8 @@ const routes: Routes = [
         path: '', component: WalletComponent,
         canActivate: [AuthenticatedUserGuard],
         data: {
-            title: 'Wallet'
+            title: 'Wallet',
+            animation: 'WalletPage'
         }
     },
     {
