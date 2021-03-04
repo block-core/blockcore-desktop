@@ -89,6 +89,10 @@ export class LoadComponent implements OnInit, OnDestroy {
         if (this.appState.isChangingToChain) {
             // If the user has selected a new chain to change to, just do it automatically.
             this.appState.activeChain = this.appState.changeToChain;
+
+            // Important to update this, it will be used by API Service to initialize the correct node daemon.
+            this.appState.daemon.network = this.appState.activeChain.network;
+
             // this.appState.changeToChain = null;
 
             // if (this.appState.changeToChain) {

@@ -330,7 +330,7 @@ export class RootComponent implements OnInit {
         debugger;
 
         // Restart Angular to refresh services, etc.
-        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+        // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
 
         // Navigate and show loading indicator.
         // this.router.navigate(['/load'], { queryParams: { loading: true, changing: true } });
