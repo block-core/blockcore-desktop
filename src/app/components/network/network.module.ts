@@ -8,6 +8,7 @@ import { NetworkDetailsComponent } from './network-details.component';
 import { NetworkAddNodeComponent } from './network-add-node.component';
 import { FormsModule } from '@angular/forms';
 import { NetworkBanNodeComponent } from './network-ban-node.component';
+import { NetworkRoutingModule } from './network-routing.module';
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import { NetworkBanNodeComponent } from './network-ban-node.component';
         FlexLayoutModule,
         MaterialModule,
         FormsModule,
+        NetworkRoutingModule
     ],
     declarations: [
         NetworkComponent,

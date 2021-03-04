@@ -6,6 +6,7 @@ import { MaterialModule } from '../../material.module';
 import { FormsModule } from '@angular/forms';
 import { HubAddComponent } from './hub-add.component';
 import { HubDetailsComponent } from './hub-details.component';
+import { SettingsRoutingModule } from './settings-routing.module';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import { HubDetailsComponent } from './hub-details.component';
         RouterModule,
         FormsModule,
         MaterialModule,
+        SettingsRoutingModule
     ],
     declarations: [
         SettingsComponent,

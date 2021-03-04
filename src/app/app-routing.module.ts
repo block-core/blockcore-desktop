@@ -7,15 +7,10 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { LoadComponent } from './components/load/load.component';
-import { NetworkComponent } from './components/network/network.component';
 import { MerchantsComponent } from './components/merchants/merchants.component';
 import { UpdateComponent } from './components/update/update.component';
-import { HistoryComponent } from './components/history/history.component';
 import { AdvancedComponent } from './components/advanced/advanced.component';
 import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
-import { ToolsComponent } from './components/tools/tools.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
-import { NetworkDetailsComponent } from './components/network/network-details.component';
 import { IdentityComponent } from './components/identity/identity.component';
 import { IdentityViewComponent } from './components/identity/identity-view.component';
 import { HubDetailsComponent } from './components/settings/hub-details.component';
@@ -40,11 +35,7 @@ const routes: Routes = [
     },
     {
         path: 'advanced',
-        component: AdvancedComponent,
-        data: {
-            title: 'Advanced Tools',
-            animation: 'AdvancedPage'
-        },
+        loadChildren: () => import('./components/advanced/advanced.module').then(m => m.AdvancedModule),
     },
     {
         path: 'login',
@@ -74,56 +65,8 @@ const routes: Routes = [
     },
     {
         path: 'identity',
-        component: IdentityComponent,
+        loadChildren: () => import('./components/identity/identity.module').then(m => m.IdentityModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity'
-        },
-    },
-    {
-        path: 'identity/:id',
-        component: IdentityViewComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity',
-            prefix: 'View'
-        },
-    },
-    {
-        path: 'identity/:id/edit',
-        component: IdentityEditComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity',
-            prefix: 'Edit'
-        },
-    },
-    {
-        path: 'identity/:id/unlock',
-        component: IdentityUnlockComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity',
-            prefix: 'Unlock'
-        },
-    },
-    {
-        path: 'identity/:id/export',
-        component: IdentityExportComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity',
-            prefix: 'Export'
-        },
-    },
-    {
-        path: 'identity/:id/search',
-        component: IdentityLookupComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Identity',
-            prefix: 'Lookup'
-        },
     },
     {
         path: 'merchants',
@@ -133,87 +76,70 @@ const routes: Routes = [
             title: 'Merchants'
         },
     },
+    // {
+    //     path: 'settings',
+    //     component: SettingsComponent,
+    //     canActivate: [AuthenticatedUserGuard],
+    //     data: {
+    //         title: 'Settings'
+    //     },
+    // },
+    // {
+    //     path: 'hubs',
+    //     component: HubDetailsComponent,
+    //     canActivate: [AuthenticatedUserGuard],
+    //     data: {
+    //         title: 'Manage Hubs'
+    //     },
+    // },
     {
         path: 'settings',
-        component: SettingsComponent,
+        loadChildren: () => import('./components/settings/settings.module').then(m => m.SettingsModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Settings'
-        },
-    },
-    {
-        path: 'hubs',
-        component: HubDetailsComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Manage Hubs'
-        },
     },
     {
         path: 'logout',
-        component: LogoutComponent,
+        loadChildren: () => import('./components/logout/logout.module').then(m => m.LogoutModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Log out'
-        },
-    },
-    {
-        path: 'network',
-        component: NetworkComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Network Status',
-            animation: 'StatusPage'
-        },
-    },
-    {
-        path: 'network-details',
-        component: NetworkDetailsComponent,
-        canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Network Details'
-        },
     },
     {
         path: 'update',
-        component: UpdateComponent,
+        loadChildren: () => import('./components/update/update.module').then(m => m.UpdateModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Update Blockcore Hub'
-        },
+    },
+    {
+        path: 'network',
+        loadChildren: () => import('./components/network/network.module').then(m => m.NetworkModule),
+        canActivate: [AuthenticatedUserGuard],
     },
     {
         path: 'tools',
-        component: ToolsComponent,
+        loadChildren: () => import('./components/tools/tools.module').then(m => m.ToolsModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Tools'
-        },
     },
     {
         path: 'notifications',
-        component: NotificationsComponent,
+        loadChildren: () => import('./components/notifications/notifications.module').then(m => m.NotificationsModule),
         canActivate: [AuthenticatedUserGuard],
-        data: {
-            title: 'Notification Center',
-            animation: 'NotificationPage'
-        },
     },
     {
         path: 'about',
-        loadChildren: () => import('./components/about/about.module').then(m => m.AboutModule)
+        loadChildren: () => import('./components/about/about.module').then(m => m.AboutModule),
     },
     {
         path: 'wallet',
-        loadChildren: () => import('./components/wallet/wallet.module').then(m => m.WalletModule)
+        loadChildren: () => import('./components/wallet/wallet.module').then(m => m.WalletModule),
+        canActivate: [AuthenticatedUserGuard],
     },
     {
         path: 'account',
-        loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule)
+        loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule),
+        canActivate: [AuthenticatedUserGuard],
     },
     {
         path: 'history',
-        loadChildren: () => import('./components/history/history.module').then(m => m.HistoryModule)
+        loadChildren: () => import('./components/history/history.module').then(m => m.HistoryModule),
+        canActivate: [AuthenticatedUserGuard],
     },
     {
         path: '**',

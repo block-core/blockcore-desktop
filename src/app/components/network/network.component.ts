@@ -52,6 +52,6 @@ export class NetworkComponent implements OnInit, OnDestroy, AfterContentInit {
     }
 
     details() {
-        this.router.navigateByUrl('/network-details');
+        this.router.navigateByUrl('/network/details');
     }
 }

@@ -52,7 +52,7 @@ export class LogoutComponent {
             );
 
         // Triggers the reboot in main.ts
-        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+        // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
 
         this.router.navigateByUrl('/login');
     }

@@ -40,11 +40,11 @@ import { BootController } from 'src/boot';
     //     slideInAnimation
     // ]
 })
-export class RootComponent implements OnInit, OnDestroy {
+export class RootComponent implements OnInit {
 
     @HostBinding('class.root') hostClass = true;
 
-    private readonly destroyed$ = new Subject<void>();
+    // private readonly destroyed$ = new Subject<void>();
     private walletObservable;
     private ipc: Electron.IpcRenderer;
 
@@ -137,9 +137,10 @@ export class RootComponent implements OnInit, OnDestroy {
                     this.cd.detectChanges();
 
                     // Navigate again to hide the loading indicator.
+                    debugger;
 
                     // if (!this.appState.isChangingToChain) {
-                        this.router.navigate(['/load']);
+                    this.router.navigate(['/load']);
                     // }
 
                     this.cd.detectChanges();
@@ -274,6 +275,9 @@ export class RootComponent implements OnInit, OnDestroy {
 
         this.stopWallet();
 
+        // Triggers the reboot in main.ts
+        // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+
         this.router.navigateByUrl('/login');
     }
 
@@ -294,9 +298,6 @@ export class RootComponent implements OnInit, OnDestroy {
                     this.apiService.handleException(error);
                 }
             );
-
-        // Triggers the reboot in main.ts
-        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
     }
 
     changeMode(chain) {
@@ -326,8 +327,13 @@ export class RootComponent implements OnInit, OnDestroy {
 
         this.electronService.ipcRenderer.send('update-icon', null);
 
+        debugger;
+
+        // Restart Angular to refresh services, etc.
+        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+
         // Navigate and show loading indicator.
-        this.router.navigate(['/load'], { queryParams: { loading: true, changing: true } });
+        // this.router.navigate(['/load'], { queryParams: { loading: true, changing: true } });
     }
 
     prepareRoute(outlet: RouterOutlet) {
@@ -377,8 +383,13 @@ export class RootComponent implements OnInit, OnDestroy {
             this.checkForUpdates();
         }, 12000);
 
-        if (this.router.url !== '/load') {
-            this.router.navigateByUrl('/load');
+        debugger;
+
+        // Only perform root toe load redirect when not changing the chain.
+        if (!this.appState.changeToChain) {
+            if (this.router.url !== '/load') {
+                this.router.navigateByUrl('/load');
+            }
         }
     }
 
@@ -396,10 +407,10 @@ export class RootComponent implements OnInit, OnDestroy {
         console.log(this.coinIcon);
     }
 
-    ngOnDestroy() {
-        this.destroyed$.next();
-        this.destroyed$.complete();
-    }
+    // ngOnDestroy() {
+    //     this.destroyed$.next();
+    //     this.destroyed$.complete();
+    // }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     private subscription: Subscription;

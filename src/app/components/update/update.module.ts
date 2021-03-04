@@ -4,13 +4,15 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
+import { UpdateRoutingModule } from './update-routing.module';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
         MaterialModule,
-        AppSharedModule
+        AppSharedModule,
+        UpdateRoutingModule
     ],
     declarations: [
         UpdateComponent,

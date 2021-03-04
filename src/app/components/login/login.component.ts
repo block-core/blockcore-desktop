@@ -126,6 +126,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.electronService.ipcRenderer.send('update-icon', null);
 
+        debugger;
+
         // Navigate and show loading indicator.
         this.router.navigate(['/load'], { queryParams: { loading: true } });
     }

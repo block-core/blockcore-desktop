@@ -322,7 +322,7 @@ export class LoadComponent implements OnInit, OnDestroy {
                 }
 
                 if (params.changing) {
-
+                    // this.initialize();
                 }
             });
 
@@ -341,6 +341,12 @@ export class LoadComponent implements OnInit, OnDestroy {
         //         this.initialize();
         //     }
         // }
+
+        if (this.appState.changeToChain && this.appState.isChangingToChain) {
+            // this.appState.changeToChain = null;
+            this.appState.isChangingToChain = false;
+            this.initialize();
+        }
 
         const existingMode = localStorage.getItem('Network:Mode');
 

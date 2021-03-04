@@ -4,12 +4,10 @@ import { ChangesComponent } from './changes/changes.component';
 import { LicensesComponent } from './licenses/licenses.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { AboutComponent } from './about.component';
-import { AuthenticatedUserGuard } from '../../modules/authentication/guards/authenticated-user.guard';
 
 const routes: Routes = [
     {
         path: '', component: AboutComponent,
-        canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'About',
             animation: 'AboutPage'
@@ -18,7 +16,6 @@ const routes: Routes = [
     {
         path: 'changes',
         component: ChangesComponent,
-        canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'What\'s new',
             prefix: 'About'
@@ -27,7 +24,6 @@ const routes: Routes = [
     {
         path: 'licenses',
         component: LicensesComponent,
-        canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Third party licenses',
             prefix: 'About'
@@ -36,7 +32,6 @@ const routes: Routes = [
     {
         path: 'privacy',
         component: PrivacyComponent,
-        canActivate: [AuthenticatedUserGuard],
         data: {
             title: 'Privacy Policy',
             prefix: 'About'
