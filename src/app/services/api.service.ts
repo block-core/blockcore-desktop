@@ -84,11 +84,11 @@ export class ApiService {
 
                 if (this.daemon !== 'OK') {
                     this.notifications.add({
-                        title: 'City Chain background error',
-                        hint: 'Messages from the background process received in City Hub',
+                        title: 'Blockcore node background error',
+                        hint: 'Messages from the background process received in Blockcore Hub',
                         message: this.daemon,
                         icon: 'warning'
-                        // icon: (this.daemon.indexOf('City Hub was started in development mode') > -1) ? 'build' : 'warning'
+                        // icon: (this.daemon.indexOf('Blockcore Hub was started in development mode') > -1) ? 'build' : 'warning'
                     });
                     // this.snackBar.open(this.daemon, null, { duration: 7000 });
                 }
@@ -640,7 +640,7 @@ export class ApiService {
             .pipe(map((response: Response) => response));
     }
 
-    /** Use this to handle error in the initial startup (wallet/files) of City Hub. */
+    /** Use this to handle error in the initial startup (wallet/files) of Blockcore Hub. */
     handleInitialError(error: HttpErrorResponse | any) {
         // Only show snackbar errors when we have connected. Initially we will receive some errors due to aggresive
         // attempts at connecting to the node.
@@ -665,7 +665,16 @@ export class ApiService {
             errorMessage = 'An error occurred:' + error.error.message;
             // A client-side or network error occurred. Handle it accordingly.
         } else if (error.error?.errors) {
-            errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
+            if (Array.isArray(error.error.errors)) {
+                errorMessage = `${error.error.errors[0].message} (Code: ${error.error.errors[0].status})`;
+            } else {
+                for (var property in error.error?.errors) {
+                    if (error.error?.errors.hasOwnProperty(property)) {
+                        console.log(property);
+                        errorMessage += `${property}: ${error.error.errors[property]}`;
+                    }
+                }
+            }
         } else if (error.name === 'HttpErrorResponse') {
             errorMessage = `Unable to connect with background daemon: ${error.message} (${error.status})`;
             // if (error.error.target.__zone_symbol__xhrURL.indexOf('api/wallet/files') > -1) {

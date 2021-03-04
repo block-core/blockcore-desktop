@@ -119,9 +119,6 @@ export class IdentityService implements OnDestroy {
         // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
         // }, null, this.appState.networkParams);
 
-        // eslint-disable-next-line no-debugger
-        // debugger;
-
         const decryptedKey = bip38.decrypt(seed.encryptedSeed, password, null, null, this.appState.networkParams);
 
         const chainCode = Buffer.from(seed.chainCode, 'base64');

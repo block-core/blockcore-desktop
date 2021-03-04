@@ -115,7 +115,7 @@ export class RootComponent implements OnInit {
                 this.appState.shutdownInProgress = true;
                 this.cd.detectChanges();
 
-                // If the exit takes a very long time, we want to allow users to forcefully exit City Hub.
+                // If the exit takes a very long time, we want to allow users to forcefully exit Blockcore Hub.
                 setTimeout(() => {
                     this.appState.shutdownDelayed = true;
                     this.cd.detectChanges();
@@ -137,8 +137,6 @@ export class RootComponent implements OnInit {
                     this.cd.detectChanges();
 
                     // Navigate again to hide the loading indicator.
-                    debugger;
-
                     // if (!this.appState.isChangingToChain) {
                     this.router.navigate(['/load']);
                     // }
@@ -301,9 +299,6 @@ export class RootComponent implements OnInit {
     }
 
     changeMode(chain) {
-
-        debugger;
-
         // Update the change to chain to be what user want to change to.
         this.appState.changeToChain = chain;
         this.appState.isChangingToChain = true;
@@ -327,7 +322,7 @@ export class RootComponent implements OnInit {
 
         this.electronService.ipcRenderer.send('update-icon', null);
 
-        debugger;
+        this.cd.detectChanges();
 
         // Restart Angular to refresh services, etc.
         // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
@@ -375,15 +370,12 @@ export class RootComponent implements OnInit {
     }
 
     ngOnInit() {
-
         // this.tryStart();
 
         setTimeout(() => {
             // We'll check for updates in the startup of the app.
             this.checkForUpdates();
         }, 12000);
-
-        debugger;
 
         // Only perform root toe load redirect when not changing the chain.
         if (!this.appState.changeToChain) {

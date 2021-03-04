@@ -56,7 +56,7 @@ export class NotificationService {
         //     {
         //         title: 'Unable to connect with server',
         //         icon: 'warning',
-        //         hint: 'This normally means there is communication issues between City Hub, and the City Chain background process.',
+        //         hint: 'This normally means there is communication issues between Blockcore Hub, and the City Chain background process.',
         //         message: 'Exception: STACK OVERFLOW!',
         //         count: 5
         //     });

@@ -148,9 +148,6 @@ export class CreateAccountComponent implements OnInit {
                 // eslint-disable-next-line prefer-const
                 let encryptedKeySeed = bip38.encrypt(masterNode.privateKey, true, wallet.password, null, null, this.appState.networkParams);
 
-                // eslint-disable-next-line
-                // debugger;
-
                 // Instantiate it
                 const db = new DatabaseStorageService('cityhub');
 

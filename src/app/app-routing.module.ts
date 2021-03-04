@@ -107,14 +107,14 @@ const routes: Routes = [
     //         prefix: 'Lookup'
     //     },
     // },
-    // {
-    //     path: 'merchants',
-    //     component: MerchantsComponent,
-    //     canActivate: [AuthenticatedUserGuard],
-    //     data: {
-    //         title: 'Merchants'
-    //     },
-    // },
+    {
+        path: 'merchants',
+        component: MerchantsComponent,
+        canActivate: [AuthenticatedUserGuard],
+        data: {
+            title: 'Merchants'
+        },
+    },
     // {
     //     path: 'settings',
     //     component: SettingsComponent,
@@ -173,7 +173,6 @@ const routes: Routes = [
     {
         path: 'account',
         loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule),
-        canActivate: [AuthenticatedUserGuard],
     },
     {
         path: 'history',

@@ -59,7 +59,7 @@ import { IdentityModule } from './components/identity/identity.module';
         // ChainService,
         ElectronService,
         // GlobalService,
-        { provide: APP_TITLE, useValue: 'City Hub' },
+        { provide: APP_TITLE, useValue: 'Blockcore Hub' },
     ],
     bootstrap: [RootComponent]
 })

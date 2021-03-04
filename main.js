@@ -174,7 +174,7 @@ electron_1.ipcMain.on('reset-database', function (event, arg) {
     resetArg = arg;
     // Make sure the daemon is shut down first:
     shutdownDaemon(function (success, error) {
-        console.log('SHUTDOWN COMPLETED, NOW WIPE FOLDERS! ... this code is never called.');
+        console.log('Shutdown completed, delete of files will be triggered by different event handler.');
     });
     event.returnValue = 'OK';
 });
@@ -271,7 +271,7 @@ function createWindow() {
         frame: true,
         minWidth: 260,
         minHeight: 400,
-        title: 'City Hub',
+        title: 'Blockcore Hub',
         icon: __dirname + '/app.ico',
         webPreferences: { webSecurity: false, nodeIntegration: true, contextIsolation: false }
     });
@@ -347,7 +347,7 @@ electron_1.app.on('ready', function () {
     createWindow();
 });
 electron_1.app.on('before-quit', function () {
-    writeLog('City Hub was exited.');
+    writeLog('Blockcore Hub was exited.');
     exitGuard();
 });
 var shutdown = function (callback) {
@@ -495,6 +495,7 @@ function launchDaemon(apiPath, chain) {
     daemonProcess.on('exit', function (code, signal) {
         writeLog("Node daemon process exited with code " + code + " and signal " + signal + " when the state was " + daemonState + ".");
         if (resetMode) {
+            resetMode = false;
             daemonState = DaemonState.Changing;
             writeLog('Daemon reset was expected, the user is resetting the blockchain database. Proceeding to delete files...');
             var dataFolder = parseDataFolder(resetArg);

@@ -119,8 +119,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getUnusedReceiveAddressSimpleMode() {
-        // eslint-disable-next-line
-        // debugger;
         const network = this.appState.networkDefinition;
         const xpubkey = this.wallet.activeWallet.extPubKey;
         const root = bip32.fromBase58(xpubkey);
@@ -171,9 +169,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
             // TODO: Find the last used indexed from querying indexer (persisted to IndexedDB locally)
             const address = this.getAddress(root.derivePath('0/' + i), network);
             this.unusedAddresses.push(address);
-
-            // eslint-disable-next-line
-            // debugger;
         }
 
         const walletInfo = new WalletInfo(this.globalService.getWalletName());

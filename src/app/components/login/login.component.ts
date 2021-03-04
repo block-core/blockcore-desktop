@@ -126,8 +126,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.electronService.ipcRenderer.send('update-icon', null);
 
-        debugger;
-
         // Navigate and show loading indicator.
         this.router.navigate(['/load'], { queryParams: { loading: true } });
     }
@@ -331,8 +329,13 @@ export class LoginComponent implements OnInit, OnDestroy {
                     // }
                 },
                 error => {
-                    if (error.status === 403 || error.status === 400) { // Invalid password / empty password
+                    if (error.status === 403) { // Invalid password
                         const msg = error.error.errors[0].message;
+                        this.errorMessage = msg;
+                    }
+
+                    if (error.status === 400) { // Empty password
+                        const msg = error.error.errors.password[0];
                         this.errorMessage = msg;
                     }
 

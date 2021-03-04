@@ -71,8 +71,6 @@ export class LoadComponent implements OnInit, OnDestroy {
             { id: 'full', name: 'Full' },
         ];
 
-        debugger;
-
         if (!environment.production) {
             this.modes.push(
                 // { id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
@@ -134,8 +132,6 @@ export class LoadComponent implements OnInit, OnDestroy {
     }
 
     initialize() {
-        debugger;
-
         this.apiService.initialize();
 
         // TODO: Should send the correct network, hard-coded to city main for now.
@@ -316,7 +312,6 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.routingSubscription = this.route
             .queryParams
             .subscribe(params => {
-                debugger;
                 if (params.loading) {
                     this.loading = true;
                     this.loadingFailed = false;
@@ -329,8 +324,6 @@ export class LoadComponent implements OnInit, OnDestroy {
                     // this.initialize();
                 }
             });
-
-        debugger;
 
         // this.unsubscribe(); // Make sure we unsubscribe existing listeners.
 
@@ -347,7 +340,6 @@ export class LoadComponent implements OnInit, OnDestroy {
         // }
 
         if (this.appState.changeToChain && this.appState.isChangingToChain) {
-            // this.appState.changeToChain = null;
             this.appState.isChangingToChain = false;
             this.initialize();
         }

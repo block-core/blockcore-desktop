@@ -1,11 +1,11 @@
-City Hub: Development Guidelines
+Blockcore Hub: Development Guidelines
 ===============
 
-So if anyone want to try doing some development on City Hub, this is the absolute easiest way to get started:
+So if anyone want to try doing some development on Blockcore Hub, this is the absolute easiest way to get started:
 
-1. Download, install and run City Hub. By running the official release of City Hub, you also get the City Chain daemon running locally. This will host the APIs that are used by City Hub.
+1. Download, install and run Blockcore Hub. By running the official release of Blockcore Hub, you also get the City Chain daemon running locally. This will host the APIs that are used by Blockcore Hub.
 
-2. Clone the City Hub source code, navigate to the root, run "npm install" and then "npm start". This will launch a web server with the angular app.
+2. Clone the Blockcore Hub source code, navigate to the root, run "npm install" and then "npm start". This will launch a web server with the angular app.
 
 3. Hit F5 in Visual Studio Code to debug, select the "Electron: All" to debug both renderer and main processes.
 
@@ -59,7 +59,7 @@ Check out the [city-chain](https://dev.azure.com/citychain/city-chain/) project 
 
 ## Security
 
-Security is always a very important concern, and City Hub has more built-in features that most normal wallets. More features, 
+Security is always a very important concern, and Blockcore Hub has more built-in features that most normal wallets. More features, 
 means more exposure to potential security issues.
 
 It is important that all contributors are well aware of security principles, and especially regarding Electron, 
