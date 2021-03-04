@@ -13,7 +13,7 @@ const routes: Routes = [
         },
     },
     {
-        path: ':id',
+        path: 'view/:id',
         component: IdentityViewComponent,
         data: {
             title: 'Identity',
@@ -21,7 +21,7 @@ const routes: Routes = [
         },
     },
     {
-        path: ':id/edit',
+        path: 'edit/:id',
         component: IdentityViewComponent,
         data: {
             title: 'Identity',
@@ -29,7 +29,7 @@ const routes: Routes = [
         },
     },
     {
-        path: ':id/unlock',
+        path: 'unlock/:id',
         component: IdentityUnlockComponent,
         data: {
             title: 'Identity',
@@ -37,7 +37,7 @@ const routes: Routes = [
         },
     },
     {
-        path: ':id/export',
+        path: 'export/:id',
         component: IdentityViewComponent,
         data: {
             title: 'Identity',
@@ -45,7 +45,7 @@ const routes: Routes = [
         },
     },
     {
-        path: ':id/search',
+        path: 'search/:id',
         component: IdentityUnlockComponent,
         data: {
             title: 'Identity',

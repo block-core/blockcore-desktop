@@ -56,6 +56,7 @@ import { IdentityRoutingModule } from './identity-routing.module';
         IdentityExportComponent,
         IdentityBadgeComponent,
         IdentityFilterComponent,
+        IdentityFilterPipe,
         IdentityStateComponent,
     ],
     entryComponents: [
