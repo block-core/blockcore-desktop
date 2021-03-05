@@ -139,6 +139,17 @@
             <mat-card-subtitle>Settings that applies to your wallet.</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
+
+            <h3 class="mat-h3">Address Type</h3>
+
+            <mat-form-field>
+                <mat-select [(ngModel)]="appState.addressType">
+                    <mat-option *ngFor="let addressType of appState.addressTypes" [value]="addressType">
+                        {{addressType}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
             <h3 class="mat-h3">Wallet Mode</h3>
 
             <mat-radio-group (change)="onChanged($event)" [(ngModel)]="selectedWalletMode">

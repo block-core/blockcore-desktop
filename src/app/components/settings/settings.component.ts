@@ -5,6 +5,7 @@ import { ElectronService } from 'ngx-electron';
 import { SettingsService } from 'src/app/services/settings.service';
 import { JsonHubProtocol } from '@aspnet/signalr';
 import { HubService } from 'src/app/services/hub.service';
+import { ApplicationStateService } from 'src/app/services/application-state.service';
 
 @Component({
     selector: 'app-settings',
@@ -27,12 +28,15 @@ export class SettingsComponent {
 
     selectedHub: string;
     hubs: any;
+    addressTypes = ['Legacy', 'Segwit'];
+    addressType: string;
 
     constructor(
         public readonly theme: Theming,
         private electronService: ElectronService,
         public electron: ElectronService,
         public settings: SettingsService,
+        public appState: ApplicationStateService,
         public hubService: HubService,
         public appModes: AppModes) {
 

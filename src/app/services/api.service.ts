@@ -415,7 +415,7 @@ export class ApiService {
             fromObject: {
                 walletName: data.walletName,
                 accountName: 'account 0',
-                segwit: (addressType === 'segwit').toString()
+                segwit: (addressType === 'Segwit').toString()
             }
         });
 
@@ -433,7 +433,7 @@ export class ApiService {
             fromObject: {
                 walletName: data.walletName,
                 accountName: 'account 0',
-                segwit: (addressType === 'segwit').toString()
+                segwit: (addressType === 'Segwit').toString()
             }
         });
 
@@ -452,7 +452,7 @@ export class ApiService {
                 walletName: data.walletName,
                 accountName: 'account 0',
                 count,
-                segwit: (addressType === 'segwit').toString()
+                segwit: (addressType === 'Segwit').toString()
             }
         });
 
@@ -470,7 +470,7 @@ export class ApiService {
             fromObject: {
                 walletName: data.walletName,
                 accountName: 'account 0',
-                segwit: (addressType === 'segwit').toString()
+                segwit: (addressType === 'Segwit').toString()
             }
         });
 

@@ -30,7 +30,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     public unusedAddresses: string[];
     public changeAddresses: string[];
     private errorMessage: string;
-    public addressType = 'legacy';
+    public addressType: string;
 
     constructor(
         public readonly appState: ApplicationStateService,
@@ -45,6 +45,9 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        // Read the user picked address type.
+        this.addressType = this.appState.addressType;
+
         this.load();
     }
 

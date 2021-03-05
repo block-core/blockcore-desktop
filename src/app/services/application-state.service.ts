@@ -7,6 +7,7 @@ import { ElectronService } from 'ngx-electron';
 import { SettingsService } from './settings.service';
 import { Chain, ChainService } from './chain.service';
 import { WalletAccount } from '../components/login/login.component';
+import { StorageService } from './storage.service';
 
 export interface DaemonConfiguration {
     mode: string;
@@ -31,6 +32,7 @@ export class ApplicationStateService {
         private electron: ElectronService,
         private settings: SettingsService,
         public chains: ChainService,
+        private storage: StorageService,
         private readonly titleService: TitleService,
     ) {
         if (!ApplicationStateService.singletonInstance) {
@@ -114,6 +116,16 @@ export class ApplicationStateService {
     get isSimpleMode(): boolean {
         return this.daemon.mode === 'simple';
     }
+
+    get addressType(): string {
+        return this.storage.getValue('AddressType', 'Legacy', true);
+    }
+
+    set addressType(value: string) {
+        this.storage.setValue('AddressType', value, true);
+    }
+
+    addressTypes = ['Legacy', 'Segwit'];
 
     getParam(n) {
         const half = location.search.split(n + '=')[1];
