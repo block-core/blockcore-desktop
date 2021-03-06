@@ -42,6 +42,7 @@ export class LoadComponent implements OnInit, OnDestroy {
     delayed = false;
     apiSubscription: any;
     routingSubscription: any;
+    downloadUrl: string;
     // dataFolder: string;
     // nodePath: string;
 
@@ -252,6 +253,10 @@ export class LoadComponent implements OnInit, OnDestroy {
         });
 
         this.tryStart();
+    }
+
+    downloadAndUnpack() {
+        
     }
 
     // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
