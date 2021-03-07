@@ -135,7 +135,7 @@ export class LoadComponent implements OnInit, OnDestroy {
             this.cd.detectChanges();
         });
 
-        this.ipc.on('download-blockchain-package', (event, finished, progress, error) => {
+        this.ipc.on('download-blockchain-package-finished', (event, finished, progress, error) => {
             if (error) {
                 console.error('Error during downloading: ' + error);
             }
@@ -160,7 +160,7 @@ export class LoadComponent implements OnInit, OnDestroy {
             this.cd.detectChanges();
         });
 
-        this.ipc.on('unpack-blockchain-package', (error) => {
+        this.ipc.on('unpack-blockchain-package-finished', (error) => {
 
             this.unpacking = false;
             this.unpacked = true;
@@ -328,6 +328,10 @@ export class LoadComponent implements OnInit, OnDestroy {
             // If the user supplies an relative / local path, we'll go ahead and unpack directly.
             this.unpack(url);
         }
+    }
+
+    openFolder(directory: string): void {
+        this.electronService.shell.openPath(directory);
     }
 
     unpack(source: string) {

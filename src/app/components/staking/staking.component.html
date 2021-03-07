@@ -1,0 +1,127 @@
+<div class="content">
+    <app-grid-container>
+        <div gridCell gcColSpan="2" gcRowSpan="2" class="card card-body">
+            <mat-card class="grid-card">
+                <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
+                <mat-card-subtitle>Balance of: {{wallet.walletName}}</mat-card-subtitle>
+                <mat-card-content>
+                    <!-- <p>
+                            <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                            <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+                        </p> -->
+
+                    <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
+                    <em> (unconfirmed)</em>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body">
+            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                <mat-card-title>Status</mat-card-title>
+                <mat-card-subtitle>Staking disabled</mat-card-subtitle>
+                <mat-card-content class="center-align">
+                    <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
+                <mat-card-title>Status</mat-card-title>
+                <mat-card-subtitle>Staking enabled</mat-card-subtitle>
+                <mat-card-content class="center-align">
+                    <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="wallet.hasBalance">
+            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                <mat-card-title>Unlock wallet</mat-card-title>
+                <mat-card-subtitle>Unlock your wallet to start staking</mat-card-subtitle>
+                <mat-card-content>
+                    <form [formGroup]="stakingForm">
+                        <div class="form-group">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Account password</mat-label>
+                                <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                            </mat-form-field>
+                            <br>
+                            <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
+                <mat-card-title>Staking actions</mat-card-title>
+                <mat-card-subtitle>Want to stop staking?</mat-card-subtitle>
+                <mat-card-content>
+                    <p>
+                        <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="!wallet.hasBalance">
+            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                <mat-card-title>Empty balance</mat-card-title>
+                <mat-card-subtitle>Balance is required</mat-card-subtitle>
+                <mat-card-content>
+                    <p>The balance of this wallet is zero. You must deposit some funds before you can activate staking.</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+            <mat-card class="grid-card">
+                <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(2)}}%</mat-card-title>
+                <mat-card-subtitle>Percentage of network</mat-card-subtitle>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+            <mat-card class="grid-card">
+                <mat-card-title>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
+                <mat-card-subtitle>Your weight</mat-card-subtitle>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+            <mat-card class="grid-card">
+                <mat-card-title>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
+                <mat-card-subtitle>Network weight</mat-card-subtitle>
+            </mat-card>
+        </div>
+
+        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+            <mat-card class="grid-card">
+                <mat-card-title>{{ wallet.dateTime }}</mat-card-title>
+                <mat-card-subtitle>Expected reward time</mat-card-subtitle>
+            </mat-card>
+        </div>
+
+        <div gridCell gcRowSpan="2" class="card card-body" *ngIf="wallet.stakingEnabled">
+            <mat-card class="grid-card">
+                <mat-card-title>Advanced</mat-card-title>
+                <mat-card-subtitle>Details on your staking status</mat-card-subtitle>
+                <mat-card-content>
+                    <p>
+                        CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
+                        CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
+                        PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
+                        Difficulty: {{wallet.stakingInfo.difficulty}}<br>
+                        Search interval: {{wallet.stakingInfo.searchInterval}}<br>
+                        Errors: {{wallet.stakingInfo.errors}}<br>
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div gridCell gcRowSpan="2" class="card card-body">
+            <div class="mat-caption">
+                You can stake the balance you have in your wallet. If you just received your coins, it might take a while for staking to start, due to confirmation requirement for staked coins.
+                <br>When you stop staking, or receive stake rewards, it will take some time before the same coins can be used for staking.
+            </div>
+        </div>
+    </app-grid-container>
+</div>

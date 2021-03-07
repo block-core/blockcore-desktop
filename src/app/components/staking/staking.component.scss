@@ -1,0 +1,286 @@
+@import '~@angular/material/theming';
+
+
+// .grid-container {
+//     position: relative;
+//     max-width: 100%;
+//     display: grid;
+//     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+//     grid-template-rows: minmax(10px, auto);
+//     grid-auto-flow: dense;
+//     grid-gap: 1rem;
+//   }
+  
+//   :host ::ng-deep  [gridCell] {
+//     display: block;
+//     font-size: 20px;
+//     padding: 20px;
+//   }
+  
+//   @media only screen and (max-width: 767px) {
+//     :host ::ng-deep [gridCell] {
+//       grid-column: span 2 !important;
+//     }
+//   }
+
+
+
+
+
+.wallet
+{
+    div[fxLayoutAlign] { padding:10px; padding-left: 25px; padding-top:15px;}
+
+    .dashboard-card {
+        //height: 100%;
+        //margin: 20px;
+        min-height: 150px;
+        //width: 100%;
+    }
+
+    .mat-card {
+        margin-bottom: 20px;
+    }
+
+    mat-card {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-split-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dashboard-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
+
+    .dashboard-split-right {
+       padding-left: 20px;
+       flex-grow: 1;
+       width: 35%;
+       align-self: center;
+    }
+
+    @media screen and (max-width: 599px) {
+        .dashboard-split-card
+        {
+            flex-direction: column;
+        }
+
+        .dashboard-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
+
+        .dashboard-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+         }
+    }
+
+
+    .break-everything {
+        clear: both;
+    }
+
+
+
+    .link {
+        cursor: pointer;
+    }
+
+    .wallet-no-transactions {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .wallet-transactions-table {
+        width: 100%;
+
+        .unconfirmed {
+            font-style: italic;
+            color: rgba($color: silver, $alpha: 0.75)
+        }
+
+        // .mat-row {
+        //     background-color: red! important;
+        //     //color: blue !important;
+        // }
+
+        // .mat-row:hover {
+        //     background-color: rgba(mat-color($primary, 'default'), .6);
+        //     //background-color: red! important;
+        //     //color: blue !important;
+        // }
+    }
+
+    // .wallet-transactions-table .mat-row {
+    //     background-color: red! important;
+    //     color: blue !important;
+    // }
+
+    .wallet-confirmed-icon {
+        font-size: 14px;
+    }
+      
+    .wallet-split-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .wallet-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
+
+    .wallet-split-right {
+       padding-left: 20px;
+       flex-grow: 1;
+       width: 35%;
+       align-self: center;
+    }
+
+    .wallet-info-icon {
+        float: right;
+        cursor: default;
+    }
+
+    @media screen and (max-width: 599px) {
+        .wallet-split-card
+        {
+            flex-direction: column;
+        }
+
+        .wallet-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
+
+        .wallet-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+         }
+    }
+}
+
+
+
+.dashboard {
+
+    .history
+    {
+        width: 80%;
+
+        .history-table
+        {
+            width: 100%;
+        }
+    }
+
+    div[fxLayoutAlign] { padding:10px; padding-left: 25px; padding-top:15px;}
+
+    .dashboard-card {
+        //height: 100%;
+        //margin: 20px;
+        min-height: 150px;
+        //width: 100%;
+    }
+
+    .mat-grid-tile .mat-figure
+    {
+        align-items: flex-start;
+    }
+
+    .dashboard-coinmap {
+        min-height: 200px;
+    }
+
+    .dashboard-info-icon {
+        float: right;
+        cursor: default;
+    }
+
+    .transaction-details-button
+    {
+        height: 10px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .transaction-details-button .mat-icon
+    {
+        font-size: 10px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .link {
+        cursor: pointer;
+    }
+
+    mat-card {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-split-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dashboard-split-left {
+        flex-grow: 2;
+        min-width: 230px;
+        width: 65%;
+    }
+
+    .dashboard-split-right {
+       padding-left: 20px;
+       flex-grow: 1;
+       width: 35%;
+       align-self: center;
+    }
+
+    .marketprice
+    {
+        color: green;
+    }
+
+    .marketprice-negative
+    {
+        color: red;
+    }
+
+    .marketprice-larger 
+    {
+        font-size: 1.2rem;
+    }
+
+    .marketprice-table
+    {
+        width: 100%;
+    }
+
+    @media screen and (max-width: 599px) {
+        .dashboard-split-card
+        {
+            flex-direction: column;
+        }
+
+        .dashboard-split-left {
+            flex-grow: 2;
+            width: 100%;
+        }
+
+        .dashboard-split-right {
+            flex-grow: 1;
+            width: 100%;
+            align-self: center;
+         }
+    }
+}

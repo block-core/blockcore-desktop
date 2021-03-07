@@ -39,8 +39,7 @@
                         ],
                         "styles": [
                             "src/styles/styles.scss",
-                            "src/styles/print.scss",
-                            "src/assets/fonts/material-icons/material-icons.css"
+                            "src/styles/print.scss"
                         ],
                         "stylePreprocessorOptions": {
                             "includePaths": [
@@ -127,8 +126,7 @@
                         "karmaConfig": "karma.conf.js",
                         "styles": [
                             "src/styles/styles.scss",
-                            "src/styles/print.scss",
-                            "src/assets/fonts/material-icons/material-icons.css"
+                            "src/styles/print.scss"
                         ],
                         "scripts": [],
                         "assets": [

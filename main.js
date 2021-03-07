@@ -202,7 +202,7 @@ electron_1.ipcMain.on('download-blockchain-package', function (event, arg) {
     // We must have this in a try/catch or crashes will halt the UI.
     try {
         downloadFile(arg.url, targetFolder, function (finished, progress, error) {
-            contents.send('download-blockchain-package', finished, progress, error);
+            contents.send('download-blockchain-package-finished', finished, progress, error);
             // if (error) {
             //     console.error('Error during downloading: ' + error);
             // }
@@ -226,10 +226,11 @@ electron_1.ipcMain.on('download-blockchain-package-abort', function (event, arg)
     catch (err) {
         event.returnValue = err.message;
     }
-    contents.send('download-blockchain-package', true, { status: 'Cancelled', progress: 0, size: 0, downloaded: 0 }, 'Cancelled');
+    contents.send('download-blockchain-package-finished', true, { status: 'Cancelled', progress: 0, size: 0, downloaded: 0 }, 'Cancelled');
     event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('unpack-blockchain-package', function (event, arg) {
+    console.log('CALLED!!!! - unpack-blockchain-package');
     var targetFolder = parseDataFolder(arg.path);
     var sourceFile = arg.source;
     console.log('targetFolder: ' + targetFolder);
@@ -237,21 +238,11 @@ electron_1.ipcMain.on('unpack-blockchain-package', function (event, arg) {
     var extract = require('extract-zip');
     extract(sourceFile, { dir: targetFolder }).then(function () {
         console.log('FINISHED UNPACKING!');
-        contents.send('unpack-blockchain-package', null);
+        contents.send('unpack-blockchain-package-finished', null);
     })["catch"](function (err) {
         console.error('Failed to unpack: ', err);
-        contents.send('unpack-blockchain-package', err);
+        contents.send('unpack-blockchain-package-finished', err);
     });
-    // extract(source, { dir: target })
-    // const compressing = require('compressing');
-    // // uncompress a file
-    // compressing.tgz.uncompress('file/path/to/uncompress.tgz', 'path/to/destination/dir')
-    //     .t
-    //     .then(uncompressDone)
-    //     .catch(handleError);
-    // var AdmZip = require('adm-zip');
-    // var zip = new AdmZip(targetFile);
-    // zip.extractAllTo(targetFolder, true);
     event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('open-dev-tools', function (event, arg) {

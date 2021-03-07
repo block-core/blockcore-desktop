@@ -5,10 +5,10 @@
     <p class="paragraph-margin">If you have problems, we have these tools to help investigate and fix potential issues that might occur.</p>
 
     <p>
-        <button mat-stroked-button *ngIf="!appState.isSimpleMode" (click)="openDataFolder()">Open Wallet Folder</button> &nbsp;
-        <button mat-stroked-button *ngIf="!appState.isSimpleMode" (click)="resetDatabase()">Reset Blockchain Database</button> &nbsp;
+        <button mat-stroked-button *ngIf="!appState.isSimpleMode" (click)="openDataFolder()"><span class="material-icons">folder</span> Open Wallet Folder</button> &nbsp;
+        <button mat-stroked-button *ngIf="!appState.isSimpleMode" (click)="resetDatabase()"><span class="material-icons">delete_forever</span> Reset Blockchain Database</button> &nbsp;
         <br><br>
-        <button mat-stroked-button (click)="updateService.checkForUpdate()" [disabled]="updateService.downloading">Check for Update</button> &nbsp;
+        <button mat-stroked-button (click)="updateService.checkForUpdate()" [disabled]="updateService.downloading"><span class="material-icons">system_update</span> Check for Update</button> &nbsp;
         <button mat-stroked-button *ngIf="updateService.available" [disabled]="updateService.downloading" (click)="updateService.downloadUpdate()">Download Update</button> &nbsp;
         <button mat-stroked-button *ngIf="updateService.downloaded" (click)="updateService.installUpdate()">Install Update</button>
     </p>

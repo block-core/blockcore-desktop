@@ -1,0 +1,21 @@
+.grid-container {
+    position: relative;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows: minmax(10px, auto);
+    grid-auto-flow: dense;
+    grid-gap: 1rem;
+}
+
+:host ::ng-deep [gridCell] {
+    display: block;
+    font-size: 20px;
+    // padding: 20px;
+}
+
+@media only screen and (max-width: 767px) {
+    :host ::ng-deep [gridCell] {
+        grid-column: span 2 !important;
+    }
+}

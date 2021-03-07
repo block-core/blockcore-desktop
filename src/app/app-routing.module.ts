@@ -171,6 +171,11 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
     },
     {
+        path: 'staking',
+        loadChildren: () => import('./components/staking/staking.module').then(m => m.StakingModule),
+        canActivate: [AuthenticatedUserGuard],
+    },
+    {
         path: 'account',
         loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule),
     },

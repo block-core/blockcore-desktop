@@ -7,8 +7,8 @@
 @import "./variables";
 @import "./themes/font";
 @import "./typography";
-@import './material';
-@import './mobile';
+@import "./material";
+@import "./mobile";
 
 //@import './themes/palettes/green.palette';
 @import "./themes/palettes/orange.palette";
@@ -30,65 +30,63 @@
 @include app-theme($app-dark-theme);
 
 .app-light-theme {
-	@include app-theme($app-light-theme);
+    @include app-theme($app-light-theme);
 }
 
 .app-dark-theme {
-	@include app-theme($app-dark-theme);
+    @include app-theme($app-dark-theme);
 }
 
 /* You can add global styles to this file, and also import other style files */
 html,
 body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
-	background-color: #f8f8f8;
-	font-family: mat-font-family($app-typography);
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 28px;
+    background-color: #f8f8f8;
+    font-family: mat-font-family($app-typography);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
 }
 
 .toolbar-bottom {
-	order: 100;
+    order: 100;
 }
 
 .toolbar {
-	flex-shrink: 0;
-	display: inline-flex;
+    flex-shrink: 0;
+    display: inline-flex;
 }
 
 .content-container {
-	//overflow: scroll;
-	flex-grow: 1; /*ensures that the container will take up the full height of the parent container*/
-	//overflow-y: auto; /*adds scroll to this container*/
-	overflow: hidden;
+    //overflow: scroll;
+    flex-grow: 1; /*ensures that the container will take up the full height of the parent container*/
+    //overflow-y: auto; /*adds scroll to this container*/
+    overflow: hidden;
 }
 
 .content-container-full {
-	height: 100% !important;
+    height: 100% !important;
 }
 
 .input-full-width {
-	width: 100%;
+    width: 100%;
 }
 
-.content
-{
-	margin: 30px;
+.content {
+    margin: 30px;
 }
 
 .content-big-margin {
-	margin: 60px;
+    margin: 60px;
 }
 
-.vertical-spacer
-{
+.vertical-spacer {
     margin-left: 10px;
     margin-right: 10px;
 }
@@ -132,75 +130,74 @@ body {
 // }
 
 @media screen and (max-width: 599px) {
-	.content
-	{
-		margin: 16px;
-	}
+    .content {
+        margin: 16px;
+    }
 }
 
 .fill-remaining-vertical {
-	/* This fills the remaining space, by using flexbox. 
+    /* This fills the remaining space, by using flexbox. 
          Every toolbar row uses a flexbox row layout. */
-	flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .app-sidenav-content {
-	overflow: hidden;
-	height: 100%; /*allows both columns to span the full height of the browser window*/
-	display: flex;
-	flex-direction: column;
+    overflow: hidden;
+    height: 100%; /*allows both columns to span the full height of the browser window*/
+    display: flex;
+    flex-direction: column;
 }
 
 .main-menu .mat-list-item {
-	//border-left: 3px solid transparent;
-	border-right: 3px solid transparent;
+    //border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
     cursor: pointer;
     width: auto !important;
 }
 
 .main-menu .mat-list-item:hover {
-	background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 
 .mat-list-item-focus {
-	border-right: 3px solid #dfab3c !important;
+    border-right: 3px solid #dfab3c !important;
 }
 
 .main-menu .main-menu-active {
-	border-right: 3px solid #dfab3c;
+    border-right: 3px solid #dfab3c;
 }
 
 .main-menu h4 {
-	margin-right: 4px; /* To offset some of the left padding on icons */
+    margin-right: 4px; /* To offset some of the left padding on icons */
 }
 
 .mat-list {
-	padding-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 .main-menu-first {
-	padding-top: 8px;
-	padding-bottom: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .dashboard-item {
-	width: 80%;
-	margin: 40px;
+    width: 80%;
+    margin: 40px;
 }
 
 .not-selectable {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-  }
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 span.ellipsis {
-    display:inline-block;
+    display: inline-block;
     white-space: nowrap;
-    overflow:hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -218,7 +215,6 @@ span.ellipsis {
 //     outline: none;
 //     transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
 // }
-
 
 /* Styling for custom chrome. Temporarily removed, might consider reintroduce in the future. */
 
@@ -284,32 +280,89 @@ span.ellipsis {
 }
 */
 
-.app-electron
-{
+.app-electron {
 }
 
 .app-electron .login {
-	height: $app-height;
+    height: $app-height;
 }
 
 .app-electron .app-container {
-	height: $app-height;
+    height: $app-height;
 }
 
-.splash-container
-{
-	height: $app-height;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	align-content: center;
-	flex-direction: column;
+.splash-container {
+    height: $app-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
 }
 
 .button-action-spinner {
-	font-size: 10px;
+    font-size: 10px;
 }
 
 .clickable {
     cursor: pointer !important;
 }
+
+// .grid-container {
+//     position: relative;
+//     max-width: 100%;
+//     display: grid;
+//     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+//     grid-template-rows: minmax(10px, auto);
+//     grid-auto-flow: dense;
+//     grid-gap: 1rem;
+//   }
+
+//   :host ::ng-deep  [gridCell] {
+//     display: block;
+//     font-size: 20px;
+//     padding: 20px;
+//   }
+
+//   @media only screen and (max-width: 767px) {
+//     :host ::ng-deep [gridCell] {
+//       grid-column: span 2 !important;
+//     }
+//   }
+
+//   .card {
+//     &.card-body {
+//       background:#FFFFFF;
+//       color: #444;
+//       display: flex;
+//       flex-grow: 1;
+//       transition: background 0.5s;
+//       cursor: pointer;
+
+//       &:hover {
+//         background: #d9d9e2;
+//         color: #000;
+//       }
+//     }
+//   }
+
+.grid-card {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.icon-medium {
+    font-size: 4em;
+}
+
+.center-align {
+    text-align: center;
+}
+
+// .icon-warn {
+//     color: mat-color($primary, 300);
+// }
+
+// .icon-success {
+//     color: mat-color($accent, A400);
+// }

@@ -45,7 +45,7 @@
         </div>
 
         <div class="login-mode">
-            <button mat-button (click)="changeMode()">Change network</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
+            <button mat-button (click)="changeMode()"><span class="material-icons">public</span> Change network</button> &nbsp; <button mat-button routerLink="/advanced"><span class="material-icons">settings</span> Advanced</button>
         </div>
     </div>
     <div class="login-banner"  [ngClass]="'login-banner-' + appState.chain" id="login-banner-wallpaper">
@@ -65,7 +65,7 @@
             </p>
         </div>
         <div class="login-mode-mobile">
-            <button mat-button (click)="changeMode()">Change network</button> &nbsp; <button mat-button routerLink="/advanced">Advanced</button>
+            <button mat-button (click)="changeMode()"><span class="material-icons">public</span> Change network</button> &nbsp; <button mat-button routerLink="/advanced"><span class="material-icons">settings</span> Advanced</button>
         </div>
     </div>
 </div>

@@ -16,18 +16,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AppModes } from '../../shared/app-modes';
 import { Subscription } from 'rxjs';
 import { WalletInfo } from '@models/wallet-info';
-import { WalletUtxoCountDialogComponent } from './wallet-utxo-count-dialog';
 import { WalletSplit } from '@models/wallet-split';
 
 @Component({
-    selector: 'app-wallet',
-    templateUrl: './wallet.component.html',
-    styleUrls: ['./wallet.component.scss'],
+    selector: 'app-staking',
+    templateUrl: './staking.component.html',
+    styleUrls: ['./staking.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class WalletComponent implements OnInit, OnDestroy {
+export class StakingComponent implements OnInit, OnDestroy {
     @HostBinding('class.wallet') hostClass = true;
 
+    public stakingForm: FormGroup;
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
     public displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp'];
     public dataSource = new MatTableDataSource<TransactionInfo>();
@@ -56,7 +56,14 @@ export class WalletComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private ref: ChangeDetectorRef
     ) {
+        this.buildStakingForm();
         this.appState.pageMode = false;
+    }
+
+    private buildStakingForm(): void {
+        this.stakingForm = this.fb.group({
+            walletPassword: ['', Validators.required]
+        });
     }
 
     ngOnInit() {
@@ -67,6 +74,16 @@ export class WalletComponent implements OnInit, OnDestroy {
         if (this.wallet.transactionArray != null) {
             this.parseHistory(this.wallet.transactionArray);
             // this.dataSource.data = this.wallet.transactionArray;
+        }
+
+        // We will only retrieve UTXOs statistics if user has enable advanced mode.
+        if (this.appModes.enabled('staking')) {
+            const walletInfo = new WalletInfo(this.globalService.getWalletName());
+            this.apiService.getWalletStatistics(walletInfo).subscribe(data => {
+                console.log(data);
+                this.walletStatistics = data;
+                this.ref.detectChanges();
+            });
         }
 
         this.walletServiceSubscription = this.wallet.history$.subscribe(items => {
@@ -86,27 +103,6 @@ export class WalletComponent implements OnInit, OnDestroy {
         if (this.walletServiceSubscription) {
             this.walletServiceSubscription.unsubscribe();
         }
-    }
-
-    openDialog(): void {
-        const amountFormatted = this.globalService.transform(this.wallet.confirmedBalance);
-
-        const dialogRef = this.dialog.open(WalletUtxoCountDialogComponent, {
-            width: '350px',
-            data: { count: 10, amount: amountFormatted, utxos: this.walletStatistics.totalUtxoCount }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('Change UTXO count to:', result);
-
-            const wallet = new WalletSplit(this.globalService.getWalletName(), 'account 0', result.password, result.amount, result.count);
-            this.apiService.splitCoins(wallet).subscribe(data => {
-                console.log(data);
-                this.ref.detectChanges();
-            });
-
-            // this.animal = result;
-        });
     }
 
     selectRow(row) {
@@ -140,6 +136,15 @@ export class WalletComponent implements OnInit, OnDestroy {
             this.links[1].title = 'Received (' + this.countReceived + ')';
             this.links[2].title = 'Sent (' + this.countSent + ')';
         }
+    }
+
+    public stopStaking() {
+        this.wallet.stopStaking();
+    }
+
+    public startStaking() {
+        this.wallet.startStaking(this.stakingForm.get('walletPassword').value);
+        this.stakingForm.patchValue({ walletPassword: '' });
     }
 
     public openTransactionDetails(transaction: TransactionInfo) {

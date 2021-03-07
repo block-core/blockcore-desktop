@@ -273,7 +273,7 @@ ipcMain.on('download-blockchain-package', (event, arg: any) => {
     try {
         downloadFile(arg.url, targetFolder, (finished, progress, error) => {
 
-            contents.send('download-blockchain-package', finished, progress, error);
+            contents.send('download-blockchain-package-finished', finished, progress, error);
 
             // if (error) {
             //     console.error('Error during downloading: ' + error);
@@ -303,12 +303,15 @@ ipcMain.on('download-blockchain-package-abort', (event, arg: any) => {
         event.returnValue = err.message;
     }
 
-    contents.send('download-blockchain-package', true, { status: 'Cancelled', progress: 0, size: 0, downloaded: 0 }, 'Cancelled');
+    contents.send('download-blockchain-package-finished', true, { status: 'Cancelled', progress: 0, size: 0, downloaded: 0 }, 'Cancelled');
 
     event.returnValue = 'OK';
 });
 
 ipcMain.on('unpack-blockchain-package', (event, arg: any) => {
+
+    console.log('CALLED!!!! - unpack-blockchain-package');
+
     let targetFolder = parseDataFolder(arg.path);
     let sourceFile = arg.source;
 
@@ -318,10 +321,10 @@ ipcMain.on('unpack-blockchain-package', (event, arg: any) => {
     const extract = require('extract-zip');
     extract(sourceFile, { dir: targetFolder }).then(() => {
         console.log('FINISHED UNPACKING!');
-        contents.send('unpack-blockchain-package', null);
+        contents.send('unpack-blockchain-package-finished', null);
     }).catch(err => {
         console.error('Failed to unpack: ', err);
-        contents.send('unpack-blockchain-package', err);
+        contents.send('unpack-blockchain-package-finished', err);
     });
 
     event.returnValue = 'OK';

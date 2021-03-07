@@ -9,8 +9,10 @@ import { YesNoPipe } from './pipes/yesno.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { LogoModule } from './logo/logo.module';
 import { BytesPipe } from './pipes/bytes.pipe';
+import { GridContainerComponent } from './grid/grid-container/grid-container.component';
+import { GridCellDirective } from './grid/grid-cell/grid-cell.directive';
 
-const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe, BytesPipe];
+const SHARED_DIRECTIVES = [GridCellDirective, GridContainerComponent, RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe, BytesPipe];
 
 @NgModule({
     declarations: [

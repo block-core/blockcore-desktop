@@ -68,7 +68,7 @@
                         <br>
 
                         <div class="path" *ngIf="appState.daemon.datafolder"><br>
-                            <span class="path">{{appState.daemon.datafolder}}</span> <button (click)="clearDataFolder()" mat-icon-button>
+                            <span class="path"><a (click)="openFolder(appState.daemon.datafolder)" href="javascript:void(0)">{{appState.daemon.datafolder}}</a></span> <button (click)="clearDataFolder()" mat-icon-button>
                                 <mat-icon>clear</mat-icon>
                             </button>
                         </div>
