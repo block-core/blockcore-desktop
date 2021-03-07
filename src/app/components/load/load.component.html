@@ -73,6 +73,7 @@
                             </button>
                         </div>
                         <br>
+
                     </div>
                     <br>
 
@@ -105,7 +106,30 @@
 
                     <br>
 
-                    <button [disabled]="!downloadUrl" (click)="downloadAndUnpack()" mat-raised-button>Download and unpack</button>
+                    <button [disabled]="!downloadUrl || downloading || unpacking" (click)="downloadAndUnpack(downloadUrl)" mat-raised-button>Download and unpack</button>
+
+                    <div *ngIf="downloading && downloadProgress">
+                        <br><br>
+                        Downloading:<br><br>
+                        <mat-progress-bar mode="determinate" [value]="downloadProgress.progress"></mat-progress-bar>
+                        <br>
+                        {{downloadProgress.downloaded | bytes}} of {{downloadProgress.size | bytes}}
+                        <br><br>
+                        <button (click)="cancelDownload()" mat-raised-button>Cancel</button>
+                    </div>
+
+                    <div *ngIf="unpacking">
+                        <br><br>
+                        Unpacking:<br><br>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </div>
+
+                    <div *ngIf="unpacked">
+                        <br><br>
+                        Download and unpacking completed.<br>
+                        You can now continue by clicking Start.
+                    </div>
+
                 </div>
             </mat-expansion-panel>
 

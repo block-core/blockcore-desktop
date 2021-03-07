@@ -8,8 +8,9 @@ import { PriceUnitPipe } from './pipes/price-unit.pipe';
 import { YesNoPipe } from './pipes/yesno.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { LogoModule } from './logo/logo.module';
+import { BytesPipe } from './pipes/bytes.pipe';
 
-const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe];
+const SHARED_DIRECTIVES = [RouterLinkBack, PasswordValidationDirective, CoinNotationPipe, SizeUnitPipe, PriceUnitPipe, YesNoPipe, SortByPipe, BytesPipe];
 
 @NgModule({
     declarations: [

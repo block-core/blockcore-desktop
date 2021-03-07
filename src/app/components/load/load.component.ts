@@ -45,6 +45,10 @@ export class LoadComponent implements OnInit, OnDestroy {
     downloadUrl: string;
     // dataFolder: string;
     // nodePath: string;
+    downloading = false;
+    downloadProgress: { url: string, target: string, size: number, progress: number, downloaded: number, status: string };
+    unpacking = false;
+    unpacked = false;
 
     private subscription: Subscription;
     private statusIntervalSubscription: Subscription;
@@ -130,6 +134,49 @@ export class LoadComponent implements OnInit, OnDestroy {
             // We must force a detection here to make it update immediately.
             this.cd.detectChanges();
         });
+
+        this.ipc.on('download-blockchain-package', (event, finished, progress, error) => {
+            if (error) {
+                console.error('Error during downloading: ' + error);
+            }
+
+            this.downloadProgress = progress;
+
+            if (finished) {
+                // If finished with error, we won't unpack.
+                if (progress.status == 'Done') {
+                    this.downloading = false;
+                    this.unpack(progress.target);
+                }
+                else {
+                    this.downloading = false;
+                }
+
+                // Clear the download progress.
+                this.downloadProgress = null;
+            }
+
+            // We must force a detection here to make it update immediately.
+            this.cd.detectChanges();
+        });
+
+        this.ipc.on('unpack-blockchain-package', (error) => {
+
+            this.unpacking = false;
+            this.unpacked = true;
+
+            if (error) {
+                console.error('Error during downloading: ' + error);
+            }
+            else {
+
+            }
+
+            // We must force a detection here to make it update immediately.
+            this.cd.detectChanges();
+        });
+
+
     }
 
     initialize() {
@@ -255,8 +302,52 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.tryStart();
     }
 
-    downloadAndUnpack() {
-        
+    downloadAndUnpack(url: string | any) {
+        // If user does "Copy as path" we must ensure we replace the quotes.
+        url = url.replaceAll('"', ''); // replaceAll is a very recent addition to ECMAScript, so we had to make url the type of any.
+
+        var isAbsolute = new RegExp('^([a-z]+://|//)', 'i');
+
+        if (isAbsolute.test(url)) {
+            console.log('Download: ' + url);
+            this.downloading = true;
+
+            // Send array of path information to be used in path.join to get native full path in the main process.
+            const pathInfo = [this.appState.daemon.datafolder, this.appState.activeChain.rootFolderName, this.appState.activeChain.network];
+
+            const downloadInfo = {
+                url: url,
+                path: pathInfo
+            };
+
+            this.log.info('Target Folder...', downloadInfo);
+            this.electronService.ipcRenderer.sendSync('download-blockchain-package', downloadInfo);
+            // this.appState.daemon.datafolder
+        }
+        else {
+            // If the user supplies an relative / local path, we'll go ahead and unpack directly.
+            this.unpack(url);
+        }
+    }
+
+    unpack(source: string) {
+        // Send array of path information to be used in path.join to get native full path in the main process.
+        const pathInfo = [this.appState.daemon.datafolder, this.appState.activeChain.rootFolderName, this.appState.activeChain.network];
+
+        const downloadInfo = {
+            source: source,
+            path: pathInfo
+        };
+
+        this.unpacking = true;
+
+        // unpack-blockchain-package
+        this.electronService.ipcRenderer.sendSync('unpack-blockchain-package', downloadInfo);
+    }
+
+    cancelDownload() {
+        this.electronService.ipcRenderer.sendSync('download-blockchain-package-abort');
+        this.downloading = false;
     }
 
     // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.

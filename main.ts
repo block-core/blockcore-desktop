@@ -260,13 +260,79 @@ ipcMain.on('open-data-folder', (event, arg: any) => {
     event.returnValue = 'OK';
 });
 
+ipcMain.on('download-blockchain-package', (event, arg: any) => {
+
+    console.log('download-blockchain-package');
+
+    const dataFolder = parseDataFolder(arg.path);
+
+    // Get the folder to download zip to:
+    const targetFolder = path.dirname(dataFolder);
+
+    // We must have this in a try/catch or crashes will halt the UI.
+    try {
+        downloadFile(arg.url, targetFolder, (finished, progress, error) => {
+
+            contents.send('download-blockchain-package', finished, progress, error);
+
+            // if (error) {
+            //     console.error('Error during downloading: ' + error);
+            // }
+
+            // if (finished) {
+            //     console.log('FINISHED!!');
+            // }
+            // else {
+            //     console.log('Progress: ' + progress.status);
+            // }
+        });
+    }
+    catch (err) {
+
+    }
+
+    event.returnValue = 'OK';
+});
+
+ipcMain.on('download-blockchain-package-abort', (event, arg: any) => {
+    try {
+        blockchainDownloadRequest.abort();
+        blockchainDownloadRequest = null;
+    }
+    catch (err) {
+        event.returnValue = err.message;
+    }
+
+    contents.send('download-blockchain-package', true, { status: 'Cancelled', progress: 0, size: 0, downloaded: 0 }, 'Cancelled');
+
+    event.returnValue = 'OK';
+});
+
+ipcMain.on('unpack-blockchain-package', (event, arg: any) => {
+    let targetFolder = parseDataFolder(arg.path);
+    let sourceFile = arg.source;
+
+    console.log('targetFolder: ' + targetFolder);
+    console.log('sourceFile: ' + sourceFile);
+
+    const extract = require('extract-zip');
+    extract(sourceFile, { dir: targetFolder }).then(() => {
+        console.log('FINISHED UNPACKING!');
+        contents.send('unpack-blockchain-package', null);
+    }).catch(err => {
+        console.error('Failed to unpack: ', err);
+        contents.send('unpack-blockchain-package', err);
+    });
+
+    event.returnValue = 'OK';
+});
+
 ipcMain.on('open-dev-tools', (event, arg: string) => {
     mainWindow.webContents.openDevTools();
     event.returnValue = 'OK';
 });
 
 ipcMain.on('get-wallet-seed', (event, arg: string) => {
-
     writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
 
     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
@@ -687,36 +753,36 @@ function shutdownDaemon(callback) {
     }
 
     // if (process.platform !== 'darwin') {
-        writeLog('Sending POST request to shut down daemon.');
+    writeLog('Sending POST request to shut down daemon.');
 
-        const http = require('http');
-        const options = {
-            hostname: 'localhost',
-            port: currentChain.apiPort,
-            path: '/api/node/shutdown',
-            method: 'POST'
-        };
+    const http = require('http');
+    const options = {
+        hostname: 'localhost',
+        port: currentChain.apiPort,
+        path: '/api/node/shutdown',
+        method: 'POST'
+    };
 
-        const req = http.request(options);
+    const req = http.request(options);
 
-        req.on('response', (res) => {
-            if (res.statusCode === 200) {
-                writeLog('Request to shutdown daemon returned HTTP success code.');
-                callback(true, null);
-            } else {
-                writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
-                callback(false, res);
-            }
-        });
+    req.on('response', (res) => {
+        if (res.statusCode === 200) {
+            writeLog('Request to shutdown daemon returned HTTP success code.');
+            callback(true, null);
+        } else {
+            writeError('Request to shutdown daemon returned HTTP failure code: ' + res.statusCode);
+            callback(false, res);
+        }
+    });
 
-        req.on('error', (err) => {
-            writeError('Request to shutdown daemon failed.');
-            callback(false, err);
-        });
+    req.on('error', (err) => {
+        writeError('Request to shutdown daemon failed.');
+        callback(false, err);
+    });
 
-        req.setHeader('content-type', 'application/json-patch+json');
-        req.write('true');
-        req.end();
+    req.setHeader('content-type', 'application/json-patch+json');
+    req.write('true');
+    req.end();
     // }
 }
 
@@ -800,4 +866,86 @@ function assert(result: boolean) {
     if (result !== true) {
         throw new Error('The chain configuration is invalid. Unable to continue.');
     }
+}
+
+var blockchainDownloadRequest;
+
+function downloadFile(fileUrl, folder, callback) {
+    // If download is triggered again, abort the previous and reset.
+    if (blockchainDownloadRequest != null) {
+        try {
+            blockchainDownloadRequest.abort();
+            blockchainDownloadRequest = null;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const { parse } = require('url');
+    const http = require('https');
+    const fs = require('fs');
+    const { basename } = require('path');
+
+    var timeout = 10000;
+
+    const uri = parse(fileUrl);
+    const fileName = basename(uri.path);
+    const filePath = path.join(folder, fileName);
+
+    //var url = require('url');
+    //var http = require('https');
+    //var p = url.parse(fileUrl);
+
+    var file = fs.createWriteStream(filePath);
+
+    var timeout_wrapper = function (req) {
+        return function () {
+            console.log('abort');
+            req.abort();
+            callback(true, { size: 0, downloaded: 0, progress: 0, status: 'Timeout' }, "File transfer timeout!");
+        };
+    };
+
+    blockchainDownloadRequest = http.get(fileUrl).on('response', function (res) {
+        var len = parseInt(res.headers['content-length'], 10);
+        var downloaded = 0;
+
+        res.on('data', function (chunk) {
+            file.write(chunk);
+            downloaded += chunk.length;
+
+            callback(false, { url: fileUrl, target: filePath, size: len, downloaded: downloaded, progress: (100.0 * downloaded / len).toFixed(2), status: 'Downloading' });
+            //process.stdout.write();
+            // reset timeout
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(fn, timeout);
+        }).on('end', function () {
+            // clear timeout
+            clearTimeout(timeoutId);
+            file.end();
+
+            // Reset the download request instance.
+            blockchainDownloadRequest = null;
+
+            if (downloaded != len) {
+                callback(true, { size: len, downloaded: downloaded, progress: (100.0 * downloaded / len).toFixed(2), url: fileUrl, target: filePath, status: 'Incomplete' });
+            }
+            else {
+                callback(true, { size: len, downloaded: downloaded, progress: (100.0 * downloaded / len).toFixed(2), url: fileUrl, target: filePath, status: 'Done' });
+            }
+
+            // console.log(file_name + ' downloaded to: ' + folder);
+            // callback(null);
+        }).on('error', function (err) {
+            // clear timeout
+            clearTimeout(timeoutId);
+            callback(true, { size: 0, downloaded: downloaded, progress: (100.0 * downloaded / len).toFixed(2), url: fileUrl, target: filePath, status: 'Error' }, err.message);
+        });
+    });
+
+    // generate timeout handler
+    var fn = timeout_wrapper(blockchainDownloadRequest);
+
+    // set initial timeout
+    var timeoutId = setTimeout(fn, timeout);
 }
