@@ -1,6 +1,6 @@
 <div class="content">
     <app-grid-container>
-        <div gridCell gcColSpan="2" gcRowSpan="2" class="card card-body">
+        <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body">
             <mat-card class="grid-card">
                 <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
                 <mat-card-subtitle>Balance of: {{wallet.walletName}}</mat-card-subtitle>
@@ -16,7 +16,7 @@
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body">
+        <div app-grid-cell class="card card-body">
             <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
                 <mat-card-title>Status</mat-card-title>
                 <mat-card-subtitle>Staking disabled</mat-card-subtitle>
@@ -34,7 +34,7 @@
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="wallet.hasBalance">
+        <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance">
             <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
                 <mat-card-title>Unlock wallet</mat-card-title>
                 <mat-card-subtitle>Unlock your wallet to start staking</mat-card-subtitle>
@@ -63,7 +63,7 @@
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="!wallet.hasBalance">
+        <div app-grid-cell class="card card-body" *ngIf="!wallet.hasBalance">
             <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
                 <mat-card-title>Empty balance</mat-card-title>
                 <mat-card-subtitle>Balance is required</mat-card-subtitle>
@@ -73,35 +73,35 @@
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
             <mat-card class="grid-card">
                 <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(2)}}%</mat-card-title>
                 <mat-card-subtitle>Percentage of network</mat-card-subtitle>
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
             <mat-card class="grid-card">
                 <mat-card-title>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
                 <mat-card-subtitle>Your weight</mat-card-subtitle>
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
             <mat-card class="grid-card">
                 <mat-card-title>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
                 <mat-card-subtitle>Network weight</mat-card-subtitle>
             </mat-card>
         </div>
 
-        <div gridCell class="card card-body" *ngIf="wallet.stakingEnabled">
+        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
             <mat-card class="grid-card">
                 <mat-card-title>{{ wallet.dateTime }}</mat-card-title>
                 <mat-card-subtitle>Expected reward time</mat-card-subtitle>
             </mat-card>
         </div>
 
-        <div gridCell gcRowSpan="2" class="card card-body" *ngIf="wallet.stakingEnabled">
+        <div app-grid-cell gcRowSpan="2" class="card card-body" *ngIf="wallet.stakingEnabled">
             <mat-card class="grid-card">
                 <mat-card-title>Advanced</mat-card-title>
                 <mat-card-subtitle>Details on your staking status</mat-card-subtitle>
@@ -117,7 +117,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div gridCell gcRowSpan="2" class="card card-body">
+        <div app-grid-cell gcRowSpan="2" class="card card-body">
             <div class="mat-caption">
                 You can stake the balance you have in your wallet. If you just received your coins, it might take a while for staking to start, due to confirmation requirement for staked coins.
                 <br>When you stop staking, or receive stake rewards, it will take some time before the same coins can be used for staking.

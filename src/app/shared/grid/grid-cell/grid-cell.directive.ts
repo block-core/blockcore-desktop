@@ -1,7 +1,8 @@
 import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
-    selector: '[gridCell]'
+    // eslint-disable-next-line @angular-eslint/directive-selector
+    selector: '[app-grid-cell]'
 })
 export class GridCellDirective {
     constructor(private el: ElementRef) {

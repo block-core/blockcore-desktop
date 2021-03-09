@@ -8,14 +8,14 @@
     grid-gap: 1rem;
 }
 
-:host ::ng-deep [gridCell] {
+:host ::ng-deep [app-grid-cell] {
     display: block;
     font-size: 20px;
     // padding: 20px;
 }
 
 @media only screen and (max-width: 767px) {
-    :host ::ng-deep [gridCell] {
+    :host ::ng-deep [app-grid-cell] {
         grid-column: span 2 !important;
     }
 }
