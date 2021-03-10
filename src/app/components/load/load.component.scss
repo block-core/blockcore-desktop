@@ -36,3 +36,40 @@
 .advanced-form-field {
     width: 100%;
 }
+
+.load-feature-status {
+    text-align: left;
+    color: silver;
+    margin-left: 6em;
+    margin-bottom: 0.1em;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 2em 2em;
+    grid-template-areas: "name status";
+}
+
+.load-feature-status .name {
+    grid-area: name;
+    height: 24px;
+
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.load-feature-status .status {
+    grid-area: status;
+    text-align: left;
+    height: 24px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.load-feature-status mat-icon {
+    font-size: 24px !important;
+    color: green;
+}

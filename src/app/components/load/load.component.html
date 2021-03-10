@@ -152,7 +152,15 @@
 
     <ng-template #spinner>
         <mat-spinner></mat-spinner>
-        <span class="load-text">Loading <strong>{{appState.activeChain.name}}</strong>... please wait.<br><br>Release {{appState.release}}</span>
+        <span class="load-text">Loading <strong>{{appState.activeChain.name}}</strong>... please wait.<br><br>
+
+            <div class="load-feature-status" *ngFor="let feature of featureStatus">
+                <div class="name">{{feature.name}}</div>
+                <div class="status"><mat-icon *ngIf="feature.initialized">task_alt</mat-icon></div>
+            </div>
+
+            <br>Release {{appState.release}}
+        </span>
         <span *ngIf="delayed">
             <br>
             <button routerLink="/advanced" mat-raised-button>Advanced</button>&nbsp;

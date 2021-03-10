@@ -79,6 +79,7 @@ export class WalletService {
     public start() {
         this.walletName = this.globalService.getWalletName();
         this.coinUnit = this.globalService.getCoinUnit();
+
         this.startSubscriptions();
     }
 
@@ -195,7 +196,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             );
     }
@@ -213,7 +214,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             );
     }
@@ -275,7 +276,7 @@ export class WalletService {
                 },
                 error => {
                     this.apiService.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             );
     }
@@ -304,7 +305,7 @@ export class WalletService {
                     }
                 }, error => {
                     this.apiService.handleException(error);
-                    this.reactivate();
+                    // this.reactivate();
                 }
             );
     }

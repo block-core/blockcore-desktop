@@ -49,6 +49,7 @@ export class LoadComponent implements OnInit, OnDestroy {
     downloadProgress: { url: string, target: string, size: number, progress: number, downloaded: number, status: string };
     unpacking = false;
     unpacked = false;
+    featureStatus: any[];
 
     private subscription: Subscription;
     private statusIntervalSubscription: Subscription;
@@ -373,18 +374,20 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.subscription = stream$.subscribe(
             (data: NodeStatus) => {
                 this.apiConnected = true;
-                this.statusIntervalSubscription = this.apiService.getNodeStatusInterval()
+                this.statusIntervalSubscription = this.apiService.getNodeStatusCustomInterval(350) // Get status quickly during initial load.
                     .subscribe(
                         response => {
-                            let statusResponse = response.featuresData.filter(x => x.namespace === 'Blockcore.Base.BaseFeature');
-                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
-                                this.statusIntervalSubscription.unsubscribe();
-                                this.start();
-                            }
+                            this.featureStatus = response.featuresData.map(d => {
+                                return {
+                                    name: d.namespace.split('.').pop(),
+                                    state: d.state,
+                                    initialized: d.state === 'Initialized'
+                                };
+                            });
 
-                            // TODO: Remove this when Stratis based node is removed.
-                            statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-                            if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                            let loadingStatus = this.featureStatus.filter(x => x.name == 'WalletFeature');
+
+                            if (loadingStatus.length > 0 && loadingStatus[0].initialized) {
                                 this.statusIntervalSubscription.unsubscribe();
                                 this.start();
                             }
