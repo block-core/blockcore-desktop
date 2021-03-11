@@ -118,7 +118,7 @@
     "city-lib": "5.0.0",
     "core-js": "3.6.5",
     "dexie": "3.0.2",
-    "electron": "^11.2.0",
+    "electron": "^11.3.0",
     "electron-builder": "^22.9.1",
     "electron-reload": "1.5.0",
     "enhanced-resolve": "4.3.0",
