@@ -127,6 +127,11 @@
                     <h4 *ngIf="showFiller" mat-line>Staking</h4>
                 </mat-list-item>
 
+                <mat-list-item *ngIf="appModes.enabled('signing')" routerLinkActive="main-menu-active" routerLink="/signing">
+                    <mat-icon mat-list-icon>fingerprint</mat-icon>
+                    <h4 *ngIf="showFiller" mat-line>Signing</h4>
+                </mat-list-item>
+
                 <mat-list-item *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
                     <mat-icon mat-list-icon>history</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>History</h4>

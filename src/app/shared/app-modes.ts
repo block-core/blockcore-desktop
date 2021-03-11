@@ -23,7 +23,7 @@ export class AppModes {
     }, {
         id: 'experimental',
         name: 'Experimental',
-        features: ['dashboard', 'wallet', 'history', 'identity', 'merchants', 'settings', 'logout', 'staking', 'hubs', 'debug', 'walletmode']
+        features: ['dashboard', 'wallet', 'history', 'merchants', 'settings', 'logout', 'staking', 'walletmode', 'signing', 'identity', 'hubs', 'debug']
     }];
 
     active: AppMode;

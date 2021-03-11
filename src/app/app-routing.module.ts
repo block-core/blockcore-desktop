@@ -176,6 +176,11 @@ const routes: Routes = [
         canActivate: [AuthenticatedUserGuard],
     },
     {
+        path: 'signing',
+        loadChildren: () => import('./components/signing/signing.module').then(m => m.SigningModule),
+        canActivate: [AuthenticatedUserGuard],
+    },
+    {
         path: 'account',
         loadChildren: () => import('./components/account/account.module').then(m => m.AccountModule),
     },
