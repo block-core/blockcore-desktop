@@ -63,7 +63,7 @@ jobs:
       run: |
         echo ${env:PATH}
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        $url = "https://github.com/CityChainFoundation/city-chain/releases/download/v${{ env.DAEMON }}/City.Chain-${{ env.DAEMON }}-${{ matrix.platform }}-${{ env.ARCH }}${{ matrix.extension }}"
+        $url = "https://github.com/block-core/blockcore-nodes/releases/download/${{ env.DAEMON }}/MULTI-${{ env.DAEMON }}-${{ matrix.platform }}-${{ env.ARCH }}${{ matrix.extension }}"
         $output = Join-Path -Path "./" -ChildPath "daemon${{ matrix.extension }}"
         Write-Output "Url: $url"
         Write-Output "Path: $output"
