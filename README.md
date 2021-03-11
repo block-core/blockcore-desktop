@@ -15,7 +15,7 @@ such as City Coin (CITY), Bitcoin (BTC) and Stratis (STRAT).
 
 Running the Blockcore Wallet allows you to participate in staking of your coins, and help support the global network. 
 
-![City Hub screenshot (2018-07-18)](doc/images/2018-08-11.png "City Hub (2018-08-11)")
+![City Hub screenshot (2018-07-18)](doc/images/2018-08-11.png "Blockcore Hub (2018-08-11)")
 
 ## 💿 Installation
 
