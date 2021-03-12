@@ -28,21 +28,8 @@ export class SigningComponent implements OnInit {
 
     public signingForm: FormGroup;
     public verifyForm: FormGroup;
-    public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
-    public displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp'];
-    public dataSource = new MatTableDataSource<TransactionInfo>();
-    private walletServiceSubscription: Subscription;
-
-    public firstTransactionDate: Date;
-    public countReceived: number;
-    public countSent: number;
-    public walletStatistics: any;
-
-    links = [{ title: 'All', filter: '' }, { title: 'Received', filter: 'received' }, { title: 'Sent', filter: 'sent' }];
-    activeLink = this.links[0];
-
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    public signature: string;
+    public validSignature = null;
 
     constructor(
         private apiService: ApiService,
@@ -54,7 +41,7 @@ export class SigningComponent implements OnInit {
         public appModes: AppModes,
         public dialog: MatDialog,
         private fb: FormBuilder,
-        private ref: ChangeDetectorRef
+        private ref: ChangeDetectorRef,
     ) {
         this.buildsForms();
         this.appState.pageMode = false;
@@ -63,13 +50,14 @@ export class SigningComponent implements OnInit {
     private buildsForms(): void {
         this.signingForm = this.fb.group({
             signingAddress: ['', Validators.required],
+            signingPassword: ['', Validators.required],
             signingMessage: ['']
         });
 
         this.verifyForm = this.fb.group({
-            signingAddress: ['', Validators.required],
-            signingMessage: [''],
-            signingSignature: ['', Validators.required]
+            verifyAddress: ['', Validators.required],
+            verifyMessage: [''],
+            verifySignature: ['', Validators.required]
         });
     }
 
@@ -77,12 +65,28 @@ export class SigningComponent implements OnInit {
 
     }
 
-    sign(form: FormGroupDirective) {
+    sign() {
+        const address = this.signingForm.get('signingAddress').value;
+        const message = this.signingForm.get('signingMessage').value;
+        const password = this.signingForm.get('signingPassword').value;
+        this.signature = null;
 
+        this.apiService.signMessage(this.wallet.walletName, password, 'account 0', address, message).subscribe(response => {
+            console.log(response);
+            this.signature = response.signature;
+        });
+
+        this.signingForm.get('signingPassword').reset();
     }
 
-    verify(form: FormGroupDirective) {
+    verify() {
+        const address = this.verifyForm.get('verifyAddress').value;
+        const message = this.verifyForm.get('verifyMessage').value;
+        const signature = this.verifyForm.get('verifySignature').value;
 
+        this.apiService.verifyMessage(address, message, signature).subscribe(response => {
+            this.validSignature = response == 'True';
+        });
     }
 
     clear(form: FormGroupDirective) {

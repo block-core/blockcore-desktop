@@ -550,6 +550,36 @@ export class ApiService {
     }
 
     /**
+     * Sign a message
+     */
+    signMessage(wallet: string, password: string, account: string, address: string, message: string): Observable<any> {
+        return this.http
+            .post(this.apiUrl + '/Wallet/signmessage', {
+                "walletName": wallet,
+                "password": password,
+                "accountName": account,
+                "externalAddress": address,
+                "message": message
+            }, { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Verify a message
+     */
+    verifyMessage(address: string, message: string, signature: string): Observable<any> {
+        return this.http
+            .post(this.apiUrl + '/Wallet/verifymessage', {
+                "signature": signature,
+                "externalAddress": address,
+                "message": message
+            }, { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
      * Send shutdown signal to the daemon
      */
     shutdownNode(): Observable<any> {

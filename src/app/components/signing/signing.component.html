@@ -12,7 +12,7 @@
                     <mat-card class="grid-card">
                         <mat-card-content class="center-align">
 
-                            <form [formGroup]="signingForm" class="signing-form" #signForm="ngForm" (ngSubmit)="sign(signForm)">
+                            <form [formGroup]="signingForm" class="signing-form" #signForm="ngForm" (ngSubmit)="sign()">
                                 <div>
                                     <mat-form-field class="signing-form-field" appearance="outline">
                                         <mat-label>Signature address/identity</mat-label>
@@ -20,13 +20,24 @@
                                     </mat-form-field>
                                     <br>
 
-                                    <mat-form-field class="signing-form-field   " appearance="outline">
+                                    <mat-form-field class="signing-form-field" appearance="outline">
                                         <mat-label>Message</mat-label>
                                         <textarea matInput id="inputMessage" rows="10" formControlName="signingMessage" placeholder="Fill out a message"></textarea>
                                     </mat-form-field>
                                     <br>
 
-                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!signingForm.valid" (click)="sign(signForm)">Sign</button>&nbsp;
+                                    <mat-form-field class="signing-form-field" appearance="outline">
+                                        <mat-label>Account Password</mat-label>
+                                        <input matInput type="password" id="inputPassword" formControlName="signingPassword" placeholder="Fill out your account (wallet) password">
+                                    </mat-form-field>
+                                    <br>
+
+                                    <mat-form-field class="signing-form-field" appearance="outline" *ngIf="signature">
+                                        <mat-label>Signature</mat-label>
+                                        <textarea matInput id="inputMessage" rows="4" [value]="signature"></textarea>
+                                    </mat-form-field>
+
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!signingForm.valid" (click)="sign()">Sign</button>&nbsp;
                                     <button type="button" mat-flat-button id="flipcard" (click)="clear(signForm)">Clear All</button>
                                 </div>
                             </form>
@@ -56,27 +67,51 @@
                     <mat-card class="grid-card">
                         <mat-card-content class="center-align">
 
-                            <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign(verForm)">
+                            <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign()">
                                 <div>
                                     <mat-form-field class="signing-form-field" appearance="outline">
                                         <mat-label>Signature address/identity</mat-label>
-                                        <input matInput type="text" id="inputAddress" formControlName="signingAddress" placeholder="Fill out address/identity">
+                                        <input matInput type="text" formControlName="verifyAddress" placeholder="Fill out address/identity">
                                     </mat-form-field>
                                     <br>
 
                                     <mat-form-field class="signing-form-field   " appearance="outline">
                                         <mat-label>Message</mat-label>
-                                        <textarea matInput id="inputMessage" rows="10" formControlName="signingMessage" placeholder="Fill out a message"></textarea>
+                                        <textarea matInput rows="10" formControlName="verifyMessage" placeholder="Fill out a message"></textarea>
                                     </mat-form-field>
                                     <br>
 
                                     <mat-form-field class="signing-form-field" appearance="outline">
                                         <mat-label>Signature</mat-label>
-                                        <input matInput type="text" id="inputSignature" formControlName="signingSignature" placeholder="Fill out signature">
+                                        <input matInput type="text" formControlName="verifySignature" placeholder="Fill out signature">
                                     </mat-form-field>
                                     <br>
 
-                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify(verForm)">Verify Message</button>&nbsp;
+                                    <mat-card *ngIf="validSignature === true">
+                                        <mat-card-header>
+                                            <mat-card-title>Signature verified</mat-card-title>
+                                            <mat-card-subtitle>This means that the message has been verified to be signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon class="verified">verified</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
+
+                                    <mat-card *ngIf="validSignature === false">
+                                        <mat-card-header>
+                                            <mat-card-title>Failed signature verification</mat-card-title>
+                                            <mat-card-subtitle>This means that the message was not signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon *ngIf="validSignature === false" class="failed">report</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
+
+                                    <br>
+
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify()">Verify Message</button>&nbsp;
                                     <button type="button" mat-flat-button id="flipcard" (click)="clear(verForm)">Clear All</button>
                                 </div>
                             </form>

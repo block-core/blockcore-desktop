@@ -15,6 +15,16 @@
     width: 100%;
 }
 
+.verified {
+    font-size: 36px !important;
+    color: green;
+}
+
+.failed {
+    font-size: 36px !important;
+    color: red;
+}
+
 .wallet {
     div[fxLayoutAlign] {
         padding: 10px;
