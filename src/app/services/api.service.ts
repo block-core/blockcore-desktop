@@ -529,6 +529,16 @@ export class ApiService {
     }
 
     /**
+     * Stop staking
+     */
+    stopStaking(): Observable<any> {
+        return this.http
+            .post(this.apiUrl + '/staking/stopstaking', 'true', { headers: this.headers })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
      * Get staking info
      */
     getStakingInfo(): Observable<any> {
@@ -540,11 +550,32 @@ export class ApiService {
     }
 
     /**
-     * Stop staking
+     * Get cold staking info
      */
-    stopStaking(): Observable<any> {
+    getColdStakingInfo(walletName: string): Observable<any> {
+        const params = new HttpParams({
+            fromObject: {
+                walletName: walletName
+            }
+        });
+
+        return interval(this.pollingInterval)
+            .pipe(startWith(0))
+            .pipe(switchMap(() => this.http.get(this.apiUrl + '/ColdStaking/cold-staking-info', { headers: this.headers, params })))
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Enable delegated staking
+     */
+    enableColdStaking(wallet: string, password: string, isColdWalletAccount: boolean): Observable<any> {
         return this.http
-            .post(this.apiUrl + '/staking/stopstaking', 'true', { headers: this.headers })
+            .post(this.apiUrl + '/ColdStaking/cold-staking-account', {
+                "walletName": wallet,
+                "walletPassword": password,
+                "isColdWalletAccount": isColdWalletAccount
+            }, { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }

@@ -511,6 +511,7 @@ function launchDaemon(apiPath, chain) {
     commandLineArguments.push('--chain=' + chain.chain);
     commandLineArguments.push('-port=' + chain.port);
     commandLineArguments.push('-rpcport=' + chain.rpcPort);
+    commandLineArguments.push('-dbtype=rocksdb');
     commandLineArguments.push('-apiport=' + chain.apiPort);
     commandLineArguments.push('-txindex=1'); // Required for History (Block) explorer.
     if (chain.mode === 'light') {

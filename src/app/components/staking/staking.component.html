@@ -1,127 +1,433 @@
-<div class="content">
-    <app-grid-container>
-        <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body">
-            <mat-card class="grid-card">
-                <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
-                <mat-card-subtitle>Balance of: {{wallet.walletName}}</mat-card-subtitle>
-                <mat-card-content>
-                    <!-- <p>
-                            <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-                            <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
-                        </p> -->
+<mat-tab-group color="primary" backgroundColor="accent">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">local_fire_department</mat-icon>
+            Hot Staking
+        </ng-template>
 
-                    <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
-                    <em> (unconfirmed)</em>
-                </mat-card-content>
-            </mat-card>
+        <div class="content">
+
+            <app-grid-container>
+                <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
+                        <mat-card-subtitle>Balance of: {{wallet.walletName}}</mat-card-subtitle>
+                        <mat-card-content>
+                            <!-- <p>
+                                    <strong>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                                    <small class="text-uppercase"> {{ wallet.coinUnit }}</small>
+                                </p> -->
+
+                            <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
+                            <em> (unconfirmed)</em>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                        <mat-card-title>Status</mat-card-title>
+                        <mat-card-subtitle>Staking disabled</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
+                        <mat-card-title>Status</mat-card-title>
+                        <mat-card-subtitle>Staking enabled</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance">
+                    <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                        <mat-card-title>Start staking</mat-card-title>
+                        <mat-card-subtitle>Start staking by unlocking your wallet</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <form [formGroup]="stakingForm">
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Account password</mat-label>
+                                        <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                                    </mat-form-field>
+                                    <br>
+                                    <!-- <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button> -->
+
+                                    <button mat-fab color="accent" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">
+                                        <mat-icon>play_arrow</mat-icon>
+                                    </button>
+
+                                </div>
+                            </form>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
+                        <mat-card-title>Staking action</mat-card-title>
+                        <mat-card-subtitle>Click to stop staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <p>
+                                <!-- <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button> -->
+
+                                <button mat-fab color="warn" [disabled]="wallet.isStopping" (click)="stopStaking()">
+                                    <mat-icon>stop</mat-icon>
+                                </button>
+
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="!wallet.hasBalance">
+                    <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
+                        <mat-card-title>Empty balance</mat-card-title>
+                        <mat-card-subtitle>Balance is required</mat-card-subtitle>
+                        <mat-card-content>
+                            <p>The balance of this wallet is zero. You must deposit some funds before you can activate staking.</p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(2)}}%</mat-card-title>
+                        <mat-card-subtitle>Percentage of network</mat-card-subtitle>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
+                        <mat-card-subtitle>Your weight</mat-card-subtitle>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
+                        <mat-card-subtitle>Network weight</mat-card-subtitle>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ wallet.dateTime }}</mat-card-title>
+                        <mat-card-subtitle>Expected reward time</mat-card-subtitle>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell gcRowSpan="2" class="card card-body" *ngIf="wallet.stakingEnabled">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Advanced</mat-card-title>
+                        <mat-card-subtitle>Details on your staking status</mat-card-subtitle>
+                        <mat-card-content>
+                            <p>
+                                CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
+                                CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
+                                PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
+                                Difficulty: {{wallet.stakingInfo.difficulty}}<br>
+                                Search interval: {{wallet.stakingInfo.searchInterval}}<br>
+                                Errors: {{wallet.stakingInfo.errors}}<br>
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div app-grid-cell gcRowSpan="2" class="card card-body">
+                    <div class="mat-caption">
+                        You can stake the balance you have in your wallet. If you just received your coins, it might take a while for staking to start, due to confirmation requirement for staked coins.
+                        <br>When you stop staking, or receive stake rewards, it will take some time before the same coins can be used for staking.
+                    </div>
+                </div>
+            </app-grid-container>
+
         </div>
 
-        <div app-grid-cell class="card card-body">
-            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
-                <mat-card-title>Status</mat-card-title>
-                <mat-card-subtitle>Staking disabled</mat-card-subtitle>
-                <mat-card-content class="center-align">
-                    <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
-                </mat-card-content>
-            </mat-card>
+    </mat-tab>
 
-            <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
-                <mat-card-title>Status</mat-card-title>
-                <mat-card-subtitle>Staking enabled</mat-card-subtitle>
-                <mat-card-content class="center-align">
-                    <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
-                </mat-card-content>
-            </mat-card>
-        </div>
 
-        <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance">
-            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
-                <mat-card-title>Unlock wallet</mat-card-title>
-                <mat-card-subtitle>Unlock your wallet to start staking</mat-card-subtitle>
-                <mat-card-content>
-                    <form [formGroup]="stakingForm">
-                        <div class="form-group">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Account password</mat-label>
-                                <input matInput type="password" id="inputPassword" formControlName="walletPassword" placeholder="Fill out to unlock account">
-                            </mat-form-field>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">offline_bolt</mat-icon>
+            Delegated Staking
+        </ng-template>
+
+        <app-grid-container>
+
+            <div class="content">
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.coldWalletAccountExists">
+                        <mat-card-title>Delegated Status</mat-card-title>
+                        <mat-card-subtitle>Your wallet is not enabled for delegated staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.coldWalletAccountExists">
+                        <mat-card-title>Delegated Status</mat-card-title>
+                        <mat-card-subtitle>Your wallet has been enabled for delegated staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.coldWalletAccountExists">
+                        <mat-card-title>Enable delegated staking</mat-card-title>
+                        <mat-card-subtitle>First step is to enable cold staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <form [formGroup]="delegatedForm">
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Account password</mat-label>
+                                        <input matInput type="password" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                                    </mat-form-field>
+                                    <br>
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">Enable</button>
+
+                                    <button mat-fab color="accent" [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">
+                                        <mat-icon>play_arrow</mat-icon>
+                                    </button>
+
+                                </div>
+                            </form>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.coldWalletAccountExists">
+                        <mat-card-title>Staking action</mat-card-title>
+                        <mat-card-subtitle>Click to stop staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <p>
+                                <!-- <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button> -->
+
+                                <button mat-fab color="warn" [disabled]="wallet.isStopping" (click)="stopStaking()">
+                                    <mat-icon>stop</mat-icon>
+                                </button>
+
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-content class="center-align">
+
+
+                            Cold Wallet Account Exists: {{coldStakingInfo?.coldWalletAccountExists}}
                             <br>
-                            <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
-                        </div>
-                    </form>
-                </mat-card-content>
-            </mat-card>
 
-            <mat-card class="grid-card" *ngIf="wallet.stakingEnabled">
-                <mat-card-title>Staking actions</mat-card-title>
-                <mat-card-subtitle>Want to stop staking?</mat-card-subtitle>
-                <mat-card-content>
-                    <p>
-                        <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button>
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </div>
+                            <button mat-fab color="accent">
+                                <mat-icon>play_arrow</mat-icon>
+                            </button>
 
-        <div app-grid-cell class="card card-body" *ngIf="!wallet.hasBalance">
-            <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
-                <mat-card-title>Empty balance</mat-card-title>
-                <mat-card-subtitle>Balance is required</mat-card-subtitle>
-                <mat-card-content>
-                    <p>The balance of this wallet is zero. You must deposit some funds before you can activate staking.</p>
-                </mat-card-content>
-            </mat-card>
-        </div>
+                            <!-- <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign()">
+                                <div>
+                                    <mat-form-field class="signing-form-field" appearance="outline">
+                                        <mat-label>Signature address/identity</mat-label>
+                                        <input matInput type="text" formControlName="verifyAddress" placeholder="Fill out address/identity">
+                                    </mat-form-field>
+                                    <br>
 
-        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
-            <mat-card class="grid-card">
-                <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(2)}}%</mat-card-title>
-                <mat-card-subtitle>Percentage of network</mat-card-subtitle>
-            </mat-card>
-        </div>
+                                    <mat-form-field class="signing-form-field   " appearance="outline">
+                                        <mat-label>Message</mat-label>
+                                        <textarea matInput rows="10" formControlName="verifyMessage" placeholder="Fill out a message"></textarea>
+                                    </mat-form-field>
+                                    <br>
 
-        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
-            <mat-card class="grid-card">
-                <mat-card-title>{{ wallet.stakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
-                <mat-card-subtitle>Your weight</mat-card-subtitle>
-            </mat-card>
-        </div>
+                                    <mat-form-field class="signing-form-field" appearance="outline">
+                                        <mat-label>Signature</mat-label>
+                                        <input matInput type="text" formControlName="verifySignature" placeholder="Fill out signature">
+                                    </mat-form-field>
+                                    <br>
 
-        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
-            <mat-card class="grid-card">
-                <mat-card-title>{{ wallet.netStakingWeight | coinNotation | number: '1.0-0' }} {{ wallet.coinUnit }}</mat-card-title>
-                <mat-card-subtitle>Network weight</mat-card-subtitle>
-            </mat-card>
-        </div>
+                                    <mat-card *ngIf="validSignature === true">
+                                        <mat-card-header>
+                                            <mat-card-title>Signature verified</mat-card-title>
+                                            <mat-card-subtitle>This means that the message has been verified to be signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon class="verified">verified</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
 
-        <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
-            <mat-card class="grid-card">
-                <mat-card-title>{{ wallet.dateTime }}</mat-card-title>
-                <mat-card-subtitle>Expected reward time</mat-card-subtitle>
-            </mat-card>
-        </div>
+                                    <mat-card *ngIf="validSignature === false">
+                                        <mat-card-header>
+                                            <mat-card-title>Failed signature verification</mat-card-title>
+                                            <mat-card-subtitle>This means that the message was not signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon *ngIf="validSignature === false" class="failed">report</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
 
-        <div app-grid-cell gcRowSpan="2" class="card card-body" *ngIf="wallet.stakingEnabled">
-            <mat-card class="grid-card">
-                <mat-card-title>Advanced</mat-card-title>
-                <mat-card-subtitle>Details on your staking status</mat-card-subtitle>
-                <mat-card-content>
-                    <p>
-                        CurrentBlockSize: {{wallet.stakingInfo.currentBlockSize}}<br>
-                        CurrentBlockTx: {{wallet.stakingInfo.currentBlockTx}}<br>
-                        PooledTx: {{wallet.stakingInfo.pooledTx}}<br>
-                        Difficulty: {{wallet.stakingInfo.difficulty}}<br>
-                        Search interval: {{wallet.stakingInfo.searchInterval}}<br>
-                        Errors: {{wallet.stakingInfo.errors}}<br>
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <div app-grid-cell gcRowSpan="2" class="card card-body">
-            <div class="mat-caption">
-                You can stake the balance you have in your wallet. If you just received your coins, it might take a while for staking to start, due to confirmation requirement for staked coins.
-                <br>When you stop staking, or receive stake rewards, it will take some time before the same coins can be used for staking.
+                                    <br>
+
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify()">Verify Message</button>&nbsp;
+                                    <button type="button" mat-flat-button id="flipcard" (click)="clear(verForm)">Clear All</button>
+                                </div>
+                            </form> -->
+
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <div class="mat-caption signing-info">
+                        Enter the receiver's address/identity, message (ensure you copy exact content) and signature below to verify the message.
+                        Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack. Note that this only provies the signing party receives with the address/identity, it
+                        cannot prove sendership of any transaction.
+                    </div>
+                </div>
             </div>
-        </div>
-    </app-grid-container>
-</div>
+
+        </app-grid-container>
+
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">ac_unit</mat-icon>
+            Cold Staking
+        </ng-template>
+
+        <app-grid-container>
+
+            <div class="content">
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.hotWalletAccountExists">
+                        <mat-card-title>Cold Staking Status</mat-card-title>
+                        <mat-card-subtitle>Your wallet is not enabled for cold (hosted) staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.hotWalletAccountExists">
+                        <mat-card-title>Cold Staking Status</mat-card-title>
+                        <mat-card-subtitle>Your wallet has been enabled for cold (hosted) staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.hotWalletAccountExists">
+                        <mat-card-title>Enable cold staking</mat-card-title>
+                        <mat-card-subtitle>First step is to enable cold staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <form [formGroup]="coldStakingForm">
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Account password</mat-label>
+                                        <input matInput type="password" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                                    </mat-form-field>
+                                    <br>
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !coldStakingForm.valid" (click)="enableColdStaking()">Enable</button>
+
+                                    <button mat-fab color="accent" [disabled]="wallet.isStarting || !coldStakingForm.valid" (click)="enableColdStaking()">
+                                        <mat-icon>play_arrow</mat-icon>
+                                    </button>
+
+                                </div>
+                            </form>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.hotWalletAccountExists">
+                        <mat-card-title>Staking action</mat-card-title>
+                        <mat-card-subtitle>Click to stop staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <p>
+                                <!-- <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button> -->
+
+                                <button mat-fab color="warn" [disabled]="wallet.isStopping" (click)="stopStaking()">
+                                    <mat-icon>stop</mat-icon>
+                                </button>
+
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-content class="center-align">
+
+                            Hot Wallet (hosting delegated hosting) Account Exists: {{coldStakingInfo?.hotWalletAccountExists}}
+
+
+                            <!-- <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign()">
+                                <div>
+                                    <mat-form-field class="signing-form-field" appearance="outline">
+                                        <mat-label>Signature address/identity</mat-label>
+                                        <input matInput type="text" formControlName="verifyAddress" placeholder="Fill out address/identity">
+                                    </mat-form-field>
+                                    <br>
+
+                                    <mat-form-field class="signing-form-field   " appearance="outline">
+                                        <mat-label>Message</mat-label>
+                                        <textarea matInput rows="10" formControlName="verifyMessage" placeholder="Fill out a message"></textarea>
+                                    </mat-form-field>
+                                    <br>
+
+                                    <mat-form-field class="signing-form-field" appearance="outline">
+                                        <mat-label>Signature</mat-label>
+                                        <input matInput type="text" formControlName="verifySignature" placeholder="Fill out signature">
+                                    </mat-form-field>
+                                    <br>
+
+                                    <mat-card *ngIf="validSignature === true">
+                                        <mat-card-header>
+                                            <mat-card-title>Signature verified</mat-card-title>
+                                            <mat-card-subtitle>This means that the message has been verified to be signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon class="verified">verified</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
+
+                                    <mat-card *ngIf="validSignature === false">
+                                        <mat-card-header>
+                                            <mat-card-title>Failed signature verification</mat-card-title>
+                                            <mat-card-subtitle>This means that the message was not signed by the owner of the address/identity specified.
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <mat-icon *ngIf="validSignature === false" class="failed">report</mat-icon>
+                                        </mat-card-content>
+                                    </mat-card>
+
+                                    <br>
+
+                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify()">Verify Message</button>&nbsp;
+                                    <button type="button" mat-flat-button id="flipcard" (click)="clear(verForm)">Clear All</button>
+                                </div>
+                            </form> -->
+
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body">
+                    <div class="mat-caption signing-info">
+                        <!-- Enter the receiver's address/identity, message (ensure you copy exact content) and signature below to verify the message.
+                    Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack. Note that this only provies the signing party receives with the address/identity, it
+                    cannot prove sendership of any transaction. -->
+                    </div>
+                </div>
+            </div>
+        </app-grid-container>
+    </mat-tab>
+</mat-tab-group>

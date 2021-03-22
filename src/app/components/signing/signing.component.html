@@ -1,10 +1,11 @@
-<div class="content">
-    <mat-tab-group>
-        <mat-tab>
-            <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon">create</mat-icon>
-                Sign Message
-            </ng-template>
+<mat-tab-group color="primary" backgroundColor="accent">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">create</mat-icon>
+            Sign Message
+        </ng-template>
+
+        <div class="content">
 
             <app-grid-container>
 
@@ -53,13 +54,16 @@
                     </div>
                 </div>
             </app-grid-container>
-        </mat-tab>
+        </div>
+    </mat-tab>
 
-        <mat-tab>
-            <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon">fingerprint</mat-icon>
-                Verify Message
-            </ng-template>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">fingerprint</mat-icon>&nbsp;
+            Verify Message
+        </ng-template>
+
+        <div class="content">
 
             <app-grid-container>
 
@@ -128,7 +132,6 @@
                     </div>
                 </div>
             </app-grid-container>
-
-        </mat-tab>
-    </mat-tab-group>
-</div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

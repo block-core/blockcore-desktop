@@ -17,6 +17,7 @@ import { AppModes } from '../../shared/app-modes';
 import { Subscription } from 'rxjs';
 import { WalletInfo } from '@models/wallet-info';
 import { WalletSplit } from '@models/wallet-split';
+import { Logger } from 'src/app/services/logger.service';
 
 @Component({
     selector: 'app-staking',
@@ -28,15 +29,20 @@ export class StakingComponent implements OnInit, OnDestroy {
     @HostBinding('class.wallet') hostClass = true;
 
     public stakingForm: FormGroup;
+    public delegatedForm: FormGroup;
+    public coldStakingForm: FormGroup;
+
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
     public displayedColumns: string[] = ['transactionType', 'transactionAmount', 'transactionTimestamp'];
     public dataSource = new MatTableDataSource<TransactionInfo>();
     private walletServiceSubscription: Subscription;
+    private coldStakingSubscription: Subscription;
 
     public firstTransactionDate: Date;
     public countReceived: number;
     public countSent: number;
     public walletStatistics: any;
+    public coldStakingInfo: { coldWalletAccountExists: boolean, hotWalletAccountExists: boolean }
 
     links = [{ title: 'All', filter: '' }, { title: 'Received', filter: 'received' }, { title: 'Sent', filter: 'sent' }];
     activeLink = this.links[0];
@@ -53,6 +59,7 @@ export class StakingComponent implements OnInit, OnDestroy {
         public wallet: WalletService,
         public appModes: AppModes,
         public dialog: MatDialog,
+        private log: Logger,
         private fb: FormBuilder,
         private ref: ChangeDetectorRef
     ) {
@@ -62,6 +69,14 @@ export class StakingComponent implements OnInit, OnDestroy {
 
     private buildStakingForm(): void {
         this.stakingForm = this.fb.group({
+            walletPassword: ['', Validators.required]
+        });
+
+        this.delegatedForm = this.fb.group({
+            walletPassword: ['', Validators.required]
+        });
+
+        this.coldStakingForm = this.fb.group({
             walletPassword: ['', Validators.required]
         });
     }
@@ -97,11 +112,20 @@ export class StakingComponent implements OnInit, OnDestroy {
             // this.dataSource.paginator = this.paginator;
             // this.dataSource.sort = this.sort;
         });
+
+        this.coldStakingSubscription = this.apiService.getColdStakingInfo(this.globalService.getWalletName()).subscribe(data => {
+            console.log('Cold Staking Info: ', data);
+            this.coldStakingInfo = data;
+        });
     }
 
     ngOnDestroy() {
         if (this.walletServiceSubscription) {
             this.walletServiceSubscription.unsubscribe();
+        }
+
+        if (this.coldStakingSubscription) {
+            this.coldStakingSubscription.unsubscribe();
         }
     }
 
@@ -120,6 +144,32 @@ export class StakingComponent implements OnInit, OnDestroy {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    enableDelegatedStaking() {
+        this.apiService.enableColdStaking(this.globalService.getWalletName(), this.delegatedForm.get('walletPassword').value, true).subscribe(
+            response => {
+                this.log.info('delegated staking enabled:', response);
+            },
+            error => {
+
+                this.apiService.handleException(error);
+            });
+
+        this.delegatedForm.patchValue({ walletPassword: '' });
+    }
+
+    enableColdStaking() {
+        this.apiService.enableColdStaking(this.globalService.getWalletName(), this.coldStakingForm.get('walletPassword').value, false).subscribe(
+            response => {
+                this.log.info('cold staking enabled:', response);
+            },
+            error => {
+
+                this.apiService.handleException(error);
+            });
+
+        this.coldStakingForm.patchValue({ walletPassword: '' });
     }
 
     parseHistory(items: TransactionInfo[]) {
