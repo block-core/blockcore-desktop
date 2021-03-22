@@ -122,7 +122,7 @@
                     <h4 *ngIf="showFiller" mat-line>Wallet</h4>
                 </mat-list-item>
                 
-                <mat-list-item *ngIf="appModes.enabled('staking')" routerLinkActive="main-menu-active" routerLink="/staking">
+                <mat-list-item *ngIf="appModes.enabled('staking') && appState.activeChain.pos" routerLinkActive="main-menu-active" routerLink="/staking">
                     <mat-icon mat-list-icon>bolt</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Staking</h4>
                 </mat-list-item>
