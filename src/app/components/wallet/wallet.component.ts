@@ -69,6 +69,16 @@ export class WalletComponent implements OnInit, OnDestroy {
             // this.dataSource.data = this.wallet.transactionArray;
         }
 
+        // We will only retrieve UTXOs statistics if user has enable advanced mode.
+        if (this.appModes.enabled('staking')) {
+            const walletInfo = new WalletInfo(this.globalService.getWalletName());
+            this.apiService.getWalletStatistics(walletInfo).subscribe(data => {
+                console.log(data);
+                this.walletStatistics = data;
+                this.ref.detectChanges();
+            });
+        }
+
         this.walletServiceSubscription = this.wallet.history$.subscribe(items => {
 
             this.dataSource.paginator = this.paginator;
