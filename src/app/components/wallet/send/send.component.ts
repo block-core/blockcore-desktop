@@ -16,6 +16,7 @@ import { WalletInfo } from '../../../classes/wallet-info';
 import { Router } from '@angular/router';
 import { WalletService } from '../../../services/wallet.service';
 import { TransactionResult } from 'src/app/classes/transaction-result';
+import { AppModes } from 'src/app/shared/app-modes';
 
 @Component({
     selector: 'app-send',
@@ -46,6 +47,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
     constructor(
         public readonly appState: ApplicationStateService,
+        public appModes: AppModes,
         private apiService: ApiService,
         private location: Location,
         private router: Router,
@@ -72,7 +74,9 @@ export class SendComponent implements OnInit, OnDestroy {
         address: '',
         amount: '',
         fee: '',
-        password: ''
+        password: '',
+        opreturndata: '',
+        opreturnamount: ''
     };
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -92,6 +96,12 @@ export class SendComponent implements OnInit, OnDestroy {
         },
         password: {
             required: 'Your password is required.'
+        },
+        opreturndata: {
+            max: 'Maximum 80 characters.'
+        },
+        opreturnamount: {
+            pattern: 'Enter a valid amount. Only positive numbers and no more than 8 decimals are allowed.',
         }
     };
 
@@ -100,7 +110,10 @@ export class SendComponent implements OnInit, OnDestroy {
             address: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
             amount: ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])],
             fee: ['medium', Validators.required],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            shuffleOutputs: [true],
+            opreturndata: ['', Validators.compose([Validators.maxLength(this.appState.activeChain.opreturndata)])], // TODO: This is maxLength for ASCII, with UNICODE it can be longer but node will throw error then. Make a custom validator that encodes UTF8 to bytes.
+            opreturnamount: ['', Validators.compose([Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/)])],
         });
 
         this.sendForm.valueChanges.pipe(debounceTime(300))
@@ -161,9 +174,9 @@ export class SendComponent implements OnInit, OnDestroy {
                     } else if (error.status >= 400) {
                         this.apiService.handleException(error);
 
-                        if (!error.json().errors[0]) {
+                        if (!error.error.errors[0]) {
                         } else {
-                            this.apiError = error.json().errors[0].message;
+                            this.apiError = error.error.errors[0].message;
                         }
                     }
                 },
@@ -181,7 +194,9 @@ export class SendComponent implements OnInit, OnDestroy {
             this.sendForm.get('address').value.trim(),
             this.sendForm.get('amount').value,
             this.sendForm.get('fee').value,
-            true
+            true,
+            this.sendForm.get('opreturndata').value,
+            this.sendForm.get('opreturnamount').value,
         );
 
         this.apiService.estimateFee(transaction)
@@ -199,10 +214,11 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        if (!error.json().errors[0]) {
+                        if (!error.error.errors[0]) {
+                            this.apiError = error;
                         } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
-                            this.apiError = error.json().errors[0].message;
+                            this.apiError = error.error.errors[0].message;
                         }
                     }
                 },
@@ -224,8 +240,10 @@ export class SendComponent implements OnInit, OnDestroy {
             // TO DO: use coin notation
             this.estimatedFee / 100000000,
             true,
-            false,
-            this.wallet.isSingleAddressMode
+            this.sendForm.get('shuffleOutputs').value,
+            this.wallet.isSingleAddressMode,
+            this.sendForm.get('opreturndata').value,
+            this.sendForm.get('opreturnamount').value,
         );
 
         this.apiService
@@ -252,11 +270,11 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        if (!error.json().errors[0]) {
+                        if (!error.error.errors[0]) {
 
                         } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
-                            this.apiError = error.json().errors[0].message;
+                            this.apiError = error.error.errors[0].message;
                         }
                     }
                 },
@@ -299,11 +317,11 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        if (!error.json().errors[0]) {
+                        if (!error.error.errors[0]) {
 
                         } else {
                             // this.genericModalService.openModal(null, error.json().errors[0].message);
-                            this.apiError = error.json().errors[0].message;
+                            this.apiError = error.error.errors[0].message;
                         }
                     }
                 },
@@ -333,10 +351,10 @@ export class SendComponent implements OnInit, OnDestroy {
 
                         this.apiService.handleException(error);
 
-                        if (!error.json().errors[0]) {
+                        if (!error.error.errors[0]) {
 
                         } else {
-                            if (error.json().errors[0].description) {
+                            if (error.error.errors[0].description) {
                                 // this.genericModalService.openModal(null, error.json().errors[0].message);
                             } else {
                                 this.cancelSubscriptions();

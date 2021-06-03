@@ -57,7 +57,6 @@ export class NetworkDetailsComponent implements OnInit, OnDestroy {
 
         this.subscription2 = this.apiService.getBannedNodesCustomInterval(10000).subscribe((response) => {
             this.bans = response;
-            console.log(this.bans);
         });
     }
 
