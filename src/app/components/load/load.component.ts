@@ -415,7 +415,7 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.routingSubscription = this.route
             .queryParams
             .subscribe(params => {
-                if (params.loading) {
+                if (params.loading == true) { // params will be strings, so can be 'true' or 'false' in this case. So double equal to ensure it triggers on both.
                     this.loading = true;
                     this.loadingFailed = false;
                     this.appState.connected = false;

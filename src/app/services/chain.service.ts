@@ -56,11 +56,17 @@ export class ChainService {
                 { opreturndata: 80, pos: true, rootFolderName: 'x1', test: false, name: 'X1', chain: 'X1', private: 128, public: 0, identity: 'X1', tooltip: 'X1', port: 23333, rpcPort: 43333, apiPort: 43334, network: 'X1Main', genesisDate: new Date(2018, 1, 1) },
                 { opreturndata: 40, pos: false, rootFolderName: 'xrc', test: false, name: 'xRhodium', chain: 'XRC', private: 100, public: 61, identity: 'x42', tooltip: 'X42', port: 37270, rpcPort: 19660, apiPort: 37221, network: 'xRhodiumMain', genesisDate: new Date(2018, 1, 1) },
                 { opreturndata: 80, pos: true, rootFolderName: 'homecoin', test: false, name: 'HomeCoin', chain: 'HOME', private: 160, public: 40, identity: 'home', tooltip: 'HomeCoin', port: 33331, rpcPort: 33332, apiPort: 33333, network: 'HomeCoinMain', genesisDate: new Date(2018, 1, 1) },
+                { opreturndata: 80, pos: true, rootFolderName: 'strax', test: false, name: 'Stratis', unit: 'STRAX', chain: 'STRAX', private: 203, public: 75, identity: 'strax', tooltip: 'Stratis', port: 17105, rpcPort: 17104, apiPort: 17103, network: 'StraxMain', genesisDate: new Date(2020, 11, 9) }, // Mon Nov 09 2020 12:22:20 GMT+0100 (Central European Standard Time)
+                // { pos: true, rootFolderName: 'stratis', test: false, name: 'Stratis', chain: 'STRAT', private: 191, public: 63, identity: 'stratis', tooltip: 'Stratis Core', port: 16178, rpcPort: 16174, apiPort: 37221, network: 'StratisMain', genesisDate: new Date(2016, 8, 6) },
+                
                 // { pos: true, rootFolderName: 'xds', test: false, name: 'XDS', chain: 'XDS', private: 128, public: 0, identity: 'xds', tooltip: 'XDS', port: 38333, rpcPort: 48333, apiPort: 48334, network: 'XdsMain', genesisDate: new Date(2020, 0, 2) },
                 // { pos: true, rootFolderName: 'stratis', test: false, name: 'Stratis', chain: 'STRAT', private: 191, public: 63, identity: 'stratis', tooltip: 'Stratis Core', port: 16178, rpcPort: 16174, apiPort: 37221, network: 'StratisMain', genesisDate: new Date(2016, 8, 6) },
                 // { pos: true, rootFolderName: 'stratis', test: true, name: 'Stratis (RegTest)', chain: 'STRAT', private: 193, public: 65, identity: 'stratis', tooltip: 'Stratis Core', port: 18444, rpcPort: 18442, apiPort: 37221, network: 'StratisRegTest', genesisDate: new Date(2017, 5, 16) },
                 // { pos: true, rootFolderName: 'stratis', test: true, name: 'Stratis (Test)', chain: 'STRAT', private: 193, public: 65, identity: 'stratis', tooltip: 'Stratis Core', port: 26178, rpcPort: 26174, apiPort: 38221, network: 'StratisTest', genesisDate: new Date(2017, 5, 4) },
             ];
+
+            // Sort the array by name.
+            this.availableChains.sort((a, b) => a.name.localeCompare(b.name));
 
             ChainService.singletonInstance = this;
         }

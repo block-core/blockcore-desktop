@@ -109,6 +109,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     changeMode() {
+        let currentMode = localStorage.getItem('Network:Mode');
+        let shouldExitNode = currentMode !== 'manual';
+
         // Persist the current mode as PreviousMode.
         localStorage.setItem('Network:ModePrevious', localStorage.getItem('Network:Mode'));
         localStorage.removeItem('Network:Mode');
@@ -116,18 +119,21 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.appState.changingMode = true;
         this.electronService.ipcRenderer.send('daemon-change');
 
-        // Make sure we shut down the existing node when user choose the change mode action.
-        this.apiService.shutdownNode().subscribe(response => {
-            // The response from shutdown is returned before the node is fully exited, so put a small delay here.
-            // setTimeout(() => {
-            //     this.router.navigate(['/load']);
-            // }, 1500);
-        });
+        // Do not send shutdown command if we're in manual mode.
+        if (shouldExitNode) {
+            // Make sure we shut down the existing node when user choose the change mode action.
+            this.apiService.shutdownNode().subscribe(response => {
+                // The response from shutdown is returned before the node is fully exited, so put a small delay here.
+                // setTimeout(() => {
+                //     this.router.navigate(['/load']);
+                // }, 1500);
+            });
+        }
 
         this.electronService.ipcRenderer.send('update-icon', null);
 
         // Navigate and show loading indicator.
-        this.router.navigate(['/load'], { queryParams: { loading: true } });
+        this.router.navigate(['/load'], { queryParams: { loading: shouldExitNode } });
     }
 
     cancel() {
