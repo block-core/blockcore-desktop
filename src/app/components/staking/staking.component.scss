@@ -1,5 +1,8 @@
 @import '~@angular/material/theming';
 
+.dim {
+    color: rgba(255, 255, 255, 0.7);
+}
 
 // .grid-container {
 //     position: relative;
@@ -22,10 +25,6 @@
 //       grid-column: span 2 !important;
 //     }
 //   }
-
-
-
-
 
 .wallet
 {

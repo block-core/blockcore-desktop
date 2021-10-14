@@ -44,6 +44,9 @@ export class StakingComponent implements OnInit, OnDestroy {
     public walletStatistics: any;
     public coldStakingInfo: { coldWalletAccountExists: boolean, hotWalletAccountExists: boolean }
 
+    public delegatedStakingAddress = '';
+    public coldStakingAddress = '';
+
     links = [{ title: 'All', filter: '' }, { title: 'Received', filter: 'received' }, { title: 'Sent', filter: 'sent' }];
     activeLink = this.links[0];
 
@@ -116,7 +119,29 @@ export class StakingComponent implements OnInit, OnDestroy {
         this.coldStakingSubscription = this.apiService.getColdStakingInfo(this.globalService.getWalletName()).subscribe(data => {
             console.log('Cold Staking Info: ', data);
             this.coldStakingInfo = data;
+
+            if (this.coldStakingInfo && this.coldStakingInfo.coldWalletAccountExists || this.coldStakingInfo.hotWalletAccountExists) {
+                this.mode = 'enabled';
+            }
+
+            if (this.coldStakingInfo.coldWalletAccountExists) {
+                this.apiService.getColdStakingAddress(this.globalService.getWalletName(), true, true).subscribe(data => {
+                    console.log('Delegated Staking Address: ', data);
+                    this.delegatedStakingAddress = data.address;
+                });
+            }
+
+            if (this.coldStakingInfo.hotWalletAccountExists) {
+                this.apiService.getColdStakingAddress(this.globalService.getWalletName(), false, true).subscribe(data => {
+                    console.log('Cold Staking Address: ', data);
+                    this.coldStakingAddress = data.address;
+                });
+            }
+
         });
+
+        // We probably need to figure out what flag to look for to see if segwit is required. We can't allow user to select this.
+        // (this.appState.addressType === 'Segwit')
     }
 
     ngOnDestroy() {
@@ -143,6 +168,18 @@ export class StakingComponent implements OnInit, OnDestroy {
 
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
+        }
+    }
+
+    mode = '';
+
+    setMode(mode: string) {
+        this.mode = mode;
+
+        if (!this.mode) {
+            this.stakingForm.reset();
+            this.coldStakingForm.reset();
+            this.delegatedForm.reset();
         }
     }
 

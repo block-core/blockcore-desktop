@@ -2,12 +2,28 @@
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="tab-icon">local_fire_department</mat-icon>
-            Hot Staking
+            Hot
         </ng-template>
 
         <div class="content">
 
             <app-grid-container>
+
+
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Hot Staking</mat-card-title>
+                        <mat-card-content class="dim">
+                            Hot staking requires your computer and the software to be online at all times. It also requires you to have your password to unlock the wallet.
+                            <br><br>
+                            This form of staking is less secure than cold staking, as it requires your password to be kept in-memory as long as your are staking.
+                            <br><br>
+                            When you enable this type of staking, all of your balance will be used for staking.
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+
                 <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body">
                     <mat-card class="grid-card">
                         <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
@@ -24,7 +40,7 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body">
+                <!-- <div app-grid-cell class="card card-body">
                     <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
                         <mat-card-title>Status</mat-card-title>
                         <mat-card-subtitle>Staking disabled</mat-card-subtitle>
@@ -40,7 +56,7 @@
                             <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
                         </mat-card-content>
                     </mat-card>
-                </div>
+                </div> -->
 
                 <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance">
                     <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
@@ -150,37 +166,89 @@
 
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">offline_bolt</mat-icon>
-            Delegated Staking
+            <mat-icon class="tab-icon">ac_unit</mat-icon>
+            Cold
         </ng-template>
 
-        <app-grid-container>
+        <div class="content">
+            <app-grid-container>
 
-            <div class="content">
-
-                <div app-grid-cell class="card card-body">
-                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.coldWalletAccountExists">
-                        <mat-card-title>Delegated Status</mat-card-title>
-                        <mat-card-subtitle>Your wallet is not enabled for delegated staking</mat-card-subtitle>
-                        <mat-card-content class="center-align">
-                            <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.coldWalletAccountExists">
-                        <mat-card-title>Delegated Status</mat-card-title>
-                        <mat-card-subtitle>Your wallet has been enabled for delegated staking</mat-card-subtitle>
-                        <mat-card-content class="center-align">
-                            <mat-icon class="icon-medium mat-primary">check_circle</mat-icon>
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Cold Staking</mat-card-title>
+                        <mat-card-content class="dim">
+                            Your wallet can only do either offline cold staking or online cold staking. You have to make a decision which type of cold staking you want to perform.
+                            <br><br>
+                            You can of course make multiple wallets, one where you are doing offline cold staking and another wallet you are performing online cold staking.
+                            <br><br>
+                            Offline staking allows you to stake without your computer being online, by using a third party server or your own server.
+                            <br><br>
+                            This form of staking is more secure than hot staking.
                         </mat-card-content>
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body">
-                    <mat-card class="grid-card" *ngIf="!coldStakingInfo?.coldWalletAccountExists">
-                        <mat-card-title>Enable delegated staking</mat-card-title>
-                        <mat-card-subtitle>First step is to enable cold staking</mat-card-subtitle>
-                        <mat-card-content class="center-align">
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == ''">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Offline or Online?</mat-card-title>
+                        <mat-card-content class="dim">
+                            Offline means that your funds are sent to an online cold staking wallet. This online cold staking wallet can be your own computer,
+                            or you can find third party online providers that allows you to delegate your staking.
+                            <br><br>
+                            If you choose to run online cold staking, your computer must be online at all times. Your computer can perform offline cold staking for others
+                            when you run in this mode.
+                            <br><br>
+                            <h3>Choose mode</h3>
+                            <button type="button" color="primary" mat-flat-button (click)="setMode('offline')">
+                                <mat-icon>cloud_off</mat-icon>
+                                Offline Cold Staking
+                            </button>&nbsp;
+                            <button type="button" color="primary" mat-flat-button (click)="setMode('online')">
+                                <mat-icon>cloud</mat-icon>
+                                Online Cold Staking
+                            </button>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == 'online'">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Online</mat-card-title>
+                        <mat-card-content class="dim">
+                            You are about to enable online cold staking on this wallet. This is a non-reversible operation. Fill in your password to continue.
+                            <br><br>
+
+                            <form [formGroup]="coldStakingForm">
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Account password</mat-label>
+                                        <input matInput type="password" formControlName="walletPassword" placeholder="Fill out to unlock account">
+                                    </mat-form-field>
+                                    <br>
+
+                                    <button type="button" color="primary" mat-flat-button [disabled]="wallet.isStarting || !coldStakingForm.valid" (click)="enableColdStaking()">
+                                        <mat-icon>cloud</mat-icon>
+                                        Enable Online Cold Staking
+                                    </button>
+                                    &nbsp;
+                                    <button type="button" mat-flat-button (click)="setMode('')">
+                                        Cancel
+                                    </button>
+
+                                </div>
+                            </form>
+
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == 'offline' && coldStakingInfo?.hotWalletAccountExists">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Offline</mat-card-title>
+                        <mat-card-content class="dim">
+                            You are about to enable offline cold staking on this wallet. This is a non-reversible operation. Fill in your password to continue.
+                            <br><br>
+
                             <form [formGroup]="delegatedForm">
                                 <div class="form-group">
                                     <mat-form-field appearance="outline">
@@ -188,122 +256,103 @@
                                         <input matInput type="password" formControlName="walletPassword" placeholder="Fill out to unlock account">
                                     </mat-form-field>
                                     <br>
-                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">Enable</button>
-
-                                    <button mat-fab color="accent" [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">
-                                        <mat-icon>play_arrow</mat-icon>
+                                    <button type="button" color="primary" mat-flat-button [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">
+                                        <mat-icon>cloud_off</mat-icon>
+                                        Enable Offline Cold Staking
                                     </button>
-
+                                    &nbsp;
+                                    <button type="button" mat-flat-button (click)="setMode('')">
+                                        Cancel
+                                    </button>
                                 </div>
                             </form>
-                        </mat-card-content>
-                    </mat-card>
 
-                    <mat-card class="grid-card" *ngIf="coldStakingInfo?.coldWalletAccountExists">
-                        <mat-card-title>Staking action</mat-card-title>
-                        <mat-card-subtitle>Click to stop staking</mat-card-subtitle>
-                        <mat-card-content class="center-align">
-                            <p>
-                                <!-- <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button> -->
-
-                                <button mat-fab color="warn" [disabled]="wallet.isStopping" (click)="stopStaking()">
-                                    <mat-icon>stop</mat-icon>
-                                </button>
-
-                            </p>
                         </mat-card-content>
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body">
+                <div app-grid-cell class="card card-body" *ngIf="coldStakingInfo?.coldWalletAccountExists">
                     <mat-card class="grid-card">
+                        <mat-card-title>Offline Cold Staking Enabled</mat-card-title>
+                        <mat-card-subtitle>Your wallet is enabled for offline cold staking staking</mat-card-subtitle>
                         <mat-card-content class="center-align">
-
-
-                            Cold Wallet Account Exists: {{coldStakingInfo?.coldWalletAccountExists}}
-                            <br>
-
-                            <button mat-fab color="accent">
-                                <mat-icon>play_arrow</mat-icon>
-                            </button>
-
-                            <!-- <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign()">
-                                <div>
-                                    <mat-form-field class="signing-form-field" appearance="outline">
-                                        <mat-label>Signature address/identity</mat-label>
-                                        <input matInput type="text" formControlName="verifyAddress" placeholder="Fill out address/identity">
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-form-field class="signing-form-field   " appearance="outline">
-                                        <mat-label>Message</mat-label>
-                                        <textarea matInput rows="10" formControlName="verifyMessage" placeholder="Fill out a message"></textarea>
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-form-field class="signing-form-field" appearance="outline">
-                                        <mat-label>Signature</mat-label>
-                                        <input matInput type="text" formControlName="verifySignature" placeholder="Fill out signature">
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-card *ngIf="validSignature === true">
-                                        <mat-card-header>
-                                            <mat-card-title>Signature verified</mat-card-title>
-                                            <mat-card-subtitle>This means that the message has been verified to be signed by the owner of the address/identity specified.
-                                            </mat-card-subtitle>
-                                        </mat-card-header>
-                                        <mat-card-content>
-                                            <mat-icon class="verified">verified</mat-icon>
-                                        </mat-card-content>
-                                    </mat-card>
-
-                                    <mat-card *ngIf="validSignature === false">
-                                        <mat-card-header>
-                                            <mat-card-title>Failed signature verification</mat-card-title>
-                                            <mat-card-subtitle>This means that the message was not signed by the owner of the address/identity specified.
-                                            </mat-card-subtitle>
-                                        </mat-card-header>
-                                        <mat-card-content>
-                                            <mat-icon *ngIf="validSignature === false" class="failed">report</mat-icon>
-                                        </mat-card-content>
-                                    </mat-card>
-
-                                    <br>
-
-                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify()">Verify Message</button>&nbsp;
-                                    <button type="button" mat-flat-button id="flipcard" (click)="clear(verForm)">Clear All</button>
-                                </div>
-                            </form> -->
-
+                            <!-- <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon> -->
                         </mat-card-content>
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body">
-                    <div class="mat-caption signing-info">
-                        Enter the receiver's address/identity, message (ensure you copy exact content) and signature below to verify the message.
-                        Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack. Note that this only provies the signing party receives with the address/identity, it
-                        cannot prove sendership of any transaction.
-                    </div>
+                <div app-grid-cell class="card card-body" *ngIf="coldStakingInfo?.hotWalletAccountExists">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Online ColdStaking Enabled</mat-card-title>
+                        <mat-card-subtitle>Your wallet is enabled for online cold staking</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            <!-- <mat-icon class="icon-medium mat-warn">do_not_disturb_on</mat-icon> -->
+                        </mat-card-content>
+                    </mat-card>
                 </div>
-            </div>
 
-        </app-grid-container>
+                <!-- <mat-card class="grid-card" *ngIf="!coldStakingInfo?.coldWalletAccountExists && !coldStakingInfo?.hotWalletAccountExists">
+                    <mat-card-title>Choose mode</mat-card-title>
+                    <mat-card-subtitle>Your wallet is not enabled for cold staking</mat-card-subtitle>
+                    <mat-card-content class="center-align">
+                    </mat-card-content>
+                </mat-card> -->
+
+                <div app-grid-cell class="card card-body" *ngIf="delegatedStakingAddress">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Offline Cold Staking Address</mat-card-title>
+                        <mat-card-subtitle>Target address for cold staking setup</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            {{delegatedStakingAddress}}
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="coldStakingAddress">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Online Cold Staking Address</mat-card-title>
+                        <mat-card-subtitle>Target address for cold staking setup</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            {{coldStakingAddress}}
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+            </app-grid-container>
+        </div>
 
     </mat-tab>
 
-    <mat-tab>
+    <!-- <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">ac_unit</mat-icon>
-            Cold Staking
+            <mat-icon class="tab-icon">computer</mat-icon>
+            Server
         </ng-template>
 
-        <app-grid-container>
+        <div class="content">
+            <app-grid-container>
 
-            <div class="content">
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-title>Server for staking</mat-card-title>
+                        <mat-card-content class="dim">
+                            You can configure your computer to act as an hosting for offline stakers. You can use it only for your own purpose or share it with others.
+                            <br><br>
+                            When you activate server, you cannot use the same wallet for online or offline staking.
+                        </mat-card-content>
+                    </mat-card>
+                </div>
 
                 <div app-grid-cell class="card card-body">
+
+                    <mat-card class="grid-card">
+                        <mat-card-title>Cold Staking Address</mat-card-title>
+                        <mat-card-subtitle>xxx</mat-card-subtitle>
+                        <mat-card-content class="center-align">
+                            {{coldStakingAddress}}
+                        </mat-card-content>
+                    </mat-card>
+
                     <mat-card class="grid-card" *ngIf="!coldStakingInfo?.hotWalletAccountExists">
                         <mat-card-title>Cold Staking Status</mat-card-title>
                         <mat-card-subtitle>Your wallet is not enabled for cold (hosted) staking</mat-card-subtitle>
@@ -349,12 +398,9 @@
                         <mat-card-subtitle>Click to stop staking</mat-card-subtitle>
                         <mat-card-content class="center-align">
                             <p>
-                                <!-- <button type="button" color="warn" mat-flat-button [disabled]="wallet.isStopping" (click)="stopStaking()">Stop Staking</button> -->
-
                                 <button mat-fab color="warn" [disabled]="wallet.isStopping" (click)="stopStaking()">
                                     <mat-icon>stop</mat-icon>
                                 </button>
-
                             </p>
                         </mat-card-content>
                     </mat-card>
@@ -363,71 +409,12 @@
                 <div app-grid-cell class="card card-body">
                     <mat-card class="grid-card">
                         <mat-card-content class="center-align">
-
                             Hot Wallet (hosting delegated hosting) Account Exists: {{coldStakingInfo?.hotWalletAccountExists}}
-
-
-                            <!-- <form [formGroup]="verifyForm" class="signing-form" #verForm="ngForm" (ngSubmit)="sign()">
-                                <div>
-                                    <mat-form-field class="signing-form-field" appearance="outline">
-                                        <mat-label>Signature address/identity</mat-label>
-                                        <input matInput type="text" formControlName="verifyAddress" placeholder="Fill out address/identity">
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-form-field class="signing-form-field   " appearance="outline">
-                                        <mat-label>Message</mat-label>
-                                        <textarea matInput rows="10" formControlName="verifyMessage" placeholder="Fill out a message"></textarea>
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-form-field class="signing-form-field" appearance="outline">
-                                        <mat-label>Signature</mat-label>
-                                        <input matInput type="text" formControlName="verifySignature" placeholder="Fill out signature">
-                                    </mat-form-field>
-                                    <br>
-
-                                    <mat-card *ngIf="validSignature === true">
-                                        <mat-card-header>
-                                            <mat-card-title>Signature verified</mat-card-title>
-                                            <mat-card-subtitle>This means that the message has been verified to be signed by the owner of the address/identity specified.
-                                            </mat-card-subtitle>
-                                        </mat-card-header>
-                                        <mat-card-content>
-                                            <mat-icon class="verified">verified</mat-icon>
-                                        </mat-card-content>
-                                    </mat-card>
-
-                                    <mat-card *ngIf="validSignature === false">
-                                        <mat-card-header>
-                                            <mat-card-title>Failed signature verification</mat-card-title>
-                                            <mat-card-subtitle>This means that the message was not signed by the owner of the address/identity specified.
-                                            </mat-card-subtitle>
-                                        </mat-card-header>
-                                        <mat-card-content>
-                                            <mat-icon *ngIf="validSignature === false" class="failed">report</mat-icon>
-                                        </mat-card-content>
-                                    </mat-card>
-
-                                    <br>
-
-                                    <button type="button" color="primary" mat-flat-button id="flipcard" [disabled]="!verifyForm.valid" (click)="verify()">Verify Message</button>&nbsp;
-                                    <button type="button" mat-flat-button id="flipcard" (click)="clear(verForm)">Clear All</button>
-                                </div>
-                            </form> -->
-
                         </mat-card-content>
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body">
-                    <div class="mat-caption signing-info">
-                        <!-- Enter the receiver's address/identity, message (ensure you copy exact content) and signature below to verify the message.
-                    Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack. Note that this only provies the signing party receives with the address/identity, it
-                    cannot prove sendership of any transaction. -->
-                    </div>
-                </div>
-            </div>
-        </app-grid-container>
-    </mat-tab>
+            </app-grid-container>
+        </div>
+    </mat-tab> -->
 </mat-tab-group>

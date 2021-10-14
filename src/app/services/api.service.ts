@@ -550,6 +550,24 @@ export class ApiService {
     }
 
     /**
+     * Get cold staking address (for Cold or Hot addresses)
+     */
+    getColdStakingAddress(walletName: string, isColdWallet: boolean, segwit: boolean): Observable<any> {
+        const params = new HttpParams({
+            fromObject: {
+                walletName: walletName,
+                IsColdWalletAddress: isColdWallet.toString(),
+                Segwit: segwit.toString()
+            }
+        });
+
+        return this.http
+            .get(this.apiUrl + '/ColdStaking/cold-staking-address', { headers: this.headers, params })
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
      * Get cold staking info
      */
     getColdStakingInfo(walletName: string): Observable<any> {
