@@ -22,10 +22,10 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body">
+                <div app-grid-cell class="card card-body">
                     <mat-card class="grid-card">
-                        <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
-                        <mat-card-subtitle>Balance of: {{wallet.walletName}}</mat-card-subtitle>
+                        <mat-card-title>{{ (wallet.confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }} <mat-icon class="tab-icon">local_fire_department</mat-icon></mat-card-title>
+                        <mat-card-subtitle>Balance of hot wallet: {{wallet.walletName}}</mat-card-subtitle>
                         <mat-card-content>
                             <strong>{{ (wallet.unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
                             <em> (unconfirmed)</em>
@@ -33,7 +33,18 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance">
+                <div app-grid-cell class="card card-body" *ngIf="hasHotColdStakingBalance">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }} <mat-icon class="tab-icon">ac_unit</mat-icon></mat-card-title>
+                        <mat-card-subtitle>Balance of online cold staking: {{wallet.walletName}}</mat-card-subtitle>
+                        <mat-card-content>
+                            <strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
+                            <em> (unconfirmed)</em>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell class="card card-body" *ngIf="wallet.hasBalance || hasHotColdStakingBalance">
                     <mat-card class="grid-card" *ngIf="!wallet.stakingEnabled">
                         <mat-card-title>Start staking</mat-card-title>
                         <mat-card-subtitle>Start staking by unlocking your wallet</mat-card-subtitle>
@@ -269,13 +280,37 @@
                         <mat-card-subtitle>Final step is to fill out below and submit the activation transaction</mat-card-subtitle>
                         <mat-card-content class="dim">
 
-                            <form [formGroup]="delegatedForm">
+                            <form [formGroup]="offlineForm">
                                 <div class="form-group">
+
+                                    <p>
+                                        Pick online cold staking local wallet or fill out address below from an online staking provider:
+                                    </p>
+
+                                    <mat-form-field appearance="outline">
+                                        <mat-select (selectionChange)="onAccountChanged($event)" placeholder="Select wallet">
+                                            <mat-option [value]="">Manual / Online Provider</mat-option>
+                                            <mat-option *ngFor="let account of localOnlineColdStakingAccounts" [value]="account.address">
+                                                {{account.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <br>
+
+                                    <!-- <mat-form-field>
+                                        <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedMode">
+                                            <mat-option *ngFor="let mode of appModes.available" [value]="mode.id">
+                                                {{mode.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field> -->
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Online Cold Staking Address (From third party or your own online cold staking wallet)</mat-label>
-                                        <input matInput type="text" formControlName="walletPassword" placeholder="Address from an online cold staking wallet">
+                                        <input matInput type="text" formControlName="onlineColdStakingAddress" placeholder="Address from an online cold staking wallet">
                                     </mat-form-field>
+                                    &nbsp;<a href="https://www.blockcore.net/staking" target="_blank">Discovery Online Staking Providers</a>
+
                                     <br>
 
                                     <!-- <mat-form-field appearance="outline">
@@ -286,13 +321,16 @@
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Amount</mat-label>
-                                        <input matInput type="text" formControlName="walletPassword" placeholder="Amount from the balance to activate for staking">
+                                        <input matInput type="text" formControlName="amount" placeholder="Amount from the balance to activate for staking">
                                     </mat-form-field>
+
+                                    &nbsp;<button mat-button (click)="getMaxAmount()">MAX</button>
+
                                     <br>
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Fee</mat-label>
-                                        <input matInput type="text" formControlName="walletPassword" placeholder="Fee on the transaction">
+                                        <input matInput type="text" formControlName="fee" placeholder="Fee on the transaction">
                                     </mat-form-field>
                                     <br>
 
@@ -302,7 +340,9 @@
                                     </mat-form-field>
                                     <br>
 
-                                    <button type="button" color="primary" mat-flat-button [disabled]="wallet.isStarting || !delegatedForm.valid" (click)="enableDelegatedStaking()">
+                                    <div *ngIf="invalidPassword">The password is not correct.<br><br></div>
+
+                                    <button type="button" color="primary" mat-flat-button [disabled]="wallet.isStarting || !offlineForm.valid" (click)="setupStaking()">
                                         <mat-icon>cloud_upload</mat-icon>
                                         Broadcast Transaction
                                     </button>
@@ -315,9 +355,10 @@
 
                 <div app-grid-cell class="card card-body" *ngIf="coldStakingInfo?.hotWalletAccountExists">
                     <mat-card class="grid-card">
-                        <mat-card-title>Online ColdStaking Enabled</mat-card-title>
+                        <mat-card-title>Online Cold Staking Enabled</mat-card-title>
                         <mat-card-subtitle>Your wallet is enabled for online cold staking</mat-card-subtitle>
                         <mat-card-content class="center-align">
+                            To start staking with your online cold staking wallet, go to the "Hot" staking on the top and fill out your password to begin secure hot cold staking.
                         </mat-card-content>
                     </mat-card>
                 </div>
@@ -328,6 +369,17 @@
                         <mat-card-subtitle>Target address for cold staking setup</mat-card-subtitle>
                         <mat-card-content class="center-align">
                             {{coldStakingAddress}}
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body" *ngIf="coldStakingAddress">
+                    <mat-card class="grid-card">
+                        <mat-card-title>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
+                        <mat-card-subtitle>Balance of online cold staking ({{wallet.walletName}})</mat-card-subtitle>
+                        <mat-card-content>
+                            <strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>
+                            <em> (unconfirmed)</em>
                         </mat-card-content>
                     </mat-card>
                 </div>

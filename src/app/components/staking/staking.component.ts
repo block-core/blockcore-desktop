@@ -16,8 +16,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AppModes } from '../../shared/app-modes';
 import { Subscription } from 'rxjs';
 import { WalletInfo } from '@models/wallet-info';
-import { WalletSplit } from '@models/wallet-split';
 import { Logger } from 'src/app/services/logger.service';
+import { TransactionSending } from '@models/transaction-sending';
 
 @Component({
     selector: 'app-staking',
@@ -30,6 +30,7 @@ export class StakingComponent implements OnInit, OnDestroy {
 
     public stakingForm: FormGroup;
     public delegatedForm: FormGroup;
+    public offlineForm: FormGroup;
     public coldStakingForm: FormGroup;
 
     public walletInfo = 'When you send, balance can\ntemporarily go from confirmed\nto unconfirmed.';
@@ -56,6 +57,7 @@ export class StakingComponent implements OnInit, OnDestroy {
     constructor(
         private apiService: ApiService,
         private globalService: GlobalService,
+        private walletService: WalletService,
         private router: Router,
         public appState: ApplicationStateService,
         private detailsService: DetailsService,
@@ -79,12 +81,75 @@ export class StakingComponent implements OnInit, OnDestroy {
             walletPassword: ['', Validators.required]
         });
 
+        this.offlineForm = this.fb.group({
+            walletPassword: ['', Validators.required],
+            onlineColdStakingAddress: ['', Validators.required],
+            amount: ['', Validators.required],
+            fee: ['0.002', Validators.required]
+        });
+
         this.coldStakingForm = this.fb.group({
             walletPassword: ['', Validators.required]
         });
     }
 
+    localOnlineColdStakingAccounts = [];
+    selectedAccount: any;
+    selectedAddress: string;
+
+    onAccountChanged(event) {
+        this.offlineForm.controls['onlineColdStakingAddress'].setValue(event.value);
+    }
+
+    getMaxAmount() {
+        var balance = this.globalService.transform(this.wallet.confirmedBalance);
+        this.offlineForm.controls["amount"].setValue(balance);
+    }
+
+    public confirmedBalance: number;
+    public unconfirmedBalance: number;
+    public hasHotColdStakingBalance = false;
+
     ngOnInit() {
+        this.localOnlineColdStakingAccounts = [];
+
+        // Discover all online cold staking wallets:
+        this.appState.accounts.forEach((account) => {
+
+            // 
+            this.apiService.getColdStakingAddress(account.name, false, true).subscribe((address) => {
+                this.localOnlineColdStakingAccounts.push({ name: account.name, address: address.address });
+                console.log(this.localOnlineColdStakingAccounts);
+            });
+
+        });
+
+        const walletInfo = new WalletInfo(this.globalService.getWalletName(), 'coldStakingHotAddresses');
+        this.apiService.getWalletBalance(walletInfo).subscribe(response => {
+
+            this.log.info('Get hot cold staking wallet balance:', response);
+
+            const balanceResponse = response;
+            this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+            this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+
+            if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
+                this.hasHotColdStakingBalance = true;
+            } else {
+                this.hasHotColdStakingBalance = false;
+            }
+
+            // if (response.status >= 200 && response.status < 400) {
+            // const balanceResponse = response;
+            // // TO DO - add account feature instead of using first entry in array
+            // this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
+            // // }
+        },
+            error => {
+                this.apiService.handleException(error);
+            });
+
+
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
@@ -179,8 +244,62 @@ export class StakingComponent implements OnInit, OnDestroy {
         if (!this.mode) {
             this.stakingForm.reset();
             this.coldStakingForm.reset();
+            this.offlineForm.reset();
             this.delegatedForm.reset();
         }
+    }
+
+    invalidPassword: boolean;
+
+    setupStaking() {
+        this.invalidPassword = false;
+
+        let amount = +this.offlineForm.get('amount').value;
+        const confirmedBalance = +this.globalService.transform(this.wallet.confirmedBalance);
+        const fee = +this.offlineForm.get('fee').value;
+
+        // Basic protection against mistakes.
+        if (fee > amount) {
+            throw Error('You cannot have a fee that is larger than the amount.');
+        }
+
+        // If the amount and fee is larger than balance, remove fee from amount.
+        if ((amount + fee) > confirmedBalance) {
+            amount = amount - fee;
+        }
+
+        this.apiService.setupOfflineColdStaking(
+            this.globalService.getWalletName(),
+            this.offlineForm.get('walletPassword').value,
+            'account 0',
+            this.delegatedStakingAddress,
+            this.offlineForm.get('onlineColdStakingAddress').value,
+            amount,
+            fee,
+            true, // segwit change address
+            true // paytoscript
+        ).subscribe(
+            response => {
+                this.log.info('offline cold staking transaction hex:', response.transactionHex);
+
+                // Broadcast transaction:
+                this.apiService.sendTransaction(new TransactionSending(response.transactionHex)).subscribe(
+                    response => {
+                        this.log.info('Transaction broadcasted successfully and cold staking activated!', response);
+                    },
+                    error => {
+                        console.error(error);
+                        this.apiService.handleException(error);
+
+                    });
+            },
+            error => {
+                if (error.error.errors[0]?.message.indexOf('Invalid password') > -1) {
+                    this.invalidPassword = true;
+                }
+
+                this.apiService.handleException(error);
+            });
     }
 
     enableDelegatedStaking() {

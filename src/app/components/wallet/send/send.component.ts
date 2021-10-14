@@ -153,6 +153,7 @@ export class SendComponent implements OnInit, OnDestroy {
     public getMaxBalance() {
         const data = {
             walletName: this.globalService.getWalletName(),
+            accontName: 'account 0',
             feeType: this.sendForm.get('fee').value
         };
 

@@ -182,7 +182,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
             }
         });
 
@@ -246,7 +246,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
             }
         });
 
@@ -359,7 +359,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0'
+                accountName: data.accountName
             }
         });
 
@@ -377,7 +377,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accontName,
                 feeType: data.feeType,
                 allowUnconfirmed: 'true'
             }
@@ -396,7 +396,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0'
+                accountName: data.accountName
             }
         });
 
@@ -414,7 +414,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
                 segwit: (addressType === 'Segwit').toString()
             }
         });
@@ -432,7 +432,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
                 segwit: (addressType === 'Segwit').toString()
             }
         });
@@ -450,7 +450,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
                 count,
                 segwit: (addressType === 'Segwit').toString()
             }
@@ -469,7 +469,7 @@ export class ApiService {
         const search = new HttpParams({
             fromObject: {
                 walletName: data.walletName,
-                accountName: 'account 0',
+                accountName: data.accountName,
                 segwit: (addressType === 'Segwit').toString()
             }
         });
@@ -580,6 +580,30 @@ export class ApiService {
         return interval(this.pollingInterval)
             .pipe(startWith(0))
             .pipe(switchMap(() => this.http.get(this.apiUrl + '/ColdStaking/cold-staking-info', { headers: this.headers, params })))
+            .pipe(catchError(this.handleError.bind(this)))
+            .pipe(map((response: Response) => response));
+    }
+
+    /**
+     * Active the offline cold staking
+     */
+    setupOfflineColdStaking(wallet: string, password: string, walletAccount: string, coldWalletAddress: string, hotWalletAddress: string, amount: number, fees: number, segwitChangeAddress: boolean, payToScript: boolean): Observable<any> {
+        var body = {
+            "coldWalletAddress": coldWalletAddress,
+            "hotWalletAddress": hotWalletAddress,
+            "walletName": wallet,
+            "walletPassword": password,
+            "walletAccount": walletAccount,
+            "amount": amount,
+            "fees": fees,
+            "segwitChangeAddress": segwitChangeAddress,
+            "payToScript": payToScript
+        };
+
+        console.log(body);
+
+        return this.http
+            .post(this.apiUrl + '/ColdStaking/setup-offline-staking', body, { headers: this.headers })
             .pipe(catchError(this.handleError.bind(this)))
             .pipe(map((response: Response) => response));
     }
