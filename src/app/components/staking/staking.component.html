@@ -93,7 +93,7 @@
 
                 <div app-grid-cell class="card card-body" *ngIf="wallet.stakingEnabled">
                     <mat-card class="grid-card">
-                        <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(2)}}%</mat-card-title>
+                        <mat-card-title>{{(wallet.stakingWeight/wallet.netStakingWeight * 100).toFixed(6)}}%</mat-card-title>
                         <mat-card-subtitle>Percentage of network</mat-card-subtitle>
                     </mat-card>
                 </div>
@@ -274,6 +274,43 @@
                     </mat-card>
                 </div>
 
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body">
+                    <mat-card class="grid-card">
+                        <mat-card-title>History</mat-card-title>
+                        <mat-card-content class="dim">
+                            
+                            <mat-list>
+                                <div mat-subheader>Transactions</div>
+                                <mat-list-item *ngFor="let tx of coldStakingHistory">
+                                  <mat-icon mat-list-icon *ngIf="tx.type == 'sent'">remove_circle</mat-icon>
+                                  <mat-icon mat-list-icon *ngIf="tx.type == 'received'">add_circle</mat-icon>
+                                  <div mat-line>{{tx.amount | coinNotation}} ({{tx.type}})</div>
+                                  <div mat-line>{{ tx.toAddress}}</div>
+                                  <div mat-line>{{ tx.timestamp * 1000 | date:'short'}}</div>
+                                </mat-list-item>
+
+
+                                <mat-list-item *ngFor="let tx of coldStakingOfflineHistory">
+                                    <mat-icon mat-list-icon *ngIf="tx.type == 'sent'">remove_circle</mat-icon>
+                                    <mat-icon mat-list-icon *ngIf="tx.type == 'received'">add_circle</mat-icon>
+                                    <div mat-line>{{tx.amount | coinNotation}} ({{tx.type}})</div>
+                                    <div mat-line>{{ tx.toAddress}}</div>
+                                    <div mat-line>{{ tx.timestamp * 1000 | date:'short'}}</div>
+                                  </mat-list-item>
+
+                                <!-- <mat-divider></mat-divider>
+                                <div mat-subheader>Notes</div>
+                                <mat-list-item *ngFor="let note of notes">
+                                  <mat-icon mat-list-icon>note</mat-icon>
+                                  <div mat-line>{{note.name}}</div>
+                                  <div mat-line> {{note.updated | date}} </div>
+                                </mat-list-item> -->
+                              </mat-list>
+
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
                 <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="coldStakingInfo?.coldWalletAccountExists">
                     <mat-card class="grid-card">
                         <mat-card-title>Setup</mat-card-title>
@@ -375,7 +412,7 @@
 
                 <div app-grid-cell gcColSpan="2" gcRowSpan="2" class="card card-body" *ngIf="coldStakingAddress">
                     <mat-card class="grid-card">
-                        <mat-card-title>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</mat-card-title>
+                        <mat-card-title>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }} <mat-icon class="tab-icon">ac_unit</mat-icon></mat-card-title>
                         <mat-card-subtitle>Balance of online cold staking ({{wallet.walletName}})</mat-card-subtitle>
                         <mat-card-content>
                             <strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }} {{ wallet.coinUnit }}</strong>

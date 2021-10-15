@@ -109,7 +109,15 @@ export class StakingComponent implements OnInit, OnDestroy {
     public confirmedBalance: number;
     public unconfirmedBalance: number;
     public hasHotColdStakingBalance = false;
+    public coldStakingHistory: any;
 
+    public confirmedOfflineBalance: number;
+    public unconfirmedOfflineBalance: number;
+    public hasOfflineColdStakingBalance = false;
+    public coldStakingOfflineHistory: any;
+
+    // TODO: All of this code is a flying spaghetti monster mess!
+    // A proper manager to get state in correct order, etc. must be made, so do some refactoring later!
     ngOnInit() {
         this.localOnlineColdStakingAccounts = [];
 
@@ -125,8 +133,17 @@ export class StakingComponent implements OnInit, OnDestroy {
         });
 
         const walletInfo = new WalletInfo(this.globalService.getWalletName(), 'coldStakingHotAddresses');
-        this.apiService.getWalletBalance(walletInfo).subscribe(response => {
+        const walletInfoOffline = new WalletInfo(this.globalService.getWalletName(), 'coldStakingColdAddresses');
 
+        this.apiService.getWalletHistory(walletInfo).subscribe(response => {
+            console.log(response);
+            this.coldStakingHistory = response.history[0].transactionsHistory;
+        }, error => {
+            console.error(error);
+            this.apiService.handleError(error);
+        });
+
+        this.apiService.getWalletBalance(walletInfo).subscribe(response => {
             this.log.info('Get hot cold staking wallet balance:', response);
 
             const balanceResponse = response;
@@ -138,12 +155,32 @@ export class StakingComponent implements OnInit, OnDestroy {
             } else {
                 this.hasHotColdStakingBalance = false;
             }
+        },
+            error => {
+                this.apiService.handleException(error);
+            });
 
-            // if (response.status >= 200 && response.status < 400) {
-            // const balanceResponse = response;
-            // // TO DO - add account feature instead of using first entry in array
-            // this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
-            // // }
+
+        this.apiService.getWalletHistory(walletInfoOffline).subscribe(response => {
+            console.log(response);
+            this.coldStakingOfflineHistory = response.history[0].transactionsHistory;
+        }, error => {
+            console.error(error);
+            this.apiService.handleError(error);
+        });
+
+        this.apiService.getWalletBalance(walletInfoOffline).subscribe(response => {
+            this.log.info('Get offline cold staking wallet balance:', response);
+
+            const balanceResponse = response;
+            this.confirmedOfflineBalance = balanceResponse.balances[0].amountConfirmed;
+            this.unconfirmedOfflineBalance = balanceResponse.balances[0].amountUnconfirmed;
+
+            if ((this.confirmedOfflineBalance + this.unconfirmedOfflineBalance) > 0) {
+                this.hasOfflineColdStakingBalance = true;
+            } else {
+                this.hasOfflineColdStakingBalance = false;
+            }
         },
             error => {
                 this.apiService.handleException(error);
