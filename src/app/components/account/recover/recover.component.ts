@@ -19,8 +19,8 @@ import { ApplicationStateService } from '../../../services/application-state.ser
 export class RecoverAccountComponent {
     @HostBinding('class.account-recover') hostClass = true;
 
-    public minDate: Date;
-    public maxDate: Date;
+    public minDate: String;
+    public maxDate: String;
     public mnemonic: string;
     public seedExtension = '';
     public password1 = '';
@@ -51,8 +51,8 @@ export class RecoverAccountComponent {
         private appState: ApplicationStateService,
         private apiService: ApiService) {
 
-        this.minDate = this.apiService.genesisDate;
-        this.maxDate = new Date(); // Set to current date.
+        this.minDate = this.apiService.genesisDate.toISOString().slice(0, 10);
+        this.maxDate = new Date().toISOString().slice(0, 10); // Set to current date.
 
         this.accountName = 'main';
     }
