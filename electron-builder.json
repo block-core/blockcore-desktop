@@ -6,7 +6,7 @@
     "publish": [
         {
             "provider": "github",
-            "owner": "block-core",
+            "owner": "seniorblockchain",
             "repo": "blockcore-hub"
         }
     ],
