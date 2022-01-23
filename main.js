@@ -583,7 +583,7 @@ function launchDaemon(apiPath, chain) {
             contents.send('daemon-error', "Node daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
         }
         else {
-            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
+            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).
             if (code !== 0) {
                 contents.send('daemon-error', "City Chain daemon shutdown completed, but resulted in exit code " + code + " and signal " + signal + ".");
             }
