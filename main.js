@@ -473,13 +473,13 @@ function startDaemon(chain) {
 function getDaemonPath() {
     var apiPath;
     if (os.platform() === 'win32') {
-        apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
+        apiPath = path.resolve(__dirname, 'daemon');
     }
     else if (os.platform() === 'linux') {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
+        apiPath = path.resolve(__dirname, 'daemon');
     }
     else {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
+        apiPath = path.resolve(__dirname, 'daemon');
     }
     return apiPath;
 }
