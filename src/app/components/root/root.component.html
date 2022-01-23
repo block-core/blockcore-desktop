@@ -65,7 +65,7 @@
                     <br> -->
 
                     <button mat-button class="menu-top-button" [matMenuTriggerFor]="menu">
-                        <img src="/assets/{{appState.chain}}/logo.png" class="menu-top-logo">
+                        <img src="assets/{{appState.chain}}/logo.png" class="menu-top-logo">
                         <span *ngIf="showFiller" class="menu-top-text" mat-line>{{coinName}}</span>
                     </button>
 
@@ -87,7 +87,7 @@
                         <!-- <div>Chains:</div> -->
 
                         <button (click)="changeMode(network)" mat-menu-item *ngFor="let network of filteredAvailableChains">
-                            <img src="/assets/{{network.chain.toLowerCase()}}/logo.png" class="mat-icon notranslate material-icons mat-icon-no-color">
+                            <img src="assets/{{network.chain.toLowerCase()}}/logo.png" class="mat-icon notranslate material-icons mat-icon-no-color">
                             <span>{{network.name}}</span>
                         </button>
 
@@ -121,7 +121,7 @@
                     <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Wallet</h4>
                 </mat-list-item>
-                
+
                 <mat-list-item *ngIf="appModes.enabled('staking') && appState.activeChain.pos" routerLinkActive="main-menu-active" routerLink="/staking">
                     <mat-icon mat-list-icon>bolt</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Staking</h4>
