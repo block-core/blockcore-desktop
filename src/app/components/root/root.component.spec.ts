@@ -42,6 +42,6 @@ describe('AppComponent', () => {
 //     const fixture = TestBed.createComponent(RootComponent);
 //     fixture.detectChanges();
 //     const compiled = fixture.debugElement.nativeElement;
-//     expect(compiled.querySelector('h1').textContent).toContain('Welcome to city-hub!');
+//     expect(compiled.querySelector('h1').textContent).toContain('Welcome to senior-hub!');
 //   }));
 });

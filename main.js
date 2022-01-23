@@ -659,12 +659,12 @@ function createTray() {
     // Put the app in system tray
     var trayIcon;
     if (serve) {
-        /// trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
-        trayIcon = electron_1.nativeImage.createFromPath('./src/favicon.ico');
+        trayIcon = electron_1.nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        //trayIcon = nativeImage.createFromPath('./src/favicon.ico');
     }
     else {
-        // trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
-        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
+        trayIcon = electron_1.nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        //trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
     }
     var systemTray = new electron_1.Tray(trayIcon);
     var contextMenu = electron_1.Menu.buildFromTemplate([

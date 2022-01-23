@@ -25,7 +25,7 @@ module.exports = function (config) {
         suppressAll: true // removes the duplicated traces
       },
       coverageReporter: {
-        dir: require('path').join(__dirname, './coverage/city-hub'),
+        dir: require('path').join(__dirname, './coverage/senior-hub'),
         subdir: '.',
         reporters: [
           { type: 'html' },
@@ -42,4 +42,3 @@ module.exports = function (config) {
       restartOnFileChange: true
     });
   };
-  

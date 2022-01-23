@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "city-hub": {
+        "senior-hub": {
             "root": "",
             "sourceRoot": "src",
             "projectType": "application",
@@ -102,19 +102,19 @@
                 "serve": {
                     "builder": "@angular-builders/custom-webpack:dev-server",
                     "options": {
-                        "browserTarget": "city-hub:build",
+                        "browserTarget": "senior-hub:build",
                         "port": 4200
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "city-hub:build:production"
+                            "browserTarget": "senior-hub:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "city-hub:build"
+                        "browserTarget": "senior-hub:build"
                     }
                 },
                 "test": {
@@ -146,7 +146,7 @@
                 }
             }
         },
-        "city-hub-e2e": {
+        "senior-hub-e2e": {
             "root": "e2e/",
             "projectType": "application",
             "prefix": "",
@@ -155,16 +155,16 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "city-hub:serve"
+                        "devServerTarget": "senior-hub:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "city-hub:serve:production"
+                            "devServerTarget": "senior-hub:serve:production"
                         }
                     }
                 }
             }
         }
     },
-    "defaultProject": "city-hub"
+    "defaultProject": "senior-hub"
 }
