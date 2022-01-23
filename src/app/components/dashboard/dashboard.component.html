@@ -31,6 +31,24 @@
 
                 <mat-card-content>
 
+                    <div *ngIf="appState.chain === 'sbc'">
+                        <p>
+                            Soon you will be able to buy coins directly in Blockcore Hub. Until then, please visit our website for a list of partners
+                            and exchanges.
+                        </p>
+
+                        <a href="https://seniorblockchain.io" target="_blank" mat-stroked-button>Buy Coins</a>
+                    </div>
+
+                    <div *ngIf="appState.chain === 'rsc'">
+                        <p>
+                            Soon you will be able to buy coins directly in Blockcore Hub. Until then, please visit our website for a list of partners
+                            and exchanges.
+                        </p>
+
+                        <a href="https://royalsportscity.com/partners" target="_blank" mat-stroked-button>Buy Coins</a>
+                    </div>
+
                     <div *ngIf="appState.chain === 'city'">
                         <p>
                             Soon you will be able to buy coins directly in Blockcore Hub. Until then, please visit our website for a list of partners
