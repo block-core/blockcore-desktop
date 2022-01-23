@@ -2,8 +2,8 @@
 
 ## Your portal into your decentralized digital life
 
-[1]: https://github.com/block-core/blockcore-hub/workflows/Build/badge.svg
-[2]: https://github.com/block-core/blockcore-hub/actions
+[1]: https://github.com/seniorblockchain/blockcore-hub/workflows/Build/badge.svg
+[2]: https://github.com/seniorblockchain/blockcore-hub/actions
 
 [![Build Status][1]][2]
 
@@ -17,7 +17,7 @@ Running the Blockcore Hub allows you to participate in staking of your coins, an
 
 ## 💿 Installation
 
-You'll find the latest releases on the [releases](https://github.com/block-core/blockcore-hub/releases) tab. Make sure you pick the latest release.
+You'll find the latest releases on the [releases](https://github.com/seniorblockchain/blockcore-hub/releases) tab. Make sure you pick the latest release.
 
 ### Auto Updates
 
@@ -33,7 +33,7 @@ update information and perform a download and installation.
 For Windows, we decided to only support 64-bit installations of Windows. If you are running
 a 32-bit installation, please let us know by reporting an issue to survey the market demand.
 
-Simply download the latest win-x64.exe file from the [releases](https://github.com/block-core/blockcore-hub/releases) page and run
+Simply download the latest win-x64.exe file from the [releases](https://github.com/seniorblockchain/blockcore-hub/releases) page and run
 the installer. You might need to approve installation of unsigned installer. This will only
 be required until we have a signed release available.
 
@@ -42,7 +42,7 @@ be required until we have a signed release available.
 For Linux, we decided to use the new AppImage installer format. This is included in a lot of
 Linux distributions, including Ubuntu.
 
-Download the latest linux-x86_64.AppImage from the [releases](https://github.com/block-core/blockcore-hub/releases) page.
+Download the latest linux-x86_64.AppImage from the [releases](https://github.com/seniorblockchain/blockcore-hub/releases) page.
 
 Open a terminal, navigate to the download folder and make the .AppImage an executeable with
 the following command:
@@ -101,6 +101,7 @@ If you're interested in being a contributor and want to get involved in developm
 
 # License
 
+MIT @ Senior Blockchain  
 MIT @ Blockcore  
 MIT @ City Chain Foundation  
 MIT @ Stratisplatform

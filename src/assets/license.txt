@@ -1,8 +1,9 @@
 MIT License
 
-Copyright (c) 2020-2021 Blockcore
-Copyright (c) 2018-2020 City Chain Foundation
-Copyright (c) 2017 Stratisplatform
+Copyright (c) 2021-2022 Senior Blockchain
+Copyright (c) 2020-2022 Blockcore
+Copyright (c) 2018-2022 City Chain Foundation
+Copyright (c) 2017-2022 Stratisplatform
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

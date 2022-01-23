@@ -10,12 +10,12 @@
   "description": "Blockcore Hub is your hub into everything on blockchains and the Smart City Platform.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/block-core/blockcore-hub.git"
+    "url": "git+https://github.com/seniorblockchain/blockcore-hub.git"
   },
   "bugs": {
-    "url": "https://github.com/block-core/blockcore-hub/issues"
+    "url": "https://github.com/seniorblockchain/blockcore-hub/issues"
   },
-  "homepage": "https://github.com/block-core/blockcore-hub#readme",
+  "homepage": "https://github.com/seniorblockchain/blockcore-hub#readme",
   "main": "main.js",
   "scripts": {
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",

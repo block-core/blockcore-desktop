@@ -20,7 +20,7 @@ import * as blockcoreMessage from '@blockcore/message';
     - JSON Web Signature (JWS) (DONE)
     - JSON Web Token (JWT)
 
-    .NET version: https://github.com/block-core/blockcore-jose
+    .NET version: https://github.com/seniorblockchain/blockcore-jose
 */
 
 export class Jws {
