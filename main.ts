@@ -829,11 +829,11 @@ function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-         trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
-        //trayIcon = nativeImage.createFromPath('./src/favicon.ico');
+         //trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
+        trayIcon = nativeImage.createFromPath('./src/favicon.ico');
     } else {
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
-        //trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
+        //trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
     }
 
     const systemTray = new Tray(trayIcon);
