@@ -561,7 +561,7 @@ app.on('activate', () => {
 
 function startDaemon(chain: Chain) {
     hasDaemon = true;
-    const folderPath = chain.path || getDaemonPath();
+    let folderPath = chain.path || getDaemonPath();
 
     // let daemonName;
 
@@ -582,8 +582,19 @@ function startDaemon(chain: Chain) {
 
     // const daemonPath = path.resolve(folderPath, daemonName);
 
-    writeLog('start-daemon: ' + folderPath);
+    // If the user has choosen an .exe or .dll manually in startup, we'll use that, if not
+    // we'll set the multinode.
+    if (folderPath.indexOf('.exe') == -1 || folderPath.indexOf('.dll') == -1) {
+        var daemonName = 'Blockcore.MultiNode.dll';
 
+        if (os.platform() === 'win32') {
+            daemonName = 'Blockcore.MultiNode.exe';
+        }
+
+        folderPath = path.resolve(folderPath, daemonName);
+    }
+
+    writeLog('start-daemon: ' + folderPath);
     launchDaemon(folderPath, chain);
 }
 
