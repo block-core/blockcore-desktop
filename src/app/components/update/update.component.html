@@ -7,9 +7,7 @@
             <mat-card-subtitle>Version: {{updateService.info.version}} ({{updateService.info.releaseDate}})</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <p>
-                {{updateService.info.releaseNotes}}
-            </p>
+            <p [innerHTML]="updateService.info.releaseNotes" ></p>
             <p *ngIf="updateService.progress && updateService.progress.percent !== 100">
                 <mat-progress-bar mode="determinate" bufferValue="0" mode="buffer" [value]="updateService.progress.percent"></mat-progress-bar>
                 <br>({{updateService.progress.transferred | sizeUnit}}/{{updateService.progress.total | sizeUnit}})
