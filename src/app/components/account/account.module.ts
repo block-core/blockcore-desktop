@@ -7,6 +7,7 @@ import { MaterialModule } from '../../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountRoutingModule } from './account-routing.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
     imports: [
@@ -22,10 +23,11 @@ import { AppSharedModule } from '../../shared/app-shared.module';
         CreateAccountComponent,
         RecoverAccountComponent,
     ],
+    providers: [DatePipe],
     exports: [
         CreateAccountComponent,
         RecoverAccountComponent
-    ],
+    ]
 })
 export class AccountModule {
 }
