@@ -28,6 +28,7 @@ import { IdentityContainer } from '@models/identity';
 import { StorageService } from 'src/app/services/storage.service';
 import { ChainService } from 'src/app/services/chain.service';
 import { BootController } from 'src/boot';
+import { environment } from 'src/environments/environment';
 // import { slideInAnimation } from 'src/app/app.animations';
 
 @Component({
@@ -101,12 +102,8 @@ export class RootComponent implements OnInit {
         this.isAuthenticated = authService.isAuthenticated();
 
         if (this.electronService.ipcRenderer) {
-            if (this.electronService.remote) {
-                const applicationVersion = this.electronService.remote.app.getVersion();
-
-                this.appState.setVersion(applicationVersion);
-                this.log.info('Version: ' + applicationVersion);
-            }
+            const applicationVersion = environment.version;
+            this.appState.setVersion(applicationVersion);
 
             this.ipc = electronService.ipcRenderer;
 

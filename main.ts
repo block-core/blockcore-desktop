@@ -599,16 +599,33 @@ function startDaemon(chain: Chain) {
 }
 
 function getDaemonPath() {
-    let apiPath;
+    var apiPath;
     if (os.platform() === 'win32') {
-        apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
-    } else if (os.platform() === 'linux') {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
-    } else {
-        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
+        if (serve) {
+            apiPath = path.resolve(__dirname, 'daemon\\');
+        }
+        else {
+            apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
+        }
     }
-
+    else if (os.platform() === 'linux') {
+        if (serve) {
+            apiPath = path.resolve(__dirname, 'daemon//');
+        }
+        else {
+            apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
+        }
+    }
+    else {
+        if (serve) {
+            apiPath = path.resolve(__dirname, 'daemon//');
+        }
+        else {
+            apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
+        }
+    }
     return apiPath;
+
 }
 
 function exitGuard() {
