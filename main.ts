@@ -584,7 +584,8 @@ function startDaemon(chain: Chain) {
 
     // If the user has choosen an .exe or .dll manually in startup, we'll use that, if not
     // we'll set the multinode.
-    if (folderPath.indexOf('.exe') == -1 || folderPath.indexOf('.dll') == -1) {
+
+    if (folderPath.indexOf('.exe') == -1 && folderPath.indexOf('.dll') == -1) {
         var daemonName = 'Blockcore.MultiNode.dll';
 
         if (os.platform() === 'win32') {
