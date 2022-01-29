@@ -65,7 +65,7 @@ Support for running Blockcore Hub on mobile devices is currently under developme
 
 ### Development environment
 
-Make sure you have Node.JS install, and open a console promt and navigate to the root of the repo.
+Make sure you have Node.JS install, and open a console promåt and navigate to the root of the repo.
 
 ```sh
 # Install the packages if you have not yet.
@@ -77,6 +77,12 @@ npm install
 ```sh
 # Run the script that will install tooling and add platforms. It installs Cordova globally, and add support for android, ios and browser.
 npm run mobile-setup
+```
+
+### Run with debug enabled
+
+```sh
+npm start
 ```
 
 ### Build to mobile
@@ -91,6 +97,16 @@ npm run mobile-build
 # This will launch the web browser, or you can use "mobile-android" or "mobile-ios".
 npm run mobile-browser
 ```
+
+### Blockchain Node
+
+You have two options to run a node during development. Either you can start one manually and choose the option `Manual` from the mode selection on startup. The other option is to choose `Custom` and pick `Blockcore.MultiNode.dll` or `Blockcore.MultiNode.exe`.
+
+Download the latest multinode from here: https://github.com/block-core/blockcore-nodes/releases
+
+See example for local development:
+
+![Blockcore Hub custom](doc/images/custom.png "Blockcore Hub custom")
 
 ## Contribution
 
