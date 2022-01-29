@@ -9,6 +9,7 @@ import { WalletRecovery } from '../../../classes/wallet-recovery';
 import { ApiService } from '../../../services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationStateService } from '../../../services/application-state.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-account-recover',
@@ -49,7 +50,8 @@ export class RecoverAccountComponent {
         public snackBar: MatSnackBar,
         private router: Router,
         private appState: ApplicationStateService,
-        private apiService: ApiService) {
+        private apiService: ApiService,
+        private datePipe: DatePipe) {
 
         this.minDate = this.apiService.genesisDate;
         this.maxDate = new Date(); // Set to current date.
