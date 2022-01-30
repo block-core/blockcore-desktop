@@ -86,7 +86,7 @@ jobs:
         tar -xvzf daemon${{ matrix.extension }} -C daemon
 
     - name: Install (npm)
-      run: npm install
+      run: npm ci
 
     - name: Build and Publish
       run: npm run publish:${{ matrix.platform }}
