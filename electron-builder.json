@@ -72,7 +72,7 @@
     },
     "extraResources": [
         "daemon/**/*",
-        "favicon.ico",
+        "app.ico",
         "dist/assets/license.txt"
     ]
 }

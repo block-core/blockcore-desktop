@@ -806,11 +806,11 @@ function createTray() {
     // Put the app in system tray
     let trayIcon;
     if (serve) {
-        /// trayIcon = nativeImage.createFromPath('./src/assets/' + coin.identity + '/icon-tray.ico');
-        trayIcon = nativeImage.createFromPath('./src/favicon.ico');
+        // During development, we can read the icon directly from src folder.
+        trayIcon = nativeImage.createFromPath('./app.ico');
     } else {
-        // trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
+        // This icon is manually included using "extraResources" on electron-builder.json.
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/app.ico'));
     }
 
     const systemTray = new Tray(trayIcon);
