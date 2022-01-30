@@ -136,7 +136,7 @@ body {
 }
 
 .fill-remaining-vertical {
-    /* This fills the remaining space, by using flexbox. 
+    /* This fills the remaining space, by using flexbox.
          Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
 }
@@ -151,12 +151,13 @@ body {
 .main-menu .mat-list-item {
     //border-left: 3px solid transparent;
     border-right: 3px solid transparent;
+    outline: 0px;
     cursor: pointer;
     width: auto !important;
 }
 
 .main-menu .mat-list-item:hover {
-    background-color: #f0f0f0;
+    background-color: #dfab3c;
 }
 
 .mat-list-item-focus {
@@ -221,10 +222,10 @@ span.ellipsis {
 /*
 .title-bar {
 	-webkit-app-region: drag;
-	height: $app-title-bar-height; 
+	height: $app-title-bar-height;
 	background-color: #0d0d0d;
 	padding: none;
-	margin: 0px; 
+	margin: 0px;
 }
 
 .title-bar-logo
@@ -233,14 +234,14 @@ span.ellipsis {
 	margin-left: 3px;
 	z-index: 1000;
 	position: absolute;
-	
+
 }
 
 .title-bar-title {
 	position: fixed;
 	z-index: 5000;
 	top: 3px;
-	left: 3px; 
+	left: 3px;
 }
 
 .title-bar-actions {
@@ -261,7 +262,7 @@ span.ellipsis {
 	-moz-appearance: none;
 	height: 32px;
 	width: 45px;
-	
+
 	// transition-duration: 100ms;
 	// -webkit-transition-duration: 100ms;
 	// -moz-transition-duration: 100ms;
