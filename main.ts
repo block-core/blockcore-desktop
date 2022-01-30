@@ -810,7 +810,7 @@ function createTray() {
         trayIcon = nativeImage.createFromPath('./src/favicon.ico');
     } else {
         // trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/assets/' + coin.identity + '/icon-tray.ico'));
-        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/dist/favicon.ico'));
+        trayIcon = nativeImage.createFromPath(path.resolve(__dirname, './dist/favicon.ico'));
     }
 
     const systemTray = new Tray(trayIcon);
