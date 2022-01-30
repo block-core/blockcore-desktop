@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     environment: '',
-    password: ''  // Specify a password to auto-login on the last used wallet. Makes development a bit easier.
+    password: '' // Specify a password to auto-login on the last used wallet. Makes development a bit easier.
 };
 
 /*
