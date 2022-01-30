@@ -1,12 +1,12 @@
 name: Pull Request
 
-on: 
+on:
   pull_request:
     branches:
       - master
 
 jobs:
-  
+
   buildAndTest:
 
     strategy:
@@ -30,9 +30,9 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
-    
+
     env:
-      DAEMON: '1.0.23'
+      DAEMON: '1.1.34'
       ARCH: 'x64'
 
     steps:
@@ -68,7 +68,7 @@ jobs:
         Write-Output "Path: $output"
         $start_time = Get-Date
         (New-Object System.Net.WebClient).DownloadFile($url, $output)
-        Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)" 
+        Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)"
 
     - name: Unpack (Windows)
       if: matrix.os == 'windows-latest'
