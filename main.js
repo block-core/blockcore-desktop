@@ -460,7 +460,6 @@ function startDaemon(chain) {
     // const daemonPath = path.resolve(folderPath, daemonName);
     // If the user has choosen an .exe or .dll manually in startup, we'll use that, if not
     // we'll set the multinode.
-    debugger;
     if (folderPath.indexOf('.exe') == -1 && folderPath.indexOf('.dll') == -1) {
         var daemonName = 'Blockcore.MultiNode.dll';
         if (os.platform() === 'win32') {
@@ -474,28 +473,13 @@ function startDaemon(chain) {
 function getDaemonPath() {
     var apiPath;
     if (os.platform() === 'win32') {
-        if (serve) {
-            apiPath = path.resolve(__dirname, 'daemon\\');
-        }
-        else {
-            apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
-        }
+        apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\');
     }
     else if (os.platform() === 'linux') {
-        if (serve) {
-            apiPath = path.resolve(__dirname, 'daemon//');
-        }
-        else {
-            apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
-        }
+        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
     }
     else {
-        if (serve) {
-            apiPath = path.resolve(__dirname, 'daemon//');
-        }
-        else {
-            apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
-        }
+        apiPath = path.resolve(__dirname, '..//..//resources//daemon//');
     }
     return apiPath;
 }
