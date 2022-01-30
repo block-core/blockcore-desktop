@@ -46,7 +46,9 @@
                                 "src/styles"
                             ]
                         },
-                        "scripts": [],
+                        "scripts": [
+                            "src/version.js"
+                        ],
                         "allowedCommonJsDependencies": [
                             "lodash",
                             "assert",
@@ -128,7 +130,9 @@
                             "src/styles/styles.scss",
                             "src/styles/print.scss"
                         ],
-                        "scripts": [],
+                        "scripts": [
+                            "src/version.js"
+                        ],
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"

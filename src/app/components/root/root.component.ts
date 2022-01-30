@@ -28,8 +28,9 @@ import { IdentityContainer } from '@models/identity';
 import { StorageService } from 'src/app/services/storage.service';
 import { ChainService } from 'src/app/services/chain.service';
 import { BootController } from 'src/boot';
-import { environment } from 'src/environments/environment';
 // import { slideInAnimation } from 'src/app/app.animations';
+
+declare var APP_VERSION: string;
 
 @Component({
     selector: 'app-root',
@@ -41,6 +42,7 @@ import { environment } from 'src/environments/environment';
     //     slideInAnimation
     // ]
 })
+
 export class RootComponent implements OnInit {
 
     @HostBinding('class.root') hostClass = true;
@@ -64,6 +66,7 @@ export class RootComponent implements OnInit {
     isAuthenticated: Observable<boolean>;
     menuMode = 'side';
     menuOpened = true;
+
 
     // TODO: Change into Observable.
     // get userActivated(): boolean {
@@ -102,11 +105,9 @@ export class RootComponent implements OnInit {
         this.isAuthenticated = authService.isAuthenticated();
 
         if (this.electronService.ipcRenderer) {
-            const applicationVersion = environment.version;
-            this.appState.setVersion(applicationVersion);
-
+            this.appState.setVersion(APP_VERSION);
+            this.log.info('application version: ', this.appState.version);
             this.ipc = electronService.ipcRenderer;
-
             this.ipc.on('daemon-exiting', (event, error) => {
                 this.log.info('daemon is currently being stopped... please wait...');
                 this.appState.shutdownInProgress = true;
