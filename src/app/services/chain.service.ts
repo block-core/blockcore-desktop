@@ -63,7 +63,9 @@ export class ChainService {
                 // { pos: true, rootFolderName: 'stratis', test: true, name: 'Stratis (RegTest)', chain: 'STRAT', private: 193, public: 65, identity: 'stratis', tooltip: 'Stratis Core', port: 18444, rpcPort: 18442, apiPort: 37221, network: 'StratisRegTest', genesisDate: new Date(2017, 5, 16) },
                 // { pos: true, rootFolderName: 'stratis', test: true, name: 'Stratis (Test)', chain: 'STRAT', private: 193, public: 65, identity: 'stratis', tooltip: 'Stratis Core', port: 26178, rpcPort: 26174, apiPort: 38221, network: 'StratisTest', genesisDate: new Date(2017, 5, 4) },
                 { opreturndata: 80, pos: true, rootFolderName: 'sbc', test: false, name: 'Senior Block Coin', unit: 'SBC', coin: 'SBC', chain: 'SBC', private: 125, public: 63, identity: 'SeniorBlockCoin', tooltip: 'Senior Block Coin', port: 15006, rpcPort: 15007, apiPort: 15008, wsPort: 4336, network: 'SeniorBlockCoin', genesisDate: new Date(2022, 0, 5) },
-                { opreturndata: 80, pos: true, rootFolderName: 'rsc', test: false, name: 'Royal Sports City', unit: 'RSC', coin: 'RSC', chain: 'RSC', private: 122, public: 60, identity: 'RoyalSportsCity', tooltip: 'Royal Sports City', port: 14001, rpcPort: 14002, apiPort: 14003, wsPort: 4337, network: 'RoyalSportsCity', genesisDate: new Date(2022, 0, 5) }
+                { opreturndata: 80, pos: true, rootFolderName: 'rsc', test: false, name: 'Royal Sports City', unit: 'RSC', coin: 'RSC', chain: 'RSC', private: 122, public: 60, identity: 'RoyalSportsCity', tooltip: 'Royal Sports City', port: 14001, rpcPort: 14002, apiPort: 14003, wsPort: 4337, network: 'RoyalSportsCity', genesisDate: new Date(2022, 0, 5) },
+                { opreturndata: 80, pos: true, rootFolderName: 'Cybits', test: false, name: 'Cybits Main', chain: 'Cybits', private: 160, public: 28, identity: 'Cybits', tooltip: 'Cybits', port: 17771, rpcPort: 17772, apiPort: 17773, network: 'CybitsMain', genesisDate: new Date(Date.UTC(2021, 10, 1)) },
+
             ];
 
             // Sort the array by name.
