@@ -69,6 +69,7 @@
         width: 56%;
         // background-image: url('../../../assets/city/splash-image.jpg');
         background-repeat: no-repeat;
+        background-position: center;
         background-size: cover;
         text-align: center;
     }
@@ -126,6 +127,11 @@
     .login-banner-rsc
     {
         background-image: url('~src/assets/rsc/splash-image.jpg');
+    }
+    
+    .login-banner-cybits 
+    {
+        background-image: url('~src/assets/cybits/splash-image.jpg');
     }
 
     .login-banner-content
