@@ -265,6 +265,14 @@ export class RootComponent implements OnInit {
             this.chains.availableChains.filter(language => !language.test);
     }
 
+    getTooltip(tooltip:string): string {
+        if (!this.showFiller) {
+            return tooltip
+        }
+
+        return null;
+    }
+
     changeWallet(wallet) {
         // Write the "previous wallet" and then logout.
         localStorage.setItem('Network:Wallet', wallet.name);
