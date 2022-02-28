@@ -112,57 +112,57 @@
 
                 </div>
 
-                <mat-list-item *ngIf="appModes.enabled('dashboard')" routerLinkActive="main-menu-active" routerLink="/dashboard">
+                <mat-list-item [matTooltip]="getTooltip('Dashboard')" *ngIf="appModes.enabled('dashboard')" routerLinkActive="main-menu-active" routerLink="/dashboard">
                     <mat-icon mat-list-icon>dashboard</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Dashboard</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('wallet')" routerLinkActive="main-menu-active" routerLink="/wallet">
+                <mat-list-item [matTooltip]="getTooltip('Wallet')" *ngIf="appModes.enabled('wallet')" routerLinkActive="main-menu-active" routerLink="/wallet">
                     <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Wallet</h4>
                 </mat-list-item>
                 
-                <mat-list-item *ngIf="appModes.enabled('staking') && appState.activeChain.pos" routerLinkActive="main-menu-active" routerLink="/staking">
+                <mat-list-item [matTooltip]="getTooltip('Staking')" *ngIf="appModes.enabled('staking') && appState.activeChain.pos" routerLinkActive="main-menu-active" routerLink="/staking">
                     <mat-icon mat-list-icon>bolt</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Staking</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('signing')" routerLinkActive="main-menu-active" routerLink="/signing">
+                <mat-list-item [matTooltip]="getTooltip('Signing')" *ngIf="appModes.enabled('signing')" routerLinkActive="main-menu-active" routerLink="/signing">
                     <mat-icon mat-list-icon>fingerprint</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Signing</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
+                <mat-list-item [matTooltip]="getTooltip('History')" *ngIf="appModes.enabled('history')" routerLinkActive="main-menu-active" routerLink="/history">
                     <mat-icon mat-list-icon>history</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>History</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('identity')" routerLinkActive="main-menu-active" routerLink="/identity">
+                <mat-list-item [matTooltip]="getTooltip('Identity')" *ngIf="appModes.enabled('identity')" routerLinkActive="main-menu-active" routerLink="/identity">
                     <mat-icon mat-list-icon>person</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Identity</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('merchants')" routerLinkActive="main-menu-active" routerLink="/merchants">
+                <mat-list-item [matTooltip]="getTooltip('Merchants')" *ngIf="appModes.enabled('merchants')" routerLinkActive="main-menu-active" routerLink="/merchants">
                     <mat-icon mat-list-icon>map</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Merchants</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('settings')" routerLinkActive="main-menu-active" routerLink="/settings">
+                <mat-list-item [matTooltip]="getTooltip('Settings')" *ngIf="appModes.enabled('settings')" routerLinkActive="main-menu-active" routerLink="/settings">
                     <mat-icon mat-list-icon>settings</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Settings</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/about">
+                <mat-list-item [matTooltip]="getTooltip('About')" *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/about">
                     <mat-icon mat-list-icon>info</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>About</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/tools">
+                <mat-list-item [matTooltip]="getTooltip('Tools')" *ngIf="handset" routerLinkActive="main-menu-active" routerLink="/tools">
                     <mat-icon mat-list-icon>build</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Tools</h4>
                 </mat-list-item>
 
-                <mat-list-item *ngIf="appModes.enabled('logout')" routerLinkActive="main-menu-active" routerLink="/logout">
+                <mat-list-item [matTooltip]="getTooltip('Logout')" *ngIf="appModes.enabled('logout')" routerLinkActive="main-menu-active" routerLink="/logout">
                     <mat-icon mat-list-icon>power_settings_new</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Log out</h4>
                 </mat-list-item>
