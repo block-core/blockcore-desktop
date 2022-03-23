@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 $app-font-weight: (
     'fin': 100,
     'light': 300,
@@ -7,10 +8,10 @@ $app-font-weight: (
 );
 
 @function app-typography-level($font-size, $line-height: $font-size, $style: 'regular') {
-    @return mat-typography-level($font-size, $line-height, map-get($app-font-weight, $style));
+    @return mat.define-typography-level($font-size, $line-height, map-get($app-font-weight, $style));
 }
 
-$app-typography: mat-typography-config(
+$app-typography: mat.define-typography-config(
     $font-family: 'Roboto, "Helvetica Neue", sans-serif',
     $display-4: app-typography-level(100px, 100px, 'fin'),
     $display-3: app-typography-level(50px, 50px, 'light'),

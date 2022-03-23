@@ -1,9 +1,10 @@
+@use '~@angular/material' as mat;
 @mixin app-theme($theme) {
     $background: map-get($theme, "background");
     $primary: map-get($theme, "primary");
     $accent: map-get($theme, "accent");
 
-    @include angular-material-theme($theme);
+    @include mat.all-component-themes($theme);
 
     .mat-menu-panel {
         background-color: map-get($background, "dialog");
@@ -24,7 +25,7 @@
     }
 
     .mat-tab-label-active {
-        background-color: rgba(mat-color($primary, "default"), 0.3);
+        background-color: rgba(mat.get-color-from-palette($primary, "default"), 0.3);
         opacity: 1 !important;
     }
 
@@ -48,12 +49,12 @@
     }
 
     a {
-        color: mat-color($accent);
+        color: mat.get-color-from-palette($accent);
         text-decoration: none;
     }
 
     a:hover {
-        color: mat-color($accent);
+        color: mat.get-color-from-palette($accent);
         text-decoration: underline;
     }
 
@@ -68,7 +69,7 @@
         }
 
         .mat-row:hover {
-            background-color: rgba(mat-color($primary, "default"), 0.6);
+            background-color: rgba(mat.get-color-from-palette($primary, "default"), 0.6);
             //background-color: red! important;
             //color: blue !important;
         }

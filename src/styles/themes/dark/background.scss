@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '../palettes/dark-gray.palette';
 
 $app-dark-theme-background: (
@@ -18,4 +19,4 @@ $app-dark-theme-background: (
     unselected-chip: map_get($app-dark-gray, 700),
     disabled-list-option: black,
 );
-$mat-dark-theme-background: map-merge($mat-dark-theme-background, $app-dark-theme-background);
+mat.$dark-theme-background-palette: map-merge(mat.$dark-theme-background-palette, $app-dark-theme-background);

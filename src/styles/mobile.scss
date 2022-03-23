@@ -3,9 +3,9 @@
 }
 
 body {
-    // -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    // -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    // -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    // -webkit-touch-callout: none;                __<<ngThemingMigrationEscapedComment1>>__
+    // -webkit-text-size-adjust: none;             __<<ngThemingMigrationEscapedComment2>>__
+    // -webkit-user-select: none;                  __<<ngThemingMigrationEscapedComment3>>__
 
     // background-color:#E4E4E4;
     // background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
@@ -23,25 +23,25 @@ body {
 
 /* Portrait layout (default) */
 // .app {
-//     // background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-//     position:absolute;             /* position in the center of the screen */
+//     // background:url(../img/logo.png) no-repeat center top; __<<ngThemingMigrationEscapedComment6>>__
+//     position:absolute;             __<<ngThemingMigrationEscapedComment7>>__
 //     left:50%;
 //     top:50%;
-//     height:50px;                   /* text area height */
-//     width:225px;                   /* text area width */
+//     height:50px;                   __<<ngThemingMigrationEscapedComment8>>__
+//     width:225px;                   __<<ngThemingMigrationEscapedComment9>>__
 //     text-align:center;
-//     padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-//     margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-//                                    /* offset horizontal: half of text area width */
+//     padding:180px 0px 0px 0px;     __<<ngThemingMigrationEscapedComment10>>__
+//     margin:-115px 0px 0px -112px;  __<<ngThemingMigrationEscapedComment11>>__
+//                                    __<<ngThemingMigrationEscapedComment12>>__
 // }
 
 /* Landscape layout (with min-width) */
 // @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
 //     .app {
 //         background-position:left center;
-//         padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-//         margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-//                                       /* offset horizontal: half of image width and text area width */
+//         padding:75px 0px 75px 170px;  __<<ngThemingMigrationEscapedComment14>>__
+//         margin:-90px 0px 0px -198px;  __<<ngThemingMigrationEscapedComment15>>__
+//                                       __<<ngThemingMigrationEscapedComment16>>__
 //     }
 // }
 

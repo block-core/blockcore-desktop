@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 $app-dark-theme-foreground: (
     base:              white,
     divider:           $light-dividers,
@@ -14,4 +15,4 @@ $app-dark-theme-foreground: (
     slider-off:        rgba(white, 0.3),
     slider-off-active: rgba(white, 0.3),
 );
-$mat-dark-theme-foreground: map-merge($mat-dark-theme-foreground, $app-dark-theme-foreground);
+mat.$dark-theme-foreground-palette: map-merge(mat.$dark-theme-foreground-palette, $app-dark-theme-foreground);

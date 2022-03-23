@@ -1,10 +1,11 @@
+@use '~@angular/material' as mat;
 @import '../palettes/dark-gray.palette';
 @import '../palettes/red.palette';
 
-$app-primary-palette: mat-palette($app-orange-palette, 500, 200, 900);
-$app-accent-palette:  mat-palette($app-orange-palette, 500, 200, 900);
-$app-warn-palette:    mat-palette($app-red-palette, 500, 200, 900);
+$app-primary-palette: mat.define-palette($app-orange-palette, 500, 200, 900);
+$app-accent-palette:  mat.define-palette($app-orange-palette, 500, 200, 900);
+$app-warn-palette:    mat.define-palette($app-red-palette, 500, 200, 900);
 
-$app-dark-theme: mat-dark-theme($app-primary-palette, $app-accent-palette, $app-warn-palette);
+$app-dark-theme: mat.define-dark-theme($app-primary-palette, $app-accent-palette, $app-warn-palette);
 
 $app-selection-color: #343442;

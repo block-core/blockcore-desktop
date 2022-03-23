@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '../palettes/light-gray.palette';
 
 $app-light-theme-background: (
@@ -18,4 +19,4 @@ $app-light-theme-background: (
     unselected-chip: map_get($app-light-gray, 300),
     disabled-list-option: map_get($app-light-gray, 200),
 );
-$mat-light-theme-background: map-merge($mat-light-theme-background, $app-light-theme-background);
+mat.$light-theme-background-palette: map-merge(mat.$light-theme-background-palette, $app-light-theme-background);
