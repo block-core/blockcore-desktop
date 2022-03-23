@@ -72,7 +72,7 @@ process.on('uncaughtException', function (error) {
     writeLog('Error: ' + error);
 });
 process.on('exit', function (code) {
-    return console.log("About to exit with code " + code);
+    return console.log("About to exit with code ".concat(code));
 });
 electron_1.ipcMain.on('start-daemon', function (event, arg) {
     if (daemonState === DaemonState.Started) {
@@ -335,7 +335,7 @@ function createWindow() {
     });
     if (serve) {
         require('electron-reload')(__dirname, {
-            electron: require(__dirname + "/node_modules/electron")
+            electron: require("".concat(__dirname, "/node_modules/electron"))
         });
         writeLog('Creating Window and loading: http://localhost:4200?coin=' + coin.identity);
         mainWindow.loadURL('http://localhost:4200?coin=' + coin.identity);
@@ -353,7 +353,7 @@ function createWindow() {
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function (event) {
-        writeLog("close event on mainWindow was triggered. Calling shutdown method. Daemon state is: " + daemonState + ".");
+        writeLog("close event on mainWindow was triggered. Calling shutdown method. Daemon state is: ".concat(daemonState, "."));
         // If daemon stopping has not been triggered, it means it likely never started and user clicked Exit on the error dialog. Exit immediately.
         // Additionally if it was never started, it is already stopped.
         if (daemonState === DaemonState.Stopping || daemonState === DaemonState.Stopped) {
@@ -550,11 +550,11 @@ function launchDaemon(apiPath, chain) {
     }
     daemons.push(daemonProcess);
     daemonProcess.stdout.on('data', function (data) {
-        writeDebug("Node: " + data);
+        writeDebug("Node: ".concat(data));
     });
     /** Exit is triggered when the process exits. */
     daemonProcess.on('exit', function (code, signal) {
-        writeLog("Node daemon process exited with code " + code + " and signal " + signal + " when the state was " + daemonState + ".");
+        writeLog("Node daemon process exited with code ".concat(code, " and signal ").concat(signal, " when the state was ").concat(daemonState, "."));
         if (resetMode) {
             resetMode = false;
             daemonState = DaemonState.Changing;
@@ -577,15 +577,15 @@ function launchDaemon(apiPath, chain) {
             contents.send('daemon-changing');
         }
         else if (daemonState === DaemonState.Starting) {
-            contents.send('daemon-error', "CRITICAL: Node daemon process exited during startup with code " + code + " and signal " + signal + ".");
+            contents.send('daemon-error', "CRITICAL: Node daemon process exited during startup with code ".concat(code, " and signal ").concat(signal, "."));
         }
         else if (daemonState === DaemonState.Started) {
-            contents.send('daemon-error', "Node daemon process exited manually or crashed, with code " + code + " and signal " + signal + ".");
+            contents.send('daemon-error', "Node daemon process exited manually or crashed, with code ".concat(code, " and signal ").concat(signal, "."));
         }
         else {
             // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
             if (code !== 0) {
-                contents.send('daemon-error', "City Chain daemon shutdown completed, but resulted in exit code " + code + " and signal " + signal + ".");
+                contents.send('daemon-error', "City Chain daemon shutdown completed, but resulted in exit code ".concat(code, " and signal ").concat(signal, "."));
             }
             else {
                 // Check is stopping of daemon has been requested. If so, we'll notify the UI that it has completed the exit.
@@ -595,7 +595,7 @@ function launchDaemon(apiPath, chain) {
         daemonState = DaemonState.Stopped;
     });
     daemonProcess.on('error', function (code, signal) {
-        writeError("Node daemon process failed to start. Code " + code + " and signal " + signal + ".");
+        writeError("Node daemon process failed to start. Code ".concat(code, " and signal ").concat(signal, "."));
     });
 }
 function shutdownDaemon(callback) {
