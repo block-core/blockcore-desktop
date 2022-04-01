@@ -22,7 +22,7 @@
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",
     "postinstall:electron": "node postinstall",
-    "start": "npm run prepare && npm run postinstall:electron && npm run electron:tsc && npm-run-all -p ng:lint ng:serve electron:serve",
+    "start": "npm run prepare && npm run postinstall:electron && npm run electron:tsc && npm-run-all -p ng:serve electron:serve",
     "ng": "ng",
     "build": "npm run postinstall:electron && npm run electron:tsc && ng lint && ng build",
     "build:prod": "npm run build -- -c production",
