@@ -13,6 +13,7 @@ import { Link } from '@models/link';
 import { LinkAddComponent } from './link-add.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
+import * as QRCode from 'qrcode';
 
 @Component({
     selector: 'app-identity-export',
@@ -110,15 +111,37 @@ export class IdentityExportComponent implements OnDestroy, OnInit {
 
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
 
         // Make sure we only edit a copy of the identity.
         this.originalIdentityContainer = this.identityService.get(this.id);
         this.identityContainer = this.jsonCopy(this.originalIdentityContainer);
-
         this.identityNode = this.identityService.getIdentityNode(this.identityContainer.index);
-        this.qrString = this.identityNode.toWIF();
+
+        try {
+            this.qrString = await QRCode.toDataURL(this.identityNode.toWIF(), {
+                errorCorrectionLevel: 'L',
+                margin: 2,
+                scale: 5,
+            });
+
+            // LEFT TO HAVE INSTRUCTIONS ON POSSIBLE OPTIONS :-)
+            // this.qrCode = await QRCode.toDataURL(this.address, {
+            //     // version: this.version,
+            //     errorCorrectionLevel: 'L',
+            //     // margin: this.margin,
+            //     // scale: this.scale,
+            //     // width: this.width,
+            //     // color: {
+            //     //     dark: this.colorDark,
+            //     //     light: this.colorLight
+            //     // }
+            // });
+
+        } catch (err) {
+            console.error(err);
+        }
 
         this.buildSendForm();
     }

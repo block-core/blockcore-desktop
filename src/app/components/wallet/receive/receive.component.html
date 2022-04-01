@@ -17,7 +17,8 @@
                     errorCorrectionLevel = "L">
                 </ngx-qrcode> -->
 
-                <ngx-qrcode cssClass="qr-address" elementType="canvas" [value]="qrString" errorCorrectionLevel="L"></ngx-qrcode>
+                <img [src]="qrString" class="qr-address" />
+                <!-- <ngx-qrcode cssClass="qr-address" elementType="canvas" [value]="qrString" errorCorrectionLevel="L"></ngx-qrcode> -->
 
             </div>
             <div>

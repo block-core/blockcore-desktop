@@ -17,7 +17,6 @@ import { IdentityBadgeComponent } from './identity-badge.component';
 import { IdentityFilterComponent } from './identity-filter.component';
 import { IdentityStateComponent } from './identity-state.component';
 import { IdentityFilterPipe } from './identity-filter.pipe';
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { IdentityRoutingModule } from './identity-routing.module';
 
 @NgModule({
@@ -29,7 +28,6 @@ import { IdentityRoutingModule } from './identity-routing.module';
         MaterialModule,
         AppSharedModule,
         ImageModule,
-        NgxQRCodeModule,
         IdentityRoutingModule
     ],
     declarations: [

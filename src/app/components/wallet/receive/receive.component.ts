@@ -11,6 +11,7 @@ import { Logger } from '../../../services/logger.service';
 import * as bip32 from 'bip32';
 import * as city from 'city-lib';
 import * as coininfo from 'city-coininfo';
+import * as QRCode from 'qrcode';
 
 @Component({
     selector: 'app-receive',
@@ -102,10 +103,17 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
         this.apiService.getFirstReceiveAddress(walletInfo, this.addressType)
             .subscribe(
-                response => {
+                async (response) => {
                     this.address = response;
                     // this.qrString = 'city:' + response;
-                    this.qrString = response; // To be compatible with mobile wallet (copay-based), we won't use prefix.
+
+                    this.qrString = await QRCode.toDataURL(response, {
+                        errorCorrectionLevel: 'L',
+                        margin: 2,
+                        scale: 5,
+                    });
+
+                    // this.qrString = response; // To be compatible with mobile wallet (copay-based), we won't use prefix.
                 },
                 error => {
                     this.log.error('Failed to get first receive address:', error);

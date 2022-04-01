@@ -5,6 +5,7 @@ import { Identity, IdentityContainer } from '@models/identity';
 import { IdentityService } from 'src/app/services/identity.service';
 import { ProfileImageService } from 'src/app/services/profile-image.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import * as QRCode from 'qrcode';
 
 @Component({
     selector: 'app-identity-view',
@@ -30,12 +31,18 @@ export class IdentityViewComponent implements OnDestroy, OnInit {
 
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
         console.log('ID:', id);
         this.identityContainer = this.identityService.get(id);
 
-        this.qrString = 'id:' + this.identityContainer.content.identifier;
+        this.qrString = await QRCode.toDataURL('id:' + this.identityContainer.content.identifier, {
+            errorCorrectionLevel: 'L',
+            margin: 2,
+            scale: 5,
+        });
+
+        // this.qrString = 'id:' + this.identityContainer.content.identifier;
 
         // this.image = this.profileImageService.getImage(this.identity.id);
     }
