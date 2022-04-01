@@ -110,7 +110,7 @@ export class ApplicationStateService {
     }
 
     get isElectron(): boolean {
-        return this.electron.isElectronApp;
+        return this.electron.isElectron;
     }
 
     get isSimpleMode(): boolean {
