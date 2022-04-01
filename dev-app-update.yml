@@ -1,0 +1,4 @@
+owner: block-core
+repo: blockcore-hub
+provider: github
+updaterCacheDirName: blockcore-hub-updater
