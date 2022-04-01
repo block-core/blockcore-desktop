@@ -12,7 +12,7 @@
             </mat-select>
         </mat-form-field>
 
-        <button class="start-button" (click)="launch()" [disabled]="selectedMode == null || appState.activeChain == null" mat-raised-button color="primary">Start</button>
+        <button class="start-button" (click)="launch()" [disabled]="selectedMode === null || appState.activeChain === null" mat-raised-button color="primary">Start</button>
 
         <mat-accordion class="setup-headers-align" multi>
             <mat-expansion-panel>
@@ -36,7 +36,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <div *ngIf="selectedMode?.id == 'local'">
+                    <div *ngIf="selectedMode?.id === 'local'">
                         <br>
 
                         <button (click)="chooseNodeExecutable()" mat-raised-button>Node executable:</button>
@@ -58,7 +58,7 @@
                     </div>
                     <br>
 
-                    <div *ngIf="selectedMode?.id != 'mobile'">
+                    <div *ngIf="selectedMode?.id !== 'mobile'">
                         <br>
                         <!-- Data folder:<br>
             <input class="custom-file-mode" type="file" (change)="onDataFolderChange($event)" />

@@ -172,7 +172,7 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == ''">
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode === ''">
                     <mat-card class="grid-card">
                         <mat-card-title>Offline or Online?</mat-card-title>
                         <mat-card-content class="dim">
@@ -195,7 +195,7 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == 'online'">
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode === 'online'">
                     <mat-card class="grid-card">
                         <mat-card-title>Online</mat-card-title>
                         <mat-card-content class="dim">
@@ -226,7 +226,7 @@
                     </mat-card>
                 </div>
 
-                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode == 'offline'">
+                <div app-grid-cell gcColSpan="2" gcRowSpan="1" class="card card-body" *ngIf="mode === 'offline'">
                     <mat-card class="grid-card">
                         <mat-card-title>Offline</mat-card-title>
                         <mat-card-content class="dim">
@@ -282,8 +282,8 @@
                             <mat-list>
                                 <div mat-subheader>Transactions</div>
                                 <mat-list-item *ngFor="let tx of coldStakingHistory">
-                                  <mat-icon mat-list-icon *ngIf="tx.type == 'sent'">remove_circle</mat-icon>
-                                  <mat-icon mat-list-icon *ngIf="tx.type == 'received'">add_circle</mat-icon>
+                                  <mat-icon mat-list-icon *ngIf="tx.type === 'sent'">remove_circle</mat-icon>
+                                  <mat-icon mat-list-icon *ngIf="tx.type === 'received'">add_circle</mat-icon>
                                   <div mat-line>{{tx.amount | coinNotation}} ({{tx.type}})</div>
                                   <div mat-line>{{ tx.toAddress}}</div>
                                   <div mat-line>{{ tx.timestamp * 1000 | date:'short'}}</div>
@@ -291,8 +291,8 @@
 
 
                                 <mat-list-item *ngFor="let tx of coldStakingOfflineHistory">
-                                    <mat-icon mat-list-icon *ngIf="tx.type == 'sent'">remove_circle</mat-icon>
-                                    <mat-icon mat-list-icon *ngIf="tx.type == 'received'">add_circle</mat-icon>
+                                    <mat-icon mat-list-icon *ngIf="tx.type === 'sent'">remove_circle</mat-icon>
+                                    <mat-icon mat-list-icon *ngIf="tx.type === 'received'">add_circle</mat-icon>
                                     <div mat-line>{{tx.amount | coinNotation}} ({{tx.type}})</div>
                                     <div mat-line>{{ tx.toAddress}}</div>
                                     <div mat-line>{{ tx.timestamp * 1000 | date:'short'}}</div>

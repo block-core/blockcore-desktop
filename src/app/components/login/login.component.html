@@ -10,7 +10,7 @@
                 </mat-select>
             </mat-form-field>
 
-            <span *ngIf="selectedAccount != null">
+            <span *ngIf="selectedAccount !== null">
                 <br>
                 <mat-form-field appearance="outline">
                     <mat-label>Wallet password</mat-label>
@@ -31,10 +31,10 @@
                 {{errorMessage}}
             </span>
 
-            <mat-divider *ngIf="selectedAccount == null"></mat-divider>
+            <mat-divider *ngIf="selectedAccount === null"></mat-divider>
         </div>
 
-        <div class="login-actions" *ngIf="selectedAccount == null">
+        <div class="login-actions" *ngIf="selectedAccount === null">
             <div>
                 <button routerLink="/account/create" mat-stroked-button>Create</button> or
                 <button routerLink="/account/recover" mat-stroked-button color="primary">Restore</button>

@@ -49,7 +49,7 @@
             </p>
         </mat-card-content>
     </mat-card> -->
-    
+
     <!-- <mat-card>
         <mat-card-title>Details</mat-card-title>
         <mat-card-content>
@@ -61,7 +61,7 @@
         </mat-card-content>
     </mat-card> -->
 
-    <!-- 
+    <!--
     <mat-card class="wallet-split-card">
         <div class="wallet-split-left">
             <h2 class="mat-h2">Balance</h2>
@@ -100,7 +100,7 @@
     </div>
 
     <nav mat-tab-nav-bar mat-stretch-tabs>
-        <a mat-tab-link *ngFor="let link of links" (click)="filterHistory(link)" [active]="activeLink == link"> {{link.title}} </a>
+        <a mat-tab-link *ngFor="let link of links" (click)="filterHistory(link)" [active]="activeLink === link"> {{link.title}} </a>
     </nav>
 
     <div class="tab-pane">
@@ -128,19 +128,19 @@
 
                     <td mat-cell *matCellDef="let transaction" [ngClass]="{'unconfirmed': !transaction.transactionConfirmedInBlock}">
 
-                        <span *ngIf="transaction.transactionType == 'sent'">
+                        <span *ngIf="transaction.transactionType === 'sent'">
                             <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation
                                 }}
                             </strong>
                         </span>
 
-                        <span *ngIf="transaction.transactionType == 'received'">
+                        <span *ngIf="transaction.transactionType === 'received'">
                             <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation
                                 }}
                             </strong>
                         </span>
 
-                        <span *ngIf="transaction.transactionType == 'staked'">
+                        <span *ngIf="transaction.transactionType === 'staked'">
                             <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation
                                 }}
                             </strong>
