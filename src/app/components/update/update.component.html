@@ -9,7 +9,7 @@
         <mat-card-content>
             <p [innerHTML]="updateService.info.releaseNotes" ></p>
             <p *ngIf="updateService.progress && updateService.progress.percent !== 100">
-                <mat-progress-bar mode="determinate" bufferValue="0" mode="buffer" [value]="updateService.progress.percent"></mat-progress-bar>
+                <mat-progress-bar mode="determinate" [bufferValue]="0" mode="buffer" [value]="updateService.progress.percent"></mat-progress-bar>
                 <br>({{updateService.progress.transferred | sizeUnit}}/{{updateService.progress.total | sizeUnit}})
                 <br>{{updateService.progress.bytesPerSecond | sizeUnit: 0}}/sec.
             </p>

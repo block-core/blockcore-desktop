@@ -19,7 +19,7 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
 
     public identity: any;
     public container: any;
-    public error: string;
+    public error?: string | any;
 
     constructor(
         private appState: ApplicationStateService,
@@ -35,7 +35,7 @@ export class IdentityLookupComponent implements OnDestroy, OnInit {
 
     async ngOnInit() {
         this.sub = this.route.params.subscribe(async params => {
-            const id = params.id;
+            const id = params['id'];
 
             try {
                 this.error = null;

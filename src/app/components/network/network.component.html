@@ -29,7 +29,7 @@
             <span class="network-value">{{walletService.generalInfo?.creationTime.toDateString()}}</span>
         </mat-grid-tile>
     </mat-grid-list>
-    <mat-progress-bar mode="determinate" ng-hide="walletService.generalInfo == null" *ngIf="walletService.percentSyncedNumber !== 100" bufferValue="0" mode="buffer" [value]="walletService.percentSyncedNumber"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" ng-hide="walletService.generalInfo == null" *ngIf="walletService.percentSyncedNumber !== 100" [bufferValue]="0" mode="buffer" [value]="walletService.percentSyncedNumber"></mat-progress-bar>
 </div>
 
 <div class="network-details-footer">
