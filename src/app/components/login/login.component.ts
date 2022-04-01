@@ -11,7 +11,7 @@ import { WalletLoad } from '../../classes/wallet-load';
 import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { DatabaseStorageService, StorageService } from 'src/app/services/storage.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { Logger } from 'src/app/services/logger.service';
 import { IdentityService } from 'src/app/services/identity.service';
 import { ChainService } from 'src/app/services/chain.service';

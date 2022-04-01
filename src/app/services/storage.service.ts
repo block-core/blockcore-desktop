@@ -1,4 +1,3 @@
-import Dexie from 'dexie';
 import { Injectable } from '@angular/core';
 
 /** The storage service will recognice the current wallet and storage wallet-dependent items isolated. */
@@ -73,23 +72,6 @@ export class StorageService {
         }
 
         localStorage.setItem(key, JSON.stringify(value));
-    }
-}
-
-export class DatabaseStorageService extends Dexie {
-
-    wallets: Dexie.Table<IWallet, number>;
-
-    constructor(databaseName) {
-        super(databaseName);
-
-        //
-        // Define tables and indexes
-        // (Here's where the implicit table props are dynamically created)
-        //
-        this.version(1).stores({
-            wallets: '++id, name, network, coinType',
-        });
     }
 }
 
