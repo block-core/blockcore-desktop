@@ -7,7 +7,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationStateService } from './application-state.service';
 import * as bip32 from 'bip32';
-import * as bip38 from '../../libs/bip38';
 import * as city from 'city-lib';
 import { HDNode } from 'city-lib';
 import { HubService } from './hub.service';
@@ -104,39 +103,38 @@ export class IdentityService implements OnDestroy {
     }
 
     verifyPassword(password: string) {
-        const decryptedKey = bip38.decrypt(this.seed.encryptedSeed, password, null, null, this.appState.networkParams);
-        console.log(decryptedKey);
+        // const decryptedKey = bip38.decrypt(this.seed.encryptedSeed, password, null, null, this.appState.networkParams);
+        // console.log(decryptedKey);
     }
 
     unlock(path: string, password: string) {
-        // Read the seed from the file on disk.
-        const seed: { encryptedSeed: string; chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
+        // // Read the seed from the file on disk.
+        // const seed: { encryptedSeed: string; chainCode: string } = this.electronService.ipcRenderer.sendSync('get-wallet-seed', path);
 
-        // Keep a copy of the encrypted seed. For mobile mode, this will be available in the local storage / indexeddb.
-        this.seed = seed;
+        // // Keep a copy of the encrypted seed. For mobile mode, this will be available in the local storage / indexeddb.
+        // this.seed = seed;
 
-        // Descrypt the seed with the password provided on unlock (login).
-        // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
-        // }, null, this.appState.networkParams);
+        // // Descrypt the seed with the password provided on unlock (login).
+        // // bip38.decryptAsync(seed.encryptedSeed, password, (decryptedKey) => {
+        // // }, null, this.appState.networkParams);
 
-        const decryptedKey = bip38.decrypt(seed.encryptedSeed, password, null, null, this.appState.networkParams);
+        // const decryptedKey = bip38.decrypt(seed.encryptedSeed, password, null, null, this.appState.networkParams);
 
-        const chainCode = Buffer.from(seed.chainCode, 'base64');
+        // const chainCode = Buffer.from(seed.chainCode, 'base64');
 
-        // Dispose of this object, we don't want to keep the root extkey after initial login.
-        const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
+        // // Dispose of this object, we don't want to keep the root extkey after initial login.
+        // const masterNode = bip32.fromPrivateKey(decryptedKey.privateKey, chainCode, this.appState.networkDefinition);
 
-        // eslint-disable-next-line @typescript-eslint/quotes
-        const identityRoot: HDNode = masterNode.derivePath("m/302'");
+        // // eslint-disable-next-line @typescript-eslint/quotes
+        // const identityRoot: HDNode = masterNode.derivePath("m/302'");
 
-        // Persist the identity node that we need to generate identities and keys for them.
-        this.identityRoot = identityRoot;
+        // // Persist the identity node that we need to generate identities and keys for them.
+        // this.identityRoot = identityRoot;
 
-        this.identityExtPubKey = identityRoot.neutered();
+        // this.identityExtPubKey = identityRoot.neutered();
 
-        // Load identities after unlocking.
-        this.load();
-
+        // // Load identities after unlocking.
+        // this.load();
     }
 
     getIdentityNode(index: number) {

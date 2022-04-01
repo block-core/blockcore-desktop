@@ -7,7 +7,6 @@ import { ProfileImageService } from 'src/app/services/profile-image.service';
 import { ApiService } from 'src/app/services/api.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Logger } from 'src/app/services/logger.service';
-import * as bip38 from '../../../libs/bip38';
 import * as bs58 from 'bs58';
 import * as bitcoinMessage from 'bitcoinjs-message';
 import { MatSnackBar } from '@angular/material/snack-bar';

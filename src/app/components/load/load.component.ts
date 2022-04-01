@@ -81,8 +81,7 @@ export class LoadComponent implements OnInit, OnDestroy {
             this.modes.push(
                 // { id: 'demo', name: 'Demo' }, // Auto-wallet creation, etc.
                 { id: 'local', name: 'Custom' }, // Launches the daemon by specifying path to .dll file.
-                { id: 'manual', name: 'Manual' }, // Manual startup of daemon, does not send shutdown messages. Useful when you debug node with Visual Studio.
-                { id: 'simple', name: 'Mobile' }); // API Wallet mode.
+                { id: 'manual', name: 'Manual' }); // Manual startup of daemon, does not send shutdown messages. Useful when you debug node with Visual Studio.
             // { id: 'light', name: 'Light' }, // Full Node in Purge mode and other features disabled.
             // { id: 'pos', name: 'Point-of-Sale (POS)' },
             // { id: 'readonly', name: 'Read-only' });
@@ -214,19 +213,6 @@ export class LoadComponent implements OnInit, OnDestroy {
             this.appState.connected = true;
             this.cd.detectChanges();
             this.fullNodeConnect();
-        } else if (this.appState.daemon.mode === 'simple') {
-            // TODO: Should send the correct network, hard-coded to city main for now.
-            // const network = coininfo('city').toBitcoinJS();
-            // this.appState.networkDefinition = network;
-
-            // this.appState.networkParams = {
-            //     private: network.wif,
-            //     public: network.pubKeyHash
-            // };
-
-            this.loading = false;
-            this.appState.connected = true;
-            this.router.navigateByUrl('/login');
         }
     }
 

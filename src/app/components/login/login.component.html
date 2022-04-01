@@ -22,8 +22,6 @@
                 <button class="login-unlock-button" (click)="unlock()" [disabled]="unlocking" mat-raised-button color="primary">Unlock</button>&nbsp;
                 <button class="login-cancel-button" (click)="cancel()" mat-raised-button>Cancel</button>
                 <br>
-                <!-- <mat-progress-bar *ngIf="unlocking && appState.isSimpleMode" mode="determinate" [value]="unlockPercentage"></mat-progress-bar>
-                <mat-spinner *ngIf="unlocking && appState.isSimpleMode"></mat-spinner> -->
                 <br>
                 <div *ngIf="invalidPassword">The password is not correct.</div>
             </span>
@@ -48,7 +46,7 @@
             <button mat-button (click)="changeMode()"><span class="material-icons">public</span> Change network</button> &nbsp; <button mat-button routerLink="/advanced"><span class="material-icons">settings</span> Advanced</button>
         </div>
     </div>
-    <div class="login-banner"  [ngClass]="'login-banner-' + appState.chain" id="login-banner-wallpaper">
+    <div class="login-banner" [ngClass]="'login-banner-' + appState.chain" id="login-banner-wallpaper">
         <div class="login-banner-content">
             <img src="assets/{{appState.chain}}/logo-full-light.png" class="login-logo">
             <br>

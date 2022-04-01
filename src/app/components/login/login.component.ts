@@ -12,7 +12,6 @@ import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { DatabaseStorageService, StorageService } from 'src/app/services/storage.service';
-import * as bip38 from '../../../libs/bip38';
 import { Logger } from 'src/app/services/logger.service';
 import { IdentityService } from 'src/app/services/identity.service';
 import { ChainService } from 'src/app/services/chain.service';
@@ -78,34 +77,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private loadWallets() {
-        if (this.appState.isSimpleMode) {
-            this.getLocalWalletFiles();
-        } else {
-            this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
-                this.status = response;
-                this.log.info('Status update result: ', this.status);
-            });
+        this.subscription = this.apiService.getNodeStatusCustomInterval(10000).subscribe((response) => {
+            this.status = response;
+            this.log.info('Status update result: ', this.status);
+        });
 
-            this.getWalletFiles();
-        }
-    }
-
-    private async getLocalWalletFiles() {
-        try {
-            // Read accounts from localStorage.
-            const db = new DatabaseStorageService('cityhub');
-            const list = await db.wallets.toArray();
-            const wallets = list.map((item) => ({ id: item.name, name: item.name }));
-
-            this.accounts = wallets;
-            this.appState.accounts = wallets;
-
-            console.log(list);
-
-            this.hasWallet = list.length > 0;
-        } catch (error) {
-            this.log.error(error);
-        }
+        this.getWalletFiles();
     }
 
     changeMode() {
@@ -220,56 +197,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.password
         );
 
-        if (this.appState.isSimpleMode) {
-            this.loadLocalWallet(walletLoad);
-        } else {
-            this.loadWallet(walletLoad);
-        }
-    }
-
-    private async loadLocalWallet(walletLoad: WalletLoad) {
-        const db = new DatabaseStorageService('cityhub');
-        const wallet = await db.wallets.get({ name: walletLoad.name });
-        const self = this;
-
-        console.log('Load Local Wallet...');
-
-        try {
-            const start = new Date().getTime();
-
-            console.log(wallet);
-
-            // bip38.decryptAsync(wallet.encryptedSeed, walletLoad.password, (decryptedKey) => {
-            // }, null, this.appState.networkParams);
-
-            const decryptedKey = bip38.decrypt(wallet.encryptedSeed, walletLoad.password, null, null, this.appState.networkParams);
-
-            console.log('decrypted!');
-            console.log(decryptedKey);
-
-            const stop = new Date().getTime();
-
-            const diff = stop - start;
-            console.log(diff + 'ms taken to decrypt.');
-            // console.log('decryptedKey:', decryptedKey);
-
-            self.authService.setAuthenticated();
-            self.unlocking = false;
-            localStorage.setItem('Network:Wallet', wallet.name);
-
-            // Make sure the unlocked wallet is available, especially the extpubkey is required to generate addresses.
-            this.wallet.activeWallet = wallet;
-
-            self.router.navigateByUrl('/dashboard');
-
-        } catch (err) {
-            if (err.message !== 'AssertionError [ERR_ASSERTION]') {
-                self.log.error('Unknown failure on wallet unlock', err);
-            }
-
-            self.unlocking = false;
-            self.invalidPassword = true;
-        }
+        this.loadWallet(walletLoad);
     }
 
     private getCurrentNetwork() {

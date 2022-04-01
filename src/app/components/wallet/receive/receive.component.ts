@@ -54,11 +54,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
     load() {
         if (this.showAll) {
-            if (this.appState.isSimpleMode) {
-                this.getAddressesSimpleMode();
-            } else {
-                this.getAddressesFullNode();
-            }
+            this.getAddressesFullNode();
         }
         else {
             if (this.wallet.isMultiAddressMode) {
@@ -84,11 +80,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     public showAllAddresses() {
-        if (this.appState.isSimpleMode) {
-            this.getAddressesSimpleMode();
-        } else {
-            this.getAddressesFullNode();
-        }
+        this.getAddressesFullNode();
 
         this.showAll = true;
     }
@@ -123,11 +115,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
 
     private getUnusedReceiveAddress() {
-        if (this.appState.isSimpleMode) {
-            this.getUnusedReceiveAddressSimpleMode();
-        } else {
-            this.getUnusedReceiveAddressFullNode();
-        }
+        this.getUnusedReceiveAddressFullNode();
     }
 
     private getUnusedReceiveAddressSimpleMode() {

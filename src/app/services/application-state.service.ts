@@ -113,10 +113,6 @@ export class ApplicationStateService {
         return this.electron.isElectron;
     }
 
-    get isSimpleMode(): boolean {
-        return this.daemon.mode === 'simple';
-    }
-
     get addressType(): string {
         return this.storage.getValue('AddressType', 'Legacy', true);
     }

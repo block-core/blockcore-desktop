@@ -75,27 +75,22 @@ export class ApiService {
 
         this.log.info('Api Service, Chain: ', chain);
 
-        // For mobile mode, we won't launch any daemons.
-        if (chain.mode === 'simple') {
+        if (this.electronService.ipcRenderer) {
+            this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
 
-        } else {
-            if (this.electronService.ipcRenderer) {
-                this.daemon = this.electronService.ipcRenderer.sendSync('start-daemon', chain);
-
-                if (this.daemon !== 'OK') {
-                    this.notifications.add({
-                        title: 'Blockcore node background error',
-                        hint: 'Messages from the background process received in Blockcore Hub',
-                        message: this.daemon,
-                        icon: 'warning'
-                        // icon: (this.daemon.indexOf('Blockcore Hub was started in development mode') > -1) ? 'build' : 'warning'
-                    });
-                    // this.snackBar.open(this.daemon, null, { duration: 7000 });
-                }
-
-                this.log.info('Daemon result: ', this.daemon);
-                this.setApiPort(chain.apiPort);
+            if (this.daemon !== 'OK') {
+                this.notifications.add({
+                    title: 'Blockcore node background error',
+                    hint: 'Messages from the background process received in Blockcore Hub',
+                    message: this.daemon,
+                    icon: 'warning'
+                    // icon: (this.daemon.indexOf('Blockcore Hub was started in development mode') > -1) ? 'build' : 'warning'
+                });
+                // this.snackBar.open(this.daemon, null, { duration: 7000 });
             }
+
+            this.log.info('Daemon result: ', this.daemon);
+            this.setApiPort(chain.apiPort);
         }
     }
 
