@@ -1,14 +1,16 @@
 /* eslint-disable */
-
+require('babel-core/register');
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, shell, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import * as fs from 'fs';
+import { autoUpdater } from 'electron-updater';
+import * as readChunk from 'read-chunk';
 
-const log = require('electron-log');
-const { autoUpdater } = require('electron-updater');
-const fs = require('fs');
-const readChunk = require('read-chunk');
+import * as log from 'electron-log';
+// const fs = require('fs');
+
 
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
@@ -341,7 +343,7 @@ ipcMain.on('get-wallet-seed', (event, arg: string) => {
     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
     // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
     // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
-    const dataBuffer = readChunk.sync(arg, 1, 500);
+    const dataBuffer = readChunk.readChunkSync(arg, { length: 500, startPosition: 1 });
     const data = dataBuffer.toString('utf8');
 
     const key = '"encryptedSeed":"';
@@ -733,7 +735,7 @@ function launchDaemon(apiPath: string, chain: Chain) {
         } else if (daemonState === DaemonState.Started) {
             contents.send('daemon-error', `Node daemon process exited manually or crashed, with code ${code} and signal ${signal}.`);
         } else {
-            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
+            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).
             if (code !== 0) {
                 contents.send('daemon-error', `City Chain daemon shutdown completed, but resulted in exit code ${code} and signal ${signal}.`);
             } else {

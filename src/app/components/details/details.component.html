@@ -5,28 +5,28 @@
         <div class="details-row-value">{{ transaction.transactionType }}</div>
     </div>
 
-    <div class="details-row" *ngIf="transaction.transactionType == 'received'">
+    <div class="details-row" *ngIf="transaction.transactionType === 'received'">
         <div class="details-row-title">Total Amount</div>
         <div class="details-row-value">{{ transaction.transactionAmount | coinNotation }}
             <small>{{ coinUnit }}</small>
         </div>
     </div>
 
-    <div class="details-row" *ngIf="transaction.transactionType == 'sent'">
+    <div class="details-row" *ngIf="transaction.transactionType === 'sent'">
         <div class="details-row-title">Total Amount</div>
         <div class="details-row-value">{{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}
             <small>{{ coinUnit }}</small>
         </div>
     </div>
 
-    <div class="details-row" *ngIf="transaction.transactionType == 'sent'">
+    <div class="details-row" *ngIf="transaction.transactionType === 'sent'">
         <div class="details-row-title">Amount Sent</div>
         <div class="details-row-value">{{ transaction.transactionAmount | coinNotation }}
             <small>{{ coinUnit }}</small>
         </div>
     </div>
 
-    <div class="details-row" *ngIf="transaction.transactionType == 'sent'">
+    <div class="details-row" *ngIf="transaction.transactionType === 'sent'">
         <div class="details-row-title">Fee</div>
         <div class="details-row-value">{{ transaction.transactionFee | coinNotation }}
             <small>{{ coinUnit }}</small>

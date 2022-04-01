@@ -1,7 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApplicationStateService } from 'src/app/services/application-state.service';
+import { ApplicationStateService } from '../../services/application-state.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 export interface ReportDialogData {
