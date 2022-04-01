@@ -80,7 +80,7 @@
     "ngx-image-cropper": "^6.1.0",
     "ngx-material-file-input": "3.0.0",
     "qrcode": "^1.5.0",
-    "safe-buffer": "~5.2.1",
+    "stream-browserify": "^3.0.0",
     "tslib": "^2.3.1",
     "utf8": "^3.0.0"
   },
@@ -100,7 +100,6 @@
     "@typescript-eslint/eslint-plugin": "5.11.0",
     "@typescript-eslint/parser": "5.11.0",
     "city-coininfo": "5.0.0",
-    "city-lib": "5.0.0",
     "core-js": "3.21.1",
     "electron-builder": "^22.14.13",
     "electron-reload": "1.5.0",

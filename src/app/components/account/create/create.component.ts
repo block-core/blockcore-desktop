@@ -11,10 +11,7 @@ import { WalletCreation } from '../../../classes/wallet-creation';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Logger } from '../../../services/logger.service';
-
 import { ApplicationStateService } from 'src/app/services/application-state.service';
-import * as city from 'city-lib';
-import * as wif from 'wif';
 
 @Component({
     selector: 'app-account-create',
@@ -106,10 +103,6 @@ export class CreateAccountComponent implements OnInit {
         this.saving = true;
         this.log.info('Create account:', this.accountName);
         this.createWallet(new WalletCreation(this.accountName, this.mnemonic, this.password1, this.seedExtension));
-    }
-
-    private getAddress(node, network) {
-        return city.payments.p2pkh({ pubkey: node.publicKey, network }).address;
     }
 
     private createWallet(wallet: WalletCreation) {

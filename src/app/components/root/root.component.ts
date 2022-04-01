@@ -22,7 +22,6 @@ import { retryWhen, delay, tap } from 'rxjs/operators';
 import { NodeStatus } from '@models/node-status';
 import { ReportComponent } from '../report/report.component';
 import { SettingsService } from 'src/app/services/settings.service';
-import { IdentityService } from 'src/app/services/identity.service';
 import { IdentityContainer } from '@models/identity';
 import { StorageService } from 'src/app/services/storage.service';
 import { ChainService } from 'src/app/services/chain.service';
@@ -83,7 +82,6 @@ export class RootComponent implements OnInit {
         private log: Logger,
         public updateService: UpdateService,
         public detailsService: DetailsService,
-        public identityService: IdentityService,
         public settings: SettingsService,
         private apiService: ApiService,
         private walletService: WalletService,
@@ -213,13 +211,13 @@ export class RootComponent implements OnInit {
     }
 
     get identityTooltip(): string {
-        if (this.identityService.identity) {
-            const name = this.identityService.identity.content.name || this.identityService.identity.content.identifier;
-            const alias = this.identityService.identity.content.alias ? ' (@' + this.identityService.identity.content.alias + ')' : '';
-            const title = this.identityService.identity.content.title ? '\n' + this.identityService.identity.content.title : '';
+        // if (this.identityService.identity) {
+        //     const name = this.identityService.identity.content.name || this.identityService.identity.content.identifier;
+        //     const alias = this.identityService.identity.content.alias ? ' (@' + this.identityService.identity.content.alias + ')' : '';
+        //     const title = this.identityService.identity.content.title ? '\n' + this.identityService.identity.content.title : '';
 
-            return `${name}${alias}\nID: ${this.identityService.identity.content.identifier}${title}`;
-        }
+        //     return `${name}${alias}\nID: ${this.identityService.identity.content.identifier}${title}`;
+        // }
 
         return '';
     }
@@ -372,7 +370,7 @@ export class RootComponent implements OnInit {
     }
 
     selectIdentity(identity: IdentityContainer) {
-        this.identityService.identity = identity;
+        // this.identityService.identity = identity;
     }
 
     ngOnInit() {

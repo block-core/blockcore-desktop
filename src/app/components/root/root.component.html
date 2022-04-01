@@ -138,10 +138,10 @@
                     <h4 *ngIf="showFiller" mat-line>History</h4>
                 </mat-list-item>
 
-                <mat-list-item [matTooltip]="getTooltip('Identity')" *ngIf="appModes.enabled('identity')" routerLinkActive="main-menu-active" routerLink="/identity">
+                <!-- <mat-list-item [matTooltip]="getTooltip('Identity')" *ngIf="appModes.enabled('identity')" routerLinkActive="main-menu-active" routerLink="/identity">
                     <mat-icon mat-list-icon>person</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Identity</h4>
-                </mat-list-item>
+                </mat-list-item> -->
 
                 <mat-list-item [matTooltip]="getTooltip('Merchants')" *ngIf="appModes.enabled('merchants')" routerLinkActive="main-menu-active" routerLink="/merchants">
                     <mat-icon mat-list-icon>map</mat-icon>
@@ -228,10 +228,10 @@
                 <mat-icon>cloud_off</mat-icon>
             </button>
 
-            <button *ngIf="appModes.enabled('identity')" mat-icon-button [matTooltip]="identityTooltip" [matMenuTriggerFor]="identityMenu">
+            <!-- <button *ngIf="appModes.enabled('identity')" mat-icon-button [matTooltip]="identityTooltip" [matMenuTriggerFor]="identityMenu">
                 <mat-icon *ngIf="!identityService.identity">person</mat-icon>
                 <img *ngIf="identityService.identity" class="mat-icon notranslate material-icons mat-icon-no-color" [src]="identityService.getImage(identityService.identity.content.image)">
-            </button>
+            </button> -->
 
             <button *ngIf="!appState.pageMode && !appState.handset" mat-icon-button [matMenuTriggerFor]="moreMenu">
                 <mat-icon>more_vert</mat-icon>
