@@ -10,7 +10,6 @@ import { ApplicationStateService } from '../../services/application-state.servic
 import { TitleService } from '../../services/title.service';
 import { ApiService } from '../../services/api.service';
 import { GlobalService } from '../../services/global.service';
-import { ElectronService } from 'ngx-electron';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { GeneralInfo } from '../../classes/general-info';
 import { DetailsService } from '../../services/details.service';
@@ -28,6 +27,7 @@ import { IdentityContainer } from '@models/identity';
 import { StorageService } from 'src/app/services/storage.service';
 import { ChainService } from 'src/app/services/chain.service';
 import { BootController } from 'src/boot';
+import { ElectronService } from 'src/app/services/electron.service';
 // import { slideInAnimation } from 'src/app/app.animations';
 
 declare var APP_VERSION: string;

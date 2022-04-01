@@ -5,8 +5,8 @@ import { ApplicationStateService } from '../../services/application-state.servic
 import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
 import { Logger } from '../../services/logger.service';
-import { ElectronService } from 'ngx-electron';
 import { UpdateService } from '../../services/update.service';
+import { ElectronService } from 'src/app/services/electron.service';
 
 export interface ListItem {
     name: string;

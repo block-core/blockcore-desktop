@@ -9,6 +9,7 @@ var log = require('electron-log');
 var autoUpdater = require('electron-updater').autoUpdater;
 var fs = require('fs');
 var readChunk = require('read-chunk');
+require('@electron/remote/main').initialize();
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
 var gotTheLock = electron_1.app.requestSingleInstanceLock();

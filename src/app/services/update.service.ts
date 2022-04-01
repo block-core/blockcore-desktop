@@ -1,9 +1,9 @@
 /* eslint-disable */
 
 import { Injectable, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { UpdateInfo } from '../components/update/update-info';
 import { ApplicationStateService } from './application-state.service';
+import { ElectronService } from './electron.service';
 import { NotificationService } from './notification.service';
 
 @Injectable({

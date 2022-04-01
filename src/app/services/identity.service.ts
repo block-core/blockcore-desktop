@@ -13,8 +13,8 @@ import { HDNode } from 'city-lib';
 import { HubService } from './hub.service';
 import { StorageService } from './storage.service';
 import { AuthenticationService } from './authentication.service';
-import { ElectronService } from 'ngx-electron';
 import { Jws } from '../shared/jose';
+import { ElectronService } from './electron.service';
 
 @Injectable({
     providedIn: 'root'

@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { Theming } from '../../services/theming.service';
 import { AppModes } from '../../shared/app-modes';
-import { ElectronService } from 'ngx-electron';
 import { SettingsService } from 'src/app/services/settings.service';
 import { JsonHubProtocol } from '@aspnet/signalr';
 import { HubService } from 'src/app/services/hub.service';
 import { ApplicationStateService } from 'src/app/services/application-state.service';
+import { ElectronService } from 'src/app/services/electron.service';
 
 @Component({
     selector: 'app-settings',

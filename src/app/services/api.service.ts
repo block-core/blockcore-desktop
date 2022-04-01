@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { Observable, interval, throwError, empty } from 'rxjs';
 import { map, startWith, switchMap, catchError, } from 'rxjs/operators';
 import { GlobalService } from './global.service';
-import { ElectronService } from 'ngx-electron';
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
@@ -21,6 +20,7 @@ import { HttpErrorResponse, HttpClient, HttpParams, HttpHeaders } from '@angular
 import { TransactionResult } from '../classes/transaction-result';
 import { NotificationService } from './notification.service';
 import { WalletSplit } from '@models/wallet-split';
+import { ElectronService } from './electron.service';
 
 /**
  * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon

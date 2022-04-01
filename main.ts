@@ -10,6 +10,8 @@ const { autoUpdater } = require('electron-updater');
 const fs = require('fs');
 const readChunk = require('read-chunk');
 
+require('@electron/remote/main').initialize();
+
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
 

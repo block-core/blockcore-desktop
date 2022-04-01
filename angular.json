@@ -24,6 +24,7 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
+                        "aot": true,
                         "customWebpackConfig": {
                             "path": "webpack.config.js"
                         },
@@ -78,12 +79,18 @@
                                     "with": "src/environments/environment.prod.ts"
                                 }
                             ],
-                            "optimization": true,
+                            "optimization": {
+                                "scripts": true,
+                                "styles": {
+                                    "minify": true,
+                                    "inlineCritical": false
+                                },
+                                "fonts": true
+                            },
                             "outputHashing": "all",
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": true,
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
