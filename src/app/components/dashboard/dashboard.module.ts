@@ -6,7 +6,6 @@ import { MaterialModule } from '../../material.module';
 import { AppSharedModule } from '../../shared/app-shared.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { IdentityModule } from '../identity/identity.module';
 
 @NgModule({
     imports: [
@@ -16,7 +15,6 @@ import { IdentityModule } from '../identity/identity.module';
         FlexLayoutModule,
         FormsModule,
         ReactiveFormsModule,
-        IdentityModule,
         AppSharedModule
     ],
     declarations: [

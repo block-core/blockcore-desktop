@@ -7,9 +7,6 @@ import { LoginComponent } from './components/login/login.component';
 import { LoadComponent } from './components/load/load.component';
 import { MerchantsComponent } from './components/merchants/merchants.component';
 import { PaperWalletComponent } from './components/paperwallet/paperwallet.component';
-import { IdentityComponent } from './components/identity/identity.component';
-import { IdentityViewComponent } from './components/identity/identity-view.component';
-import { IdentityUnlockComponent } from './components/identity/identity-unlock.component';
 
 const routes: Routes = [
     {
@@ -54,11 +51,6 @@ const routes: Routes = [
         data: {
             title: 'Paperwallet'
         }
-    },
-    {
-        path: 'identity',
-        loadChildren: () => import('./components/identity/identity.module').then(m => m.IdentityModule),
-        canActivate: [AuthenticatedUserGuard],
     },
     // {
     //     path: 'identity',

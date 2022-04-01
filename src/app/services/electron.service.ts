@@ -15,6 +15,7 @@ export class ElectronService {
 
     constructor() {
         if (this.isElectron) {
+            // const { BrowserWindow } = require('electron').remote
             this.ipcRenderer = window.require('electron').ipcRenderer;
             this.webFrame = window.require('electron').webFrame;
             this.shell = window.require('electron').shell;
@@ -27,3 +28,4 @@ export class ElectronService {
         return !!(window && window.process && window.process.type);
     }
 }
+

@@ -23,7 +23,6 @@ import { httpInterceptorProviders } from './shared/http-interceptors';
 import { HttpErrorHandler } from './services/http-error-handler.service';
 import { ReportModule } from './components/report/report.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { IdentityModule } from './components/identity/identity.module';
 import { ElectronService } from './services/electron.service';
 
 @NgModule({
@@ -46,8 +45,7 @@ import { ElectronService } from './services/electron.service';
         DetailsModule,
         PaperWalletModule,
         AppRoutingModule,
-        FlexLayoutModule,
-        IdentityModule
+        FlexLayoutModule
     ],
     exports: [
     ],
