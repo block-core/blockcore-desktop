@@ -8,7 +8,7 @@ var os = require("os");
 var log = require('electron-log');
 var autoUpdater = require('electron-updater').autoUpdater;
 var fs = require('fs');
-var readChunk = require('read-chunk');
+// const readChunk = require('read-chunk');
 require('@electron/remote/main').initialize();
 // Set the log level to info. This is only for logging in this Electron main process.
 log.transports.file.level = 'info';
@@ -250,24 +250,24 @@ electron_1.ipcMain.on('open-dev-tools', function (event, arg) {
     mainWindow.webContents.openDevTools();
     event.returnValue = 'OK';
 });
-electron_1.ipcMain.on('get-wallet-seed', function (event, arg) {
-    writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
-    // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
-    // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
-    // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
-    var dataBuffer = readChunk.sync(arg, 1, 500);
-    var data = dataBuffer.toString('utf8');
-    var key = '"encryptedSeed":"';
-    var startIndex = data.indexOf(key);
-    var endIndex = data.indexOf('",', startIndex);
-    var seed = data.substring(startIndex + key.length, endIndex);
-    var keyChainCode = '"chainCode":"';
-    var startIndexChainCode = data.indexOf(keyChainCode);
-    var endIndexChainCode = data.indexOf('",', startIndexChainCode);
-    var chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
-    // chainCodeDecoded: Buffer.from(chainCode, 'base64')
-    event.returnValue = { encryptedSeed: seed, chainCode: chainCode };
-});
+// ipcMain.on('get-wallet-seed', (event, arg: string) => {
+//     writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
+//     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
+//     // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
+//     // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
+//     const dataBuffer = readChunk.sync(arg, 1, 500);
+//     const data = dataBuffer.toString('utf8');
+//     const key = '"encryptedSeed":"';
+//     const startIndex = data.indexOf(key);
+//     const endIndex = data.indexOf('",', startIndex);
+//     const seed = data.substring(startIndex + key.length, endIndex);
+//     const keyChainCode = '"chainCode":"';
+//     const startIndexChainCode = data.indexOf(keyChainCode);
+//     const endIndexChainCode = data.indexOf('",', startIndexChainCode);
+//     const chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
+//     // chainCodeDecoded: Buffer.from(chainCode, 'base64')
+//     event.returnValue = { encryptedSeed: seed, chainCode };
+// });
 electron_1.ipcMain.on('update-icon', function (event, arg) {
     if (arg) {
         mainWindow.setOverlayIcon(__dirname + arg.icon, arg.title);

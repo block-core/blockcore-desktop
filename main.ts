@@ -8,7 +8,7 @@ import * as os from 'os';
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const fs = require('fs');
-const readChunk = require('read-chunk');
+// const readChunk = require('read-chunk');
 
 require('@electron/remote/main').initialize();
 
@@ -337,28 +337,28 @@ ipcMain.on('open-dev-tools', (event, arg: string) => {
     event.returnValue = 'OK';
 });
 
-ipcMain.on('get-wallet-seed', (event, arg: string) => {
-    writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
+// ipcMain.on('get-wallet-seed', (event, arg: string) => {
+//     writeLog('get-wallet-seed: Send the encrypted seed and chain code to the UI.');
 
-    // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
-    // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
-    // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
-    const dataBuffer = readChunk.sync(arg, 1, 500);
-    const data = dataBuffer.toString('utf8');
+//     // TODO: Consider doing this async to avoid UI hanging, but to simplify the integration at the moment and
+//     // use return value, we rely on sync read.  "readChunk(filePath, startPosition, length)" <- async
+//     // Read 300 characters, that should be more than enough to get the encryptedSeed. Consider doing a loop until we find it.
+//     const dataBuffer = readChunk.sync(arg, 1, 500);
+//     const data = dataBuffer.toString('utf8');
 
-    const key = '"encryptedSeed":"';
-    const startIndex = data.indexOf(key);
-    const endIndex = data.indexOf('",', startIndex);
-    const seed = data.substring(startIndex + key.length, endIndex);
+//     const key = '"encryptedSeed":"';
+//     const startIndex = data.indexOf(key);
+//     const endIndex = data.indexOf('",', startIndex);
+//     const seed = data.substring(startIndex + key.length, endIndex);
 
-    const keyChainCode = '"chainCode":"';
-    const startIndexChainCode = data.indexOf(keyChainCode);
-    const endIndexChainCode = data.indexOf('",', startIndexChainCode);
-    const chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
+//     const keyChainCode = '"chainCode":"';
+//     const startIndexChainCode = data.indexOf(keyChainCode);
+//     const endIndexChainCode = data.indexOf('",', startIndexChainCode);
+//     const chainCode = data.substring(startIndexChainCode + keyChainCode.length, endIndexChainCode);
 
-    // chainCodeDecoded: Buffer.from(chainCode, 'base64')
-    event.returnValue = { encryptedSeed: seed, chainCode };
-});
+//     // chainCodeDecoded: Buffer.from(chainCode, 'base64')
+//     event.returnValue = { encryptedSeed: seed, chainCode };
+// });
 
 ipcMain.on('update-icon', (event, arg: { icon, title }) => {
     if (arg) {
