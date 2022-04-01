@@ -113,7 +113,7 @@ export class BlockHistoryComponent implements OnInit, OnDestroy {
     getBlock() {
         this.route.params.subscribe(params => {
 
-            const url = this.apiService.apiUrl + '/' + this.apiService.apiVersion + '/blocks/' + params.id;
+            const url = this.apiService.apiUrl + '/' + this.apiService.apiVersion + '/blocks/' + params['id'];
 
             this.http
                 .get<any[]>(url)

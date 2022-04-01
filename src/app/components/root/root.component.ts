@@ -28,6 +28,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { ChainService } from 'src/app/services/chain.service';
 import { BootController } from 'src/boot';
 import { ElectronService } from 'src/app/services/electron.service';
+import { MatDrawerMode } from '@angular/material/sidenav';
 // import { slideInAnimation } from 'src/app/app.animations';
 
 declare var APP_VERSION: string;
@@ -64,9 +65,8 @@ export class RootComponent implements OnInit {
     generalInfo: GeneralInfo;
 
     isAuthenticated: Observable<boolean>;
-    menuMode = 'side';
+    menuMode: MatDrawerMode = 'side';
     menuOpened = true;
-
 
     // TODO: Change into Observable.
     // get userActivated(): boolean {
@@ -265,7 +265,7 @@ export class RootComponent implements OnInit {
             this.chains.availableChains.filter(language => !language.test);
     }
 
-    getTooltip(tooltip:string): string {
+    getTooltip(tooltip: string): string {
         if (!this.showFiller) {
             return tooltip
         }
@@ -338,7 +338,7 @@ export class RootComponent implements OnInit {
     }
 
     prepareRoute(outlet: RouterOutlet) {
-        return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
+        return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
     }
 
     loadFiller() {

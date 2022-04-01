@@ -24,7 +24,8 @@
         <app-details *ngIf="detailsService.item"></app-details>
     </mat-drawer>
 
-    <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [(mode)]="menuMode">
+    <!-- <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [(mode)]="menuMode"> -->
+    <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [mode]="menuMode">
         <app-view-area>
             <mat-list class="main-menu">
 

@@ -40,7 +40,7 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.route.params.subscribe(params => {
-            this.getTransaction(params.id);
+            this.getTransaction(params['id']);
         });
 
         this.coinUnit = this.globalService.getCoinUnit();
