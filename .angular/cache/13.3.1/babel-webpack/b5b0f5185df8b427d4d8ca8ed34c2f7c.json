@@ -1,1 +1,0 @@
-{"ast":null,"code":"/* eslint-disable */\nexport class WalletLoad {\n  name;\n  password;\n  folderPath;\n\n  constructor(name, password, folderPath = null) {\n    this.name = name;\n    this.password = password;\n    this.folderPath = folderPath;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

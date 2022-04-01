@@ -1,1 +1,0 @@
-{"ast":null,"code":"export class TransactionSending {\n  hex;\n\n  constructor(hex) {\n    this.hex = hex;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

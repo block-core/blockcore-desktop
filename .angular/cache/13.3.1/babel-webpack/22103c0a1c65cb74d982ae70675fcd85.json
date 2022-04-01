@@ -1,1 +1,0 @@
-{"ast":null,"code":"export class Recipient {\n  destinationAddress;\n  amount;\n\n  constructor(destinationAddress, amount) {\n    this.destinationAddress = destinationAddress;\n    this.amount = amount;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}
