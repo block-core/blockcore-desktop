@@ -49,12 +49,6 @@
     "e2e": "npm run postinstall:web && ng e2e",
     "version": "node -p \"require('./package.json').version\"",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "mobile-start": "npm run mobile-build && npm run mobile-browser",
-    "mobile-setup": "npm install -g cordova && cd mobile && cordova platform add android && cordova platform add ios && cordova platform add browser && cd ..",
-    "mobile-build": "ng lint && ng build --outputPath=./mobile/www",
-    "mobile-android": "cd mobile && cordova run android && cd ..",
-    "mobile-ios": "cd mobile && cordova run ios && cd ..",
-    "mobile-browser": "cd mobile && cordova run browser && cd ..",
     "lint": "ng lint"
   },
   "private": true,
