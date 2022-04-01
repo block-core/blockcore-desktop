@@ -5,9 +5,12 @@ var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var os = require("os");
-var log = require('electron-log');
-var autoUpdater = require('electron-updater').autoUpdater;
-var fs = require('fs');
+var log = require("electron-log");
+var electron_updater_1 = require("electron-updater");
+var fs = require("fs");
+// const log = require('electron-log');
+// const { autoUpdater } = require('electron-updater');
+// const fs = require('fs');
 // const readChunk = require('read-chunk');
 require('@electron/remote/main').initialize();
 // Set the log level to info. This is only for logging in this Electron main process.
@@ -50,7 +53,7 @@ var DaemonState;
     DaemonState[DaemonState["Failed"] = 6] = "Failed";
 })(DaemonState || (DaemonState = {}));
 // We don't want to support auto download.
-autoUpdater.autoDownload = false;
+electron_updater_1.autoUpdater.autoDownload = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
@@ -112,13 +115,13 @@ electron_1.ipcMain.on('settings', function (event, arg) {
     });
 });
 electron_1.ipcMain.on('check-for-update', function (event, arg) {
-    autoUpdater.checkForUpdates();
+    electron_updater_1.autoUpdater.checkForUpdates();
 });
 electron_1.ipcMain.on('download-update', function (event, arg) {
-    autoUpdater.downloadUpdate();
+    electron_updater_1.autoUpdater.downloadUpdate();
 });
 electron_1.ipcMain.on('install-update', function (event, arg) {
-    autoUpdater.quitAndInstall();
+    electron_updater_1.autoUpdater.quitAndInstall();
 });
 electron_1.ipcMain.on('daemon-started', function (event, arg) {
     daemonState = DaemonState.Started;
@@ -276,25 +279,25 @@ electron_1.ipcMain.on('update-icon', function (event, arg) {
         mainWindow.setOverlayIcon(null, '');
     }
 });
-autoUpdater.on('checking-for-update', function () {
+electron_updater_1.autoUpdater.on('checking-for-update', function () {
     if (!serve) {
         contents.send('checking-for-update');
         writeLog('Checking for update...');
     }
 });
-autoUpdater.on('error', function (error) {
+electron_updater_1.autoUpdater.on('error', function (error) {
     contents.send('update-error', error);
 });
-autoUpdater.on('update-available', function (info) {
+electron_updater_1.autoUpdater.on('update-available', function (info) {
     contents.send('update-available', info);
 });
-autoUpdater.on('update-not-available', function (info) {
+electron_updater_1.autoUpdater.on('update-not-available', function (info) {
     contents.send('update-not-available', info);
 });
-autoUpdater.on('update-downloaded', function (info) {
+electron_updater_1.autoUpdater.on('update-downloaded', function (info) {
     contents.send('update-downloaded', info);
 });
-autoUpdater.on('download-progress', function (progressObj) {
+electron_updater_1.autoUpdater.on('download-progress', function (progressObj) {
     contents.send('download-progress', progressObj);
     var log_message = 'Download speed: ' + progressObj.bytesPerSecond;
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
@@ -584,7 +587,7 @@ function launchDaemon(apiPath, chain) {
             contents.send('daemon-error', "Node daemon process exited manually or crashed, with code ".concat(code, " and signal ").concat(signal, "."));
         }
         else {
-            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).   
+            // This is a normal shutdown scenario, but we'll show error dialog if the exit code was not 0 (OK).
             if (code !== 0) {
                 contents.send('daemon-error', "City Chain daemon shutdown completed, but resulted in exit code ".concat(code, " and signal ").concat(signal, "."));
             }
