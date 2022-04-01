@@ -10,13 +10,13 @@ import { WalletInfo } from '../../classes/wallet-info';
 import { WalletLoad } from '../../classes/wallet-load';
 import { WalletService } from '../../services/wallet.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 import { ElectronService } from 'ngx-electron';
-import { DatabaseStorageService, StorageService } from 'src/app/services/storage.service';
+import { DatabaseStorageService, StorageService } from '../../services/storage.service';
 import * as bip38 from '../../../libs/bip38';
-import { Logger } from 'src/app/services/logger.service';
-import { IdentityService } from 'src/app/services/identity.service';
-import { ChainService } from 'src/app/services/chain.service';
+import { Logger } from '../../services/logger.service';
+import { IdentityService } from '../../services/identity.service';
+import { ChainService } from '../../services/chain.service';
 
 export interface WalletAccount {
     name: string;

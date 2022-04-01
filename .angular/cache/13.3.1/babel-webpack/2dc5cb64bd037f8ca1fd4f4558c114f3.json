@@ -1,0 +1,1 @@
+{"ast":null,"code":"'use strict';\n/* http://www.ecma-international.org/ecma-262/6.0/#sec-number.isnan */\n\nmodule.exports = function isNaN(value) {\n  return value !== value;\n};","map":null,"metadata":{},"sourceType":"script"}

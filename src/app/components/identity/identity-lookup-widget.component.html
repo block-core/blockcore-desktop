@@ -8,7 +8,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <button class="button" (click)="lookup()" [disabled]="searchInput.length == 0" mat-stroked-button>Lookup</button>
+        <button class="button" (click)="lookup()" [disabled]="searchInput.length === 0" mat-stroked-button>Lookup</button>
         <!-- <button class="button" (click)="refresh()" [disabled]="loading" mat-stroked-button>Refresh</button> -->
     </mat-card-content>
 </mat-card>

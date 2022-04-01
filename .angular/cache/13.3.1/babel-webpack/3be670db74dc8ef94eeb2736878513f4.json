@@ -1,0 +1,1 @@
+{"ast":null,"code":"var scrypt = require('./scryptSync');\n\nscrypt.async = require('./scrypt');\nmodule.exports = scrypt;","map":null,"metadata":{},"sourceType":"script"}

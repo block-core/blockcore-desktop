@@ -1,0 +1,1 @@
+{"ast":null,"code":"// {signature}\nvar bscript = require('../../script');\n\nfunction check(script) {\n  var chunks = bscript.decompile(script);\n  return chunks.length === 1 && bscript.isCanonicalScriptSignature(chunks[0]);\n}\n\ncheck.toJSON = function () {\n  return 'pubKey input';\n};\n\nmodule.exports = {\n  check: check\n};","map":null,"metadata":{},"sourceType":"script"}

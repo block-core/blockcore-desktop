@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding, ChangeDetectionStrategy, ViewEncapsulation, HostListener } from '@angular/core';
-import { SetupService } from 'src/app/services/setup.service';
+import { SetupService } from '../../services/setup.service';
 
 @Component({
     selector: 'app-logo',

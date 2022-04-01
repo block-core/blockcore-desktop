@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class WalletInfo {\n  walletName;\n  accountName = 'account 0';\n\n  constructor(walletName, accountName = 'account 0') {\n    this.walletName = walletName;\n    this.accountName = accountName;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

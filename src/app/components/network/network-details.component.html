@@ -28,7 +28,7 @@
             </p>
 
         </mat-list-item>
-        <mat-card class="card" *ngIf="status.outboundPeers == 0">
+        <mat-card class="card" *ngIf="status.outboundPeers === 0">
             <mat-card-header>
                 <mat-icon mat-card-avatar>info</mat-icon>
                 <mat-card-title>Zero outbound nodes</mat-card-title>
@@ -63,7 +63,7 @@
             </p>
 
         </mat-list-item>
-        <mat-card class="card" *ngIf="status.inboundPeers == 0">
+        <mat-card class="card" *ngIf="status.inboundPeers === 0">
             <mat-card-header>
                 <mat-icon mat-card-avatar>info</mat-icon>
                 <mat-card-title>Zero inbound nodes</mat-card-title>
@@ -96,7 +96,7 @@
 
         </mat-list-item>
 
-        <div class="network-details-footer" *ngIf="bans != 0">
+        <div class="network-details-footer" *ngIf="bans !== 0">
             <button (click)="removeBans()" mat-raised-button>Remove all bans</button>
         </div>
 
