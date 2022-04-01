@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, HostBinding, NgZone } from '@angular/core
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
-import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
 import { Logger } from '../../services/logger.service';
 import { UpdateService } from '../../services/update.service';
@@ -29,7 +28,6 @@ export class AdvancedComponent {
     modes: ListItem[] = [];
     networks: ListItem[] = [];
     remember: boolean;
-    connection: signalR.HubConnection;
     delayed = false;
     apiSubscription: any;
 

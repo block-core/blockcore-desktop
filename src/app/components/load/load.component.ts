@@ -4,7 +4,6 @@ import { Component, ViewEncapsulation, HostBinding, NgZone, OnDestroy, OnInit, C
 import { AuthenticationService } from '../../services/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationStateService } from '../../services/application-state.service';
-import * as signalR from '@aspnet/signalr';
 import { ApiService } from '../../services/api.service';
 import { delay, retryWhen, tap } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
@@ -38,7 +37,6 @@ export class LoadComponent implements OnInit, OnDestroy {
     modes: ListItem[] = [];
     networks: ListItem[] = [];
     remember: boolean;
-    connection: signalR.HubConnection;
     delayed = false;
     apiSubscription: any;
     routingSubscription: any;
@@ -388,7 +386,6 @@ export class LoadComponent implements OnInit, OnDestroy {
     }
 
     start() {
-        // this.simpleWalletConnect();
         // We have successful connection with daemon, make sure we inform the main process of |.
         this.electronService.ipcRenderer.send('daemon-started');
 
@@ -462,37 +459,5 @@ export class LoadComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.delayed = false;
         this.appState.daemon.mode = null;
-    }
-
-    simpleWalletConnect() {
-        this.connection = new signalR.HubConnectionBuilder()
-            .withUrl('http://localhost:4337/node')
-            .build();
-
-        this.connection.on('BlockConnected', (block) => {
-            console.log('BlockConnected:' + block);
-        });
-
-        this.connection.on('TransactionReceived', (trx) => {
-            console.log('TransactionReceived:' + trx);
-        });
-
-        this.connection.on('txs', (transactions) => {
-            console.log(transactions);
-            // TODO: Update a bitcore-lib fork to add support for Stratis/City Chain.
-            // var tx1 = transactions[0];
-            // var tx = bitcoin.Transaction.fromHex(tx1.value.hex);
-        });
-
-        const self = this;
-        // Transport fallback functionality is now built into start.
-        this.connection.start()
-            .then(() => {
-                console.log('connection started');
-                self.connection.send('Subscribe', { events: ['TransactionReceived', 'BlockConnected'] });
-            })
-            .catch(error => {
-                console.error(error.message);
-            });
     }
 }
