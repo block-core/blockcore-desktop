@@ -5,7 +5,7 @@
 /daemon
 .vs
 /citynode*
-.angular/
+/.angular/cache
 
 # compiled output
 /dist
