@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { StorageService } from './storage.service';

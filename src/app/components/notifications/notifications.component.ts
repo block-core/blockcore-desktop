@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
-import { NotificationService, NotificationTile } from 'src/app/services/notification.service';
+import { NotificationService, NotificationTile } from '../../services/notification.service';
 
 @Component({
     selector: 'app-notifications',

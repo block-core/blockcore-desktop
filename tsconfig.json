@@ -11,15 +11,22 @@
         "declaration": false,
         "downlevelIteration": true,
         "experimentalDecorators": true,
-        "module": "es2020",
         "moduleResolution": "node",
         "importHelpers": true,
-        "target": "es2015",
         "typeRoots": [
             "node_modules/@types"
         ],
+        "target": "es5",
+        "module": "es2022",
         "lib": [
+            "esnext",
+            "ES5",
+            "DOM.Iterable",
+            "es2021",
+            "es2020",
             "es2018",
+            "ESNext.String",
+            "es2015.iterable",
             "dom"
         ],
         "paths": {
@@ -31,7 +38,6 @@
     "angularCompilerOptions": {
         "fullTemplateTypeCheck": true,
         "strictInjectionParameters": true,
-        "enableIvy": false,
         "enableI18nLegacyMessageIdFormat": false,
         "strictInputAccessModifiers": true,
         "strictTemplates": true

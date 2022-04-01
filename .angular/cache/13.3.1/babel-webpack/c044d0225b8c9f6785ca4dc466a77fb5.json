@@ -1,0 +1,1 @@
+{"ast":null,"code":"var BigInteger = require('./bigi'); //addons\n\n\nrequire('./convert');\n\nmodule.exports = BigInteger;","map":null,"metadata":{},"sourceType":"script"}

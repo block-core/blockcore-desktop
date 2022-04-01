@@ -24,7 +24,7 @@
         <app-details *ngIf="detailsService.item"></app-details>
     </mat-drawer>
 
-    <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" [(mode)]="menuMode">
+    <mat-drawer #drawer class="not-selectable" [(opened)]="menuOpened" mode="side">
         <app-view-area>
             <mat-list class="main-menu">
 
@@ -121,7 +121,7 @@
                     <mat-icon mat-list-icon>account_balance_wallet</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Wallet</h4>
                 </mat-list-item>
-                
+
                 <mat-list-item [matTooltip]="getTooltip('Staking')" *ngIf="appModes.enabled('staking') && appState.activeChain.pos" routerLinkActive="main-menu-active" routerLink="/staking">
                     <mat-icon mat-list-icon>bolt</mat-icon>
                     <h4 *ngIf="showFiller" mat-line>Staking</h4>

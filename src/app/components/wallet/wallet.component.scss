@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 
 .wallet
 {
@@ -99,7 +99,7 @@
     .wallet-confirmed-icon {
         font-size: 14px;
     }
-      
+
     .wallet-split-card {
         display: flex;
         flex-direction: row;

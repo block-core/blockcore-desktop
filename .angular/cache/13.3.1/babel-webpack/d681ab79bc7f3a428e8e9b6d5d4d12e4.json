@@ -1,0 +1,1 @@
+{"ast":null,"code":"var OPS = require('./index.json');\n\nvar map = {};\n\nfor (var op in OPS) {\n  var code = OPS[op];\n  map[code] = op;\n}\n\nmodule.exports = map;","map":null,"metadata":{},"sourceType":"script"}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"module.exports = {\n  input: require('./input'),\n  output: require('./output')\n};","map":null,"metadata":{},"sourceType":"script"}

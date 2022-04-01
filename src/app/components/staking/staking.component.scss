@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 
 .dim {
     color: rgba(255, 255, 255, 0.7);
@@ -13,13 +13,13 @@
 //     grid-auto-flow: dense;
 //     grid-gap: 1rem;
 //   }
-  
+
 //   :host ::ng-deep  [gridCell] {
 //     display: block;
 //     font-size: 20px;
 //     padding: 20px;
 //   }
-  
+
 //   @media only screen and (max-width: 767px) {
 //     :host ::ng-deep [gridCell] {
 //       grid-column: span 2 !important;
@@ -125,7 +125,7 @@
     .wallet-confirmed-icon {
         font-size: 14px;
     }
-      
+
     .wallet-split-card {
         display: flex;
         flex-direction: row;
@@ -255,7 +255,7 @@
         color: red;
     }
 
-    .marketprice-larger 
+    .marketprice-larger
     {
         font-size: 1.2rem;
     }

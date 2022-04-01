@@ -10,12 +10,12 @@ import { delay, retryWhen, tap } from 'rxjs/operators';
 import { Logger } from '../../services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { NodeStatus } from '@models/node-status';
 import { ElectronService } from 'ngx-electron';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 import * as coininfo from 'city-coininfo';
-import { Chain, ChainService } from 'src/app/services/chain.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { Chain, ChainService } from '../../services/chain.service';
+import { StorageService } from '../../services/storage.service';
+import { NodeStatus } from '../../classes/node-status';
 
 export interface ListItem {
     name: string;

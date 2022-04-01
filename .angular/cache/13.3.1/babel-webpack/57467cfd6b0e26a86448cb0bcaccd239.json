@@ -1,0 +1,1 @@
+{"ast":null,"code":"module.exports = require('./dist/base64url').default;\nmodule.exports.default = module.exports;","map":null,"metadata":{},"sourceType":"script"}

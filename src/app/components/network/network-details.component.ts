@@ -6,10 +6,11 @@ import { ApiService } from '../../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WalletService } from '../../services/wallet.service';
 import { Router } from '@angular/router';
-import { ChainService, Chain } from 'src/app/services/chain.service';
-import { ApplicationStateService } from 'src/app/services/application-state.service';
+
 import { NetworkAddNodeComponent } from './network-add-node.component';
 import { NetworkBanNodeComponent } from './network-ban-node.component';
+import { Chain, ChainService } from '../../services/chain.service';
+import { ApplicationStateService } from '../../services/application-state.service';
 
 @Component({
     selector: 'app-network-details',

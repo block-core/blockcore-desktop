@@ -9,7 +9,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <button class="history-search-button" (click)="search()" [disabled]="searchInput.length == 0" mat-stroked-button>Search</button>
+        <button class="history-search-button" (click)="search()" [disabled]="searchInput.length === 0" mat-stroked-button>Search</button>
         <button class="history-search-button" (click)="refresh()" [disabled]="loading" mat-stroked-button>Refresh</button>
     </mat-card>
 
