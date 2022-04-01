@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { StorageService } from './storage.service';
 
 @Injectable({
     providedIn: 'root'

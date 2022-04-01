@@ -3,11 +3,11 @@
 import { Injectable } from '@angular/core';
 import { TitleService } from './title.service';
 import { Observable } from 'rxjs';
-import { ElectronService } from 'ngx-electron';
 import { SettingsService } from './settings.service';
 import { Chain, ChainService } from './chain.service';
 import { WalletAccount } from '../components/login/login.component';
 import { StorageService } from './storage.service';
+import { ElectronService } from './electron.service';
 
 export interface DaemonConfiguration {
     mode: string;

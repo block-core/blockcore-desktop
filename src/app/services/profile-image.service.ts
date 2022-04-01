@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProfileImageService {
-    constructor(private electron: ElectronService) {
+    constructor() {
 
     }
 

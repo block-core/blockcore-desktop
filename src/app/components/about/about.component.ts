@@ -1,9 +1,9 @@
 import { Component, HostBinding, ViewEncapsulation, OnInit } from '@angular/core';
 import { ApplicationStateService } from '../../services/application-state.service';
 import { ApiService } from 'src/app/services/api.service';
-import { ElectronService } from 'ngx-electron';
 import { NodeStatus } from '@models/node-status';
 import { Observable } from 'rxjs';
+import { ElectronService } from 'src/app/services/electron.service';
 
 @Component({
     selector: 'app-about',

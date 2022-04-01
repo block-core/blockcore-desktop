@@ -13,7 +13,6 @@ import { AppSharedModule } from './shared/app-shared.module';
 import { APP_TITLE } from './services/title.service';
 import { FormsModule } from '@angular/forms';
 import { Theming } from './services/theming.service';
-import { ElectronService } from 'ngx-electron';
 import { LoadModule } from './components/load/load.module';
 import { DetailsModule } from './components/details/details.module';
 import { MerchantsModule } from './components/merchants/merchants.module';
@@ -25,6 +24,7 @@ import { HttpErrorHandler } from './services/http-error-handler.service';
 import { ReportModule } from './components/report/report.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IdentityModule } from './components/identity/identity.module';
+import { ElectronService } from './services/electron.service';
 
 @NgModule({
     declarations: [
