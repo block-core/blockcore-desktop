@@ -250,7 +250,15 @@ electron_1.ipcMain.on('unpack-blockchain-package', function (event, arg) {
     event.returnValue = 'OK';
 });
 electron_1.ipcMain.on('open-dev-tools', function (event, arg) {
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
+    var devtools = null;
+    devtools = new electron_1.BrowserWindow({
+        title: 'Dev Tools',
+        icon: __dirname + '/app.ico',
+        webPreferences: { webSecurity: false, nodeIntegration: true, contextIsolation: false }
+    });
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
     event.returnValue = 'OK';
 });
 // ipcMain.on('get-wallet-seed', (event, arg: string) => {
@@ -353,7 +361,14 @@ function createWindow() {
         }));
     }
     if (serve) {
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
+        var devtools_1 = null;
+        electron_1.app.once('ready', function () {
+            mainWindow = new electron_1.BrowserWindow();
+            devtools_1 = new electron_1.BrowserWindow();
+            mainWindow.webContents.setDevToolsWebContents(devtools_1.webContents);
+            mainWindow.webContents.openDevTools({ mode: 'detach' });
+        });
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function (event) {

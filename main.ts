@@ -336,7 +336,15 @@ ipcMain.on('unpack-blockchain-package', (event, arg: any) => {
 });
 
 ipcMain.on('open-dev-tools', (event, arg: string) => {
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
+    let devtools = null;
+    devtools = new BrowserWindow({
+        title: 'Dev Tools',
+        icon: __dirname + '/app.ico',
+        webPreferences: { webSecurity: false, nodeIntegration: true, contextIsolation: false }
+    });
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
     event.returnValue = 'OK';
 });
 
@@ -458,7 +466,15 @@ function createWindow() {
     }
 
     if (serve) {
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
+        let devtools = null
+
+        app.once('ready', () => {
+            mainWindow = new BrowserWindow();
+            devtools = new BrowserWindow();
+            mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+            mainWindow.webContents.openDevTools({ mode: 'detach' });
+        })
     }
 
     // Emitted when the window is going to close.
