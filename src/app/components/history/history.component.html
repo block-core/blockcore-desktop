@@ -3,7 +3,8 @@
     <div *ngIf="undefined === blocks">Loading...</div>
 
     <mat-card class="history-search-card">
-        <mat-form-field class="history-form-field">
+        <mat-form-field appearance="outline" class="history-form-field">
+            <mat-label>Enter block number or block hash and press search.</mat-label>
             <input matInput type="text" placeholder="Enter block number or block hash and press search." (keyup.enter)="search()" [(ngModel)]="searchInput">
             <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
                 <mat-icon>close</mat-icon>

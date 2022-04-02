@@ -30,7 +30,9 @@
     "linux": {
         "icon": "dist/assets/images/",
         "target": [
-            "AppImage:x64"
+            "AppImage:x64",
+            "deb",
+            "tar.gz"
         ],
         "synopsis": "Blockcore is your hub into everything on blockchains and the Smart City Platform.",
         "category": "Utility"

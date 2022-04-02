@@ -45,7 +45,8 @@
 
             <h3 class="mat-h3">Mode</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Selected Mode</mat-label>
                 <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedMode">
                     <mat-option *ngFor="let mode of appModes.available" [value]="mode.id">
                         {{mode.name}}
@@ -64,7 +65,7 @@
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
                     <mat-option value="nb-NO">Norsk</mat-option>
                     <mat-option value="en-US">English</mat-option>
@@ -73,7 +74,7 @@
 
             <h3 class="mat-h3">Currency</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
                     <mat-option value="USD">USD</mat-option>
                     <mat-option value="EUR">EUR</mat-option>
@@ -93,7 +94,8 @@
         <mat-card-content>
             <h3 class="mat-h3">Active Hub</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Active Hub</mat-label>
                 <mat-select (selectionChange)="onChanged($event)" [(ngModel)]="selectedHub">
                     <mat-option *ngFor="let hub of hubs" [value]="hub.content.identifier">
                         {{hub.content.name}}
@@ -112,7 +114,7 @@
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
                     <mat-option value="nb-NO">Norsk</mat-option>
                     <mat-option value="en-US">English</mat-option>
@@ -121,7 +123,7 @@
 
             <h3 class="mat-h3">Currency</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
                     <mat-option value="USD">USD</mat-option>
                     <mat-option value="EUR">EUR</mat-option>
@@ -142,7 +144,8 @@
 
             <h3 class="mat-h3">Address Type</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Address Type</mat-label>
                 <mat-select [(ngModel)]="appState.addressType">
                     <mat-option *ngFor="let addressType of appState.addressTypes" [value]="addressType">
                         {{addressType}}
@@ -161,7 +164,7 @@
             <!-- DISABLED UNTIL IMPLEMENTED! -->
             <!-- <h3 class="mat-h3">Language</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose language" (selectionChange)="onChanged($event)" [(ngModel)]="selectedLanguage">
                     <mat-option value="nb-NO">Norsk</mat-option>
                     <mat-option value="en-US">English</mat-option>
@@ -170,7 +173,7 @@
 
             <h3 class="mat-h3">Currency</h3>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Choose currency" (selectionChange)="onChanged($event)" [(ngModel)]="selectedCurrency">
                     <mat-option value="USD">USD</mat-option>
                     <mat-option value="EUR">EUR</mat-option>

@@ -1,15 +1,15 @@
 <h1 mat-dialog-title>Change amount of UTXOs</h1>
 <div mat-dialog-content>
     <p>Your existing {{data.utxos}} UTXOs will be increased/reduced to the number you fill out. Depending on your amount of existing UTXOs, this process might take a little while.</p>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <input matInput placeholder="Count" [(ngModel)]="data.count">
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <input matInput placeholder="Amount to split" [(ngModel)]="data.amount">
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <input matInput type="password" placeholder="Wallet password" [(ngModel)]="data.password">
     </mat-form-field>
 

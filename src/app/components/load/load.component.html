@@ -4,7 +4,8 @@
 
     <ng-template [ngIf]="!loading" [ngIfElse]="spinner">
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Select network</mat-label>
             <mat-select placeholder="Select network" [(ngModel)]="appState.activeChain">
                 <mat-option *ngFor="let network of filteredAvailableChains" [value]="network">
                     {{network.name}}
@@ -28,7 +29,8 @@
 
                 <div>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select mode</mat-label>
                         <mat-select placeholder="Select mode" [(ngModel)]="selectedMode">
                             <mat-option *ngFor="let mode of modes" [value]="mode">
                                 {{mode.name}}
@@ -96,7 +98,8 @@
                 </mat-expansion-panel-header>
 
                 <div>
-                    <mat-form-field class="advanced-form-field">
+
+                    <mat-form-field appearance="outline"class="advanced-form-field">
                         <mat-label>Blockchain Database Package URL:</mat-label>
                         <input matInput type="url" [(ngModel)]="downloadUrl">
                         <button mat-button *ngIf="downloadUrl" matSuffix mat-icon-button aria-label="Clear" (click)="downloadUrl=''">
