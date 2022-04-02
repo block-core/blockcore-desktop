@@ -30,7 +30,9 @@
     "linux": {
         "icon": "dist/assets/images/",
         "target": [
-            "AppImage:x64"
+            "AppImage:x64",
+            "deb",
+            "tar.gz"
         ],
         "synopsis": "Blockcore is your hub into everything on blockchains and the Smart City Platform.",
         "category": "Utility"
@@ -65,7 +67,7 @@
         "guid": "b02c24b0-e9e9-40eb-8dbe-d24987328d41",
         "createDesktopShortcut": true,
         "createStartMenuShortcut": true,
-        "license": "dist/assets/license.txt"
+        "license": "src/assets/license.txt"
     },
     "msi": {
         "warningsAsErrors": false
@@ -73,6 +75,6 @@
     "extraResources": [
         "daemon/**/*",
         "app.ico",
-        "dist/assets/license.txt"
+        "src/assets/license.txt"
     ]
 }
