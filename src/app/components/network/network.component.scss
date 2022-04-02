@@ -55,4 +55,11 @@
     .network-grid .mat-icon {
         font-size: 1.6em !important;
     }
+
+    .network-display-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+        text-align: center;
+    }
 }

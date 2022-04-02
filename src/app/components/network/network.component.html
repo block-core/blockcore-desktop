@@ -1,32 +1,44 @@
 <div class="not-selectable">
     <mat-grid-list class="network-grid" [cols]="columns" rowHeight="2:1" #grid>
         <mat-grid-tile>
-            <span class="network-label">Network Height</span>
-            <span class="network-value">{{walletService.generalInfo?.chainTip}}</span>
+            <div class="network-display-grid">
+                <span class="network-label">Network Height</span>
+                <span class="network-value">{{walletService.generalInfo?.chainTip}}</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <span class="network-label">Wallet Height</span>
-            <span class="network-value">{{walletService.generalInfo?.lastBlockSyncedHeight}}</span>
+            <div class="network-display-grid">
+                <span class="network-label">Wallet Height</span>
+                <span class="network-value">{{walletService.generalInfo?.lastBlockSyncedHeight}}</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <span class="network-label">Connections</span>
-            <span class="network-value">{{walletService.generalInfo?.connectedNodes}}</span>
+            <div class="network-display-grid">
+                <span class="network-label">Connections</span>
+                <span class="network-value">{{walletService.generalInfo?.connectedNodes}}</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <span class="network-label">Network</span>
-            <span class="network-value">{{walletService.generalInfo?.network}}</span>
+            <div class="network-display-grid">
+                <span class="network-label">Network</span>
+                <span class="network-value">{{walletService.generalInfo?.network}}</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <span class="network-label" *ngIf="walletService.percentSyncedNumber === 100">Chain Synced</span>
-            <span class="network-label" *ngIf="walletService.percentSyncedNumber !== 100">Chain Syncing</span>
-            <span class="network-value" *ngIf="walletService.percentSyncedNumber === 100">
-                <mat-icon>cloud_done</mat-icon>
-            </span>
-            <span class="network-value" *ngIf="walletService.percentSyncedNumber !== 100">{{walletService.percentSynced}}</span>
+            <div class="network-display-grid">
+                <span class="network-label" *ngIf="walletService.percentSyncedNumber === 100">Chain Synced</span>
+                <span class="network-label" *ngIf="walletService.percentSyncedNumber !== 100">Chain Syncing</span>
+                <span class="network-value" *ngIf="walletService.percentSyncedNumber === 100">
+                    <mat-icon>cloud_done</mat-icon>
+                </span>
+                <span class="network-value" *ngIf="walletService.percentSyncedNumber !== 100">{{walletService.percentSynced}}</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <span class="network-label">Account date</span>
-            <span class="network-value">{{walletService.generalInfo?.creationTime.toDateString()}}</span>
+            <div class="network-display-grid">
+                <span class="network-label">Account date</span>
+                <span class="network-value">{{walletService.generalInfo?.creationTime.toDateString()}}</span>
+            </div>
         </mat-grid-tile>
     </mat-grid-list>
     <mat-progress-bar mode="determinate" ng-hide="walletService.generalInfo == null" *ngIf="walletService.percentSyncedNumber !== 100" [bufferValue]="0" mode="buffer" [value]="walletService.percentSyncedNumber"></mat-progress-bar>

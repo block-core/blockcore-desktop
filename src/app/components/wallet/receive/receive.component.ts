@@ -94,9 +94,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
             .subscribe(
                 async (response) => {
                     this.address = response;
-                    // this.qrString = 'city:' + response;
-
-                    this.qrString = await QRCode.toDataURL(response, {
+                    this.qrString = await QRCode.toDataURL(this.address, {
                         errorCorrectionLevel: 'L',
                         margin: 2,
                         scale: 5,
@@ -120,10 +118,18 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
         this.apiService.getUnusedReceiveAddress(walletInfo, this.addressType)
             .subscribe(
-                response => {
+                async response => {
                     this.address = response;
                     // this.qrString = 'city:' + response;
-                    this.qrString = response; // To be compatible with mobile wallet (copay-based), we won't use prefix.
+                    // this.qrString = response; // To be compatible with mobile wallet (copay-based), we won't use prefix.
+                    try {
+                        this.qrString = await QRCode.toDataURL(this.address, {
+                            errorCorrectionLevel: 'L',
+                            margin: 2,
+                            scale: 5,
+                        });
+                    }
+                    catch (e) {}
                 },
                 error => {
                     this.log.error('Failed to get unused receive address:', error);

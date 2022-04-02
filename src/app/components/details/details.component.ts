@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ViewEncapsulation, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { DetailsService } from '../../services/details.service';
 import { ApiService } from '../../services/api.service';

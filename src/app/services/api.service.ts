@@ -433,9 +433,9 @@ export class ApiService {
         });
 
         return this.http
-            .get(this.apiUrl + '/wallet/firstaddress', { headers: this.headers, params: search })
+            .get(this.apiUrl + '/wallet/addresses', { headers: this.headers, params: search })
             .pipe(catchError(this.handleError.bind(this)))
-            .pipe(map((response: Response) => response));
+            .pipe(map((response: Response) => response['addresses'][0].address));
     }
 
     /**
