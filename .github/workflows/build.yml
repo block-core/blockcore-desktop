@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      DAEMON: '1.1.38'
+      DAEMON: '1.1.39'
       ARCH: 'x64'
 
     steps:
