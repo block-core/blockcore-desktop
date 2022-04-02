@@ -13,7 +13,12 @@
         "src/polyfills.ts"
     ],
     "include": [
-        "src/**/*.spec.ts",
-        "src/**/*.d.ts"
-    ]
+        "**/*.spec.ts",
+        "**/*.d.ts"
+      ],
+      "exclude": [
+        "dist",
+        "release",
+        "node_modules"
+      ]
 }

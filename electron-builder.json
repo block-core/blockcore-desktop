@@ -21,14 +21,14 @@
         "output": "build"
     },
     "win": {
-        "icon": "src/assets/icon.ico",
+        "icon": "dist/assets/icon.ico",
         "target": [
             "nsis"
         ],
         "artifactName": "Blockcore.Hub-${version}-${os}-${env.arch}.${ext}"
     },
     "linux": {
-        "icon": "src/assets/images/",
+        "icon": "dist/assets/images/",
         "target": [
             "AppImage:x64",
             "deb",
@@ -38,7 +38,7 @@
         "category": "Utility"
     },
     "mac": {
-        "icon": "src/assets/icon.icns",
+        "icon": "dist/assets/icon.icns",
         "target": [
             "dmg",
             "zip"
@@ -67,7 +67,7 @@
         "guid": "b02c24b0-e9e9-40eb-8dbe-d24987328d41",
         "createDesktopShortcut": true,
         "createStartMenuShortcut": true,
-        "license": "src/assets/license.txt"
+        "license": "dist/assets/license.txt"
     },
     "msi": {
         "warningsAsErrors": false
@@ -75,6 +75,6 @@
     "extraResources": [
         "daemon/**/*",
         "app.ico",
-        "src/assets/license.txt"
+        "dist/assets/license.txt"
     ]
 }
