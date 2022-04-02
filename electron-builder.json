@@ -28,7 +28,7 @@
         "artifactName": "Blockcore.Hub-${version}-${os}-${env.arch}.${ext}"
     },
     "linux": {
-        "icon": "dist/assets/images/",
+        "icon": "src/assets/images/",
         "target": [
             "AppImage:x64",
             "deb",
@@ -38,7 +38,7 @@
         "category": "Utility"
     },
     "mac": {
-        "icon": "dist/assets/icon.icns",
+        "icon": "src/assets/icon.icns",
         "target": [
             "dmg",
             "zip"
