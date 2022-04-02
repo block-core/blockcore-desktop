@@ -470,7 +470,6 @@ function createWindow() {
         let devtools = null
 
         app.once('ready', () => {
-            mainWindow = new BrowserWindow();
             devtools = new BrowserWindow();
             mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
             mainWindow.webContents.openDevTools({ mode: 'detach' });

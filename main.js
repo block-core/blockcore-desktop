@@ -364,7 +364,6 @@ function createWindow() {
         //mainWindow.webContents.openDevTools();
         var devtools_1 = null;
         electron_1.app.once('ready', function () {
-            mainWindow = new electron_1.BrowserWindow();
             devtools_1 = new electron_1.BrowserWindow();
             mainWindow.webContents.setDevToolsWebContents(devtools_1.webContents);
             mainWindow.webContents.openDevTools({ mode: 'detach' });
