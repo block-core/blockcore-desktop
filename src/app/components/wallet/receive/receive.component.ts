@@ -94,9 +94,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
             .subscribe(
                 async (response) => {
                     this.address = response;
-                    // this.qrString = 'city:' + response;
-
-                    this.qrString = await QRCode.toDataURL(response, {
+                    this.qrString = await QRCode.toDataURL(this.address, {
                         errorCorrectionLevel: 'L',
                         margin: 2,
                         scale: 5,
