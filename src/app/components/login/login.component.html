@@ -2,7 +2,7 @@
     <div class="login-content">
 
         <div class="login-accounts" *ngIf="hasWallet">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-select placeholder="Select wallet" [(ngModel)]="selectedAccount">
                     <mat-option *ngFor="let account of accounts" [value]="account">
                         {{account.name}}

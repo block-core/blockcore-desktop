@@ -1,7 +1,8 @@
 <h1 mat-dialog-title>Add node</h1>
 <div mat-dialog-content>
   <p>Fill out IP address of node</p>
-  <mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>IP address of node</mat-label>
     <input matInput [(ngModel)]="data.ip">
   </mat-form-field>
 </div>

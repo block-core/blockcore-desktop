@@ -13,7 +13,8 @@
             </h2>
 
             <p>
-                <mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Choose a date</mat-label>
                     <input matInput [min]="minDate | date: 'yyyy-MM-dd'" [max]="maxDate | date: 'yyyy-MM-dd'" [(ngModel)]="accountDate" formControlName="accountDate" [matDatepicker]="picker" placeholder="Choose a date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
@@ -26,7 +27,8 @@
             <h2 class="mat-h2">What is your 12-word <strong>recovery phrase</strong> you saw when you created your account?</h2>
 
             <p>
-                <mat-form-field class="input-full-width">
+                <mat-form-field appearance="outline" class="input-full-width">
+                    <mat-label>Fill out recovery phrase</mat-label>
                     <textarea matInput formControlName="accountMnemonic" [(ngModel)]="mnemonic" id="accountMnemonic" placeholder="Fill out recovery phrase"></textarea>
                 </mat-form-field>
             </p>
@@ -37,7 +39,8 @@
             <h2 class="mat-h2">What is your personal extension word, if any, you used when you created your account?</h2>
 
             <p>
-                <mat-form-field class="input-full-width">
+                <mat-form-field appearance="outline" class="input-full-width">
+                    <mat-label>Enter your extension word (can be empty)</mat-label>
                     <textarea matInput formControlName="seedExtension" [(ngModel)]="seedExtension" id="seedExtension" placeholder="Enter your extension word (can be empty)"></textarea>
                 </mat-form-field>
             </p>
@@ -49,13 +52,17 @@
             <p>Provide a password that we can use to protect your wallet when it is saved. You can choose something other than what you had before.
                 You will be prompted to enter this passord every time your start Blockcore Hub.</p>
             <p>
-                <mat-form-field class="input-full-width">
+                <mat-form-field appearance="outline" class="input-full-width">
+                    <mat-label>Enter your password</mat-label>
                     <input matInput type="password" [formGroup]="form" [(ngModel)]="password1" placeholder="Enter your password" name="accountPassword" formControlName="accountPassword" autocomplete="new-password">
+                    <mat-icon matSuffix>visibility_off</mat-icon>
                 </mat-form-field>
             </p>
             <p>
-                <mat-form-field class="input-full-width">
+                <mat-form-field appearance="outline" class="input-full-width">
+                    <mat-label>Enter your password again</mat-label>
                     <input matInput type="password" [formGroup]="form" [(ngModel)]="password2" placeholder="Enter your password again" name="accountPasswordConfirmation" formControlName="accountPasswordConfirmation" autocomplete="new-password">
+                    <mat-icon matSuffix>visibility_off</mat-icon>
                     <mat-error *ngIf="form.get('accountPasswordConfirmation').hasError('accountPasswordConfirmation')">
                         Passwords must match.
                     </mat-error>
@@ -70,10 +77,9 @@
             </h2>
             <p>
                 <mat-form-field appearance="outline">
-                    <mat-label>Account name</mat-label>
+                    <mat-label>Fill out account name</mat-label>
                     <input matInput [(ngModel)]="accountName" formControlName="accountName" name="accountName" placeholder="Fill out account name">
-                    <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
-                    <!-- <mat-hint>This is your personal password, not the 12-word phrase. Make sure you use a password you can remember, nobody else have your password and nobody can help you recover it.</mat-hint> -->
+                    <mat-icon matSuffix>account_balance_wallet</mat-icon>
                 </mat-form-field>
             </p>
         </mat-card>
