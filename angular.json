@@ -42,7 +42,11 @@
                         },
                         "scripts": [
                             "src/version.js"
-                        ]
+                        ],
+                        "allowedCommonJsDependencies": [
+                            "lodash",
+                            "qrcode"
+                         ]
                     },
                     "configurations": {
                         "production": {

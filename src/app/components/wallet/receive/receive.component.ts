@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { WalletService } from '../../../services/wallet.service';
 import { Logger } from '../../../services/logger.service';
 import * as QRCode from 'qrcode';
-
 @Component({
     selector: 'app-receive',
     templateUrl: './receive.component.html',
