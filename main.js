@@ -346,6 +346,7 @@ function createWindow() {
         electron_1.shell.openExternal(linkUrl);
     });
     if (serve) {
+        mainWindow.webContents.openDevTools();
         require('electron-reload')(__dirname, {
             electron: require("".concat(__dirname, "/node_modules/electron"))
         });
@@ -359,15 +360,6 @@ function createWindow() {
             protocol: 'file:',
             slashes: true
         }));
-    }
-    if (serve) {
-        //mainWindow.webContents.openDevTools();
-        var devtools_1 = null;
-        electron_1.app.once('ready', function () {
-            devtools_1 = new electron_1.BrowserWindow();
-            mainWindow.webContents.setDevToolsWebContents(devtools_1.webContents);
-            mainWindow.webContents.openDevTools({ mode: 'detach' });
-        });
     }
     // Emitted when the window is going to close.
     mainWindow.on('close', function (event) {

@@ -15,5 +15,10 @@
     "include": [
         "src/**/*.spec.ts",
         "src/**/*.d.ts"
+    ],
+    "exclude": [
+        "dist",
+        "release",
+        "node_modules"
     ]
 }

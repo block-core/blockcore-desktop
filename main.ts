@@ -450,6 +450,7 @@ function createWindow() {
     });
 
     if (serve) {
+        mainWindow.webContents.openDevTools();
         require('electron-reload')(__dirname, {
             electron: require(`${__dirname}/node_modules/electron`)
         });
@@ -463,17 +464,6 @@ function createWindow() {
             protocol: 'file:',
             slashes: true
         }));
-    }
-
-    if (serve) {
-        //mainWindow.webContents.openDevTools();
-        let devtools = null
-
-        app.once('ready', () => {
-            devtools = new BrowserWindow();
-            mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
-            mainWindow.webContents.openDevTools({ mode: 'detach' });
-        })
     }
 
     // Emitted when the window is going to close.
