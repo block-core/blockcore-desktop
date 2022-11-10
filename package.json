@@ -101,7 +101,7 @@
     "@typescript-eslint/parser": "5.17.0",
     "city-coininfo": "5.0.0",
     "core-js": "3.21.1",
-    "electron": "^18.0.1",
+    "electron": "^18.3.7",
     "electron-builder": "^22.14.13",
     "electron-reload": "1.5.0",
     "enhanced-resolve": "5.9.2",
