@@ -8,7 +8,6 @@
     "tslint.enable": true,
     "editor.tabSize": 4,
     "files.insertFinalNewline": true,
-    "editor.renderIndentGuides": true,
     "html.format.wrapLineLength": 0,
     "[typescript]": {
         "editor.formatOnSave": false,
@@ -16,5 +15,6 @@
     },
     "[markdown]": {
         "editor.formatOnSave": true,
-    }
+    },
+    "editor.guides.indentation": true
 }
