@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "~@angular/material/theming";
+@import "@angular/material/theming";
 
 // for npm material-icons package (to load local files)
 // $material-icons-font-path: '~material-icons/iconfont/';
@@ -280,11 +280,11 @@ span.ellipsis {
 .title-bar-button i {
 	font-size: 20px;
 }
-*/
+
 
 .app-electron {
 }
-
+*/
 .app-electron .login {
     height: $app-height;
 }

@@ -4,7 +4,7 @@
     $primary: map-get($theme, "primary");
     $accent: map-get($theme, "accent");
 
-    @include mat.all-component-themes($theme);
+    // @include mat.all-component-themes($theme);
 
     .mat-menu-panel {
         background-color: map-get($background, "dialog");
@@ -41,8 +41,8 @@
         font-size: 16px;
     }
 
-    .link {
-    }
+    // .link {
+    // }
 
     .link:hover {
         text-decoration: underline;
